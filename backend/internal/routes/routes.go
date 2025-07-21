@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"ledsite/internal/handlers"
 
 	"github.com/gin-gonic/gin"
@@ -27,13 +28,20 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.POST("/contact", h.SubmitContact)
 	}
 
-	// Админ панель (пока простая)
+	// Админ панель
 	admin := router.Group("/admin")
 	{
-		admin.GET("/", func(c *gin.Context) {
-			c.HTML(200, "admin.html", gin.H{
-				"title": "Админ панель",
-			})
-		})
+		admin.GET("/", h.AdminDashboard)
+		admin.GET("/projects", h.AdminProjects)
+		admin.POST("/projects", h.CreateProject)
+		admin.GET("/projects/:id", h.GetProject)
+		admin.POST("/projects/:id/update", h.UpdateProject)
+		admin.DELETE("/projects/:id", h.DeleteProject)
+		admin.POST("/upload-images", h.UploadImages)
+		admin.DELETE("/images/:id", h.DeleteImage)
+		admin.POST("/images/:id/crop", h.UpdateImageCrop)
 	}
+
+	// Отладочная информация - ПРИНУДИТЕЛЬНО используем fmt
+	fmt.Printf("🔧 Маршрут кроппинга зарегистрирован: POST /admin/images/:id/crop\n")
 }

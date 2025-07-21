@@ -44,13 +44,27 @@ func Migrate(db *gorm.DB) error {
 
 // seedInitialData создает начальные данные в базе
 func seedInitialData(db *gorm.DB) error {
+	// Очищаем старые категории при первом запуске
+	var categoryCount int64
+	db.Model(&models.Category{}).Count(&categoryCount)
+
+	// Если категорий больше 6, значит есть старые - очищаем все
+	if categoryCount > 6 {
+		// Удаляем связи проектов с категориями
+		db.Exec("DELETE FROM project_categories")
+
+		// Удаляем все категории
+		db.Exec("DELETE FROM categories")
+	}
+
 	// Создаем базовые категории
 	categories := []models.Category{
-		{Name: "Интерьерные экраны", Slug: "interior", Description: "LED экраны для помещений"},
-		{Name: "Уличные экраны", Slug: "outdoor", Description: "Рекламные щиты и уличные дисплеи"},
-		{Name: "Медиафасады", Slug: "mediafacade", Description: "Фасадные LED экраны"},
-		{Name: "АЗС", Slug: "gas-station", Description: "Экраны для автозаправочных станций"},
-		{Name: "Торговые центры", Slug: "shopping", Description: "Экраны для торговых центров"},
+		{Name: "Рекламные щиты", Slug: "billboards", Description: "Рекламные щиты различных размеров"},
+		{Name: "АЗС (автозаправки)", Slug: "gas-stations", Description: "Тотемы и фасады для автозаправочных станций"},
+		{Name: "Торговые центры", Slug: "shopping-centers", Description: "Экраны для торговых центров"},
+		{Name: "Фундаментные работы", Slug: "foundation-work", Description: "Изготовление и монтаж фундаментных блоков"},
+		{Name: "Обслуживание", Slug: "maintenance", Description: "Техническое обслуживание LED экранов"},
+		{Name: "Ремонт модулей", Slug: "module-repair", Description: "Ремонт и замена модулей"},
 	}
 
 	for _, category := range categories {

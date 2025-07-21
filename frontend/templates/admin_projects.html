@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .header { background: #333; color: white; padding: 1rem; margin-bottom: 2rem; }
+        .header h1 { margin-bottom: 0.5rem; }
+        .nav-links { list-style: none; display: flex; gap: 1rem; }
+        .nav-links a { color: white; text-decoration: none; }
+        
+        .form-section { background: white; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-group input, .form-group textarea, .form-group select { 
+            width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; 
+        }
+        .form-group textarea { height: 100px; resize: vertical; }
+        .checkbox-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .checkbox-item { display: flex; align-items: center; gap: 0.5rem; }
+        
+        /* Выделяем чекбокс "Показать на главной" */
+        .featured-checkbox { 
+            background: #e8f4fd; 
+            border: 2px solid #4A90E2; 
+            border-radius: 8px; 
+            padding: 1rem; 
+            margin: 1rem 0;
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem;
+        }
+        .featured-checkbox input[type="checkbox"] { 
+            width: 20px; 
+            height: 20px; 
+            accent-color: #4A90E2;
+        }
+        .featured-checkbox label { 
+            font-weight: bold; 
+            color: #2c5aa0; 
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .featured-checkbox:hover { 
+            background: #d1ecf1; 
+        }
+        
+        .btn { background: #4A90E2; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; }
+        .btn:hover { background: #357abd; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        
+        .projects-list { background: white; padding: 2rem; border-radius: 8px; }
+        .project-item { padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .project-info h3 { margin-bottom: 0.5rem; }
+        .project-info p { color: #666; }
+        .project-actions { display: flex; gap: 0.5rem; }
+        
+        .upload-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; }
+        
+        .hidden { display: none; }
+        .success { background: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin: 1rem 0; }
+        .error { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin: 1rem 0;         }
+        
+        /* Модальное окно */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { background: white; margin: 2% auto; padding: 2rem; width: 90%; max-width: 800px; border-radius: 8px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .close { font-size: 1.5rem; cursor: pointer; }
+        .images-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .image-item { position: relative; }
+        .image-preview-container { 
+            width: 100%; 
+            height: 120px; 
+            overflow: hidden; 
+            margin-bottom: 5px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            position: relative;
+        }
+        .image-item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Превью в редакторе кроппинга */
+        .crop-preview {
+            width: 250px;
+            height: 180px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem auto;
+            border: 2px solid #4A90E2;
+            position: relative;
+        }
+        .crop-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform-origin: center center;
+        }
+        .delete-image, .crop-image { 
+            position: absolute; 
+            top: 5px; 
+            background: red; 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 25px; 
+            height: 25px; 
+            cursor: pointer; 
+            font-size: 12px;
+        }
+        .delete-image { right: 5px; }
+        .crop-image { right: 35px; background: #4A90E2; }
+        
+        /* Редактор кроппинга */
+        .crop-editor { 
+            display: flex; 
+            gap: 2rem; 
+            align-items: flex-start; 
+            margin-top: 1rem; 
+        }
+        .crop-controls { 
+            flex: 1; 
+        }
+        .crop-control { 
+            margin-bottom: 1rem; 
+        }
+        .crop-control label { 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            font-weight: bold; 
+        }
+        .crop-control input[type="range"] { 
+            width: 100%; 
+            margin-bottom: 0.5rem; 
+        }
+        .crop-value { 
+            font-size: 0.9rem; 
+            color: #666; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Админ панель</h1>
+            <ul class="nav-links">
+                <li><a href="/admin">Главная</a></li>
+                <li><a href="/admin/projects">Проекты</a></li>
+                <li><a href="/">На сайт</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="message"></div>
+        
+        <!-- Форма добавления проекта -->
+        <div class="form-section">
+            <h2>Добавить новый проект</h2>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="title">Название проекта:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Описание:</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Местоположение:</label>
+                    <input type="text" id="location" name="location">
+                </div>
+                
+                <div class="form-group">
+                    <label for="size">Размер:</label>
+                    <input type="text" id="size" name="size" placeholder="например: 12x5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="pixel_pitch">Шаг пикселя:</label>
+                    <input type="text" id="pixel_pitch" name="pixel_pitch" placeholder="например: P6.66">
+                </div>
+                
+                <div class="form-group">
+                    <label>Категории:</label>
+                    <div class="checkbox-group">
+                        {{range .categories}}
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="cat_{{.ID}}" name="categories" value="{{.ID}}">
+                            <label for="cat_{{.ID}}">{{.Name}}</label>
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+                
+                <div class="featured-checkbox">
+                    <input type="checkbox" id="featured" name="featured">
+                    <label for="featured">⭐ Показать на главной странице</label>
+                </div>
+                
+                <button type="submit" class="btn">Создать проект</button>
+            </form>
+            
+            <!-- Форма загрузки изображений -->
+            <div id="uploadSection" class="upload-section hidden">
+                <h3>Загрузить изображения</h3>
+                <form id="uploadForm">
+                    <input type="hidden" id="project_id" name="project_id">
+                    <div class="form-group">
+                        <label for="images">Выберите изображения:</label>
+                        <input type="file" id="images" name="images" multiple accept="image/*">
+                    </div>
+                    <button type="submit" class="btn">Загрузить изображения</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Список проектов -->
+        <div class="projects-list">
+            <h2>Существующие проекты</h2>
+            {{range .projects}}
+            <div class="project-item">
+                <div class="project-info">
+                    <h3>{{.Title}}</h3>
+                    <p>{{.Description}}</p>
+                    <p><small>Размер: {{.Size}} | Пиксель: {{.PixelPitch}} | Изображений: {{len .Images}} | На главной: {{if .Featured}}<span style="color: #4A90E2; font-weight: bold;">⭐ Да</span>{{else}}<span style="color: #999;">Нет</span>{{end}}</small></p>
+                </div>
+                <div class="project-actions">
+                    <button class="btn" onclick="editProject({{.ID}})">Редактировать</button>
+                    <button class="btn btn-danger" onclick="deleteProject({{.ID}})">Удалить</button>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Редактировать проект</h2>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <form id="editProjectForm">
+                <input type="hidden" id="edit_project_id">
+                
+                <div class="form-group">
+                    <label for="edit_title">Название проекта:</label>
+                    <input type="text" id="edit_title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_description">Описание:</label>
+                    <textarea id="edit_description" name="description"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_location">Местоположение:</label>
+                    <input type="text" id="edit_location" name="location">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_size">Размер:</label>
+                    <input type="text" id="edit_size" name="size">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_pixel_pitch">Шаг пикселя:</label>
+                    <input type="text" id="edit_pixel_pitch" name="pixel_pitch">
+                </div>
+                
+                <div class="form-group">
+                    <label>Категории:</label>
+                    <div id="edit_categories" class="checkbox-group">
+                        <!-- Заполняется динамически -->
+                    </div>
+                </div>
+                
+                <div class="featured-checkbox">
+                    <input type="checkbox" id="edit_featured" name="featured">
+                    <label for="edit_featured">⭐ Показать на главной странице</label>
+                </div>
+                
+                <button type="submit" class="btn">Сохранить изменения</button>
+            </form>
+            
+            <!-- Управление изображениями -->
+            <div class="upload-section">
+                <h3>Изображения проекта</h3>
+                <div id="project_images" class="images-grid">
+                    <!-- Заполняется динамически -->
+                </div>
+                
+                <form id="editUploadForm" style="margin-top: 1rem;">
+                    <input type="hidden" id="edit_upload_project_id" name="project_id">
+                    <div class="form-group">
+                        <label for="edit_images">Добавить изображения:</label>
+                        <input type="file" id="edit_images" name="images" multiple accept="image/*">
+                    </div>
+                    <button type="submit" class="btn">Загрузить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактора кроппинга -->
+    <div id="cropModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Настройка отображения</h2>
+                <span class="close" onclick="closeCropModal()">&times;</span>
+            </div>
+            
+            <div class="crop-editor">
+                <div class="crop-preview">
+                    <img id="cropPreviewImage" src="" alt="Превью" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                
+                <div class="crop-controls">
+                    <div class="crop-control">
+                        <label for="cropX">Горизонтальное смещение:</label>
+                        <input type="range" id="cropX" min="0" max="100" value="50" oninput="updateCropPreview()">
+                        <div class="crop-value">Значение: <span id="cropXValue">50</span>%</div>
+                    </div>
+                    
+                    <div class="crop-control">
+                        <label for="cropY">Вертикальное смещение:</label>
+                        <input type="range" id="cropY" min="0" max="100" value="50" oninput="updateCropPreview()">
+                        <div class="crop-value">Значение: <span id="cropYValue">50</span>%</div>
+                    </div>
+                    
+                    <div class="crop-control">
+                        <label for="cropScale">Масштаб:</label>
+                        <input type="range" id="cropScale" min="0.5" max="3" step="0.1" value="1" oninput="updateCropPreview()">
+                        <div class="crop-value">Значение: <span id="cropScaleValue">1</span>x</div>
+                    </div>
+                    
+                    <button type="button" class="btn" onclick="resetCrop()">Сбросить</button>
+                    <button type="button" class="btn" onclick="saveCrop()" style="background: #28a745;">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Создание проекта
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/admin/projects', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    
+                    // Показываем форму загрузки изображений
+                    document.getElementById('project_id').value = result.project_id;
+                    document.getElementById('uploadSection').classList.remove('hidden');
+                    
+                    // Очищаем форму
+                    e.target.reset();
+                } else {
+                    showMessage(result.error || 'Ошибка создания проекта', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        });
+        
+        // Загрузка изображений
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/admin/upload-images', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    
+                    // Скрываем форму загрузки
+                    document.getElementById('uploadSection').classList.add('hidden');
+                    
+                    // Перезагружаем страницу через 2 секунды
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    showMessage(result.error || 'Ошибка загрузки изображений', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        });
+        
+        // Редактирование проекта
+        async function editProject(id) {
+            try {
+                const response = await fetch(`/admin/projects/${id}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Данные проекта:', data); // Отладочная информация
+                    
+                    // Заполняем форму данными проекта
+                    document.getElementById('edit_project_id').value = data.project.id;
+                    document.getElementById('edit_title').value = data.project.title || '';
+                    document.getElementById('edit_description').value = data.project.description || '';
+                    document.getElementById('edit_location').value = data.project.location || '';
+                    document.getElementById('edit_size').value = data.project.size || '';
+                    document.getElementById('edit_pixel_pitch').value = data.project.pixel_pitch || '';
+                    document.getElementById('edit_featured').checked = data.project.featured || false;
+                    document.getElementById('edit_upload_project_id').value = data.project.id;
+                    
+                    // Заполняем категории
+                    const categoriesDiv = document.getElementById('edit_categories');
+                    categoriesDiv.innerHTML = '';
+                    if (data.categories && Array.isArray(data.categories)) {
+                        data.categories.forEach(category => {
+                            const isChecked = data.project.categories && data.project.categories.some(pc => pc.id === category.id);
+                            categoriesDiv.innerHTML += `
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="edit_cat_${category.id}" name="categories" value="${category.id}" ${isChecked ? 'checked' : ''}>
+                                    <label for="edit_cat_${category.id}">${category.name}</label>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    // Заполняем изображения
+                    const imagesDiv = document.getElementById('project_images');
+                    imagesDiv.innerHTML = '';
+                    if (data.project.images && Array.isArray(data.project.images)) {
+                        data.project.images.forEach(image => {
+                            imagesDiv.innerHTML += `
+                                <div class="image-item">
+                                    <div class="image-preview-container">
+                                        <img src="/static/uploads/${image.filename}" 
+                                             alt="${image.alt || ''}" 
+                                             onerror="this.src='/static/images/placeholder.jpg'"
+                                             style="transform: scale(${image.crop_scale || 1}) translate(${image.crop_x || 0}%, ${image.crop_y || 0}%); object-position: center center;">
+                                    </div>
+                                    <button class="delete-image" onclick="deleteImage(${image.id})" title="Удалить">&times;</button>
+                                    <button class="crop-image" onclick="openCropEditor(${image.id}, '${image.filename}', ${(image.crop_x || 0) + 50}, ${(image.crop_y || 0) + 50}, ${image.crop_scale || 1})" title="Настроить отображение">✂️</button>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    // Показываем модальное окно
+                    document.getElementById('editModal').style.display = 'block';
+                } else {
+                    showMessage(data.error || 'Ошибка загрузки проекта', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+        
+        // Закрытие модального окна
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        // Сохранение изменений проекта
+        document.getElementById('editProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const projectId = document.getElementById('edit_project_id').value;
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch(`/admin/projects/${projectId}/update`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    closeEditModal();
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showMessage(result.error || 'Ошибка обновления проекта', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        });
+        
+        // Загрузка дополнительных изображений
+        document.getElementById('editUploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/admin/upload-images', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    // Перезагружаем изображения проекта
+                    const projectId = document.getElementById('edit_project_id').value;
+                    editProject(projectId);
+                } else {
+                    showMessage(result.error || 'Ошибка загрузки изображений', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        });
+        
+        // Удаление изображения
+        async function deleteImage(imageId) {
+            if (!confirm('Удалить это изображение?')) return;
+            
+            try {
+                const response = await fetch(`/admin/images/${imageId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    // Перезагружаем изображения проекта
+                    const projectId = document.getElementById('edit_project_id').value;
+                    editProject(projectId);
+                } else {
+                    showMessage(result.error || 'Ошибка удаления изображения', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+        
+        let currentImageId = null;
+        
+        // Открытие редактора кроппинга
+        function openCropEditor(imageId, filename, cropX, cropY, cropScale) {
+            currentImageId = imageId;
+            
+            // Устанавливаем изображение
+            const previewImg = document.getElementById('cropPreviewImage');
+            previewImg.src = `/static/uploads/${filename}`;
+            
+            // Устанавливаем значения слайдеров
+            document.getElementById('cropX').value = cropX;
+            document.getElementById('cropY').value = cropY;
+            document.getElementById('cropScale').value = cropScale;
+            
+            // Обновляем превью и значения
+            updateCropPreview();
+            
+            // Показываем модальное окно
+            document.getElementById('cropModal').style.display = 'block';
+        }
+        
+        // Обновление превью при изменении слайдеров
+        function updateCropPreview() {
+            const cropX = document.getElementById('cropX').value;
+            const cropY = document.getElementById('cropY').value;
+            const cropScale = document.getElementById('cropScale').value;
+            
+            // Обновляем отображаемые значения
+            document.getElementById('cropXValue').textContent = cropX;
+            document.getElementById('cropYValue').textContent = cropY;
+            document.getElementById('cropScaleValue').textContent = cropScale;
+            
+            // Применяем стили к превью
+            const previewImg = document.getElementById('cropPreviewImage');
+            const translateX = cropX - 50; // Центрируем относительно 50%
+            const translateY = cropY - 50; // Центрируем относительно 50%
+            previewImg.style.transform = `scale(${cropScale}) translate(${translateX}%, ${translateY}%)`;
+            previewImg.style.objectPosition = 'center center';
+            previewImg.style.transformOrigin = 'center center';
+        }
+        
+        // Сброс настроек к значениям по умолчанию
+        function resetCrop() {
+            document.getElementById('cropX').value = 50;
+            document.getElementById('cropY').value = 50;
+            document.getElementById('cropScale').value = 1;
+            updateCropPreview();
+        }
+        
+        // Сохранение настроек кроппинга
+        async function saveCrop() {
+            if (!currentImageId) {
+                console.error('currentImageId не установлен');
+                showMessage('Ошибка: не выбрано изображение', 'error');
+                return;
+            }
+            
+            const cropX = document.getElementById('cropX').value;
+            const cropY = document.getElementById('cropY').value;
+            const cropScale = document.getElementById('cropScale').value;
+            
+            console.log('Сохраняем настройки:', { imageId: currentImageId, cropX, cropY, cropScale });
+            
+            const formData = new FormData();
+            formData.append('crop_x', cropX);
+            formData.append('crop_y', cropY);
+            formData.append('crop_scale', cropScale);
+            
+            try {
+                const response = await fetch(`/admin/images/${currentImageId}/crop`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log('Ответ сервера:', response.status);
+                const result = await response.json();
+                console.log('Результат:', result);
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    closeCropModal();
+                    
+                    // Перезагружаем изображения проекта
+                    const projectId = document.getElementById('edit_project_id').value;
+                    if (projectId) {
+                        editProject(projectId);
+                    }
+                } else {
+                    showMessage(result.error || 'Ошибка сохранения настроек', 'error');
+                }
+            } catch (error) {
+                console.error('Ошибка запроса:', error);
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+        
+        // Закрытие модального окна редактора кроппинга
+        function closeCropModal() {
+            document.getElementById('cropModal').style.display = 'none';
+            currentImageId = null;
+        }
+        
+        // Закрытие модальных окон по клику вне их
+        window.onclick = function(event) {
+            const editModal = document.getElementById('editModal');
+            const cropModal = document.getElementById('cropModal');
+            
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+            if (event.target === cropModal) {
+                closeCropModal();
+            }
+        }
+        
+        // Удаление проекта
+        async function deleteProject(id) {
+            if (!confirm('Вы уверены, что хотите удалить этот проект? Все изображения также будут удалены.')) return;
+            
+            try {
+                const response = await fetch(`/admin/projects/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showMessage(result.error || 'Ошибка удаления проекта', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+        async function deleteProject(id) {
+            if (!confirm('Вы уверены, что хотите удалить этот проект?')) return;
+            
+            try {
+                const response = await fetch(`/admin/projects/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showMessage(result.error || 'Ошибка удаления проекта', 'error');
+                }
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+        
+        // Показ сообщений
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = type;
+            messageDiv.textContent = message;
+            
+            setTimeout(() => {
+                messageDiv.className = '';
+                messageDiv.textContent = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

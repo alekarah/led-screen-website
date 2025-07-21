@@ -1,8 +1,12 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -20,13 +24,23 @@ func New(db *gorm.DB) *Handlers {
 
 // HomePage - главная страница
 func (h *Handlers) HomePage(c *gin.Context) {
-	// Получаем последние проекты для главной страницы
+	// Получаем проекты для главной страницы (только те, что помечены для показа)
 	var featuredProjects []models.Project
 	h.db.Where("featured = ?", true).
 		Preload("Categories").
 		Preload("Images").
+		Order("created_at DESC").
 		Limit(6).
 		Find(&featuredProjects)
+
+	// Если нет рекомендуемых проектов, показываем последние
+	if len(featuredProjects) == 0 {
+		h.db.Preload("Categories").
+			Preload("Images").
+			Order("created_at DESC").
+			Limit(6).
+			Find(&featuredProjects)
+	}
 
 	// Получаем основные услуги
 	var services []models.Service
@@ -178,4 +192,58 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.",
 	})
+}
+
+// Утилитные функции
+func generateSlug(title string) string {
+	slug := strings.ToLower(title)
+	slug = strings.ReplaceAll(slug, " ", "-")
+	slug = strings.ReplaceAll(slug, "ё", "e")
+	slug = strings.ReplaceAll(slug, "а", "a")
+	slug = strings.ReplaceAll(slug, "б", "b")
+	slug = strings.ReplaceAll(slug, "в", "v")
+	slug = strings.ReplaceAll(slug, "г", "g")
+	slug = strings.ReplaceAll(slug, "д", "d")
+	slug = strings.ReplaceAll(slug, "е", "e")
+	slug = strings.ReplaceAll(slug, "ж", "zh")
+	slug = strings.ReplaceAll(slug, "з", "z")
+	slug = strings.ReplaceAll(slug, "и", "i")
+	slug = strings.ReplaceAll(slug, "й", "y")
+	slug = strings.ReplaceAll(slug, "к", "k")
+	slug = strings.ReplaceAll(slug, "л", "l")
+	slug = strings.ReplaceAll(slug, "м", "m")
+	slug = strings.ReplaceAll(slug, "н", "n")
+	slug = strings.ReplaceAll(slug, "о", "o")
+	slug = strings.ReplaceAll(slug, "п", "p")
+	slug = strings.ReplaceAll(slug, "р", "r")
+	slug = strings.ReplaceAll(slug, "с", "s")
+	slug = strings.ReplaceAll(slug, "т", "t")
+	slug = strings.ReplaceAll(slug, "у", "u")
+	slug = strings.ReplaceAll(slug, "ф", "f")
+	slug = strings.ReplaceAll(slug, "х", "h")
+	slug = strings.ReplaceAll(slug, "ц", "ts")
+	slug = strings.ReplaceAll(slug, "ч", "ch")
+	slug = strings.ReplaceAll(slug, "ш", "sh")
+	slug = strings.ReplaceAll(slug, "щ", "sch")
+	slug = strings.ReplaceAll(slug, "ъ", "")
+	slug = strings.ReplaceAll(slug, "ы", "y")
+	slug = strings.ReplaceAll(slug, "ь", "")
+	slug = strings.ReplaceAll(slug, "э", "e")
+	slug = strings.ReplaceAll(slug, "ю", "yu")
+	slug = strings.ReplaceAll(slug, "я", "ya")
+
+	// Добавляем timestamp для уникальности
+	return fmt.Sprintf("%s-%d", slug, time.Now().Unix())
+}
+
+func isImageFile(filename string) bool {
+	ext := strings.ToLower(filepath.Ext(filename))
+	allowedExts := []string{".jpg", ".jpeg", ".png", ".gif", ".webp"}
+
+	for _, allowed := range allowedExts {
+		if ext == allowed {
+			return true
+		}
+	}
+	return false
 }
