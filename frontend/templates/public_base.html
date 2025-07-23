@@ -59,6 +59,39 @@
     <script>
         // Базовые функции сайта
         console.log('Сайт LED Display загружен');
+        
+        // ИСПРАВЛЕНИЕ ОТОБРАЖЕНИЯ ИЗОБРАЖЕНИЙ НА ПУБЛИЧНОМ САЙТЕ
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const projectImages = document.querySelectorAll('img[src*="/static/uploads/"]');
+                console.log('🖼️ Исправляем изображения на публичном сайте:', projectImages.length);
+                
+                projectImages.forEach((img, index) => {
+                    const currentTransform = img.style.transform;
+                    
+                    if (currentTransform && currentTransform.includes('translate')) {
+                        const scaleMatch = currentTransform.match(/scale\(([\d.]+)\)/);
+                        const translateMatch = currentTransform.match(/translate\(([\d.-]+)%, ([\d.-]+)%\)/);
+                        
+                        if (scaleMatch && translateMatch) {
+                            const scale = parseFloat(scaleMatch[1]);
+                            const rawX = parseFloat(translateMatch[1]);
+                            const rawY = parseFloat(translateMatch[2]);
+                            
+                            // Преобразуем значения из БД (0-100) в CSS (-100% до 100%)
+                            const translateX = (rawX - 50) * 2;
+                            const translateY = (rawY - 50) * 2;
+                            
+                            // Применяем исправленный transform
+                            img.style.transform = `scale(${scale}) translate(${translateX}%, ${translateY}%)`;
+                            img.style.transformOrigin = 'center center';
+                            
+                            console.log(`✅ Исправлено изображение ${index}: ${rawX},${rawY} → ${translateX}%,${translateY}%`);
+                        }
+                    }
+                });
+            }, 100);
+        });
     </script>
     
     <!-- Скрипты для конкретной страницы -->

@@ -18,7 +18,7 @@ function setCropValues(cropX, cropY, cropScale) {
     updateDisplayValues();
     
     // Обновляем превью
-    updateCropPreview();
+    updatePreviewTransform();
 }
 
 // Сброс настроек к значениям по умолчанию

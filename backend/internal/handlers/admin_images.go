@@ -127,8 +127,8 @@ func (h *Handlers) UpdateImageCrop(c *gin.Context) {
 	cropData = validateCropData(cropData)
 
 	// Обновляем настройки изображения
-	image.CropX = cropData.X - 50 // Сохраняем готовое смещение
-	image.CropY = cropData.Y - 50 // Сохраняем готовое смещение
+	image.CropX = cropData.X
+	image.CropY = cropData.Y
 	image.CropScale = cropData.Scale
 
 	if err := h.db.Save(&image).Error; err != nil {

@@ -31,9 +31,13 @@ function fillProjectImages(images) {
 
 // Создание HTML для изображения
 function createImageHTML(image) {
-    const cropX = (image.crop_x || 0) + 50; // Преобразуем в диапазон 0-100
-    const cropY = (image.crop_y || 0) + 50; // Преобразуем в диапазон 0-100
+    const cropX = image.crop_x !== undefined ? image.crop_x : 50;
+    const cropY = image.crop_y !== undefined ? image.crop_y : 50;
     const cropScale = image.crop_scale || 1;
+    
+    // Преобразуем для CSS отображения
+    const translateX = (cropX - 50) * 2;
+    const translateY = (cropY - 50) * 2;
     
     return `
         <div class="image-item" data-image-id="${image.id}">
@@ -41,7 +45,7 @@ function createImageHTML(image) {
                 <img src="/static/uploads/${encodeURIComponent(image.filename)}" 
                      alt="${escapeHtml(image.alt || image.original_name || '')}" 
                      onerror="handleImageError(this)"
-                     style="transform: scale(${cropScale}) translate(${image.crop_x || 0}%, ${image.crop_y || 0}%); object-position: center center; transform-origin: center center;">
+                     style="transform: scale(${cropScale}) translate(${translateX}%, ${translateY}%); object-position: center center; transform-origin: center center;">
                 
                 <!-- Индикатор загрузки -->
                 <div class="image-loading hidden">

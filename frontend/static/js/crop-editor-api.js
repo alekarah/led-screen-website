@@ -39,10 +39,14 @@ function openCropEditor(imageId, filename, cropX = 50, cropY = 50, cropScale = 1
         if (cropXSlider) cropXSlider.value = 50;
         if (cropYSlider) cropYSlider.value = 50;
         if (cropScaleSlider) cropScaleSlider.value = 1;
-        
-        // ТЕПЕРЬ устанавливаем переданные значения
-        setCropValues(cropX, cropY, cropScale);
+
+        // Обновляем отображение с центральными значениями
         updatePreviewTransform();
+
+        // ПОТОМ устанавливаем переданные значения (если нужно)
+        if (cropX !== 50 || cropY !== 50 || cropScale !== 1) {
+            setCropValues(cropX, cropY, cropScale);
+        }
         
         // ПРИНУДИТЕЛЬНО добавляем обработчики событий для слайдеров
         // Удаляем старые обработчики
@@ -140,8 +144,8 @@ async function saveCrop() {
         const cropScale = parseFloat(document.getElementById('cropScale').value);
         
         // Преобразуем значения в правильный диапазон для сервера
-        const serverCropX = (cropX - 50) * 2; // Диапазон -100 до 100
-        const serverCropY = (cropY - 50) * 2; // Диапазон -100 до 100
+        const serverCropX = cropX; // Диапазон 0-100
+        const serverCropY = cropY; // Диапазон 0-100
         
         console.log('Отправляем на сервер:', {
             crop_x: serverCropX,

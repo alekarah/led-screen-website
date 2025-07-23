@@ -14,9 +14,6 @@
     
     <!-- Дополнительные стили для конкретной страницы -->
     {{block "extra-css" .}}{{end}}
-
-    <!-- Библиотека для Drag & Drop -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 <body>
     <!-- Шапка админки -->
@@ -45,10 +42,24 @@
     <!-- Основные скрипты -->
     <script src="/static/js/admin-base.js"></script>
 
+    <!-- Библиотека для Drag & Drop
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    -->
+
     <!-- Принудительно переопределяем showMessage для админки -->
     <script>
     window.showMessage = window.showAdminMessage;
     console.log('✅ showMessage переопределен на showAdminMessage');
+
+    // ПРОВЕРЯЕМ ЗАГРУЗКУ SORTABLE
+    setTimeout(() => {
+        console.log('🔧 Sortable доступен?', typeof Sortable);
+        if (typeof Sortable !== 'undefined') {
+            console.log('✅ Sortable загружен успешно');
+        } else {
+            console.error('❌ Sortable не загружен!');
+        }
+    }, 100);
     </script>
 
     <!-- Скрипты для конкретной страницы -->
@@ -88,7 +99,7 @@ if (window.location.pathname.includes('/admin/projects')) {
         '/static/js/crop-editor-ui.js',
         '/static/js/crop-editor-presets.js',
         '/static/js/crop-editor-api.js',
-        '/static/js/project-sorting.js'
+//        '/static/js/project-sorting.js'
     ];
     
     let loadedCount = 0;
@@ -117,6 +128,59 @@ if (window.location.pathname.includes('/admin/projects')) {
                         initImagePreview();
                         console.log('✅ initImagePreview вызван');
                     }
+
+                    if (typeof initProjectSorting === 'function') {
+                        initProjectSorting();
+                        console.log('✅ initProjectSorting вызван');
+                    } else {
+                        console.log('❌ initProjectSorting не найден, создаем принудительно...');
+                        // Принудительная инициализация если функция не найдена
+                        setTimeout(() => {
+                            const container = document.getElementById('sortable-projects');
+                            if (container && typeof Sortable !== 'undefined') {
+                                window.sortableInstance = Sortable.create(container, {
+                                    handle: '.drag-handle',
+                                    animation: 150,
+                                    ghostClass: 'sortable-ghost',
+                                    chosenClass: 'sortable-chosen',
+                                    onEnd: function(evt) {
+                                        console.log('Проект перемещен:', evt.oldIndex, '→', evt.newIndex);
+                                    }
+                                });
+                                console.log('✅ Принудительная сортировка создана');
+                            }
+                        }, 300);
+                    }
+                    
+                    // ИСПРАВЛЯЕМ ОТОБРАЖЕНИЕ ИЗОБРАЖЕНИЙ НА ГЛАВНОЙ СТРАНИЦЕ
+                    setTimeout(() => {
+                        const thumbnailImages = document.querySelectorAll('.project-thumbnail img');
+                        console.log('🖼️ Исправляем отображение миниатюр:', thumbnailImages.length);
+                        
+                        thumbnailImages.forEach((img, index) => {
+                            const currentTransform = img.style.transform;
+                            
+                            // Извлекаем значения из текущего transform
+                            const scaleMatch = currentTransform.match(/scale\(([\d.]+)\)/);
+                            const translateMatch = currentTransform.match(/translate\(([\d.-]+)%, ([\d.-]+)%\)/);
+                            
+                            if (scaleMatch && translateMatch) {
+                                const scale = parseFloat(scaleMatch[1]);
+                                const rawX = parseFloat(translateMatch[1]);
+                                const rawY = parseFloat(translateMatch[2]);
+                                
+                                // Преобразуем значения: если это сырые значения из БД (0-100), то преобразуем
+                                const translateX = (rawX - 50) * 2;
+                                const translateY = (rawY - 50) * 2;
+                                
+                                // Применяем исправленный transform
+                                img.style.transform = `scale(${scale}) translate(${translateX}%, ${translateY}%)`;
+                                
+                                console.log(`Изображение ${index}: ${rawX},${rawY} → ${translateX}%,${translateY}%`);
+                            }
+                        });
+                    }, 200);
+                    
                 }, 100);
             }
         };

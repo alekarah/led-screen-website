@@ -15,27 +15,6 @@ function updateDisplayValues() {
     if (cropScaleValue) cropScaleValue.textContent = parseFloat(cropScale).toFixed(1);
 }
 
-// Обновление превью при изменении слайдеров
-function updateCropPreview() {
-    const cropX = document.getElementById('cropX')?.value || 50;
-    const cropY = document.getElementById('cropY')?.value || 50;
-    const cropScale = document.getElementById('cropScale')?.value || 1;
-    
-    // Обновляем отображаемые значения
-    updateDisplayValues();
-    
-    // Применяем стили к превью
-    const previewImg = document.getElementById('cropPreviewImage');
-    if (previewImg) {
-        // Используем те же вычисления, что и в crop-editor-api.js
-        const translateX = (cropX - 50) * 2; // Диапазон -100% до 100%
-        const translateY = (cropY - 50) * 2; // Диапазон -100% до 100%
-        
-        previewImg.style.transform = `scale(${cropScale}) translate(${translateX}%, ${translateY}%)`;
-        previewImg.style.transformOrigin = 'center center';
-    }
-}
-
 // Инициализация слайдеров
 function initCropSliders() {
     const sliders = ['cropX', 'cropY', 'cropScale'];
@@ -44,10 +23,10 @@ function initCropSliders() {
         const slider = document.getElementById(sliderId);
         if (slider) {
             // Обновляем превью при изменении слайдера
-            slider.addEventListener('input', debounce(updateCropPreview, 50));
+            slider.addEventListener('input', debounce(updatePreviewTransform, 50));
             
             // Также обновляем при отпускании мыши для точности
-            slider.addEventListener('change', updateCropPreview);
+            slider.addEventListener('change', updatePreviewTransform);
         }
     });
 }
@@ -67,7 +46,7 @@ function adjustSlider(sliderId, delta) {
     newValue = Math.round(newValue / step) * step;
     
     slider.value = newValue;
-    updateCropPreview();
+    updatePreviewTransform();
 }
 
 // Debounce функция для оптимизации
@@ -101,7 +80,7 @@ function animateSliderChange(sliderId, targetValue, duration = 300) {
         
         const currentValue = startValue + (difference * easeOut);
         slider.value = currentValue;
-        updateCropPreview();
+        updatePreviewTransform();
         
         if (progress < 1) {
             requestAnimationFrame(animate);
@@ -155,7 +134,6 @@ function hidePreviewLoading() {
 
 // Экспорт функций
 window.updateDisplayValues = updateDisplayValues;
-window.updateCropPreview = updateCropPreview;
 window.initCropSliders = initCropSliders;
 window.adjustSlider = adjustSlider;
 window.animateSliderChange = animateSliderChange;
