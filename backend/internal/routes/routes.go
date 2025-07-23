@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"ledsite/internal/handlers"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +16,6 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 
 	// Страницы сайта
 	router.GET("/projects", h.ProjectsPage)
-	router.GET("/projects/:slug", h.ProjectDetail)
 	router.GET("/services", h.ServicesPage)
 	router.GET("/contact", h.ContactPage)
 
@@ -37,11 +35,11 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		admin.GET("/projects/:id", h.GetProject)
 		admin.POST("/projects/:id/update", h.UpdateProject)
 		admin.DELETE("/projects/:id", h.DeleteProject)
+		admin.POST("/projects/:id/reorder", h.ReorderProject)
+		admin.POST("/projects/bulk-reorder", h.BulkReorderProjects)
+		admin.POST("/projects/reset-order", h.ResetProjectOrder)
 		admin.POST("/upload-images", h.UploadImages)
 		admin.DELETE("/images/:id", h.DeleteImage)
 		admin.POST("/images/:id/crop", h.UpdateImageCrop)
 	}
-
-	// Отладочная информация - ПРИНУДИТЕЛЬНО используем fmt
-	fmt.Printf("🔧 Маршрут кроппинга зарегистрирован: POST /admin/images/:id/crop\n")
 }

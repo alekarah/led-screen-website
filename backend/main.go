@@ -48,7 +48,7 @@ func main() {
 
 	// Статические файлы из frontend
 	router.Static("/static", "../frontend/static")
-	router.LoadHTMLGlob("../frontend/templates/*")
+	router.LoadHTMLGlob("../frontend/templates/*.html")
 
 	port := os.Getenv("PORT")
 	if port == "" {

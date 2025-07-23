@@ -1,0 +1,176 @@
+/* Стили форм админки */
+
+/* Элементы форм */
+.form-group { 
+    margin-bottom: 1rem; 
+}
+
+.form-group label { 
+    display: block; 
+    margin-bottom: 0.5rem; 
+    font-weight: bold; 
+    color: #555;
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select { 
+    width: 100%; 
+    padding: 0.75rem; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+    outline: none;
+    border-color: #4A90E2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.form-group textarea { 
+    height: 100px; 
+    resize: vertical; 
+}
+
+/* Группы чекбоксов */
+.checkbox-group { 
+    display: flex; 
+    gap: 1rem; 
+    flex-wrap: wrap; 
+}
+
+.checkbox-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+}
+
+/* Выделенный чекбокс "Показать на главной" */
+.featured-checkbox { 
+    background: #e8f4fd; 
+    border: 2px solid #4A90E2; 
+    border-radius: 8px; 
+    padding: 1rem; 
+    margin: 1rem 0;
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem;
+    transition: background-color 0.3s;
+}
+
+.featured-checkbox:hover { 
+    background: #d1ecf1; 
+}
+
+.featured-checkbox input[type="checkbox"] { 
+    width: 20px; 
+    height: 20px; 
+    accent-color: #4A90E2;
+}
+
+.featured-checkbox label { 
+    font-weight: bold; 
+    color: #2c5aa0; 
+    margin: 0;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+/* Секция загрузки */
+.upload-section { 
+    margin-top: 1.5rem; 
+    padding-top: 1.5rem; 
+    border-top: 1px solid #eee; 
+}
+
+.upload-section h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* Сетка изображений */
+.images-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    gap: 1rem; 
+    margin-top: 1rem; 
+}
+
+.image-item { 
+    position: relative; 
+}
+
+.image-preview-container { 
+    width: 100%; 
+    height: 120px; 
+    overflow: hidden; 
+    margin-bottom: 5px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    position: relative;
+    background: #f8f9fa;
+}
+
+.image-item img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+/* Кнопки на изображениях */
+.delete-image, 
+.crop-image { 
+    position: absolute; 
+    top: 5px; 
+    background: #dc3545; 
+    color: white; 
+    border: none; 
+    border-radius: 50%; 
+    width: 25px; 
+    height: 25px; 
+    cursor: pointer; 
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s;
+}
+
+.delete-image { 
+    right: 5px; 
+}
+
+.delete-image:hover {
+    opacity: 0.8;
+}
+
+.crop-image { 
+    right: 35px; 
+    background: #4A90E2; 
+}
+
+.crop-image:hover {
+    opacity: 0.8;
+}
+
+/* Адаптивность форм */
+@media (max-width: 768px) {
+    .checkbox-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .images-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .featured-checkbox {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+}

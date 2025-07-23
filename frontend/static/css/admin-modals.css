@@ -1,0 +1,249 @@
+/* Стили модальных окон админки */
+
+/* Базовое модальное окно */
+.modal { 
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.5); 
+    z-index: 1000; 
+    backdrop-filter: blur(2px);
+}
+
+.modal-content { 
+    background: white; 
+    margin: 2% auto; 
+    padding: 2rem; 
+    width: 90%; 
+    max-width: 800px; 
+    border-radius: 12px; 
+    max-height: 90vh; 
+    overflow-y: auto; 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+/* Анимация появления модального окна */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Заголовок модального окна */
+.modal-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 1.5rem; 
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+    color: #333;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Кнопка закрытия */
+.close { 
+    font-size: 1.8rem; 
+    cursor: pointer; 
+    color: #666;
+    transition: color 0.3s;
+    padding: 0.5rem;
+    line-height: 1;
+    border: none;
+    background: transparent;
+}
+
+.close:hover {
+    color: #333;
+    background: #f5f5f5;
+    border-radius: 50%;
+}
+
+/* Контент модального окна */
+.modal-body {
+    margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+/* Специальные стили для разных типов модальных окон */
+
+/* Модальное окно подтверждения */
+.confirm-modal .modal-content {
+    max-width: 400px;
+    text-align: center;
+}
+
+.confirm-modal .modal-body {
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.confirm-modal .modal-footer {
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Модальное окно с формой */
+.form-modal .modal-content {
+    max-width: 600px;
+}
+
+/* Модальное окно галереи изображений */
+.gallery-modal .modal-content {
+    max-width: 900px;
+    padding: 1rem;
+}
+
+.gallery-modal .images-grid {
+    margin-top: 1rem;
+}
+
+/* Модальное окно загрузки */
+.upload-modal .modal-content {
+    max-width: 500px;
+}
+
+.upload-progress {
+    margin-top: 1rem;
+    background: #f5f5f5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.upload-progress-bar {
+    height: 8px;
+    background: #4A90E2;
+    transition: width 0.3s ease;
+}
+
+/* Оверлей для загрузки */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4A90E2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Адаптивность модальных окон */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+        padding: 1.5rem;
+        max-height: 85vh;
+    }
+    
+    .modal-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+        padding-bottom: 1rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+    
+    .close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1rem;
+        margin: 10% auto;
+    }
+    
+    .confirm-modal .modal-content {
+        max-width: 300px;
+    }
+    
+    .form-modal .modal-content,
+    .gallery-modal .modal-content {
+        max-width: none;
+        width: 95%;
+    }
+}
+
+/* Темная тема для модальных окон (опционально) */
+@media (prefers-color-scheme: dark) {
+    .modal {
+        background: rgba(0,0,0,0.7);
+    }
+    
+    .modal-content {
+        background: #2d3748;
+        color: #e2e8f0;
+    }
+    
+    .modal-header {
+        border-bottom-color: #4a5568;
+    }
+    
+    .modal-footer {
+        border-top-color: #4a5568;
+    }
+    
+    .close {
+        color: #a0aec0;
+    }
+    
+    .close:hover {
+        color: #e2e8f0;
+        background: #4a5568;
+    }
+}

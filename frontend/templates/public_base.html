@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+    
+    <!-- Основные стили сайта -->
+    <link rel="stylesheet" href="/static/css/public-base.css">
+    <link rel="stylesheet" href="/static/css/public-home.css">
+    <link rel="stylesheet" href="/static/css/public-contact.css">
+    <link rel="stylesheet" href="/static/css/public-services.css">
+    <link rel="stylesheet" href="/static/css/public-forms.css">
+    <link rel="stylesheet" href="/static/css/public-footer.css">
+    <link rel="stylesheet" href="/static/css/public-responsive.css">
+    
+    <!-- Дополнительные стили для конкретной страницы -->
+    {{block "extra-css" .}}{{end}}
+</head>
+<body>
+    <!-- Навигация -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">LED Display</a>
+            <ul class="nav-links">
+                <li><a href="/">Главная</a></li>
+                <li><a href="/projects">Портфолио</a></li>
+                <li><a href="/services">Услуги</a></li>
+                <li><a href="/contact">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        {{if eq .title "LED экраны в СПб | Service 'n' Repair"}}
+            {{template "home-content" .}}
+        {{else if eq .title "Контакты | LED экраны"}}
+            {{template "contact-content" .}}
+        {{else if eq .title "Услуги | LED экраны"}}
+            {{template "services-content" .}}
+        {{else if eq .title "Портфолио - LED Display"}}
+            {{template "content" .}}
+        {{else}}
+            {{template "content" .}}
+        {{end}}
+    </main>
+
+    <!-- Footer (если нужен) -->
+    {{if eq .title "LED экраны в СПб | Service 'n' Repair"}}
+        {{template "home-footer" .}}
+    {{else if eq .title "Контакты | LED экраны"}}
+        {{template "contact-footer" .}}
+    {{else}}
+        {{block "footer" .}}{{end}}
+    {{end}}
+
+    <!-- Основные скрипты -->
+    <script>
+        // Базовые функции сайта
+        console.log('Сайт LED Display загружен');
+    </script>
+    
+    <!-- Скрипты для конкретной страницы -->
+    {{block "extra-js" .}}{{end}}
+</body>
+</html>

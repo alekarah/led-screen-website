@@ -1,0 +1,236 @@
+/* Стили футеров для всех страниц */
+
+/* Базовый простой футер */
+.simple-footer {
+    background: #333;
+    color: white;
+    padding: 1rem 0;
+    margin-top: 3rem;
+}
+
+/* Контент футера с двумя колонками */
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-info h3 {
+    margin-bottom: 0.5rem;
+    color: #667eea;
+    font-size: 1.2rem;
+}
+
+.footer-info p {
+    color: #ccc;
+    line-height: 1.5;
+}
+
+.footer-contact p {
+    margin-bottom: 0.5rem;
+    color: #ccc;
+}
+
+.footer-contact a {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-contact a:hover {
+    color: #8fa4ea;
+    text-decoration: underline;
+}
+
+/* Нижняя часть футера с копирайтом */
+.footer-bottom {
+    border-top: 1px solid #555;
+    padding-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.simple-footer .footer-bottom {
+    border-top: 1px solid #555;
+    padding-top: 1rem;
+    padding-bottom: 0.75rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+/* Компактная версия футера (для контактов) */
+.simple-footer.compact {
+    padding: 0.75rem 0;
+    margin-top: 2rem;
+}
+
+.simple-footer.compact .footer-bottom {
+    border-top: none;
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+}
+
+/* Статистический футер (для портфолио) */
+.stats-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0;
+    margin-top: 3rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    text-align: center;
+}
+
+.stat-item {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.stat-item:nth-child(1) { animation-delay: 0.1s; }
+.stat-item:nth-child(2) { animation-delay: 0.2s; }
+.stat-item:nth-child(3) { animation-delay: 0.3s; }
+.stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.stat-item p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+/* Анимация для статистики */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ховер эффекты для статистики */
+.stat-item:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover h3 {
+    color: #fff;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+/* Адаптивность футеров */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .simple-footer {
+        padding: 1.5rem 0;
+    }
+    
+    .footer-info h3 {
+        font-size: 1.1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .stat-item h3 {
+        font-size: 2rem;
+    }
+    
+    .stat-item p {
+        font-size: 1rem;
+    }
+    
+    .stats-section {
+        padding: 2.5rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content {
+        gap: 1rem;
+    }
+    
+    .footer-info h3 {
+        font-size: 1rem;
+    }
+    
+    .footer-info p,
+    .footer-contact p {
+        font-size: 0.9rem;
+    }
+    
+    .footer-bottom {
+        font-size: 0.8rem;
+        padding-top: 0.75rem;
+    }
+    
+    .simple-footer.compact .footer-bottom {
+        font-size: 0.8rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-item h3 {
+        font-size: 1.8rem;
+    }
+    
+    .stat-item p {
+        font-size: 0.95rem;
+    }
+    
+    .stats-section {
+        padding: 2rem 0;
+    }
+}
+
+/* Дополнительные утилиты для футеров */
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #555, transparent);
+    margin: 1rem 0;
+}
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.footer-social a {
+    color: #ccc;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.footer-social a:hover {
+    color: #667eea;
+}

@@ -55,9 +55,9 @@ func (h *Handlers) HomePage(c *gin.Context) {
 	})
 }
 
-// ProjectsPage - страница портфолио
+// ProjectsPage отображает страницу портфолио
 func (h *Handlers) ProjectsPage(c *gin.Context) {
-	// Получаем параметры фильтрации
+	// Получаем параметр фильтрации
 	categorySlug := c.Query("category")
 
 	query := h.db.Preload("Categories").Preload("Images")
@@ -69,41 +69,16 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 	}
 
 	var projects []models.Project
-	query.Order("created_at DESC").Find(&projects)
+	query.Order("sort_order ASC, created_at DESC").Find(&projects)
 
-	// Получаем все категории для фильтров
 	var categories []models.Category
 	h.db.Find(&categories)
 
 	c.HTML(http.StatusOK, "projects.html", gin.H{
-		"title":          "Портфолио | LED экраны",
+		"title":          "Портфолио - LED Display",
 		"projects":       projects,
 		"categories":     categories,
 		"activeCategory": categorySlug,
-	})
-}
-
-// ProjectDetail - детальная страница проекта
-func (h *Handlers) ProjectDetail(c *gin.Context) {
-	slug := c.Param("slug")
-
-	var project models.Project
-	if err := h.db.Where("slug = ?", slug).
-		Preload("Categories").
-		Preload("Images").
-		First(&project).Error; err != nil {
-		c.HTML(http.StatusNotFound, "404.html", gin.H{
-			"title": "Проект не найден",
-		})
-		return
-	}
-
-	// Увеличиваем счетчик просмотров
-	h.db.Model(&project).Update("view_count", project.ViewCount+1)
-
-	c.HTML(http.StatusOK, "project_detail.html", gin.H{
-		"title":   project.Title + " | Портфолио",
-		"project": project,
 	})
 }
 
@@ -164,11 +139,23 @@ func (h *Handlers) GetProjects(c *gin.Context) {
 func (h *Handlers) SubmitContact(c *gin.Context) {
 	var form models.ContactForm
 
-	if err := c.ShouldBindJSON(&form); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Неверные данные формы",
-		})
-		return
+	// Проверяем Content-Type и парсим данные соответственно
+	contentType := c.GetHeader("Content-Type")
+	if strings.Contains(contentType, "application/json") {
+		if err := c.ShouldBindJSON(&form); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Неверные данные формы",
+			})
+			return
+		}
+	} else {
+		// Парсим данные формы
+		if err := c.ShouldBind(&form); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Неверные данные формы",
+			})
+			return
+		}
 	}
 
 	// Простая валидация

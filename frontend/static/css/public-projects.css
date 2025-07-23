@@ -1,0 +1,165 @@
+/* Стили для страницы портфолио */
+
+/* Фильтры */
+.filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.filter-btn {
+    padding: 0.8rem 1.5rem;
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    font-size: 1rem;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+/* Сетка проектов */
+.projects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    justify-content: center;
+}
+
+.public-project-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 350px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    height: 620px;
+}
+
+.public-project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* Изображения проектов */
+.public-project-image {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+    background: #f0f0f0;
+}
+
+.public-project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+    transform-origin: center center;
+}
+
+.public-project-card:hover .public-project-image img {
+    transform: scale(1.05);
+}
+
+/* Контент карточек */
+.public-project-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.public-project-content h3 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+    min-height: 2.8rem;
+    line-height: 1.2;
+}
+
+.public-project-content .project-size {
+    font-size: 1rem;
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    min-height: 1.5rem;
+}
+
+.public-project-content .project-description {
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 0.7rem;
+    font-size: 0.9rem;
+    min-height: 4.5rem;
+}
+
+.public-project-content .project-location {
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    min-height: 1.3rem;
+}
+
+/* Категории проектов */
+.public-project-content .project-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+}
+
+.category-tag {
+    background: #f0f0f0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Кнопка "Подробнее" */
+.project-detail-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.project-detail-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+/* Контейнер для нижних элементов */
+.project-bottom {
+    margin-top: auto;
+}
+
+/* Стили только для публичных карточек */
+.public-project-card .project-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}

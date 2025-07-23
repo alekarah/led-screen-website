@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+    
+    <!-- Основные стили админки -->
+    <link rel="stylesheet" href="/static/css/admin-base.css">
+    <link rel="stylesheet" href="/static/css/admin-forms.css">
+    <link rel="stylesheet" href="/static/css/admin-projects.css">
+    <link rel="stylesheet" href="/static/css/admin-modals.css">
+    <link rel="stylesheet" href="/static/css/crop-editor.css">
+    
+    <!-- Дополнительные стили для конкретной страницы -->
+    {{block "extra-css" .}}{{end}}
+
+    <!-- Библиотека для Drag & Drop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+</head>
+<body>
+    <!-- Шапка админки -->
+    <div class="header">
+        <div class="container">
+            <h1>Админ панель</h1>
+            <ul class="nav-links">
+                <li><a href="/admin">Главная</a></li>
+                <li><a href="/admin/projects">Проекты</a></li>
+                <li><a href="/">На сайт</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <div id="message"></div>
+        
+        <!-- Контент конкретной страницы -->
+        {{template "admin-content" .}}
+    </div>
+
+    <!-- Модальные окна (общие для всех страниц) -->
+    {{block "modals" .}}{{end}}
+
+    <!-- Основные скрипты -->
+    <script src="/static/js/admin-base.js"></script>
+
+    <!-- Принудительно переопределяем showMessage для админки -->
+    <script>
+    window.showMessage = window.showAdminMessage;
+    console.log('✅ showMessage переопределен на showAdminMessage');
+    </script>
+
+    <!-- Скрипты для конкретной страницы -->
+    {{block "extra-js" .}}{{end}}
+
+<!-- ПРИНУДИТЕЛЬНАЯ ЗАГРУЗКА СКРИПТОВ АДМИНКИ -->
+<script>
+if (window.location.pathname.includes('/admin/projects')) {
+    console.log('🔧 Принудительная загрузка скриптов админки...');
+    
+    // БЛОКИРУЕМ contact-form.js В АДМИНКЕ
+    const contactScript = document.querySelector('script[src*="contact-form.js"]');
+    if (contactScript) {
+        contactScript.remove();
+        console.log('❌ contact-form.js удален из админки');
+    }
+    
+    // Блокируем повторную загрузку contact-form.js
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.tagName === 'SCRIPT' && node.src && node.src.includes('contact-form.js')) {
+                    node.remove();
+                    console.log('❌ Заблокирована повторная загрузка contact-form.js');
+                }
+            });
+        });
+    });
+    observer.observe(document.head, { childList: true });
+    observer.observe(document.body, { childList: true });
+    
+    const scripts = [
+        '/static/js/admin-projects-creation.js',
+        '/static/js/admin-projects-editing.js',
+        '/static/js/admin-projects-images.js',
+        '/static/js/crop-editor-core.js',
+        '/static/js/crop-editor-ui.js',
+        '/static/js/crop-editor-presets.js',
+        '/static/js/crop-editor-api.js',
+        '/static/js/project-sorting.js'
+    ];
+    
+    let loadedCount = 0;
+    
+    scripts.forEach(src => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => {
+            loadedCount++;
+            console.log(`✅ Загружен (${loadedCount}/${scripts.length}):`, src);
+            
+            if (loadedCount === scripts.length) {
+                console.log('🎉 Все скрипты загружены! Инициализирую...');
+                
+                // ПРИНУДИТЕЛЬНО ВЫЗЫВАЕМ ИНИЦИАЛИЗАЦИЮ
+                setTimeout(() => {
+                    if (typeof initProjectCreation === 'function') {
+                        initProjectCreation();
+                        console.log('✅ initProjectCreation вызван');
+                    }
+                    if (typeof initImageUpload === 'function') {
+                        initImageUpload();
+                        console.log('✅ initImageUpload вызван');
+                    }
+                    if (typeof initImagePreview === 'function') {
+                        initImagePreview();
+                        console.log('✅ initImagePreview вызван');
+                    }
+                }, 100);
+            }
+        };
+        script.onerror = () => console.error('❌ Ошибка загрузки:', src);
+        document.head.appendChild(script);
+    });
+}
+</script>
+</body>
+</html>

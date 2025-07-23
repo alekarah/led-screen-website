@@ -28,6 +28,7 @@ type Project struct {
 	Completed   bool      `json:"completed" gorm:"default:true"`
 	Featured    bool      `json:"featured" gorm:"default:false"`
 	ViewCount   int       `json:"view_count" gorm:"default:0"`
+	SortOrder   int       `json:"sort_order" gorm:"default:0"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 

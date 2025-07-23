@@ -1,0 +1,175 @@
+{{define "contact-content"}}
+<div class="container">
+    <!-- Заголовок страницы -->
+    <div class="section-header">
+        <h1>Контакты</h1>
+        <p>Свяжитесь с нами для консультации по LED экранам и получения коммерческого предложения</p>
+    </div>
+</div>
+
+<!-- Основная информация -->
+<div class="contact-info-section">
+    <div class="container">
+        <div class="contact-cards">
+            <!-- Телефон -->
+            <div class="contact-card">
+                <div class="contact-icon">📞</div>
+                <h3>Телефон</h3>
+                <p><a href="tel:+79214291702">+7 (921) 429-17-02</a></p>
+                <span class="contact-note">Звонки принимаем с 9:00 до 21:00</span>
+            </div>
+            
+            <!-- Email -->
+            <div class="contact-card">
+                <div class="contact-icon">✉️</div>
+                <h3>Электронная почта</h3>
+                <p><a href="mailto:info@led-display-spb.ru">info@led-display-spb.ru</a></p>
+                <span class="contact-note">Ответим в течение 2 часов</span>
+            </div>
+            
+            <!-- Адрес -->
+            <div class="contact-card">
+                <div class="contact-icon">📍</div>
+                <h3>Адрес</h3>
+                <p>Санкт-Петербург<br>Ленинградская область</p>
+                <span class="contact-note">Выезд на объект бесплатно</span>
+            </div>
+            
+            <!-- Время работы -->
+            <div class="contact-card">
+                <div class="contact-icon">🕒</div>
+                <h3>Режим работы</h3>
+                <p>Пн-Пт: 9:00 - 18:00<br>Сб-Вс: 10:00 - 16:00</p>
+                <span class="contact-note">Аварийные вызовы 24/7</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Форма обратной связи -->
+<div class="contact-form-section">
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Оставьте заявку</h2>
+                <p>Мы свяжемся с вами в течение 30 минут и предоставим бесплатную консультацию</p>
+            </div>
+            
+            <form id="contactForm" class="contact-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Имя *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Телефон *</label>
+                        <input type="tel" id="phone" name="phone" required 
+                            placeholder="+7 (___) ___-__-__">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" 
+                            placeholder="example@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Компания</label>
+                        <input type="text" id="company" name="company" 
+                            placeholder="Название организации">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="project_type">Тип проекта</label>
+                    <select id="project_type" name="project_type">
+                        <option value="">Выберите тип проекта</option>
+                        <option value="indoor">Внутренние LED экраны</option>
+                        <option value="outdoor">Наружные LED экраны</option>
+                        <option value="rental">Аренда оборудования</option>
+                        <option value="service">Техническое обслуживание</option>
+                        <option value="repair">Ремонт LED экранов</option>
+                        <option value="consultation">Консультация</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Сообщение</label>
+                    <textarea id="message" name="message" rows="4" 
+                            placeholder="Опишите ваш проект, размеры экрана, место установки и другие детали..."></textarea>
+                </div>
+                
+                <!-- Согласие на обработку данных -->
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="privacy" name="privacy" required>
+                        <span class="checkmark"></span>
+                        Согласен на <a href="/privacy" target="_blank">обработку персональных данных</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large">
+                    <span class="btn-text">Отправить заявку</span>
+                    <span class="btn-loading hidden">Отправляем...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Дополнительная информация -->
+<div class="additional-info-section">
+    <div class="container">
+        <div class="info-blocks">
+            <div class="info-block">
+                <h3>🚀 Быстрый старт</h3>
+                <ul>
+                    <li>Бесплатная консультация по телефону</li>
+                    <li>Выезд специалиста на объект</li>
+                    <li>Техническое решение за 24 часа</li>
+                    <li>Коммерческое предложение в день обращения</li>
+                </ul>
+            </div>
+            
+            <div class="info-block">
+                <h3>💼 Наши услуги</h3>
+                <ul>
+                    <li>Проектирование LED решений</li>
+                    <li>Поставка и монтаж оборудования</li>
+                    <li>Техническое обслуживание</li>
+                    <li>Ремонт и модернизация</li>
+                </ul>
+            </div>
+            
+            <div class="info-block">
+                <h3>⭐ Преимущества</h3>
+                <ul>
+                    <li>Опыт работы более 5 лет</li>
+                    <li>Более 200 успешных проектов</li>
+                    <li>Гарантия на все виды работ</li>
+                    <li>Поддержка 24/7</li>
+                </ul>
+            </div>
+        </div>
+    </div>    
+</div>
+{{end}}
+
+{{define "contact-footer"}}
+<footer class="simple-footer compact">
+    <div class="container">
+        <div class="footer-bottom">
+            <p>&copy; 2025 Service 'n' Repair LED Display. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+{{end}}
+
+{{define "extra-js"}}
+<script src="/static/js/contact-form.js"></script>
+{{end}}
+
+{{template "public_base.html" .}}

@@ -1,173 +1,86 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.title}}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <style>
-        /* Временные базовые стили */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Header */
-        header { background: #4A90E2; color: white; padding: 1rem 0; }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: bold; }
-        .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { color: white; text-decoration: none; }
-        .nav-links a:hover { text-decoration: underline; }
-        
-        /* Hero section */
-        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 0; text-align: center; }
-        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
-        .btn { display: inline-block; background: #ff6b6b; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .btn:hover { background: #ee5a5a; }
-        
-        /* Services */
-        .services { padding: 4rem 0; background: #f8f9fa; }
-        .services h2 { text-align: center; margin-bottom: 3rem; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .service-card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; }
-        
-        /* Projects */
-        .projects { padding: 4rem 0; }
-        .projects h2 { text-align: center; margin-bottom: 3rem; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; justify-items: center; }
-        .project-card { 
-            background: white; 
-            border-radius: 10px; 
-            overflow: visible; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-            transition: transform 0.3s ease; 
-            text-align: center;
-            padding: 1rem;
-            max-width: 300px;
-        }
-        .project-card:hover { transform: translateY(-5px); }
-        
-        /* Прямоугольное изображение */
-        .project-image-rect {
-            width: 250px;
-            height: 180px;
-            overflow: hidden;
-            margin: 0 auto 1.5rem auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border-radius: 10px;
-            position: relative;
-        }
-        .project-image-rect img { 
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform-origin: center center;
-        }
-        
-        .project-card-content { padding: 0; }
-        .project-card h3 { margin-bottom: 0.5rem; color: #333; font-size: 1.3rem; }
-        .project-card .project-size { 
-            color: #4A90E2; 
-            font-weight: bold; 
-            font-size: 1.1rem; 
-            margin-bottom: 0.5rem; 
-        }
-        .project-card p { color: #666; margin-bottom: 1rem; line-height: 1.5; font-size: 0.95rem; }
-        .project-meta { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
-        .project-link { color: #4A90E2; text-decoration: none; font-weight: bold; }
-        .project-link:hover { text-decoration: underline; }
-        
-        /* Footer */
-        footer { background: #333; color: white; text-align: center; padding: 2rem 0; }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="container">
-            <div class="logo">LED Display</div>
-            <ul class="nav-links">
-                <li><a href="/">Главная</a></li>
-                <li><a href="/projects">Портфолио</a></li>
-                <li><a href="/services">Услуги</a></li>
-                <li><a href="/contact">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
+{{define "home-content"}}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>LED экраны для вашего бизнеса</h1>
+        <p>Продажа, монтаж и обслуживание LED дисплеев в Санкт-Петербурге и Ленинградской области</p>
+        <a href="/contact" class="btn btn-hero">Получить консультацию</a>
+    </div>
+</section>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="container">
-                <h1>LED экраны для вашего бизнеса</h1>
-                <p>Продажа, монтаж и обслуживание LED дисплеев в Санкт-Петербурге и Ленинградской области</p>
-                <a href="/contact" class="btn">Получить консультацию</a>
+<!-- Services Section -->
+<section class="services">
+    <div class="container">
+        <h2>Наши услуги</h2>
+        <div class="services-grid">
+            {{range .services}}
+            <div class="service-card">
+                <h3>{{.Name}}</h3>
+                <p>{{.ShortDesc}}</p>
             </div>
-        </section>
-
-        <!-- Services Section -->
-        <section class="services">
-            <div class="container">
-                <h2>Наши услуги</h2>
-                <div class="services-grid">
-                    {{range .services}}
-                    <div class="service-card">
-                        <h3>{{.Name}}</h3>
-                        <p>{{.ShortDesc}}</p>
-                    </div>
-                    {{end}}
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section class="projects">
-            <div class="container">
-                <h2>Последние проекты</h2>
-                <div class="projects-grid">
-                    {{range .projects}}
-                    <div class="project-card">
-                        {{if .Images}}
-                            {{$firstImage := index .Images 0}}
-                            <div class="project-image-rect">
-                                <img src="/static/uploads/{{$firstImage.Filename}}" 
-                                    alt="{{.Title}}" 
-                                    loading="lazy"
-                                    style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}}) translate({{if $firstImage.CropX}}{{printf "%.0f" $firstImage.CropX}}{{else}}0{{end}}%, {{if $firstImage.CropY}}{{printf "%.0f" $firstImage.CropY}}{{else}}0{{end}}%); object-position: center center; transform-origin: center center;">
-                            </div>
-                        {{else}}
-                            <div class="project-image-rect">
-                                <img src="/static/images/placeholder.jpg" alt="{{.Title}}" loading="lazy">
-                            </div>
-                        {{end}}
-                        <div class="project-card-content">
-                            <h3>{{.Title}}</h3>
-                            {{if .Size}}
-                            <div class="project-size">{{.Size}}</div>
-                            {{end}}
-                            <p>{{.Description}}</p>
-                            {{if or .PixelPitch .Location}}
-                            <div class="project-meta">
-                                {{if .PixelPitch}}Пиксель: {{.PixelPitch}}{{end}}
-                                {{if .Location}}<br>{{.Location}}{{end}}
-                            </div>
-                            {{end}}
-                            <a href="/projects/{{.Slug}}" class="project-link">Подробнее →</a>
-                        </div>
-                    </div>
-                    {{end}}
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Service 'n' Repair LED Display. Все права защищены.</p>
-            <p>Телефон: +7 (921) 429-17-02</p>
+            {{end}}
         </div>
-    </footer>
+    </div>
+</section>
 
-    <script src="/static/js/main.js"></script>
-</body>
-</html>
+<!-- Projects Section -->
+<section class="projects">
+    <div class="container">
+        <h2>Последние проекты</h2>
+        <div class="projects-grid">
+            {{range .projects}}
+            <div class="public-project-card">
+                {{if .Images}}
+                    {{$firstImage := index .Images 0}}
+                    <div class="project-image-rect">
+                        <img src="/static/uploads/{{$firstImage.Filename}}" 
+                            alt="{{.Title}}" 
+                            loading="lazy"
+                            style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}}) translate({{if $firstImage.CropX}}{{printf "%.0f" $firstImage.CropX}}{{else}}0{{end}}%, {{if $firstImage.CropY}}{{printf "%.0f" $firstImage.CropY}}{{else}}0{{end}}%); object-position: center center; transform-origin: center center;">
+                    </div>
+                {{else}}
+                    <div class="project-image-rect">
+                        <img src="/static/images/placeholder.jpg" alt="{{.Title}}" loading="lazy">
+                    </div>
+                {{end}}
+                <div class="project-card-content">
+                    <h3>{{.Title}}</h3>
+                    {{if .Size}}
+                    <div class="project-size">{{.Size}}</div>
+                    {{end}}
+                    <p>{{.Description}}</p>
+                    {{if or .PixelPitch .Location}}
+                    <div class="project-meta">
+                        {{if .PixelPitch}}Пиксель: {{.PixelPitch}}{{end}}
+                        {{if .Location}}<br>{{.Location}}{{end}}
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+</section>
+{{end}}
+
+{{define "home-footer"}}
+<footer class="simple-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>LED Display Service</h3>
+                <p>Профессиональные LED решения в Санкт-Петербурге</p>
+            </div>
+            <div class="footer-contact">
+                <p><strong>Телефон:</strong> <a href="tel:+79214291702">+7 (921) 429-17-02</a></p>
+                <p><strong>Email:</strong> <a href="mailto:info@led-display-spb.ru">info@led-display-spb.ru</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Service 'n' Repair LED Display. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+{{end}}
+
+{{template "public_base.html" .}}
