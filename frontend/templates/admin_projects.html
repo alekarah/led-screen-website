@@ -1,67 +1,7 @@
 {{define "admin-content"}}
-<!-- Форма добавления проекта -->
 <div class="form-section">
-    <h2>Добавить новый проект</h2>
-    <form id="projectForm">
-        <div class="form-group">
-            <label for="title">Название проекта:</label>
-            <input type="text" id="title" name="title" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="description">Описание:</label>
-            <textarea id="description" name="description"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="location">Местоположение:</label>
-            <input type="text" id="location" name="location">
-        </div>
-        
-        <div class="form-group">
-            <label for="size">Размер:</label>
-            <input type="text" id="size" name="size" placeholder="например: 12x5">
-        </div>
-        
-        <div class="form-group">
-            <label for="pixel_pitch">Шаг пикселя:</label>
-            <input type="text" id="pixel_pitch" name="pixel_pitch" placeholder="например: P6.66">
-        </div>
-        
-        <div class="form-group">
-            <label>Категории:</label>
-            <div class="checkbox-group">
-                {{range .categories}}
-                <div class="checkbox-item">
-                    <input type="checkbox" id="cat_{{.ID}}" name="categories" value="{{.ID}}">
-                    <label for="cat_{{.ID}}">{{.Name}}</label>
-                </div>
-                {{end}}
-            </div>
-        </div>
-        
-        <div class="featured-checkbox">
-            <input type="checkbox" id="featured" name="featured">
-            <label for="featured">⭐ Показать на главной странице</label>
-        </div>
-        
-        <button type="submit" class="btn">Создать проект</button>
-    </form>
-    
-    <!-- Форма загрузки изображений -->
-    <div id="uploadSection" class="upload-section hidden">
-        <h3>Загрузить изображения</h3>
-        <form id="uploadForm">
-            <input type="hidden" id="project_id" name="project_id">
-            <div class="form-group">
-                <label for="images">Выберите изображения:</label>
-                <input type="file" id="images" name="images" multiple accept="image/*">
-            </div>
-            <button type="submit" class="btn">Загрузить изображения</button>
-        </form>
-    </div>
+    <button class="btn" id="openCreateProjectModal">Создать проект</button>
 </div>
-
 <!-- Список проектов -->
 <div class="projects-list">
     <h2>Существующие проекты</h2>
@@ -174,6 +114,73 @@
     </div>
 </div>
 
+<!-- Модальное окно создания нового проекта -->
+<div id="createProjectModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Создать новый проект</h2>
+      <span class="close" onclick="closeCreateProjectModal()">&times;</span>
+    </div>
+    <form id="createProjectForm">
+      <div class="form-group">
+            <label for="title">Название проекта:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Описание:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="location">Местоположение:</label>
+            <input type="text" id="location" name="location">
+        </div>
+        
+        <div class="form-group">
+            <label for="size">Размер:</label>
+            <input type="text" id="size" name="size" placeholder="например: 12x5">
+        </div>
+        
+        <div class="form-group">
+            <label for="pixel_pitch">Шаг пикселя:</label>
+            <input type="text" id="pixel_pitch" name="pixel_pitch" placeholder="например: P6.66">
+        </div>
+        
+        <div class="form-group">
+            <label>Категории:</label>
+            <div class="checkbox-group">
+                {{range .categories}}
+                <div class="checkbox-item">
+                    <input type="checkbox" id="cat_{{.ID}}" name="categories" value="{{.ID}}">
+                    <label for="cat_{{.ID}}">{{.Name}}</label>
+                </div>
+                {{end}}
+            </div>
+        </div>
+        
+        <div class="featured-checkbox">
+            <input type="checkbox" id="featured" name="featured">
+            <label for="featured">⭐ Показать на главной странице</label>
+        </div>
+      <button type="submit" class="btn">Создать проект</button>
+    </form>
+    <!-- Форма загрузки изображений -->
+    <div id="uploadSection" class="upload-section hidden">
+        <h3>Загрузить изображения</h3>
+        <form id="uploadForm">
+            <input type="hidden" id="project_id" name="project_id">
+            <div class="form-group">
+                <label for="images">Выберите изображения:</label>
+                <input type="file" id="images" name="images" multiple accept="image/*">
+            </div>
+            <button type="submit" class="btn">Загрузить изображения</button>
+        </form>
+    </div>
+  </div>
+</div>
+
+
 <!-- Модальное окно редактора кроппинга -->
 <div id="cropModal" class="modal">
     <div class="modal-content">
@@ -216,25 +223,26 @@
 </div>
 {{end}}
 
-{{define "extra-js"}}
-<script src="/static/js/admin-projects-creation.js"></script>
-<script src="/static/js/admin-projects-editing.js"></script>
-<script src="/static/js/admin-projects-images.js"></script>
-<script src="/static/js/crop-editor-core.js"></script>
-<script src="/static/js/crop-editor-ui.js"></script>
-<script src="/static/js/crop-editor-presets.js"></script>
-<script src="/static/js/crop-editor-api.js"></script>
-<!-- ВРЕМЕННО ОТКЛЮЧЕНО
-<script src="/static/js/project-sorting.js"></script>
--->
-<script src="/static/js/admin-projects-init.js"></script>
+{{define "projects-extra-js"}}
+    <script src="/static/js/admin-projects-creation.js"></script>
+    <script src="/static/js/admin-projects-editing.js"></script>
+    <script src="/static/js/admin-projects-images.js"></script>
+    <script src="/static/js/crop-editor-core.js"></script>
+    <script src="/static/js/crop-editor-ui.js"></script>
+    <script src="/static/js/crop-editor-presets.js"></script>
+    <script src="/static/js/crop-editor-api.js"></script>
+    <script src="/static/js/project-sorting.js"></script>
+    <script src="/static/js/admin-projects-init.js"></script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    initCropUI();
-    initCropKeyboardShortcuts();
-    console.log('✂️ Редактор кроппинга загружен (модульная версия)');
-});
-</script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initCropUI();
+        initCropKeyboardShortcuts();
+        console.log('✂️ Редактор кроппинга загружен (модульная версия)');
+    });
+    </script>
+    <script>
+        console.log("🟢 extra-js подключился!");
+    </script>
+
 {{end}}
-{{template "admin_base.html" .}}

@@ -237,8 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Экспорт функции для использования в других файлах
     window.showAdminMessage = showAdminMessage; 
-
-    console.log('🔧 Базовые функции админки загружены');
 });
 
 // ЭКСПОРТ ФУНКЦИЙ ПОСЛЕ DOMContentLoaded

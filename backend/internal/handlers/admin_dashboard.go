@@ -34,7 +34,7 @@ func (h *Handlers) AdminProjects(c *gin.Context) {
 	var categories []models.Category
 	h.db.Find(&categories)
 
-	c.HTML(http.StatusOK, "admin_projects.html", gin.H{
+	c.HTML(http.StatusOK, "admin_base.html", gin.H{
 		"title":      "Управление проектами",
 		"projects":   projects,
 		"categories": categories,
