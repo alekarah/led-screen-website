@@ -1,12 +1,7 @@
 // Редактирование проектов в админке
 
-// ПРИНУДИТЕЛЬНОЕ СОЗДАНИЕ ГЛОБАЛЬНЫХ ФУНКЦИЙ
-console.log('🔧 Загрузка функций редактирования проектов...');
-
 // Глобальная функция редактирования
 window.editProject = async function(id) {
-    console.log('Редактирование проекта:', id);
-    
     if (!id) {
         showAdminMessage('Некорректный ID проекта', 'error');
         return;
@@ -17,10 +12,8 @@ window.editProject = async function(id) {
         const response = await fetch(`/admin/projects/${id}`);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
-        }
-        
+        }       
         const data = await response.json();
-        console.log('Данные проекта:', data);
         
         // Заполняем форму редактирования
         fillEditForm(data);
@@ -40,8 +33,6 @@ window.editProject = async function(id) {
 
 // Глобальная функция удаления
 window.deleteProject = async function(id) {
-    console.log('Удаление проекта:', id);
-    
     if (!id) {
         showAdminMessage('Некорректный ID проекта', 'error');
         return;
@@ -74,8 +65,6 @@ window.deleteProject = async function(id) {
 
 // Глобальная функция закрытия модального окна
 window.closeEditModal = function() {
-    console.log('Закрытие модального окна редактирования');
-    
     const modal = document.getElementById('editModal');
     if (modal) {
         modal.style.display = 'none';
@@ -188,8 +177,7 @@ function initEditForms() {
         
         newEditForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            console.log('📝 Обновление проекта...');
-            
+
             const projectId = document.getElementById('edit_project_id').value;
             const title = this.querySelector('[name="title"]').value.trim();
             
@@ -218,8 +206,6 @@ function initEditForms() {
                 showAdminMessage('Ошибка при обновлении проекта: ' + error.message, 'error');
             }
         });
-        
-        console.log('✅ Форма редактирования пересоздана');
     }
     
     // Пересоздаем форму загрузки изображений
@@ -230,8 +216,7 @@ function initEditForms() {
         
         newUploadForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            console.log('📤 Загрузка изображений...');
-            
+
             const fileInput = this.querySelector('input[type="file"]');
             if (!fileInput.files.length) {
                 showAdminMessage('Выберите файлы для загрузки', 'error');
@@ -270,21 +255,9 @@ function initEditForms() {
                 showAdminMessage('Ошибка при загрузке изображений: ' + error.message, 'error');
             }
         });
-        
-        console.log('✅ Форма загрузки пересоздана');
     }
 }
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('✅ Функции редактирования проектов загружены');
-    
-    // Проверяем доступность функций
-    console.log('Доступные функции:', {
-        editProject: typeof window.editProject,
-        deleteProject: typeof window.deleteProject,
-        closeEditModal: typeof window.closeEditModal
-    });
 });
-
-console.log('📋 Модуль редактирования проектов инициализирован');

@@ -169,6 +169,37 @@
     margin-top: 1rem;
 }
 
+/* Анимация для слайдеров */
+.crop-control input[type="range"] {
+    transition: all 0.2s ease;
+}
+
+.crop-control input[type="range"]:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    outline: 2px solid #4A90E2;
+    outline-offset: 2px;
+}
+
+/* Улучшенные стили для значений */
+.crop-value {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Контейнер для кнопок действий */
+.crop-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.crop-actions .btn {
+    margin: 0;
+}
+
 /* Адаптивность для модального окна */
 @media (max-width: 768px) {
     .modal-content {
@@ -221,31 +252,20 @@
     }
 }
 
-/* Анимация для слайдеров */
-.crop-control input[type="range"] {
-    transition: all 0.2s ease;
-}
-
-.crop-control input[type="range"]:focus {
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
-}
-
-/* Улучшенные стили для значений */
-.crop-value {
-    font-family: 'Courier New', monospace;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-/* Контейнер для кнопок действий */
-.crop-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
-}
-
-.crop-actions .btn {
-    margin: 0;
+/* Темная тема (опционально) */
+@media (prefers-color-scheme: dark) {
+  .modal-content {
+    background: #191c1e;
+    color: #e8e8e8;
+    border: 1px solid #222;
+  }
+  .crop-preview {
+    background: #222;
+    border-color: #357abd;
+  }
+  .crop-value {
+    background: #222;
+    color: #9cf;
+  }
+  .close { color: #eee; }
 }

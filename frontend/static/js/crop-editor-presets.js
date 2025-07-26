@@ -56,8 +56,6 @@ function copyCropSettings() {
     // Сохраняем в localStorage для последующего использования
     localStorage.setItem('cropSettings', JSON.stringify(settings));
     showMessage('Настройки скопированы', 'success');
-    
-    console.log('Настройки скопированы:', settings);
 }
 
 // Вставка настроек кроппинга из буфера
@@ -71,7 +69,6 @@ function pasteCropSettings() {
             if (isValidCropSettings(settings)) {
                 setCropValues(settings.cropX, settings.cropY, settings.cropScale);
                 showMessage('Настройки вставлены', 'success');
-                console.log('Настройки вставлены:', settings);
             } else {
                 showMessage('Некорректные сохраненные настройки', 'error');
             }

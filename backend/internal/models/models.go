@@ -50,7 +50,7 @@ type Image struct {
 	Caption       string `json:"caption"`
 	SortOrder     int    `json:"sort_order" gorm:"default:0"`
 
-	// Настройки кроппинга для круглого превью
+	// Настройки кроппинга для превью
 	CropX     float64 `json:"crop_x" gorm:"default:50"`      // позиция X в процентах (0-100)
 	CropY     float64 `json:"crop_y" gorm:"default:50"`      // позиция Y в процентах (0-100)
 	CropScale float64 `json:"crop_scale" gorm:"default:1.0"` // масштаб (0.5-3.0)

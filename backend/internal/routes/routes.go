@@ -11,6 +11,11 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
+	// Healthcheck endpoint (для prod/devops)
+	router.GET("/healthz", func(c *gin.Context) {
+		c.String(200, "ok")
+	})
+
 	// Главная страница
 	router.GET("/", h.HomePage)
 

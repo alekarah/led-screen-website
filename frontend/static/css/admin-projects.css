@@ -92,6 +92,11 @@
     cursor: grabbing;
 }
 
+.drag-handle:focus {
+    outline: 2px solid #4A90E2;
+    outline-offset: 2px;
+}
+
 /* Миниатюры проектов */
 .project-thumbnail {
     width: 60px;

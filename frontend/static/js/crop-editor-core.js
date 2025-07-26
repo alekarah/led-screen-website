@@ -72,7 +72,6 @@ function showCropMessage(message, type = 'success') {
         return;
     }
     
-    console.log(`${type.toUpperCase()}: ${message}`);
     if (type === 'error') {
         alert('❌ ' + message);
     } else {

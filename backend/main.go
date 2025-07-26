@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"os"
 
@@ -43,12 +44,18 @@ func main() {
 
 	router := gin.Default()
 
-	// Настраиваем маршруты
-	routes.Setup(router, h)
+	funcMap := template.FuncMap{
+		"mul": func(a, b float64) float64 { return a * b },
+		"sub": func(a, b float64) float64 { return a - b },
+	}
+	router.SetFuncMap(funcMap)
 
 	// Статические файлы из frontend
 	router.Static("/static", "../frontend/static")
 	router.LoadHTMLGlob("../frontend/templates/*.html")
+
+	// Настраиваем маршруты
+	routes.Setup(router, h)
 
 	port := os.Getenv("PORT")
 	if port == "" {

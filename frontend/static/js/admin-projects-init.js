@@ -2,19 +2,10 @@
 
 // Инициализация всех функций при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📋 Инициализация модулей управления проектами...');
-    
     try {
-        // Инициализируем модули в правильном порядке
         initializeModules();
-        
-        // Инициализируем общие обработчики
         initCommonEventHandlers();
-        
-        // Настраиваем глобальные параметры
         setupGlobalSettings();
-        
-        console.log('✅ Все модули управления проектами загружены успешно');
     } catch (error) {
         console.error('❌ Ошибка инициализации модулей:', error);
         showAdminMessage('Ошибка загрузки модулей управления проектами', 'error');
@@ -23,22 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Инициализация модулей
 function initializeModules() {
-    // Инициализируем модули создания проектов
-    if (typeof initProjectCreation === 'function') {
-        initProjectCreation();
-        console.log('✓ Модуль создания проектов инициализирован');
-    }
-    
-    if (typeof initImageUpload === 'function') {
-        initImageUpload();
-        console.log('✓ Модуль загрузки изображений инициализирован');
-    }
-    
-    // Инициализируем модули работы с изображениями
-    if (typeof initImagePreview === 'function') {
-        initImagePreview();
-        console.log('✓ Модуль превью изображений инициализирован');
-    }
+    if (typeof initProjectCreation === 'function') initProjectCreation();
+    if (typeof initProjectEditing === 'function') initProjectEditing();
+    if (typeof initProjectImages === 'function') initProjectImages();
+    if (typeof initProjectSorting === 'function') initProjectSorting();
 }
 
 // Инициализация общих обработчиков событий
@@ -62,8 +41,6 @@ function initCommonEventHandlers() {
     
     // Обработчик для drag & drop файлов
     initDragAndDrop();
-    
-    console.log('✓ Общие обработчики событий инициализированы');
 }
 
 // Настройка глобальных параметров
@@ -76,8 +53,6 @@ function setupGlobalSettings() {
     
     // Настройки производительности
     setupPerformanceOptimizations();
-    
-    console.log('✓ Глобальные настройки применены');
 }
 
 // Закрытие всех модальных окон
@@ -116,8 +91,6 @@ function saveFormData(form) {
     
     const formId = form.id || 'unknown_form';
     localStorage.setItem(`autosave_${formId}`, JSON.stringify(data));
-    
-    console.log(`💾 Автосохранение формы ${formId}`);
 }
 
 // Восстановление данных формы из localStorage
@@ -140,8 +113,6 @@ function restoreFormData(formId) {
                 }
             }
         });
-        
-        console.log(`🔄 Восстановлены данные формы ${formId}`);
     } catch (error) {
         console.error('Ошибка восстановления данных формы:', error);
     }

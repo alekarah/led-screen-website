@@ -19,9 +19,7 @@ function initProjectSorting() {
             const projectId = evt.item.getAttribute('data-project-id');
             const newIndex = evt.newIndex;
             const oldIndex = evt.oldIndex;
-            
-            console.log(`Проект ${projectId} перемещен с позиции ${oldIndex} на позицию ${newIndex}`);
-            
+                       
             // Сохраняем новый порядок на сервере
             updateProjectOrder(projectId, newIndex);
         },
@@ -31,8 +29,6 @@ function initProjectSorting() {
             showMessage('Перетащите проект в нужную позицию', 'success');
         }
     });
-    
-    console.log('🎯 Drag & Drop сортировка инициализирована');
 }
 
 // Сохранение нового порядка на сервере
@@ -123,8 +119,6 @@ async function resetProjectOrder() {
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     initProjectSorting();
-    
-    console.log('📋 Сортировка проектов загружена');
 });
 
 // Глобальные функции

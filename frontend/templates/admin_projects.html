@@ -18,7 +18,10 @@
                             {{$firstImage := index .Images 0}}
                             <img src="/static/uploads/{{$firstImage.Filename}}" 
                                 alt="{{.Title}}" 
-                                style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}}) translate({{if $firstImage.CropX}}{{printf "%.0f" $firstImage.CropX}}{{else}}0{{end}}%, {{if $firstImage.CropY}}{{printf "%.0f" $firstImage.CropY}}{{else}}0{{end}}%); object-position: center center; transform-origin: center center;">
+                                style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}})
+                                                translate({{mul (sub $firstImage.CropX 50) 2}}%, {{mul (sub $firstImage.CropY 50) 2}}%);
+                                        object-position: center center;
+                                        transform-origin: center center;">
                         {{else}}
                             <div class="no-image">📷</div>
                         {{end}}
@@ -238,11 +241,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         initCropUI();
         initCropKeyboardShortcuts();
-        console.log('✂️ Редактор кроппинга загружен (модульная версия)');
     });
     </script>
-    <script>
-        console.log("🟢 extra-js подключился!");
-    </script>
-
 {{end}}

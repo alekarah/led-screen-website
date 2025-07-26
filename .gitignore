@@ -1,0 +1,102 @@
+# .env и прочие файлы с секретами
+.env
+.env.*
+
+# Пример (оставляем в git)
+!.env.example
+
+# Базы данных и временные папки Postgres
+*.db
+postgres_data/
+pgdata/
+*.sql
+
+# Docker и контейнерные артефакты
+*.pid
+*.sock
+
+# Логи
+*.log
+*.gz
+*.tmp
+
+# Node.js (если используется в frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Сборка/дистрибутивы фронта
+frontend/dist/
+frontend/build/
+frontend/static/uploads/
+frontend/static/tmp/
+frontend/.cache/
+
+# Результаты сборки Go
+*.exe
+*.exe~
+*.out
+*.test
+*.a
+*.o
+
+# Go bin, vendor, tmp
+bin/
+vendor/
+tmp/
+backend/tmp/
+backend/bin/
+backend/vendor/
+
+# IDE и редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+.DS_Store
+Thumbs.db
+
+# ОС и системные файлы
+.DS_Store
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Мусор macOS/Linux/Windows
+*~
+
+# Папки Python (если есть python-services)
+__pycache__/
+*.pyc
+*.pyo
+
+# GitHub Copilot, VS Code settings, JetBrains IDE
+*.code-workspace
+*.iml
+*.ipr
+*.iws
+
+# Папки и файлы тестов (если есть)
+coverage/
+*.coverprofile
+
+# Frontend service artifacts
+frontend/node_modules/
+frontend/.next/
+frontend/.nuxt/
+frontend/out/
+frontend/.env
+frontend/.env.*
+
+# Docker Compose override files (часто не надо коммитить в прод)
+docker-compose.override.yml
+
+# migrations в prod могут быть вне git (если есть дампы)
+migrations/*.sql
+
+# Общее
+*.old
+*.orig

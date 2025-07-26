@@ -1,4 +1,4 @@
-{{define "content"}}
+{{define "projects-content"}}
 <div class="container">
     <!-- Заголовок -->
     <div class="section-header">
@@ -24,7 +24,10 @@
                     <img src="/static/uploads/{{$firstImage.Filename}}" 
                         alt="{{.Title}}" 
                         loading="lazy"
-                        style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}}) translate({{if $firstImage.CropX}}{{printf "%.0f" $firstImage.CropX}}{{else}}0{{end}}%, {{if $firstImage.CropY}}{{printf "%.0f" $firstImage.CropY}}{{else}}0{{end}}%); object-position: center center; transform-origin: center center;">
+                        style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}})
+                                        translate({{mul (sub $firstImage.CropX 50) 2}}%, {{mul (sub $firstImage.CropY 50) 2}}%);
+                                object-position: center center;
+                                transform-origin: center center;">
                 {{else}}
                     <img src="/static/images/placeholder.jpg" alt="{{.Title}}" loading="lazy">
                 {{end}}

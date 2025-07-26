@@ -79,6 +79,17 @@ body {
     background: #218838;
 }
 
+.btn:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.btn:focus {
+    outline: 2px solid #357abd;
+    outline-offset: 2px;
+}
+
 /* Утилитарные классы */
 .hidden { 
     display: none; 
@@ -109,7 +120,7 @@ body {
     padding: 2rem; 
     border-radius: 8px; 
     margin-bottom: 2rem; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .form-section h2 {
@@ -122,7 +133,7 @@ body {
     background: white; 
     padding: 2rem; 
     border-radius: 8px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .projects-list h2 {

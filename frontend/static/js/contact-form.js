@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initContactForm();
     initPhoneMask();
     initFormValidation();
-    
-    console.log('📞 Форма обратной связи инициализирована');
 });
 
 // Инициализация основной формы
@@ -308,9 +306,7 @@ function isValidPhone(phone) {
 }
 
 // Показ уведомлений
-function showMessage(message, type) {
-    console.log(`${type.toUpperCase()}: ${message}`);
-    
+function showMessage(message, type) {   
     if (type === 'error') {
         alert('❌ ' + message);
     } else {

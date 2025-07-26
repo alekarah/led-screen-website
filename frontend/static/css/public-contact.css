@@ -77,6 +77,12 @@
     margin: 0 auto;
 }
 
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #bdbdbd;
+    opacity: 1;
+}
+
 /* Дополнительная информация */
 .additional-info-section {
     background: #f8f9fa;

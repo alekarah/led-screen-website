@@ -234,9 +234,6 @@ document.addEventListener('DOMContentLoaded', function() {
             input.addEventListener('input', clearValidationErrors);
         });
     });
-    
-    // Экспорт функции для использования в других файлах
-    window.showAdminMessage = showAdminMessage; 
 });
 
 // ЭКСПОРТ ФУНКЦИЙ ПОСЛЕ DOMContentLoaded
@@ -245,8 +242,3 @@ window.handleFetchResponse = handleFetchResponse;
 window.submitForm = submitForm;
 window.fetchData = fetchData;
 window.deleteData = deleteData;
-
-console.log('✅ Функции админки экспортированы:', {
-    showAdminMessage: typeof window.showAdminMessage,
-    submitForm: typeof window.submitForm
-});

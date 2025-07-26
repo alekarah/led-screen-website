@@ -5,8 +5,6 @@ let currentEditingImageId = null;
 
 // Открытие редактора кроппинга
 function openCropEditor(imageId, filename, cropX = 50, cropY = 50, cropScale = 1) {
-    console.log('Открытие редактора кроппинга:', {imageId, filename, cropX, cropY, cropScale});
-    
     currentEditingImageId = imageId;
     
     // Получаем элементы
@@ -24,8 +22,6 @@ function openCropEditor(imageId, filename, cropX = 50, cropY = 50, cropScale = 1
     
     // Ждем загрузки изображения и устанавливаем значения
     previewImg.onload = () => {
-        console.log('Изображение загружено, устанавливаем значения...');
-        
         // СНАЧАЛА центрируем изображение принудительно
         previewImg.style.transform = 'scale(1) translate(0%, 0%)';
         previewImg.style.transformOrigin = 'center center';
@@ -53,17 +49,14 @@ function openCropEditor(imageId, filename, cropX = 50, cropY = 50, cropScale = 1
         if (cropXSlider) {
             cropXSlider.removeEventListener('input', updatePreviewTransform);
             cropXSlider.addEventListener('input', updatePreviewTransform);
-            console.log('✅ Обработчик cropX подключен');
         }
         if (cropYSlider) {
             cropYSlider.removeEventListener('input', updatePreviewTransform);
             cropYSlider.addEventListener('input', updatePreviewTransform);
-            console.log('✅ Обработчик cropY подключен');
         }
         if (cropScaleSlider) {
             cropScaleSlider.removeEventListener('input', updatePreviewTransform);
             cropScaleSlider.addEventListener('input', updatePreviewTransform);
-            console.log('✅ Обработчик cropScale подключен');
         }
         
         // ПРИНУДИТЕЛЬНО добавляем обработчики для кнопок
@@ -76,7 +69,6 @@ function openCropEditor(imageId, filename, cropX = 50, cropY = 50, cropScale = 1
                 e.preventDefault();
                 resetCrop();
             });
-            console.log('✅ Кнопка "Сбросить" подключена');
         }
         
         if (saveBtn) {
@@ -85,7 +77,6 @@ function openCropEditor(imageId, filename, cropX = 50, cropY = 50, cropScale = 1
                 e.preventDefault();
                 saveCrop();
             });
-            console.log('✅ Кнопка "Сохранить" подключена');
         }
     };
     
@@ -124,8 +115,6 @@ function updatePreviewTransform() {
     // Применяем трансформацию
     previewImg.style.transform = `scale(${cropScale}) translate(${translateX}%, ${translateY}%)`;
     previewImg.style.transformOrigin = 'center center';
-    
-    console.log('Превью обновлено:', {cropX, cropY, cropScale, translateX, translateY});
 }
 
 // Сохранение настроек кроппинга
@@ -134,8 +123,6 @@ async function saveCrop() {
         showCropMessage('Ошибка: не выбрано изображение для редактирования', 'error');
         return;
     }
-    
-    console.log('Сохранение настроек кроппинга для изображения:', currentEditingImageId);
     
     try {
         // Получаем текущие значения
@@ -146,12 +133,6 @@ async function saveCrop() {
         // Преобразуем значения в правильный диапазон для сервера
         const serverCropX = cropX; // Диапазон 0-100
         const serverCropY = cropY; // Диапазон 0-100
-        
-        console.log('Отправляем на сервер:', {
-            crop_x: serverCropX,
-            crop_y: serverCropY,
-            crop_scale: cropScale
-        });
         
         // Отправляем запрос на сервер
         const response = await fetch(`/admin/images/${currentEditingImageId}/crop`, {
@@ -219,7 +200,6 @@ function showCropMessage(message, type = 'success') {
     }
     
     // Если нет - показываем обычный alert
-    console.log(`${type.toUpperCase()}: ${message}`);
     if (type === 'error') {
         alert('❌ ' + message);
     } else {
@@ -233,5 +213,3 @@ window.updatePreviewTransform = updatePreviewTransform;
 window.saveCrop = saveCrop;
 window.updateProjectImages = updateProjectImages;
 window.showCropMessage = showCropMessage;
-
-console.log('✅ Crop Editor API инициализирован');

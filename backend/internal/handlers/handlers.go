@@ -48,7 +48,7 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		Order("sort_order").
 		Find(&services)
 
-	c.HTML(http.StatusOK, "index.html", gin.H{
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":    "LED экраны в СПб | Service 'n' Repair",
 		"projects": featuredProjects,
 		"services": services,
@@ -74,7 +74,7 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 	var categories []models.Category
 	h.db.Find(&categories)
 
-	c.HTML(http.StatusOK, "projects.html", gin.H{
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":          "Портфолио - LED Display",
 		"projects":       projects,
 		"categories":     categories,
@@ -87,7 +87,7 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 	var services []models.Service
 	h.db.Order("sort_order").Find(&services)
 
-	c.HTML(http.StatusOK, "services.html", gin.H{
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":    "Услуги | LED экраны",
 		"services": services,
 	})
@@ -95,7 +95,7 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 
 // ContactPage - страница контактов
 func (h *Handlers) ContactPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "contact.html", gin.H{
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title": "Контакты | LED экраны",
 	})
 }

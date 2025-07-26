@@ -36,7 +36,10 @@
                         <img src="/static/uploads/{{$firstImage.Filename}}" 
                             alt="{{.Title}}" 
                             loading="lazy"
-                            style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}}) translate({{if $firstImage.CropX}}{{printf "%.0f" $firstImage.CropX}}{{else}}0{{end}}%, {{if $firstImage.CropY}}{{printf "%.0f" $firstImage.CropY}}{{else}}0{{end}}%); object-position: center center; transform-origin: center center;">
+                            style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}})
+                                            translate({{mul (sub $firstImage.CropX 50) 2}}%, {{mul (sub $firstImage.CropY 50) 2}}%);
+                                    object-position: center center;
+                                    transform-origin: center center;">
                     </div>
                 {{else}}
                     <div class="project-image-rect">
