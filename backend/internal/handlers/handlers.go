@@ -181,6 +181,13 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 	})
 }
 
+// PrivacyPage - страница обработки персональных данных
+func (h *Handlers) PrivacyPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
+		"title": "Обработка персональных данных",
+	})
+}
+
 // Утилитные функции
 func generateSlug(title string) string {
 	slug := strings.ToLower(title)

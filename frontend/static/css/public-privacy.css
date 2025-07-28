@@ -1,0 +1,23 @@
+.privacy-section {
+    padding: 3rem 0 5rem 0;
+    background: #fafbfc;
+}
+
+.privacy-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    text-align: center;
+    color: #1b1b1b;
+}
+
+.privacy-block {
+    background: #fff;
+    border-radius: 18px;
+    padding: 2rem 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 2px 12px rgba(50,50,50,0.08);
+    color: #222;
+    font-size: 1.09rem;
+    line-height: 1.7;
+}

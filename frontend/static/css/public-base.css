@@ -7,11 +7,18 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     color: #333;
     background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Навигация */
@@ -35,7 +42,7 @@ nav {
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
     color: white;
     text-decoration: none;
@@ -73,6 +80,7 @@ nav {
 .main-content {
     margin-top: 80px;
     padding: 3rem 0;
+    flex: 1 0 auto;
 }
 
 .container {
@@ -100,6 +108,43 @@ nav {
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Для страницы политики обработки данных */
+.privacy-section .privacy-block {
+    max-width: 100%; 
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    padding: 2.2rem 2.5rem;
+    font-size: 1.12rem;
+    line-height: 1.7;
+}
+
+.privacy-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+    .privacy-section .container {
+        max-width: 98vw;
+        padding: 0 8px;
+    }
+    .privacy-section .privacy-block {
+        padding: 1.3rem 1.1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .privacy-section .privacy-block {
+        font-size: 1rem;
+    }
 }
 
 /* Базовые кнопки */

@@ -31,19 +31,19 @@ led-screen-website/
 │   ├── cmd/
 │   ├── internal/
 │   │   ├── config/
-│	│   │   └── config.go
+│   │   │   └── config.go
 │   │   ├── database/
-│	│   │   └── database.go
+│   │   │   └── database.go
 │   │   ├── handlers/
-│	│   │   ├── admin_dashboard.go
-│	│   │   ├── admin_images.go
-│	│   │   ├── admin_projects_crud.go
-│	│   │   ├── admin_sorting.go
-│	│   │   └── handlers.go
+│   │   │   ├── admin_dashboard.go
+│   │   │   ├── admin_images.go
+│   │   │   ├── admin_projects_crud.go
+│   │   │   ├── admin_sorting.go
+│   │   │   └── handlers.go
 │   │   ├── models/
-│	│   │   └── models.go
+│   │   │   └── models.go
 │   │   ├── routes/
-│	│   │   └── routes.go
+│   │   │   └── routes.go
 │   │   └── services/
 │   ├── main.go
 │   ├── go.sum
@@ -55,44 +55,44 @@ led-screen-website/
 │   ├── static/
 │   │   ├── uploads/
 │   │   ├── css/
-│	│   │   ├── admin-base.css
-│	│   │   ├── admin-forms.css
-│	│   │   ├── admin-modals.css
-│	│   │   ├── admin-projects.css
-│	│   │   ├── crop-editor.css
-│	│   │   ├── public-base.css
-│	│   │   ├── public-contact.css
-│	│   │   ├── public-footer.css
-│	│   │   ├── public-forms.css
-│	│   │   ├── public-home.css
-│	│   │   ├── public-projects.css
-│	│   │   ├── public-responsive.css
-│	│   │   └── public-services.css
+│   │   │   ├── admin-base.css
+│   │   │   ├── admin-forms.css
+│   │   │   ├── admin-modals.css
+│   │   │   ├── admin-projects.css
+│   │   │   ├── crop-editor.css
+│   │   │   ├── public-base.css
+│   │   │   ├── public-contact.css
+│   │   │   ├── public-footer.css
+│   │   │   ├── public-forms.css
+│   │   │   ├── public-home.css
+│   │   │   ├── public-projects.css
+│   │   │   ├── public-responsive.css
+│   │   │   └── public-services.css
 │   │   ├── js/
-│	│   │   ├── admin-base.js
-│	│   │   ├── admin-projects-creation.js
-│	│   │   ├── admin-projects-editing.js
-│	│   │   ├── admin-projects-images.js
-│	│   │   ├── admin-projects-init.js
-│	│   │   ├── contact-form.js
-│	│   │   ├── crop-editor-api.js
-│	│   │   ├── crop-editor-core.js
-│	│   │   ├── crop-editor-presets.js
-│	│   │   ├── crop-editor-ui.js
-│	│   │   └── project-sorting.js
+│   │   │   ├── admin-base.js
+│   │   │   ├── admin-projects-creation.js
+│   │   │   ├── admin-projects-editing.js
+│   │   │   ├── admin-projects-images.js
+│   │   │   ├── admin-projects-init.js
+│   │   │   ├── contact-form.js
+│   │   │   ├── crop-editor-api.js
+│   │   │   ├── crop-editor-core.js
+│   │   │   ├── crop-editor-presets.js
+│   │   │   ├── crop-editor-ui.js
+│   │   │   └── project-sorting.js
 │   │   └── images/
 │   └── templates/
 │   │   ├── admin_base.html
 │   │   ├── admin_projects.html
-│   │   ├── contact.html            
+│   │   ├── contact.html
 │   │   ├── index.html
 │   │   ├── projects.html
 │   │   ├── public_base.html
 │   │   └── services.html
-├── init.sql/
+├── init.sql
 ├── .env.example
 ├── docker-compose.yml
-└── README.MD
+└── README.md
 ```
 
 **1.2 База данных (PostgreSQL)** Основные таблицы:

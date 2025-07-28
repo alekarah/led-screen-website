@@ -23,6 +23,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 	router.GET("/projects", h.ProjectsPage)
 	router.GET("/services", h.ServicesPage)
 	router.GET("/contact", h.ContactPage)
+	router.GET("/privacy", h.PrivacyPage)
 
 	// API маршруты
 	api := router.Group("/api")

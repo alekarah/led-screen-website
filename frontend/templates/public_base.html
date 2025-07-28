@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/static/css/public-forms.css">
     <link rel="stylesheet" href="/static/css/public-footer.css">
     <link rel="stylesheet" href="/static/css/public-responsive.css">
+    <link rel="stylesheet" href="/static/css/public-privacy.css">
     
     <!-- Дополнительные стили для конкретной страницы -->
     {{block "extra-css" .}}{{end}}
@@ -21,7 +22,7 @@
     <!-- Навигация -->
     <nav>
         <div class="nav-container">
-            <a href="/" class="logo">LED Display</a>
+            <a href="/" class="logo">Service 'n' Repair</a>
             <ul class="nav-links">
                 <li><a href="/">Главная</a></li>
                 <li><a href="/projects">Портфолио</a></li>
@@ -41,16 +42,18 @@
             {{template "services-content" .}}
         {{else if eq .title "Портфолио - LED Display"}}
             {{template "projects-content" .}}
+        {{else if eq .title "Обработка персональных данных"}}
+            {{template "privacy-content" .}}
         {{end}}
     </main>
 
-    <!-- Footer (если нужен) -->
+    <!-- Footer -->
     {{if eq .title "LED экраны в СПб | Service 'n' Repair"}}
         {{template "home-footer" .}}
-    {{else if eq .title "Контакты | LED экраны"}}
-        {{template "contact-footer" .}}
+    {{else if eq .title "Портфолио - LED Display"}}
+        {{template "projects-footer" .}}
     {{else}}
-        {{block "footer" .}}{{end}}
+        {{template "simple-footer" .}}
     {{end}}
 
     <!-- Скрипты для конкретной страницы -->
