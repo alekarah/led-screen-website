@@ -43,31 +43,9 @@
     }
 
     /* Проекты */
-    .projects-grid {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-    }
-
-    .public-project-card {
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .projects .projects-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
     .projects .project-card {
         max-width: none;
         width: 100%;
-    }
-
-    /* Изображения на главной */
-    .project-image-rect {
-        width: 200px;
-        height: 150px;
     }
 
     /* Фильтры */
@@ -170,11 +148,6 @@
     }
 
     /* Проекты */
-    .public-project-card {
-        width: 100%;
-        max-width: none;
-    }
-
     .project-content {
         padding: 1rem;
     }
@@ -185,13 +158,6 @@
 
     .project-size {
         font-size: 1rem;
-    }
-
-    /* Изображения на главной */
-    .project-image-rect {
-        width: 100%;
-        max-width: 250px;
-        height: 140px;
     }
 
     /* Услуги */

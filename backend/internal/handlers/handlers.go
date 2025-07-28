@@ -29,16 +29,16 @@ func (h *Handlers) HomePage(c *gin.Context) {
 	h.db.Where("featured = ?", true).
 		Preload("Categories").
 		Preload("Images").
-		Order("created_at DESC").
-		Limit(6).
+		Order("sort_order ASC, created_at DESC").
+		Limit(3).
 		Find(&featuredProjects)
 
 	// Если нет рекомендуемых проектов, показываем последние
 	if len(featuredProjects) == 0 {
 		h.db.Preload("Categories").
 			Preload("Images").
-			Order("created_at DESC").
-			Limit(6).
+			Order("sort_order ASC, created_at DESC").
+			Limit(3).
 			Find(&featuredProjects)
 	}
 

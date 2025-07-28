@@ -26,7 +26,7 @@
 **1.1 Структура проекта**
 
 ```
-led-display-website/
+led-screen-website/
 ├── backend/
 │   ├── cmd/
 │   ├── internal/
@@ -35,14 +35,16 @@ led-display-website/
 │   │   ├── database/
 │	│   │   └── database.go
 │   │   ├── handlers/
+│	│   │   ├── admin_dashboard.go
+│	│   │   ├── admin_images.go
+│	│   │   ├── admin_projects_crud.go
+│	│   │   ├── admin_sorting.go
 │	│   │   └── handlers.go
 │   │   ├── models/
 │	│   │   └── models.go
 │   │   ├── routes/
 │	│   │   └── routes.go
 │   │   └── services/
-│   ├── migrations/
-│   ├── .env
 │   ├── main.go
 │   ├── go.sum
 │   └── go.mod
@@ -53,12 +55,44 @@ led-display-website/
 │   ├── static/
 │   │   ├── uploads/
 │   │   ├── css/
+│	│   │   ├── admin-base.css
+│	│   │   ├── admin-forms.css
+│	│   │   ├── admin-modals.css
+│	│   │   ├── admin-projects.css
+│	│   │   ├── crop-editor.css
+│	│   │   ├── public-base.css
+│	│   │   ├── public-contact.css
+│	│   │   ├── public-footer.css
+│	│   │   ├── public-forms.css
+│	│   │   ├── public-home.css
+│	│   │   ├── public-projects.css
+│	│   │   ├── public-responsive.css
+│	│   │   └── public-services.css
 │   │   ├── js/
+│	│   │   ├── admin-base.js
+│	│   │   ├── admin-projects-creation.js
+│	│   │   ├── admin-projects-editing.js
+│	│   │   ├── admin-projects-images.js
+│	│   │   ├── admin-projects-init.js
+│	│   │   ├── contact-form.js
+│	│   │   ├── crop-editor-api.js
+│	│   │   ├── crop-editor-core.js
+│	│   │   ├── crop-editor-presets.js
+│	│   │   ├── crop-editor-ui.js
+│	│   │   └── project-sorting.js
 │   │   └── images/
 │   └── templates/
+│   │   ├── admin_base.html
+│   │   ├── admin_projects.html
+│   │   ├── contact.html            
+│   │   ├── index.html
+│   │   ├── projects.html
+│   │   ├── public_base.html
+│   │   └── services.html
 ├── init.sql/
-├── README.MD
-└── docker-compose.yml
+├── .env.example
+├── docker-compose.yml
+└── README.MD
 ```
 
 **1.2 База данных (PostgreSQL)** Основные таблицы:

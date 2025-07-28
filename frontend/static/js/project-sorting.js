@@ -23,11 +23,6 @@ function initProjectSorting() {
             // Сохраняем новый порядок на сервере
             updateProjectOrder(projectId, newIndex);
         },
-        
-        // Визуальная обратная связь
-        onStart: function(evt) {
-            showMessage('Перетащите проект в нужную позицию', 'success');
-        }
     });
 }
 
@@ -45,8 +40,6 @@ async function updateProjectOrder(projectId, newPosition) {
         const result = await response.json();
         
         if (response.ok) {
-            showMessage('Порядок проектов обновлен', 'success');
-            
             // Обновляем порядок всех проектов
             await updateAllProjectsOrder();
         } else {

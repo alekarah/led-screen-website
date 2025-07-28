@@ -27,9 +27,9 @@
 <section class="projects">
     <div class="container">
         <h2>Последние проекты</h2>
-        <div class="projects-grid">
+        <div class="home-projects-grid">
             {{range .projects}}
-            <div class="public-project-card">
+            <div class="home-project-card">
                 {{if .Images}}
                     {{$firstImage := index .Images 0}}
                     <div class="project-image-rect">
@@ -61,6 +61,9 @@
                 </div>
             </div>
             {{end}}
+        </div>
+        <div style="width: 100%; display: flex; justify-content: center; margin-top: 2rem;">
+            <a href="/projects" class="see-all-projects-btn">Смотреть все проекты</a>
         </div>
     </div>
 </section>
