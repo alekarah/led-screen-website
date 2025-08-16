@@ -1,0 +1,81 @@
+/* ============ LED EFFECT (перелив + горизонтальные полосы) ============ */
+/* Подключайте класс .led-effect к любому блоку с градиентной подложкой   */
+/* Ничего не ломает в вёрстке: только визуальные ::before / ::after слои */
+
+.led-effect {
+    position: relative;
+    overflow: hidden;           /* чтобы псевдоэлементы не вылезали */
+    isolation: isolate;         /* корректнее смешиваются слои */
+}
+
+/* 1) Горизонтальные полосы (двухслойные), бесшовное смещение */
+.led-effect::before {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+
+    /* два слоя: светлая нитка + тёмная «нить» для объёма */
+    background-image:
+        repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255, .14) 0px,    /* светлая нитка */
+        rgba(255,255,255, .14) 2px,
+        rgba(0,0,0, 0)        2px,
+        rgba(0,0,0, 0)        6px
+        ),
+        repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0, .10)      0px,     /* лёгкая тень для контраста */
+        rgba(0,0,0, .10)      3px,
+        rgba(0,0,0, 0)        3px,
+        rgba(0,0,0, 0)        6px
+        );
+    background-size: auto 6px, auto 6px;
+    background-position: 0 0, 0 0;
+    mix-blend-mode: soft-light;
+    opacity: .9;
+    animation: led-scanlines-shift 8s linear infinite;
+    will-change: background-position;
+    z-index: 0;
+}
+
+/* 2) Перелив шире блока — alternate, чтобы не было «скачка» */
+.led-effect::after {
+    content: "";
+    position: absolute;
+    top: -40%; bottom: -40%;
+    left: -75%; right: -75%;               /* запас, чтобы край не «ловили» */
+    pointer-events: none;
+
+    background: linear-gradient(
+        120deg,
+        rgba(255,255,255, 0)   35%,
+        rgba(255,255,255, .22) 50%,          /* ярче блика */
+        rgba(255,255,255, 0)   65%
+    );
+    filter: blur(2px);
+    opacity: .8;
+    animation: led-sweep-alt 7.2s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+    z-index: 0;
+}
+
+/* ——— Анимации ——— */
+
+/* Смещение паттерна ровно на 4px → бесшовный цикл */
+@keyframes led-scanlines-shift {
+    0%   { background-position: 0 0, 0 0; }
+    100% { background-position: 0 6px, 0 6px; }
+}
+
+/* Перелив туда-обратно, без обрыва и артефактов */
+@keyframes led-sweep-alt {
+    0%   { transform: translateX(-20%) rotate(0.001deg); opacity: .65; }
+    100% { transform: translateX(20%)  rotate(0.001deg); opacity: .90; }
+}
+
+/* ——— Доп. модификатор для чуть менее яркого эффекта (например, в CTA) ——— */
+.led-effect--subtle::before { opacity: .6; }
+.led-effect--subtle::after  { opacity: .7; }
+
+/* Адаптив — сам эффект менять не нужно; размеры контента регулируйте в своих CSS */
