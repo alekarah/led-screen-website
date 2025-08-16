@@ -41,16 +41,81 @@ nav {
     padding: 0 2rem;
 }
 
+/* Корневой блок логотипа */
 .logo {
-    font-size: 1.7rem;
-    font-weight: bold;
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     text-decoration: none;
-    transition: opacity 0.3s;
 }
 
-.logo:hover {
-    opacity: 0.9;
+/* Диод */
+.logo-icon {
+    height: 30px;
+    width: 23px;
+    margin-right: 0.15rem;
+    filter:
+        drop-shadow(0 0 1px rgba(255, 247, 185, .95))
+        drop-shadow(0 0 6px rgba(255, 247, 185, .75))
+        drop-shadow(0 0 14px rgba(255, 230, 120, .55));
+    transition: filter .25s ease, transform .25s ease;
+    animation: ledPulse 2.4s ease-in-out infinite;
+}
+
+/* Текст логотипа */
+.logo-text {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 6px 0 10px rgba(0, 0, 0, .58);
+    animation: textPulse 2.4s ease-in-out infinite;
+}
+.logo:hover .logo-icon {
+    filter:
+        drop-shadow(0 0 2px rgba(255, 247, 185, 1))
+        drop-shadow(0 0 10px rgba(255, 247, 185, .95))
+        drop-shadow(0 0 22px rgba(255, 230, 120, .85));
+    transform: translateY(-1px) scale(1.04);
+    animation-duration: 1.4s;
+}
+
+.logo:hover .logo-text {
+    text-shadow: 10px 0 20px rgba(0, 0, 0, .8);
+    animation-duration: 1.4s;
+}
+
+/* Ключевые кадры */
+@keyframes ledPulse {
+    0%, 100% {
+        filter:
+        drop-shadow(0 0 1px rgba(255, 247, 185, .9))
+        drop-shadow(0 0 6px rgba(255, 247, 185, .7))
+        drop-shadow(0 0 14px rgba(255, 230, 120, .5));
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        filter:
+        drop-shadow(0 0 3px rgba(255, 247, 185, 1))
+        drop-shadow(0 0 12px rgba(255, 247, 185, .95))
+        drop-shadow(0 0 26px rgba(255, 230, 120, .9));
+        transform: translateY(-0.5px) scale(1.03);
+    }
+}
+
+@keyframes textPulse {
+    0%, 100% {
+        text-shadow: 6px 0 10px rgba(0, 0, 0, .58);
+    }
+    50% {
+        text-shadow: 9px 0 18px rgba(0, 0, 0, .78);
+  }
+}
+
+@media (max-width: 520px) {
+    .logo-icon { height: 24px; }
+    .logo-text { font-size: 1.45rem; }
 }
 
 .nav-links {
