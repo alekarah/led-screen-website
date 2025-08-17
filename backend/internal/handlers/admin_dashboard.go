@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"net/http"
+	"os"
+	"time"
 
 	"ledsite/internal/models"
 
@@ -20,10 +22,36 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 	h.db.Model(&models.Image{}).Count(&stats.ImagesCount)
 	h.db.Model(&models.ContactForm{}).Count(&stats.ContactsCount)
 
+	// последние 5 заявок
+	var latestContacts []models.ContactForm
+	h.db.Order("created_at DESC").Limit(5).Find(&latestContacts)
+
+	// заявки за 7 дней
+	var newContacts7 int
+	h.db.Raw(`SELECT COUNT(*) FROM contact_forms WHERE created_at >= NOW() - INTERVAL '7 days'`).Scan(&newContacts7)
+
+	// --- СИСТЕМА ---
+	var dbOK bool
+	if sqlDB, err := h.db.DB(); err == nil {
+		if err := sqlDB.Ping(); err == nil {
+			dbOK = true
+		}
+	}
+
+	sys := gin.H{
+		"dbOK":      dbOK,
+		"env":       os.Getenv("ENVIRONMENT"),
+		"version":   os.Getenv("APP_VERSION"),
+		"serverNow": time.Now(),
+	}
+
 	c.HTML(http.StatusOK, "admin_base.html", gin.H{
-		"title":  "Админ панель",
-		"stats":  stats,
-		"PageID": "admin-dashboard",
+		"title":        "Админ панель",
+		"stats":        stats,
+		"contacts":     latestContacts,
+		"newContacts7": newContacts7,
+		"sys":          sys,
+		"PageID":       "admin-dashboard",
 	})
 }
 
@@ -41,4 +69,28 @@ func (h *Handlers) AdminProjects(c *gin.Context) {
 		"categories": categories,
 		"PageID":     "admin-projects",
 	})
+}
+
+// Возвращает количество заявок по дням за последние 7 дней (включая сегодня)
+func (h *Handlers) AdminContacts7Days(c *gin.Context) {
+	type row struct {
+		Day   string `json:"day"`   // YYYY-MM-DD
+		Count int    `json:"count"` // сколько заявок в этот день
+	}
+	var out []row
+
+	// Postgres: generate_series + left join по contact_forms.created_at
+	h.db.Raw(`
+		WITH d AS (
+		  SELECT generate_series(CURRENT_DATE - INTERVAL '6 days', CURRENT_DATE, INTERVAL '1 day')::date AS day
+		)
+		SELECT to_char(d.day, 'YYYY-MM-DD') AS day,
+		       COALESCE(COUNT(cf.id), 0)::int AS count
+		FROM d
+		LEFT JOIN contact_forms cf ON DATE(cf.created_at) = d.day
+		GROUP BY d.day
+		ORDER BY d.day;
+	`).Scan(&out)
+
+	c.JSON(200, out)
 }

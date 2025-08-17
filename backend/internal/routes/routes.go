@@ -30,6 +30,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 	{
 		api.GET("/projects", h.GetProjects)
 		api.POST("/contact", h.SubmitContact)
+		api.GET("/admin/contacts-7d", h.AdminContacts7Days)
 	}
 
 	// Админ панель
@@ -47,5 +48,6 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		admin.POST("/upload-images", h.UploadImages)
 		admin.DELETE("/images/:id", h.DeleteImage)
 		admin.POST("/images/:id/crop", h.UpdateImageCrop)
+		admin.GET("/contacts", h.AdminContactsPage)
 	}
 }

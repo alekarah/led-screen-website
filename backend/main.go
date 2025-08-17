@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -47,6 +48,11 @@ func main() {
 	funcMap := template.FuncMap{
 		"mul": func(a, b float64) float64 { return a * b },
 		"sub": func(a, b float64) float64 { return a - b },
+		"fmtTime": func(t time.Time) string {
+			// Мск, если нужна локаль с часовым поясом
+			loc, _ := time.LoadLocation("Europe/Moscow")
+			return t.In(loc).Format("02.01.2006 15:04")
+		},
 	}
 	router.SetFuncMap(funcMap)
 

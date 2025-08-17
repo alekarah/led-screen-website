@@ -36,6 +36,8 @@
             {{template "admin-dashboard-content" .}}
         {{else if eq .PageID "admin-projects"}}
             {{template "admin-projects-content" .}}
+        {{else if eq .PageID "admin-contacts"}}
+            {{template "admin-contacts-content" .}}
         {{end}}
     </div>
 

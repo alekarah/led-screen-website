@@ -35,6 +35,7 @@ led-screen-website/
 │   │   ├── database/
 │   │   │   └── database.go
 │   │   ├── handlers/
+│   │   │   ├── admin_contacts.go
 │   │   │   ├── admin_dashboard.go
 │   │   │   ├── admin_images.go
 │   │   │   ├── admin_projects_crud.go
@@ -72,6 +73,7 @@ led-screen-website/
 │   │   │   └── public-services.css
 │   │   ├── js/
 │   │   │   ├── admin-base.js
+│   │   │   ├── admin-contacts.js
 │   │   │   ├── admin-projects-creation.js
 │   │   │   ├── admin-projects-editing.js
 │   │   │   ├── admin-projects-images.js
@@ -89,6 +91,7 @@ led-screen-website/
 │   │   │   └── favicon.png
 │   └── templates/
 │   │   ├── admin_base.html
+│   │   ├── admin_contacts.html
 │   │   ├── admin_dashboard.html
 │   │   ├── admin_projects.html
 │   │   ├── contact.html

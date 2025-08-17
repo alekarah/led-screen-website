@@ -16,4 +16,104 @@
         </div>
     </div>
 </div>
+<div class="form-section">
+    <h2>Последние заявки</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Когда</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{if .contacts}}
+            {{range .contacts}}
+            <tr>
+            <td>{{.Name}}</td>
+            <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
+            <td>{{fmtTime .CreatedAt}}</td>
+            </tr>
+            {{end}}
+        {{else}}
+            <tr><td colspan="3" style="color:#777;">Пока нет заявок</td></tr>
+        {{end}}
+        </tbody>
+    </table>
+</div>
+
+<div class="form-section">
+    <a href="/admin/contacts" class="btn">Посмотреть все заявки</a>
+</div>
+
+<div class="form-section">
+  <h2>Заявки за 7 дней ({{.newContacts7}})</h2>
+  <div class="chart-box">
+    <canvas id="contactsChart"></canvas>
+  </div>
+</div>
+
+<!-- Chart.js и отрисовка -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async function () {
+    try {
+        const res  = await fetch('/api/admin/contacts-7d');
+        const data = await res.json();
+
+        const labels = data.map(d => d.day.slice(5)); // MM-DD
+        const values = data.map(d => d.count);
+
+        const ctx = document.getElementById('contactsChart').getContext('2d');
+        new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{ label: 'Заявки', data: values }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+        });
+    } catch (e) {
+        console.error(e);
+        if (window.showAdminMessage) showAdminMessage('Не удалось загрузить график заявок', 'error');
+    }
+    });
+</script>
+
+<div class="form-section">
+    <h2>Система</h2>
+    <div class="sys-grid">
+        <div class="sys-item">
+        <div class="sys-label">Подключение к БД</div>
+        {{if .sys.dbOK}}
+            <span class="badge badge-ok">OK</span>
+        {{else}}
+            <span class="badge badge-error">Ошибка</span>
+        {{end}}
+        </div>
+
+        <div class="sys-item">
+        <div class="sys-label">Окружение</div>
+        <div class="sys-value">{{if .sys.env}}{{.sys.env}}{{else}}—{{end}}</div>
+        </div>
+
+        <div class="sys-item">
+        <div class="sys-label">Версия</div>
+        <div class="sys-value">{{if .sys.version}}{{.sys.version}}{{else}}—{{end}}</div>
+        </div>
+
+        <div class="sys-item">
+        <div class="sys-label">Время сервера</div>
+        <div class="sys-value">{{fmtTime .sys.serverNow}}</div>
+        </div>
+    </div>
+</div>
+
 {{end}}

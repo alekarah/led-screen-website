@@ -169,6 +169,113 @@ body {
     color: #4A90E2;
 }
 
+/* Стили таблицы */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.table th, .table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+.table thead th {
+    background: #f7f7f7;
+    font-weight: 600;
+    color: #333;
+}
+.table tbody tr:hover {
+    background: #fafafa;
+}
+.table a[href^="tel:"] {
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(74,144,226,.4);
+}
+.table a[href^="tel:"]:hover {
+    border-bottom-color: rgba(74,144,226,.8);
+}
+
+/* Подзаголовочные пометки на дашборде */
+.subnote {
+    margin: 8px 0 24px;
+    color: #6b7280;          /* спокойный серый */
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.subnote strong {
+    font-weight: 700;
+    color: #111827;          /* чуть темнее для цифры */
+}
+
+.chart-box {
+    position: relative;
+    height: 260px;   /* чтобы график не схлопывался */
+}
+
+/* Система */
+.sys-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.sys-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+.sys-label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.sys-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge-ok {
+    background: #e8f7ee;
+    color: #18794e;
+}
+
+.badge-error {
+    background: #fde8ea;
+    color: #b42318;
+}
+
+.count-big {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4A90E2;
+  margin-left: 10px;
+}
+
+/* Заявки */
+.td-ellipsis {
+    max-width: 420px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .container {

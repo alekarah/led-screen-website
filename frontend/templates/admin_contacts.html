@@ -1,0 +1,33 @@
+{{define "admin-contacts-content"}}
+    <div class="form-section">
+    <h2>
+        Все заявки
+        <span class="count-big">{{len .contactsAll}}</span>
+    </h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="width: 18%">Имя</th>
+            <th style="width: 18%">Телефон</th>
+            <th>Сообщение</th>
+            <th style="width: 18%">Дата</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{if .contactsAll}}
+            {{range .contactsAll}}
+            <tr>
+            <td>{{.Name}}</td>
+            <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
+            <td class="td-ellipsis">{{.Message}}</td>
+            <td>{{fmtTime .CreatedAt}}</td>
+            </tr>
+            {{end}}
+        {{else}}
+            <tr><td colspan="4" style="color:#777;">Пока нет заявок</td></tr>
+        {{end}}
+        </tbody>
+    </table>
+    </div>
+{{end}}
