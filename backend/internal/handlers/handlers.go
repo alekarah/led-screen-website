@@ -52,6 +52,7 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		"title":    "LED экраны в СПб | Service 'n' Repair",
 		"projects": featuredProjects,
 		"services": services,
+		"PageID":   "home",
 	})
 }
 
@@ -79,6 +80,7 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 		"projects":       projects,
 		"categories":     categories,
 		"activeCategory": categorySlug,
+		"PageID":         "projects",
 	})
 }
 
@@ -90,13 +92,23 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":    "Услуги | LED экраны",
 		"services": services,
+		"PageID":   "services",
 	})
 }
 
 // ContactPage - страница контактов
 func (h *Handlers) ContactPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title": "Контакты | LED экраны",
+		"title":  "Контакты | LED экраны",
+		"PageID": "contact",
+	})
+}
+
+// PrivacyPage - страница обработки персональных данных
+func (h *Handlers) PrivacyPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
+		"title":  "Обработка персональных данных",
+		"PageID": "privacy",
 	})
 }
 
@@ -178,13 +190,6 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.",
-	})
-}
-
-// PrivacyPage - страница обработки персональных данных
-func (h *Handlers) PrivacyPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title": "Обработка персональных данных",
 	})
 }
 

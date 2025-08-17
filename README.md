@@ -60,11 +60,13 @@ led-screen-website/
 │   │   │   ├── admin-modals.css
 │   │   │   ├── admin-projects.css
 │   │   │   ├── crop-editor.css
+│   │   │   ├── led-effect.css
 │   │   │   ├── public-base.css
 │   │   │   ├── public-contact.css
 │   │   │   ├── public-footer.css
 │   │   │   ├── public-forms.css
 │   │   │   ├── public-home.css
+│   │   │   ├── public-privacy.css
 │   │   │   ├── public-projects.css
 │   │   │   ├── public-responsive.css
 │   │   │   └── public-services.css
@@ -79,13 +81,18 @@ led-screen-website/
 │   │   │   ├── crop-editor-core.js
 │   │   │   ├── crop-editor-presets.js
 │   │   │   ├── crop-editor-ui.js
-│   │   │   └── project-sorting.js
+│   │   │   ├── project-modal.js
+│   │   │   ├── project-sorting.js
+│   │   │   └── services-steps.js
 │   │   └── images/
+│   │   │   ├── diod.png
+│   │   │   └── favicon.png
 │   └── templates/
 │   │   ├── admin_base.html
 │   │   ├── admin_projects.html
 │   │   ├── contact.html
 │   │   ├── index.html
+│   │   ├── privacy.html
 │   │   ├── projects.html
 │   │   ├── public_base.html
 │   │   └── services.html

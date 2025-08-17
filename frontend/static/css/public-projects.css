@@ -212,3 +212,140 @@
         justify-self: stretch;
     }
 }
+
+/* === Project Modal (общие стили) === */
+.project-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none; /* по умолчанию скрыто */
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.project-modal.is-open { display: flex; }
+
+.project-modal__dialog {
+    width: min(980px, 96vw);
+    max-height: 90vh;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 58% 42%;
+    animation: modalIn .18s ease-out;
+}
+
+@keyframes modalIn {
+    from { transform: translateY(6px); opacity: .85; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Левая зона: изображение */
+.project-modal__media {
+    background: #0f0f0f;
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.project-modal__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Правая зона: контент */
+.project-modal__body {
+    padding: 1.25rem 1.25rem 1.1rem 1.25rem;
+    overflow: auto;
+}
+
+.project-modal__title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0 2rem .4rem 0;
+    color: #222;
+}
+
+.project-modal__size {
+    color: #667eea;
+    font-weight: 700;
+    margin-bottom: .5rem;
+}
+
+.project-modal__desc {
+    color: #555;
+    line-height: 1.55;
+    margin-bottom: .75rem;
+}
+
+.project-modal__location {
+    color: #8a8a8a;
+    font-size: .95rem;
+    margin-bottom: .6rem;
+}
+
+/* теги */
+.project-modal__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+.project-modal__tags .category-tag {
+    background: #f1f1f1;
+    color: #555;
+}
+
+/* Кнопка закрытия */
+.project-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.5);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    line-height: 36px;
+    text-align: center;
+    font-size: 20px;
+    transition: background .2s ease;
+    z-index: 10;
+}
+.project-modal__close:hover { background: rgba(0,0,0,.75); }
+
+.project-modal__dialog {
+    position: relative;
+}
+
+/* Полоса прокрутки (внутри контента) — необязательно */
+.project-modal__body::-webkit-scrollbar { width: 10px; }
+.project-modal__body::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
+    border-radius: 8px;
+}
+
+/* Мобильная/планшетная разбивка */
+@media (max-width: 900px) {
+    .project-modal__dialog {
+        grid-template-columns: 1fr;
+        width: min(760px, 96vw);
+        max-height: 92vh;
+    }
+    .project-modal__media {
+        height: 42vh; /* задаём высоту под contain */
+        background: #111;
+    }
+}
+
+/* Блокируем прокрутку body, когда модалка открыта */
+body.modal-open { overflow: hidden; }
