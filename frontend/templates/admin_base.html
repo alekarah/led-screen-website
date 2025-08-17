@@ -31,10 +31,14 @@
     <!-- Основной контент -->
     <div class="container">
         <div id="message"></div>
-        
-        <!-- Контент конкретной страницы -->
-        {{template "admin-content" .}}
+
+        {{if eq .PageID "admin-dashboard"}}
+            {{template "admin-dashboard-content" .}}
+        {{else if eq .PageID "admin-projects"}}
+            {{template "admin-projects-content" .}}
+        {{end}}
     </div>
+
 
     <!-- Модальные окна (общие для всех страниц) -->
     {{block "modals" .}}{{end}}

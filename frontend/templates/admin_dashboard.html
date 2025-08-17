@@ -1,0 +1,19 @@
+{{define "admin-dashboard-content"}}
+<div class="form-section">
+    <h2>Общая статистика</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Проекты</div>
+            <div class="stat-value">{{.stats.ProjectsCount}}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Изображения</div>
+            <div class="stat-value">{{.stats.ImagesCount}}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Заявки</div>
+            <div class="stat-value">{{.stats.ContactsCount}}</div>
+        </div>
+    </div>
+</div>
+{{end}}

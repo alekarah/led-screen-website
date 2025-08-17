@@ -20,9 +20,10 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 	h.db.Model(&models.Image{}).Count(&stats.ImagesCount)
 	h.db.Model(&models.ContactForm{}).Count(&stats.ContactsCount)
 
-	c.HTML(http.StatusOK, "admin_dashboard.html", gin.H{
-		"title": "Админ панель",
-		"stats": stats,
+	c.HTML(http.StatusOK, "admin_base.html", gin.H{
+		"title":  "Админ панель",
+		"stats":  stats,
+		"PageID": "admin-dashboard",
 	})
 }
 
@@ -38,5 +39,6 @@ func (h *Handlers) AdminProjects(c *gin.Context) {
 		"title":      "Управление проектами",
 		"projects":   projects,
 		"categories": categories,
+		"PageID":     "admin-projects",
 	})
 }

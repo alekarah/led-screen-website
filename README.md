@@ -89,6 +89,7 @@ led-screen-website/
 │   │   │   └── favicon.png
 │   └── templates/
 │   │   ├── admin_base.html
+│   │   ├── admin_dashboard.html
 │   │   ├── admin_projects.html
 │   │   ├── contact.html
 │   │   ├── index.html
