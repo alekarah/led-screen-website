@@ -276,6 +276,19 @@ body {
     text-overflow: ellipsis;
 }
 
+.btn-small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.badge-ok {
+  background: #e8f7ee;
+  color: #18794e;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .container {

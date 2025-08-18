@@ -201,6 +201,122 @@
     outline-offset: 2px;
 }
 
+/* Модалка успешного открытия */
+.modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+}
+.modal-overlay.hidden { display: none; }
+
+.modal {
+    width: min(520px, 92vw);
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 22px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.18);
+    position: relative;
+    text-align: center;
+}
+.modal-icon {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+.modal h3 {
+    margin: 0 0 6px;
+    font-size: 22px;
+}
+.modal-text {
+    margin: 0 auto 18px;
+    color: #4b5563;
+}
+.modal-text a { color: #2563eb; text-decoration: none; }
+.modal-text a:hover { text-decoration: underline; }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-check {
+  font-size: 22px;
+  color: green;
+}
+
+.modal-text {
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.modal-actions .btn {
+  min-width: 120px;
+  font-size: 15px;
+}
+
+.modal-actions { 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+}
+.btn-light {
+    background: #eef2ff;
+    color: #1e3a8a;
+}
+.btn-light:hover { background: #e0e7ff; }
+
+/* кнопка закрытия */
+.modal-close {
+    position: absolute; top: 8px; right: 10px;
+    border: 0; background: transparent; font-size: 26px; line-height: 1;
+    color: #9ca3af; cursor: pointer;
+}
+.modal-close:hover { color: #6b7280; }
+
+/* Тосты */
+.toast-wrap {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1100;
+}
+
+.toast {
+    min-width: 280px;
+    max-width: 420px;
+    background: #ffffff;
+    border-left: 6px solid #4b5563;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #111827;
+    animation: toast-in .2s ease-out;
+}
+
+.toast--success { border-color: #16a34a; }
+.toast--error   { border-color: #dc2626; }
+.toast-title {
+    font-weight: 700; margin-bottom: 4px;
+}
+.toast-close {
+    position: absolute; top: 6px; right: 8px;
+    border: 0; background: transparent; font-size: 18px;
+    color: #9ca3af; cursor: pointer;
+}
+.toast-close:hover { color: #6b7280; }
+
+@keyframes toast-in { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+
 /* Адаптивность форм */
 @media (max-width: 768px) {
     .form-row {

@@ -231,29 +231,20 @@ function highlightField(fieldId) {
     }
 }
 
-// Показ ошибок валидации
+// Показ ошибок валидации (список точками)
 function showValidationErrors(errors) {
-    const message = 'Пожалуйста, исправьте ошибки:\n• ' + errors.join('\n• ');
-    showMessage(message, 'error');
+    const html = 'Пожалуйста, исправьте ошибки:<br>• ' + errors.join('<br>• ');
+    showToast(html, 'error', 'Ошибка');
 }
 
 // Показ сообщения об успешной отправке
 function showSuccessMessage() {
-    const message = `
-        ✅ Заявка успешно отправлена!
-        
-        Мы свяжемся с вами в течение 30 минут.
-        
-        Также вы можете связаться с нами напрямую:
-        📞 +7 (921) 429-17-02
-    `;
-    
-    showMessage(message, 'success');
+    openSuccessModal();
 }
 
-// Показ сообщения об ошибке
+// Единичная ошибка (например, при fetch)
 function showErrorMessage(message) {
-    showMessage(message, 'error');
+    showToast(message, 'error', 'Ошибка');
 }
 
 // Сброс формы
@@ -305,11 +296,65 @@ function isValidPhone(phone) {
     return cleanPhone.length === 11 && cleanPhone.startsWith('7');
 }
 
-// Показ уведомлений
-function showMessage(message, type) {   
-    if (type === 'error') {
-        alert('❌ ' + message);
-    } else {
-        alert('✅ ' + message);
+// Тосты
+function ensureToastWrap() {
+    let wrap = document.querySelector('.toast-wrap');
+    if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.className = 'toast-wrap';
+        document.body.appendChild(wrap);
     }
+    return wrap;
+}
+
+function showToast(message, type = 'success', title = null, timeoutMs = 4200) {
+    const wrap = ensureToastWrap();
+    const el = document.createElement('div');
+    el.className = `toast toast--${type}`;
+    el.style.position = 'relative';
+
+    el.innerHTML = `
+        <button class="toast-close" aria-label="Закрыть">&times;</button>
+        ${title ? `<div class="toast-title">${title}</div>` : ''}
+        <div class="toast-text">${message}</div>
+    `;
+
+    const close = () => {
+        if (!el.parentNode) return;
+        el.parentNode.removeChild(el);
+    };
+
+    el.querySelector('.toast-close').addEventListener('click', close);
+    wrap.appendChild(el);
+    if (timeoutMs) setTimeout(close, timeoutMs);
+}
+
+// Открытие модалки успешной отправки
+function openSuccessModal() {
+    const modal = document.getElementById('contact-success-modal');
+    if (!modal) return;
+
+    const okBtn = document.getElementById('contact-success-ok');
+    const closeBtn = modal.querySelector('.modal-close');
+
+    // показать
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+
+    // обработчики закрытия
+    function closeModal() {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    if (okBtn) okBtn.onclick = closeModal;
+    if (closeBtn) closeBtn.onclick = closeModal;
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+    });
 }

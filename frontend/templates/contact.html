@@ -55,7 +55,7 @@
                 <p>Мы свяжемся с вами в течение 30 минут и предоставим бесплатную консультацию</p>
             </div>
             
-            <form id="contactForm" class="contact-form">
+            <form id="contactForm" class="contact-form" method="post" action="/api/contact">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Имя *</label>
@@ -156,6 +156,29 @@
         </div>
     </div>    
 </div>
+
+<!-- Модалка успешной отправки -->
+<div id="contact-success-modal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="contactSuccessTitle">
+        <button class="modal-close" type="button" aria-label="Закрыть">&times;</button>
+
+        <div class="modal-header">
+        <span class="modal-check">✅</span>
+        <h3 id="contactSuccessTitle">Заявка отправлена</h3>
+        </div>
+
+        <p class="modal-text">
+        Мы свяжемся с вами в течение 30 минут.<br>
+        Если срочно — позвоните нам:
+        <a href="tel:+79214291702">+7 (921) 429-17-02</a>
+        </p>
+
+        <div class="modal-actions">
+        <a href="/" class="btn btn-light">На главную</a>
+        <button type="button" class="btn btn-light" id="contact-success-ok">Хорошо</button>
+        </div>
+    </div>
+</div>
 {{end}}
 
 {{define "simple-footer"}}
@@ -166,8 +189,4 @@
         </div>
     </div>
 </footer>
-{{end}}
-
-{{define "contact-extra-js"}}
-<script src="/static/js/contact-form.js"></script>
 {{end}}

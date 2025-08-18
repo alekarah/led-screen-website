@@ -65,12 +65,17 @@
 
     <!-- Скрипты для конкретной страницы -->
     {{if eq .PageID "projects"}}
-        <script src="/static/js/project-modal.js" defer></script>
+    <script src="/static/js/project-modal.js" defer></script>
     {{end}}
+
     {{if eq .PageID "services"}}
-        <script src="/static/js/services-steps.js" defer></script>
+    <script src="/static/js/services-steps.js" defer></script>
     {{end}}
-    
+
+    {{if eq .PageID "contact"}}
+    <script src="/static/js/contact-form.js" defer></script>
+    {{end}}
+
     {{block "extra-js" .}}{{end}}
 </body>
 </html>

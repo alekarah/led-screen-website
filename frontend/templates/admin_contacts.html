@@ -12,22 +12,34 @@
             <th style="width: 18%">Телефон</th>
             <th>Сообщение</th>
             <th style="width: 18%">Дата</th>
+            <th style="width: 12%">Статус</th>
         </tr>
         </thead>
         <tbody>
         {{if .contactsAll}}
-            {{range .contactsAll}}
-            <tr>
+        {{range .contactsAll}}
+        <tr data-id="{{.ID}}">
             <td>{{.Name}}</td>
             <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
             <td class="td-ellipsis">{{.Message}}</td>
             <td>{{fmtTime .CreatedAt}}</td>
-            </tr>
+            <td>
+            {{if .Processed}}
+                <span class="badge badge-ok">Обработано</span>
+            {{else}}
+                <button class="btn btn-small mark-done">Обработать</button>
             {{end}}
+            </td>
+        </tr>
+        {{end}}
         {{else}}
-            <tr><td colspan="4" style="color:#777;">Пока нет заявок</td></tr>
+        <tr><td colspan="5" style="color:#777;">Пока нет заявок</td></tr>
         {{end}}
         </tbody>
     </table>
     </div>
+{{end}}
+
+{{define "contacts-extra-js"}}
+<script src="/static/js/admin-contacts.js"></script>
 {{end}}
