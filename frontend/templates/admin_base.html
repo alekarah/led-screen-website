@@ -4,31 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.title}}</title>
-    
-    <!-- Основные стили админки -->
+
+    <!-- Общие стили админки -->
     <link rel="stylesheet" href="/static/css/admin-base.css">
     <link rel="stylesheet" href="/static/css/admin-forms.css">
     <link rel="stylesheet" href="/static/css/admin-projects.css">
     <link rel="stylesheet" href="/static/css/admin-modals.css">
     <link rel="stylesheet" href="/static/css/crop-editor.css">
-    
-    <!-- Дополнительные стили для конкретной страницы -->
+
+    <!-- Стили-«хуки» для отдельных страниц -->
     {{block "extra-css" .}}{{end}}
 </head>
 <body>
-    <!-- Шапка админки -->
+    <!-- Шапка -->
     <div class="header">
         <div class="container">
-            <h1>Админ панель</h1>
-            <ul class="nav-links">
-                <li><a href="/admin">Главная</a></li>
-                <li><a href="/admin/projects">Проекты</a></li>
-                <li><a href="/">На сайт</a></li>
-            </ul>
+        <h1>Админ панель</h1>
+        <ul class="nav-links">
+            <li><a href="/admin">Главная</a></li>
+            <li><a href="/admin/projects">Проекты</a></li>
+            <li><a href="/">На сайт</a></li>
+        </ul>
         </div>
     </div>
 
-    <!-- Основной контент -->
+    <!-- Контент -->
     <div class="container">
         <div id="message"></div>
 
@@ -41,23 +41,25 @@
         {{end}}
     </div>
 
+    <!-- ВСТАВКА МОДАЛОК СТРОГО ПОСЛЕ КОНТЕНТА СТРАНИЦЫ -->
+    {{if eq .PageID "admin-contacts"}}
+        {{template "contacts-modals" .}}
+    {{end}}
+    {{if eq .PageID "admin-projects"}}
+        {{template "project-modals" .}}
+    {{end}}
 
-    <!-- Модальные окна (общие для всех страниц) -->
-    {{block "modals" .}}{{end}}
-
-    <!-- Основные скрипты -->
+    <!-- Базовые скрипты -->
     <script src="/static/js/admin-base.js"></script>
-
-    <!-- Библиотека для Drag & Drop -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>window.showMessage = window.showAdminMessage;</script>
 
-    <!-- Принудительно переопределяем showMessage для админки -->
-    <script>
-    window.showMessage = window.showAdminMessage;
-    </script>
-
-    <!-- Скрипты для конкретной страницы -->
-    {{block "projects-extra-js" .}}{{end}}
-    {{block "contacts-extra-js" .}}{{end}}
+    <!-- Страничные скрипты -->
+    {{if eq .PageID "admin-contacts"}}
+        {{template "contacts-extra-js" .}}
+    {{end}}
+    {{if eq .PageID "admin-projects"}}
+        {{template "projects-extra-js" .}}
+    {{end}}
 </body>
 </html>

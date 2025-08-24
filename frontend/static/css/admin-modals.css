@@ -1,249 +1,95 @@
-/* Стили модальных окон админки */
+/* ========== БАЗА (общие утилиты) ========== */
+.prewrap { white-space: pre-wrap; }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; }
+.badge-ok { background:#E9F8EE; color:#219653; }
+.badge-blue { background:#e8f0ff; color:#1a73e8; }
+body.modal-open { overflow:hidden; }  /* когда модалка открыта, фон не скроллится */
 
-/* Базовое модальное окно */
-.modal { 
-    display: none; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0,0,0,0.5); 
-    z-index: 1000; 
-    backdrop-filter: blur(2px);
-}
-
-.modal-content { 
-    background: white; 
-    margin: 2% auto; 
-    padding: 2rem; 
-    width: 90%; 
-    max-width: 800px; 
-    border-radius: 12px; 
-    max-height: 90vh; 
-    overflow-y: auto; 
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    animation: modalFadeIn 0.3s ease-out;
-}
-
-/* Анимация появления модального окна */
+/* плавное появление окон */
 @keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+  from { opacity:0; transform:translateY(-6px) scale(.98); }
+  to   { opacity:1; transform:none; }
 }
 
-/* Заголовок модального окна */
-.modal-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 1.5rem; 
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #eee;
+/* ========== Вариант А: МОДАЛКИ ПРОЕКТОВ (overlay .modal → .modal-content) ========== */
+/* overlay */
+.modal{
+  display:none;
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:1000;
+  backdrop-filter:blur(2px);
+}
+/* window */
+.modal-content{
+  background:#fff;
+  width:min(800px,92vw);
+  max-height:85vh; overflow:auto;
+  margin:4% auto;
+  padding:20px 24px;
+  border-radius:12px;
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+  animation:modalFadeIn .22s ease-out;
+}
+/* header + close */
+.modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid #eee;
+}
+.modal-header h2{ margin:0; font-size:20px; color:#222; }
+.close{
+  font-size:28px; line-height:1; width:36px; height:36px;
+  border:0; background:transparent; cursor:pointer; color:#666;
+  display:flex; align-items:center; justify-content:center; border-radius:50%;
+}
+.close:hover{ color:#111; background:#f3f4f6; }
+
+/* ========== Вариант Б: МОДАЛКА КОНТАКТОВ (overlay .modal-overlay → .modal) ========== */
+/* overlay */
+.modal-overlay{
+  position:fixed; inset:0;
+  display:none;                       /* скрыто по умолчанию */
+  align-items:center; justify-content:center;
+  background:rgba(0,0,0,.45);
+  z-index:1000; backdrop-filter:blur(2px);
+}
+.hidden{ display:none !important; }
+/* показать overlay и окно */
+.modal-overlay:not(.hidden){ display:flex !important; }
+.modal-overlay:not(.hidden) .modal{ display:block !important; }   /* ключ */
+
+/* window */
+.modal-overlay .modal{
+  position:relative;                  /* для крестика */
+  background:#fff;
+  width:min(640px,92vw);              /* компактнее */
+  max-height:75vh; overflow:auto;     /* ниже высота */
+  padding:16px 20px;
+  border-radius:12px;
+  box-shadow:0 18px 40px rgba(0,0,0,.14);
+  animation:modalFadeIn .22s ease-out;
 }
 
-.modal-header h2 {
-    color: #333;
-    margin: 0;
-    font-size: 1.5rem;
+/* заголовок и контент */
+#contactDetailsTitle{ margin:0 0 12px; font-size:22px; font-weight:700; color:#222; }
+.modal-grid{ display:grid; grid-template-columns:1fr; row-gap:10px; }
+.modal-message{ margin-top:12px; padding-top:14px; border-top:1px dashed #e5e7eb; }
+#cd-message{ margin-top:6px; line-height:1.5; }
+
+/* крестик */
+.modal-overlay .modal .modal-close{
+  position:absolute; top:8px; right:10px;
+  width:40px; height:40px; font-size:32px; line-height:1;
+  border:0; background:transparent; cursor:pointer; color:#666;
+  display:flex; align-items:center; justify-content:center; border-radius:50%;
 }
+.modal-overlay .modal .modal-close:hover{ color:#111; background:#f3f4f6; }
 
-/* Кнопка закрытия */
-.close { 
-    font-size: 1.8rem; 
-    cursor: pointer; 
-    color: #666;
-    transition: color 0.3s;
-    padding: 0.5rem;
-    line-height: 1;
-    border: none;
-    background: transparent;
-}
+/* ссылки в деталях */
+#cd-phone, #cd-email{ text-decoration:underline; }
 
-.close:hover {
-    color: #333;
-    background: #f5f5f5;
-    border-radius: 50%;
-}
-
-/* Контент модального окна */
-.modal-body {
-    margin-bottom: 1.5rem;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
-}
-
-/* Специальные стили для разных типов модальных окон */
-
-/* Модальное окно подтверждения */
-.confirm-modal .modal-content {
-    max-width: 400px;
-    text-align: center;
-}
-
-.confirm-modal .modal-body {
-    padding: 1rem 0;
-    font-size: 1.1rem;
-    color: #666;
-}
-
-.confirm-modal .modal-footer {
-    justify-content: center;
-    gap: 1rem;
-}
-
-/* Модальное окно с формой */
-.form-modal .modal-content {
-    max-width: 600px;
-}
-
-/* Модальное окно галереи изображений */
-.gallery-modal .modal-content {
-    max-width: 900px;
-    padding: 1rem;
-}
-
-.gallery-modal .images-grid {
-    margin-top: 1rem;
-}
-
-/* Модальное окно загрузки */
-.upload-modal .modal-content {
-    max-width: 500px;
-}
-
-.upload-progress {
-    margin-top: 1rem;
-    background: #f5f5f5;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.upload-progress-bar {
-    height: 8px;
-    background: #4A90E2;
-    transition: width 0.3s ease;
-}
-
-/* Оверлей для загрузки */
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4A90E2;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Адаптивность модальных окон */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 95%;
-        margin: 5% auto;
-        padding: 1.5rem;
-        max-height: 85vh;
-    }
-    
-    .modal-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-        padding-bottom: 1rem;
-    }
-    
-    .modal-header h2 {
-        font-size: 1.3rem;
-    }
-    
-    .close {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        font-size: 1.5rem;
-    }
-    
-    .modal-footer {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-    
-    .modal-footer .btn {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .modal-content {
-        padding: 1rem;
-        margin: 10% auto;
-    }
-    
-    .confirm-modal .modal-content {
-        max-width: 300px;
-    }
-    
-    .form-modal .modal-content,
-    .gallery-modal .modal-content {
-        max-width: none;
-        width: 95%;
-    }
-}
-
-/* Темная тема для модальных окон (опционально) */
-@media (prefers-color-scheme: dark) {
-    .modal {
-        background: rgba(0,0,0,0.7);
-    }
-    
-    .modal-content {
-        background: #2d3748;
-        color: #e2e8f0;
-    }
-    
-    .modal-header {
-        border-bottom-color: #4a5568;
-    }
-    
-    .modal-footer {
-        border-top-color: #4a5568;
-    }
-    
-    .close {
-        color: #a0aec0;
-    }
-    
-    .close:hover {
-        color: #e2e8f0;
-        background: #4a5568;
-    }
+/* ========== Адаптив ========== */
+@media (max-width: 480px){
+  .modal-content{ padding:16px 18px; margin:8% auto; }
+  .modal-overlay .modal{ padding:14px 16px; }
 }

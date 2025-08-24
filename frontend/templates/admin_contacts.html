@@ -1,45 +1,91 @@
 {{define "admin-contacts-content"}}
-    <div class="form-section">
+  <div class="form-section">
     <h2>
-        Все заявки
-        <span class="count-big">{{len .contactsAll}}</span>
+      Все заявки
+      <span class="count-big">{{len .contactsAll}}</span>
     </h2>
 
     <table class="table">
-        <thead>
+      <thead>
         <tr>
-            <th style="width: 18%">Имя</th>
-            <th style="width: 18%">Телефон</th>
-            <th>Сообщение</th>
-            <th style="width: 18%">Дата</th>
-            <th style="width: 12%">Статус</th>
+          <th style="width:16%">Имя</th>
+          <th style="width:16%">Телефон</th>
+          <th>Сообщение</th>
+          <th style="width:16%">Дата</th>
+          <th style="width:12%">Статус</th>
+          <th style="width:14%">Действия</th>
         </tr>
-        </thead>
-        <tbody>
+      </thead>
+      <tbody>
         {{if .contactsAll}}
-        {{range .contactsAll}}
-        <tr data-id="{{.ID}}">
-            <td>{{.Name}}</td>
-            <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
-            <td class="td-ellipsis">{{.Message}}</td>
-            <td>{{fmtTime .CreatedAt}}</td>
-            <td>
-            {{if .Processed}}
-                <span class="badge badge-ok">Обработано</span>
-            {{else}}
-                <button class="btn btn-small mark-done">Обработать</button>
-            {{end}}
-            </td>
-        </tr>
-        {{end}}
+          {{range .contactsAll}}
+            <tr data-id="{{.ID}}">
+              <td>{{.Name}}</td>
+              <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
+              <td class="td-ellipsis">{{.Message}}</td>
+              <td>{{fmtTime .CreatedAt}}</td>
+
+              <td class="status-cell">
+                {{if .Processed}}
+                  <span class="badge badge-ok">Обработано</span>
+                {{else}}
+                  <button class="btn btn-small mark-done" type="button">Обработать</button>
+                {{end}}
+              </td>
+
+              <td class="actions">
+                <button
+                  class="btn btn-small js-contact-details"
+                  type="button"
+                  data-id="{{.ID}}"
+                  data-name="{{.Name}}"
+                  data-phone="{{.Phone}}"
+                  data-email="{{.Email}}"
+                  data-company="{{.Company}}"
+                  data-type="{{.ProjectType}}"
+                  data-message="{{.Message}}"
+                  data-date="{{fmtTime .CreatedAt}}"
+                  data-processed="{{.Processed}}"
+                >Подробнее</button>
+              </td>
+            </tr>
+          {{end}}
         {{else}}
-        <tr><td colspan="5" style="color:#777;">Пока нет заявок</td></tr>
+          <tr><td colspan="6" style="color:#777;">Пока нет заявок</td></tr>
         {{end}}
-        </tbody>
+      </tbody>
     </table>
+  </div>
+{{end}}
+
+{{define "contacts-modals"}}
+  <!-- Модалка деталей заявки -->
+  <div id="contact-details-modal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="contactDetailsTitle">
+      <button class="modal-close" type="button" aria-label="Закрыть">&times;</button>
+
+      <h3 id="contactDetailsTitle">Заявка</h3>
+
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div><strong>Имя:</strong> <span id="cd-name">—</span></div>
+          <div><strong>Телефон:</strong> <a id="cd-phone" href="#" target="_blank">—</a></div>
+          <div><strong>Email:</strong> <a id="cd-email" href="#" target="_blank">—</a></div>
+          <div><strong>Компания:</strong> <span id="cd-company">—</span></div>
+          <div><strong>Тип проекта:</strong> <span id="cd-type">—</span></div>
+          <div><strong>Дата:</strong> <span id="cd-date">—</span></div>
+          <div><strong>Статус:</strong> <span id="cd-status" class="badge">—</span></div>
+        </div>
+
+        <div class="modal-message">
+          <strong>Сообщение:</strong>
+          <div id="cd-message" class="prewrap"></div>
+        </div>
+      </div>
     </div>
+  </div>
 {{end}}
 
 {{define "contacts-extra-js"}}
-<script src="/static/js/admin-contacts.js"></script>
+  <script src="/static/js/admin-contacts.js" defer></script>
 {{end}}
