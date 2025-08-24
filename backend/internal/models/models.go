@@ -84,7 +84,7 @@ type ContactForm struct {
 	ProjectType string    `json:"project_type"`
 	Message     string    `json:"message"`
 	Source      string    `json:"source"` // откуда пришла заявка (контактная форма, калькулятор и т.д.)
-	Processed   bool      `json:"processed" gorm:"default:false"`
+	Status      string    `json:"status" gorm:"type:varchar(20);default:'new'"`
 	CreatedAt   time.Time `json:"created_at"`
 }
 

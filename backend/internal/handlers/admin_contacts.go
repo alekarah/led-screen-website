@@ -27,10 +27,38 @@ func (h *Handlers) MarkContactDone(c *gin.Context) {
 	// обновляем поле Processed = true
 	if err := h.db.Model(&models.ContactForm{}).
 		Where("id = ?", id).
-		Update("processed", true).Error; err != nil {
+		Update("status", "processed").Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось обновить заявку"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Заявка помечена как обработанная"})
+}
+
+// Смена статуса заявки
+func (h *Handlers) UpdateContactStatus(c *gin.Context) {
+	id := c.Param("id")
+	var body struct {
+		Status string `json:"status"`
+	}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверные данные"})
+		return
+	}
+
+	// Проверка допустимых статусов
+	if body.Status != "new" && body.Status != "processed" && body.Status != "archived" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Недопустимый статус"})
+		return
+	}
+
+	if err := h.db.Model(&models.ContactForm{}).
+		Where("id = ?", id).
+		Update("status", body.Status).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось обновить заявку"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Статус изменён", "status": body.Status})
 }

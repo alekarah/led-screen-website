@@ -49,6 +49,6 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		admin.DELETE("/images/:id", h.DeleteImage)
 		admin.POST("/images/:id/crop", h.UpdateImageCrop)
 		admin.GET("/contacts", h.AdminContactsPage)
-		admin.POST("/contacts/:id/done", h.MarkContactDone)
+		admin.POST("/contacts/:id/status", h.UpdateContactStatus)
 	}
 }

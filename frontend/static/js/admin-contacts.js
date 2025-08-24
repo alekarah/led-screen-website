@@ -1,104 +1,196 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // ---------- Делегирование: "Обработать" ----------
-  document.addEventListener('click', async (e) => {
-    const btn = e.target.closest('.mark-done');
-    if (!btn) return;
+    // ---------- Делегирование: "Обработать" ----------
+    document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.mark-done');
+        if (!btn) return;
 
-    const tr = btn.closest('tr');
-    const id = tr?.dataset?.id;
-    if (!id) return;
+        const tr = btn.closest('tr');
+        const id = tr?.dataset?.id;
+        if (!id) return;
 
-    btn.disabled = true;
+        btn.disabled = true;
 
-    try {
-      const res = await fetch(`/admin/contacts/${id}/done`, { method: 'POST' });
-      let data = {};
-      try { data = await res.json(); } catch (_) {}
+        try {
+        const res = await fetch(`/admin/contacts/${id}/done`, { method: 'POST' });
+        let data = {};
+        try { data = await res.json(); } catch (_) {}
 
-      if (!res.ok) throw new Error(data.error || 'Не удалось пометить как обработано');
+        if (!res.ok) throw new Error(data.error || 'Не удалось пометить как обработано');
 
-      const cell = tr.querySelector('.status-cell');
-      if (cell) cell.innerHTML = '<span class="badge badge-ok">Обработано</span>';
+        const cell = tr.querySelector('.status-cell');
+        if (cell) cell.innerHTML = '<span class="badge badge-ok">Обработано</span>';
 
-      if (window.showAdminMessage) showAdminMessage(data.message || 'Заявка помечена как обработанная', 'success');
-    } catch (err) {
-      console.error(err);
-      if (window.showAdminMessage) showAdminMessage(err.message, 'error');
-    } finally {
-      btn.disabled = false;
+        const detailsBtn = tr.querySelector('.js-contact-details');
+        if (detailsBtn) detailsBtn.dataset.status = 'processed';
+
+        if (window.showAdminMessage) showAdminMessage(data.message || 'Заявка помечена как обработанная', 'success');
+        } catch (err) {
+        console.error(err);
+        if (window.showAdminMessage) showAdminMessage(err.message, 'error');
+        } finally {
+        btn.disabled = false;
+        }
+    });
+
+    // ---------- Модалка "Подробнее" ----------
+    const overlay = document.getElementById('contact-details-modal');
+    if (!overlay) return;
+
+    const closeBtn = overlay.querySelector('.modal-close');
+    const f = {
+        name: document.getElementById('cd-name'),
+        phone: document.getElementById('cd-phone'),
+        email: document.getElementById('cd-email'),
+        company: document.getElementById('cd-company'),
+        type: document.getElementById('cd-type'),
+        date: document.getElementById('cd-date'),
+        status: document.getElementById('cd-status'),
+        message: document.getElementById('cd-message'),
+    };
+
+    let lastFocused = null;
+    let currentContactId = null;
+
+    function openModal() {
+        lastFocused = document.activeElement;
+        document.body.classList.add('modal-open');
+        overlay.classList.remove('hidden');
+        overlay.setAttribute('aria-hidden', 'false');
+        closeBtn?.focus(); // удобнее закрыть сразу
     }
-  });
 
-  // ---------- Модалка "Подробнее" ----------
-  const overlay = document.getElementById('contact-details-modal');
-  if (!overlay) return;
+    function closeModal() {
+        overlay.classList.add('hidden');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        lastFocused?.focus?.();
+    }
 
-  const closeBtn = overlay.querySelector('.modal-close');
-  const f = {
-    name: document.getElementById('cd-name'),
-    phone: document.getElementById('cd-phone'),
-    email: document.getElementById('cd-email'),
-    company: document.getElementById('cd-company'),
-    type: document.getElementById('cd-type'),
-    date: document.getElementById('cd-date'),
-    status: document.getElementById('cd-status'),
-    message: document.getElementById('cd-message'),
-  };
+    // закрытия
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closeModal();
+    });
 
-  let lastFocused = null;
+    // Делегирование на кнопки "Подробнее"
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.js-contact-details');
+        if (!btn) return;
 
-  function openModal() {
-    lastFocused = document.activeElement;
-    document.body.classList.add('modal-open');
-    overlay.classList.remove('hidden');
-    overlay.setAttribute('aria-hidden', 'false');
-    closeBtn?.focus(); // удобнее закрыть сразу
-  }
+        const d = btn.dataset;
 
-  function closeModal() {
-    overlay.classList.add('hidden');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
-    lastFocused?.focus?.();
-  }
+        currentContactId = d.id;
 
-  // закрытия
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closeModal();
-  });
+        document.querySelectorAll('.js-contact-details').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
 
-  // Делегирование на кнопки "Подробнее"
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.js-contact-details');
-    if (!btn) return;
+        f.name.textContent = d.name || '—';
 
-    const d = btn.dataset;
+        f.phone.textContent = d.phone || '—';
+        f.phone.href = d.phone ? ('tel:' + d.phone) : '#';
 
-    f.name.textContent = d.name || '—';
+        if (d.email) {
+        f.email.textContent = d.email;
+        f.email.href = 'mailto:' + d.email;
+        } else {
+        f.email.textContent = '—';
+        f.email.removeAttribute('href');
+        }
 
-    f.phone.textContent = d.phone || '—';
-    f.phone.href = d.phone ? ('tel:' + d.phone) : '#';
+        f.company.textContent = d.company || '—';
+        f.type.textContent = d.type || '—';
+        f.date.textContent = d.date || '—';
 
-    if (d.email) {
-      f.email.textContent = d.email;
-      f.email.href = 'mailto:' + d.email;
+        const status = (d.status || 'new');
+        f.status.textContent = (status === 'processed') ? 'Обработано' : 'Новая';
+        f.status.className = 'badge ' + ((status === 'processed') ? 'badge-ok' : 'badge-blue');
+
+        f.message.textContent = d.message || '—';
+
+        openModal();
+    });
+    // === Универсальная смена статуса из модалки ===
+    async function updateStatus(id, status) {
+    const res = await fetch(`/admin/contacts/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Не удалось изменить статус');
+    return data;
+    }
+
+    function applyStatusToUI(id, status) {
+    // 1) бейдж в модалке
+    if (status === 'processed') {
+        f.status.textContent = 'Обработано';
+        f.status.className = 'badge badge-ok';
+    } else if (status === 'new') {
+        f.status.textContent = 'Новая';
+        f.status.className = 'badge badge-blue';
     } else {
-      f.email.textContent = '—';
-      f.email.removeAttribute('href');
+        f.status.textContent = 'В архиве';
+        f.status.className = 'badge';
     }
 
-    f.company.textContent = d.company || '—';
-    f.type.textContent = d.type || '—';
-    f.date.textContent = d.date || '—';
+    // 2) строка в таблице
+    const tr = document.querySelector(`tr[data-id="${id}"]`);
+    if (tr) {
+        // обновим дата-статус у кнопки "Подробнее"
+        const detailsBtn = tr.querySelector('.js-contact-details');
+        if (detailsBtn) detailsBtn.dataset.status = status;
 
-    const processed = d.processed === 'true';
-    f.status.textContent = processed ? 'Обработано' : 'Новая';
-    f.status.className = 'badge ' + (processed ? 'badge-ok' : 'badge-blue');
+        // перерисуем ячейку статуса
+        const cell = tr.querySelector('.status-cell');
+        if (cell) {
+        if (status === 'processed') {
+            cell.innerHTML = '<span class="badge badge-ok">Обработано</span>';
+        } else if (status === 'new') {
+            cell.innerHTML = '<button class="btn btn-small mark-done" type="button">Обработать</button>';
+        } else {
+            cell.innerHTML = '<span class="badge">В архиве</span>';
+        }
+        }
+    }
+    }
 
-    f.message.textContent = d.message || '—';
+    // кнопки в модалке
+    const btnProcessed = document.getElementById('cd-mark-processed');
+    const btnNew       = document.getElementById('cd-mark-new');
+    const btnArchive   = document.getElementById('cd-archive');
 
-    openModal();
-  });
+    btnProcessed?.addEventListener('click', async () => {
+    if (!currentContactId) return;
+    try {
+        await updateStatus(currentContactId, 'processed');
+        applyStatusToUI(currentContactId, 'processed');
+        showAdminMessage?.('Заявка помечена как обработанная', 'success');
+    } catch (e) {
+        showAdminMessage?.(e.message, 'error');
+    }
+    });
+
+    btnNew?.addEventListener('click', async () => {
+    if (!currentContactId) return;
+    try {
+        await updateStatus(currentContactId, 'new');
+        applyStatusToUI(currentContactId, 'new');
+        showAdminMessage?.('Заявка возвращена в новые', 'success');
+    } catch (e) {
+        showAdminMessage?.(e.message, 'error');
+    }
+    });
+
+    btnArchive?.addEventListener('click', async () => {
+    if (!currentContactId) return;
+    try {
+        await updateStatus(currentContactId, 'archived');
+        applyStatusToUI(currentContactId, 'archived');
+        showAdminMessage?.('Заявка перемещена в архив', 'success');
+    } catch (e) {
+        showAdminMessage?.(e.message, 'error');
+    }
+    });
 });

@@ -26,7 +26,7 @@
               <td>{{fmtTime .CreatedAt}}</td>
 
               <td class="status-cell">
-                {{if .Processed}}
+                {{if eq .Status "processed"}}
                   <span class="badge badge-ok">Обработано</span>
                 {{else}}
                   <button class="btn btn-small mark-done" type="button">Обработать</button>
@@ -45,7 +45,7 @@
                   data-type="{{.ProjectType}}"
                   data-message="{{.Message}}"
                   data-date="{{fmtTime .CreatedAt}}"
-                  data-processed="{{.Processed}}"
+                  data-status="{{.Status}}"
                 >Подробнее</button>
               </td>
             </tr>
@@ -80,6 +80,11 @@
         <div class="modal-message">
           <strong>Сообщение:</strong>
           <div id="cd-message" class="prewrap"></div>
+        </div>
+        <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
+          <button id="cd-mark-processed" class="btn btn-small btn-success">Обработано</button>
+          <button id="cd-mark-new" class="btn btn-small btn-blue">Вернуть в новые</button>
+          <button id="cd-archive" class="btn btn-small btn-danger">Архивировать</button>
         </div>
       </div>
     </div>

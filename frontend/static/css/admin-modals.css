@@ -1,9 +1,20 @@
 /* ========== БАЗА (общие утилиты) ========== */
 .prewrap { white-space: pre-wrap; }
-.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; }
-.badge-ok { background:#E9F8EE; color:#219653; }
-.badge-blue { background:#e8f0ff; color:#1a73e8; }
-body.modal-open { overflow:hidden; }  /* когда модалка открыта, фон не скроллится */
+.badge { 
+    display:inline-block; 
+    padding:2px 8px; 
+    border-radius:999px; 
+    font-size:12px; 
+}
+.badge-ok { 
+    background:#E9F8EE; 
+    color:#219653; 
+}
+.badge-blue { 
+    background:#e8f0ff; 
+    color:#1a73e8; 
+}
+body.modal-open { overflow:hidden; }
 
 /* плавное появление окон */
 @keyframes modalFadeIn {
@@ -14,82 +25,168 @@ body.modal-open { overflow:hidden; }  /* когда модалка открыт�
 /* ========== Вариант А: МОДАЛКИ ПРОЕКТОВ (overlay .modal → .modal-content) ========== */
 /* overlay */
 .modal{
-  display:none;
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.45);
-  z-index:1000;
-  backdrop-filter:blur(2px);
+    display:none;
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:1000;
+    backdrop-filter:blur(2px);
 }
+
 /* window */
 .modal-content{
-  background:#fff;
-  width:min(800px,92vw);
-  max-height:85vh; overflow:auto;
-  margin:4% auto;
-  padding:20px 24px;
-  border-radius:12px;
-  box-shadow:0 18px 40px rgba(0,0,0,.12);
-  animation:modalFadeIn .22s ease-out;
+    background:#fff;
+    width:min(800px,92vw);
+    max-height:85vh; overflow:auto;
+    margin:4% auto;
+    padding:20px 24px;
+    border-radius:12px;
+    box-shadow:0 18px 40px rgba(0,0,0,.12);
+    animation:modalFadeIn .22s ease-out;
 }
+
 /* header + close */
 .modal-header{
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid #eee;
+  display:flex; 
+  align-items:center; 
+  justify-content:space-between;
+  margin-bottom:16px; 
+  padding-bottom:12px; 
+  border-bottom:1px solid #eee;
 }
-.modal-header h2{ margin:0; font-size:20px; color:#222; }
+
+.modal-header h2{ 
+    margin:0; 
+    font-size:20px; 
+    color:#222; 
+}
+
 .close{
-  font-size:28px; line-height:1; width:36px; height:36px;
-  border:0; background:transparent; cursor:pointer; color:#666;
-  display:flex; align-items:center; justify-content:center; border-radius:50%;
+    font-size:28px; 
+    line-height:1; 
+    width:36px; 
+    height:36px;
+    border:0; 
+    background:transparent; 
+    cursor:pointer; 
+    color:#666;
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    border-radius:50%;
 }
-.close:hover{ color:#111; background:#f3f4f6; }
+
+.close:hover{ 
+    color:#111; 
+    background:#f3f4f6; 
+}
 
 /* ========== Вариант Б: МОДАЛКА КОНТАКТОВ (overlay .modal-overlay → .modal) ========== */
 /* overlay */
 .modal-overlay{
-  position:fixed; inset:0;
-  display:none;                       /* скрыто по умолчанию */
-  align-items:center; justify-content:center;
-  background:rgba(0,0,0,.45);
-  z-index:1000; backdrop-filter:blur(2px);
+    position:fixed; 
+    inset:0;
+    display:none;
+    align-items:center; 
+    justify-content:center;
+    background:rgba(0,0,0,.45);
+    z-index:1000; 
+    backdrop-filter:blur(2px);
 }
+
 .hidden{ display:none !important; }
+
 /* показать overlay и окно */
 .modal-overlay:not(.hidden){ display:flex !important; }
 .modal-overlay:not(.hidden) .modal{ display:block !important; }   /* ключ */
 
 /* window */
 .modal-overlay .modal{
-  position:relative;                  /* для крестика */
-  background:#fff;
-  width:min(640px,92vw);              /* компактнее */
-  max-height:75vh; overflow:auto;     /* ниже высота */
-  padding:16px 20px;
-  border-radius:12px;
-  box-shadow:0 18px 40px rgba(0,0,0,.14);
-  animation:modalFadeIn .22s ease-out;
+    position:relative;
+    background:#fff;
+    width:min(640px,92vw);
+    max-height:75vh; overflow:auto;    
+    padding:16px 20px;
+    border-radius:12px;
+    box-shadow:0 18px 40px rgba(0,0,0,.14);
+    animation:modalFadeIn .22s ease-out;
 }
 
 /* заголовок и контент */
-#contactDetailsTitle{ margin:0 0 12px; font-size:22px; font-weight:700; color:#222; }
-.modal-grid{ display:grid; grid-template-columns:1fr; row-gap:10px; }
-.modal-message{ margin-top:12px; padding-top:14px; border-top:1px dashed #e5e7eb; }
-#cd-message{ margin-top:6px; line-height:1.5; }
+#contactDetailsTitle{ 
+    margin:0 0 12px; 
+    font-size:22px; 
+    font-weight:700; 
+    color:#222; 
+}
+
+.modal-grid{ 
+    display:grid; 
+    grid-template-columns:1fr; 
+    row-gap:10px; 
+}
+
+.modal-message{ 
+    margin-top:12px; 
+    padding-top:14px; 
+    border-top:1px dashed #e5e7eb; 
+}
+
+#cd-message{ 
+    margin-top:6px; 
+    line-height:1.5; 
+}
+
+/* Футер кнопки */
+.modal-footer .btn-success {
+    background: #219653;
+    color: #fff;           
+    border: 1px solid #219653;
+}
+
+.modal-footer .btn-success:hover {
+    background: #197a43;
+}
+
+.modal-footer .btn-danger {
+    background: #d93025;
+    color: #fff;
+    border: 1px solid #d93025;
+}
+
+.modal-footer .btn-danger:hover {
+    background: #b6261c;
+}
 
 /* крестик */
 .modal-overlay .modal .modal-close{
-  position:absolute; top:8px; right:10px;
-  width:40px; height:40px; font-size:32px; line-height:1;
-  border:0; background:transparent; cursor:pointer; color:#666;
-  display:flex; align-items:center; justify-content:center; border-radius:50%;
+    position:absolute; 
+    top:8px; right:10px;
+    width:40px; 
+    height:40px; 
+    font-size:32px; 
+    line-height:1;
+    border:0; 
+    background:transparent; 
+    cursor:pointer; 
+    color:#666;
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    border-radius:50%;
 }
-.modal-overlay .modal .modal-close:hover{ color:#111; background:#f3f4f6; }
+.modal-overlay .modal .modal-close:hover{ 
+    color:#111; 
+    background:#f3f4f6; 
+}
 
 /* ссылки в деталях */
 #cd-phone, #cd-email{ text-decoration:underline; }
 
 /* ========== Адаптив ========== */
 @media (max-width: 480px){
-  .modal-content{ padding:16px 18px; margin:8% auto; }
-  .modal-overlay .modal{ padding:14px 16px; }
+    .modal-content{ 
+        padding:16px 18px; 
+        margin:8% auto; 
+        }
+    .modal-overlay .modal{ padding:14px 16px; }
 }
