@@ -1,18 +1,34 @@
 // Базовые функции для админки
 
 // Показ сообщений
-function showAdminMessage(message, type = 'success') {
-    const messageDiv = document.getElementById('message');
-    if (!messageDiv) return;
-    
-    messageDiv.className = type;
-    messageDiv.textContent = message;
-    
-    // Автоматически скрываем сообщение через 5 секунд
-    setTimeout(() => {
-        messageDiv.className = '';
-        messageDiv.textContent = '';
-    }, 5000);
+function showAdminMessage(message, type = 'success', timeout = 4000) {
+    let root = document.getElementById('message');
+    if (!root) {
+        root = document.createElement('div');
+        root.id = 'message';
+        document.body.appendChild(root);
+    }
+
+    const el = document.createElement('div');
+    el.className = 'toast ' + (type === 'error' ? 'error' : 'success');
+    el.innerHTML = `
+        <span>${message}</span>
+        <button class="close" aria-label="Закрыть">&times;</button>
+    `;
+
+    el.querySelector('.close').addEventListener('click', () => {
+        root.removeChild(el);
+    });
+
+    root.appendChild(el);
+
+    if (timeout) {
+        setTimeout(() => {
+            el.style.transition = 'opacity .2s ease';
+            el.style.opacity = '0';
+            setTimeout(() => root.contains(el) && root.removeChild(el), 200);
+        }, timeout);
+    }
 }
 
 // Обработка ошибок fetch запросов

@@ -105,7 +105,7 @@
                 <!-- Заполняется динамически -->
             </div>
             
-            <form id="editUploadForm" style="margin-top: 1rem;">
+            <form id="editUploadForm" method="post" enctype="multipart/form-data" style="margin-top: 1rem;">
                 <input type="hidden" id="edit_upload_project_id" name="project_id">
                 <div class="form-group">
                     <label for="edit_images">Добавить изображения:</label>
@@ -168,18 +168,6 @@
         </div>
       <button type="submit" class="btn">Создать проект</button>
     </form>
-    <!-- Форма загрузки изображений -->
-    <div id="uploadSection" class="upload-section hidden">
-        <h3>Загрузить изображения</h3>
-        <form id="uploadForm">
-            <input type="hidden" id="project_id" name="project_id">
-            <div class="form-group">
-                <label for="images">Выберите изображения:</label>
-                <input type="file" id="images" name="images" multiple accept="image/*">
-            </div>
-            <button type="submit" class="btn">Загрузить изображения</button>
-        </form>
-    </div>
   </div>
 </div>
 
@@ -239,8 +227,11 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        initCropUI();
-        initCropKeyboardShortcuts();
+        if (!window.__cropInited) {
+            initCropUI();
+            initCropKeyboardShortcuts();
+            window.__cropInited = true;
+        }
     });
     </script>
 {{end}}

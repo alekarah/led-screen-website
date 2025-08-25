@@ -4,6 +4,28 @@
       Все заявки
       <span class="count-big">{{len .contactsAll}}</span>
     </h2>
+    <div class="filters" style="margin-bottom:16px; display:flex; gap:12px; flex-wrap:wrap;">
+      <!-- Поиск -->
+      <input type="text" id="search-input" class="form-input" placeholder="Поиск" value="{{.search}}">
+
+      <!-- Статус -->
+      <select id="status-filter" class="form-input">
+        <option value="">Все статусы</option>
+        <option value="new" {{if eq .status "new"}}selected{{end}}>Новые</option>
+        <option value="processed" {{if eq .status "processed"}}selected{{end}}>Обработанные</option>
+        <option value="archived" {{if eq .status "archived"}}selected{{end}}>Архив</option>
+      </select>
+
+      <!-- Интервал дат -->
+      <select id="date-filter" class="form-input">
+        <option value="">Все даты</option>
+        <option value="today" {{if eq .dateRange "today"}}selected{{end}}>Сегодня</option>
+        <option value="7d" {{if eq .dateRange "7d"}}selected{{end}}>Последние 7 дней</option>
+        <option value="month" {{if eq .dateRange "month"}}selected{{end}}>Этот месяц</option>
+      </select>
+
+      <button id="apply-filters" class="btn btn-small btn-blue">Применить</button>
+    </div>
 
     <table class="table">
       <thead>

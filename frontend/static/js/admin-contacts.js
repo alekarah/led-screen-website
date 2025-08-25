@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = true;
 
         try {
-        const res = await fetch(`/admin/contacts/${id}/done`, { method: 'POST' });
+        const res = await fetch(`/admin/contacts/${id}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'processed' })
+        });
         let data = {};
         try { data = await res.json(); } catch (_) {}
 
@@ -22,8 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const detailsBtn = tr.querySelector('.js-contact-details');
         if (detailsBtn) detailsBtn.dataset.status = 'processed';
-
-        if (window.showAdminMessage) showAdminMessage(data.message || 'Заявка помечена как обработанная', 'success');
         } catch (err) {
         console.error(err);
         if (window.showAdminMessage) showAdminMessage(err.message, 'error');
@@ -166,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         await updateStatus(currentContactId, 'processed');
         applyStatusToUI(currentContactId, 'processed');
-        showAdminMessage?.('Заявка помечена как обработанная', 'success');
     } catch (e) {
         showAdminMessage?.(e.message, 'error');
     }
@@ -177,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         await updateStatus(currentContactId, 'new');
         applyStatusToUI(currentContactId, 'new');
-        showAdminMessage?.('Заявка возвращена в новые', 'success');
     } catch (e) {
         showAdminMessage?.(e.message, 'error');
     }
@@ -188,9 +188,30 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         await updateStatus(currentContactId, 'archived');
         applyStatusToUI(currentContactId, 'archived');
-        showAdminMessage?.('Заявка перемещена в архив', 'success');
     } catch (e) {
         showAdminMessage?.(e.message, 'error');
     }
     });
+
+    // === Фильтры ===
+    document.getElementById('apply-filters')?.addEventListener('click', applyFilters);
+    document.getElementById('search-input')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            applyFilters();
+        }
+    });
+
+    function applyFilters() {
+        const search = document.getElementById('search-input')?.value || '';
+        const status = document.getElementById('status-filter')?.value || '';
+        const date   = document.getElementById('date-filter')?.value || '';
+
+        const params = new URLSearchParams();
+        if (search) params.set('search', search);
+        if (status) params.set('status', status);
+        if (date) params.set('date', date);
+
+        window.location = '/admin/contacts' + (params.toString() ? '?' + params.toString() : '');
+    }
 });

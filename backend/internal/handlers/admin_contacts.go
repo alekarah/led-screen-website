@@ -11,28 +11,39 @@ import (
 // /admin/contacts — страница всех заявок
 func (h *Handlers) AdminContactsPage(c *gin.Context) {
 	var contacts []models.ContactForm
-	h.db.Order("created_at DESC").Find(&contacts)
+	query := h.db.Model(&models.ContactForm{})
+
+	// --- Поиск ---
+	if search := c.Query("search"); search != "" {
+		q := "%" + search + "%"
+		query = query.Where("name ILIKE ? OR phone ILIKE ? OR email ILIKE ? OR message ILIKE ?", q, q, q, q)
+	}
+
+	// --- Фильтр по статусу ---
+	if status := c.Query("status"); status != "" {
+		query = query.Where("status = ?", status)
+	}
+
+	// --- Интервал дат ---
+	switch c.Query("date") {
+	case "today":
+		query = query.Where("DATE(created_at) = CURRENT_DATE")
+	case "7d":
+		query = query.Where("created_at >= NOW() - INTERVAL '7 days'")
+	case "month":
+		query = query.Where("DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)")
+	}
+
+	query.Order("created_at DESC").Find(&contacts)
 
 	c.HTML(http.StatusOK, "admin_base.html", gin.H{
 		"title":       "Заявки",
 		"PageID":      "admin-contacts",
 		"contactsAll": contacts,
+		"search":      c.Query("search"),
+		"status":      c.Query("status"),
+		"dateRange":   c.Query("date"),
 	})
-}
-
-// Пометить заявку как обработанную
-func (h *Handlers) MarkContactDone(c *gin.Context) {
-	id := c.Param("id")
-
-	// обновляем поле Processed = true
-	if err := h.db.Model(&models.ContactForm{}).
-		Where("id = ?", id).
-		Update("status", "processed").Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось обновить заявку"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "Заявка помечена как обработанная"})
 }
 
 // Смена статуса заявки

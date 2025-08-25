@@ -9,7 +9,7 @@ window.editProject = async function(id) {
     
     try {
         // Загружаем данные проекта
-        const response = await fetch(`/admin/projects/${id}`);
+        const response = await fetch(`/admin/projects/${id}?_=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }       

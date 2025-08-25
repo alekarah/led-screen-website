@@ -24,6 +24,19 @@ func (h *Handlers) CreateProject(c *gin.Context) {
 	// Генерируем slug из заголовка
 	project.Slug = generateSlug(project.Title)
 
+	// Обеспечиваем уникальность slug (разрешаем одинаковые названия)
+	baseSlug := project.Slug
+	suffix := 1
+	for {
+		var count int64
+		h.db.Model(&models.Project{}).Where("slug = ?", project.Slug).Count(&count)
+		if count == 0 {
+			break
+		}
+		suffix++
+		project.Slug = baseSlug + "-" + strconv.Itoa(suffix)
+	}
+
 	// Сохраняем проект
 	if err := h.db.Create(&project).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -71,6 +84,11 @@ func (h *Handlers) GetProject(c *gin.Context) {
 	if project.Images == nil {
 		project.Images = []models.Image{}
 	}
+
+	// Отключаем кеширование ответа
+	c.Header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+	c.Header("Pragma", "no-cache")
+	c.Header("Expires", "0")
 
 	c.JSON(http.StatusOK, gin.H{
 		"project":    project,

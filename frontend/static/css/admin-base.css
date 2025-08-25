@@ -289,6 +289,54 @@ body {
   border-radius: 6px;
 }
 
+/* Тосты поверх всего */
+#message {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: top center;
+    z-index: 2001;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(640px, 92vw);
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.35;
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+    color: #fff;
+    background: #4A90E2;
+    animation: toastIn .2s ease-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: toastIn .2s ease-out both;
+}
+
+.toast.success { background: #28a745; }
+.toast.error   { background: #dc3545; }
+
+.toast .close {
+    margin-left: 12px;
+    background: transparent;
+    border: 0;
+    font-size: 18px;
+    cursor: pointer;
+    color: #fff;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .container {

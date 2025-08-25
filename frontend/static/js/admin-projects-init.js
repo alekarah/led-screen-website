@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeModules() {
     if (typeof initProjectCreation === 'function') initProjectCreation();
     if (typeof initProjectEditing === 'function') initProjectEditing();
-    if (typeof initProjectImages === 'function') initProjectImages();
+    if (typeof initImagePreview === 'function') initImagePreview();
     if (typeof initProjectSorting === 'function') initProjectSorting();
 }
 
@@ -29,11 +29,13 @@ function initCommonEventHandlers() {
         }
     });
     
-    // Обработчик для закрытия модальных окон по клику вне области
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('modal')) {
-            closeAllModals();
-        }
+    // Обработчик для закрытия модальных окон по клику по оверлею
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) { // клик по подложке
+                closeModal(modal.id);
+            }
+        });
     });
     
     // Обработчик для автосохранения форм
@@ -41,6 +43,10 @@ function initCommonEventHandlers() {
     
     // Обработчик для drag & drop файлов
     initDragAndDrop();
+
+    // Кнопка "Создать проект"
+    const btn = document.getElementById('openCreateProjectModal');
+    if (btn) btn.onclick = openCreateProjectModal;
 }
 
 // Настройка глобальных параметров
@@ -243,7 +249,6 @@ function copyToClipboard(text) {
 function checkModulesStatus() {
     const modules = [
         'initProjectCreation',
-        'initImageUpload', 
         'initImagePreview'
     ];
     
