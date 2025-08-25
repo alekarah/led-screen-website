@@ -16,35 +16,6 @@
         </div>
     </div>
 </div>
-<div class="form-section">
-    <h2>Последние заявки</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Имя</th>
-            <th>Телефон</th>
-            <th>Когда</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{if .contacts}}
-            {{range .contacts}}
-            <tr>
-            <td>{{.Name}}</td>
-            <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
-            <td>{{fmtTime .CreatedAt}}</td>
-            </tr>
-            {{end}}
-        {{else}}
-            <tr><td colspan="3" style="color:#777;">Пока нет заявок</td></tr>
-        {{end}}
-        </tbody>
-    </table>
-</div>
-
-<div class="form-section">
-    <a href="/admin/contacts" class="btn">Посмотреть все заявки</a>
-</div>
 
 <div class="form-section">
   <h2>Заявки за 7 дней ({{.newContacts7}})</h2>
@@ -53,38 +24,71 @@
   </div>
 </div>
 
-<!-- Chart.js и отрисовка -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- 1) ЛОКАЛЬНАЯ копия Chart.js (основной источник) + тихий фоллбек на CDN -->
+<script src="/static/js/vendor/chart.min.js"
+        defer
+        onerror="(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js';s.defer=true;s.onerror=function(){window.__chartFailed=true};document.body.appendChild(s)})()">
+</script>
+
+<!-- 2) Инициализация графика (без блокировок и с таймаутами) -->
 <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-    try {
-        const res  = await fetch('/api/admin/contacts-7d');
-        const data = await res.json();
+document.addEventListener('DOMContentLoaded', async () => {
+  // ждём появления window.Chart до 1200 мс
+  const waitChart = () => new Promise(resolve => {
+    const start = Date.now();
+    const t = setInterval(() => {
+      if (window.Chart) { clearInterval(t); resolve(true); }
+      if (Date.now() - start > 1600 || window.__chartFailed) { clearInterval(t); resolve(false); }
+    }, 40);
+  });
+  const hasChart = await waitChart();
 
-        const labels = data.map(d => d.day.slice(5)); // MM-DD
-        const values = data.map(d => d.count);
+  // тянем данные с таймаутом 2с, чтобы вкладка не «висела»
+  let data = [];
+  try {
+    const ac = new AbortController();
+    const to = setTimeout(() => ac.abort(), 2000);
+    const res = await fetch(`/api/admin/contacts-7d?_=${Date.now()}`, { signal: ac.signal });
+    clearTimeout(to);
+    data = await res.json();
+  } catch (e) {
+    console.warn('contacts-7d fetch:', e);
+    if (window.showAdminMessage) showAdminMessage('Не удалось загрузить данные для графика', 'error');
+  }
 
-        const ctx = document.getElementById('contactsChart').getContext('2d');
-        new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels,
-            datasets: [{ label: 'Заявки', data: values }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 } }
-            }
-        }
-        });
-    } catch (e) {
-        console.error(e);
-        if (window.showAdminMessage) showAdminMessage('Не удалось загрузить график заявок', 'error');
+  // если Chart.js не загрузился — показываем заметку вместо графика
+  if (!hasChart) {
+    const canvas = document.getElementById('contactsChart');
+    if (canvas) {
+      const note = document.createElement('div');
+      note.style.color = '#6b7280';
+      note.style.padding = '12px 0';
+      note.textContent = 'График недоступен (Chart.js не загрузился).';
+      canvas.replaceWith(note);
     }
+    return;
+  }
+
+  // строим график
+  try {
+    const labels = (data || []).map(d => (d.day || '').slice(5));
+    const values = (data || []).map(d => d.count || 0);
+    const ctx = document.getElementById('contactsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: { labels, datasets: [{ label: 'Заявки', data: values }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      }
     });
+  } catch (e) {
+    console.error('Chart render error:', e);
+    if (window.showAdminMessage) showAdminMessage('Ошибка отрисовки графика', 'error');
+  }
+});
 </script>
 
 <div class="form-section">

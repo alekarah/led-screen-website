@@ -17,7 +17,7 @@ function initializeModules() {
     if (typeof initProjectCreation === 'function') initProjectCreation();
     if (typeof initProjectEditing === 'function') initProjectEditing();
     if (typeof initImagePreview === 'function') initImagePreview();
-    if (typeof initProjectSorting === 'function') initProjectSorting();
+    if (typeof initProjectSorting === 'function' && window.Sortable) initProjectSorting();
 }
 
 // Инициализация общих обработчиков событий

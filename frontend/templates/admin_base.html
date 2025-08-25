@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/static/css/admin-modals.css">
     <link rel="stylesheet" href="/static/css/crop-editor.css">
 
+    <link rel="icon" type="image/png" href="/static/images/favicon-admin.png">
+
     <!-- Стили-«хуки» для отдельных страниц -->
     {{block "extra-css" .}}{{end}}
 </head>
@@ -22,6 +24,7 @@
         <h1>Админ панель</h1>
         <ul class="nav-links">
             <li><a href="/admin">Главная</a></li>
+            <li><a href="/admin/contacts">Заявки</a></li>
             <li><a href="/admin/projects">Проекты</a></li>
             <li><a href="/">На сайт</a></li>
         </ul>
@@ -51,7 +54,6 @@
 
     <!-- Базовые скрипты -->
     <script src="/static/js/admin-base.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <script>window.showMessage = window.showAdminMessage;</script>
 
     <!-- Страничные скрипты -->

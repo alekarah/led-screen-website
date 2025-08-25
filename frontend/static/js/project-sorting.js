@@ -4,8 +4,16 @@ let sortableInstance = null;
 
 // Инициализация сортировки
 function initProjectSorting() {
+    if (!window.Sortable) {
+        console.warn('SortableJS не загружен — сортировка отключена');
+        return;
+    }
+
     const sortableContainer = document.getElementById('sortable-projects');
     if (!sortableContainer) return;
+
+    if (window.__sortableInited) return;
+    window.__sortableInited = true;
 
     sortableInstance = Sortable.create(sortableContainer, {
         handle: '.drag-handle', // Только за иконку можно перетаскивать

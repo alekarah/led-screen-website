@@ -9,6 +9,14 @@ function showAdminMessage(message, type = 'success', timeout = 4000) {
         document.body.appendChild(root);
     }
 
+    // Антидубликатор: если тот же текст прилетел за последние 1500ms — не показываем второй раз
+    const now = Date.now();
+    window.__lastToast = window.__lastToast || { text: '', ts: 0 };
+    if (window.__lastToast.text === message && (now - window.__lastToast.ts) < 1500) {
+        return;
+    }
+    window.__lastToast = { text: message, ts: now };
+
     const el = document.createElement('div');
     el.className = 'toast ' + (type === 'error' ? 'error' : 'success');
     el.innerHTML = `
