@@ -1,19 +1,4 @@
 /* ========== БАЗА (общие утилиты) ========== */
-.prewrap { white-space: pre-wrap; }
-.badge { 
-    display:inline-block; 
-    padding:2px 8px; 
-    border-radius:999px; 
-    font-size:12px; 
-}
-.badge-ok { 
-    background:#E9F8EE; 
-    color:#219653; 
-}
-.badge-blue { 
-    background:#e8f0ff; 
-    color:#1a73e8; 
-}
 body.modal-open { overflow:hidden; }
 
 /* плавное появление окон */
@@ -92,8 +77,6 @@ body.modal-open { overflow:hidden; }
     z-index:1000; 
     backdrop-filter:blur(2px);
 }
-
-.hidden{ display:none !important; }
 
 /* показать overlay и окно */
 .modal-overlay:not(.hidden){ display:flex !important; }

@@ -128,19 +128,6 @@ body {
     color: #333;
 }
 
-/* Список проектов (базовая структура) */
-.projects-list { 
-    background: white; 
-    padding: 2rem; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.projects-list h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
 /* Главная админки */
 .stats-grid {
     display: grid;
@@ -167,48 +154,6 @@ body {
     font-size: 2rem;
     font-weight: bold;
     color: #4A90E2;
-}
-
-/* Стили таблицы */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-}
-.table th, .table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-}
-.table thead th {
-    background: #f7f7f7;
-    font-weight: 600;
-    color: #333;
-}
-.table tbody tr:hover {
-    background: #fafafa;
-}
-.table a[href^="tel:"] {
-    text-decoration: none;
-    border-bottom: 1px dashed rgba(74,144,226,.4);
-}
-.table a[href^="tel:"]:hover {
-    border-bottom-color: rgba(74,144,226,.8);
-}
-.table .col-select {
-  width: 36px;
-  text-align: center;
-}
-.table .col-select input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-}
-.bulk-actions .btn[disabled] {
-  opacity: .55;
-  pointer-events: none;
 }
 
 /* Подзаголовочные пометки на дашборде */
@@ -256,6 +201,7 @@ body {
     color: #111827;
 }
 
+.prewrap { white-space: pre-wrap; }
 .badge {
     display: inline-block;
     padding: 4px 8px;
@@ -264,9 +210,17 @@ body {
     font-weight: 700;
 }
 
+.badge-blue {
+  background: #e8f0ff;
+  color: #1a73e8;
+}
+
 .badge-ok {
     background: #e8f7ee;
     color: #18794e;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
 }
 
 .badge-error {
@@ -281,65 +235,9 @@ body {
   margin-left: 10px;
 }
 
-/* Заявки */
-.td-ellipsis {
-    max-width: 420px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .btn-small {
     padding: 0.4rem 0.8rem;
     font-size: 0.9rem;
-}
-
-.badge-ok {
-    background: #e8f7ee;
-    color: #18794e;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: 6px;
-}
-
-/* Пагинация */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin: 16px 0 4px;
-}
-
-.page-numbers {
-  display: flex;
-  gap: 4px;
-  margin: 0 8px;
-}
-
-.page-link {
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  color: #333;
-  text-decoration: none;
-}
-
-.page-link:hover {
-  background: #f0f4ff;
-  border-color: #4a7cff;
-}
-
-.page-link.active {
-  background: #4a7cff;
-  color: #fff;
-  border-color: #4a7cff;
-  font-weight: 600;
-}
-
-.dots {
-  padding: 4px 6px;
-  color: #888;
 }
 
 /* Тосты поверх всего */

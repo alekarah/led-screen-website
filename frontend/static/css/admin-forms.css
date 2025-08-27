@@ -177,6 +177,96 @@
   box-shadow: 0 0 0 2px rgba(26,115,232,.2);
 }
 
+/* Таблица */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.table th, .table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+.table thead th {
+    background: #f7f7f7;
+    font-weight: 600;
+    color: #333;
+}
+.table tbody tr:hover {
+    background: #fafafa;
+}
+.table a[href^="tel:"] {
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(74,144,226,.4);
+}
+.table a[href^="tel:"]:hover {
+    border-bottom-color: rgba(74,144,226,.8);
+}
+
+/* Узкая колонка чекбокса */
+.table .col-select {
+    width: 36px;
+    text-align: center;
+}
+.table .col-select input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+/* Панель массовых действий */
+.bulk-actions .btn[disabled] {
+    opacity: .55;
+    pointer-events: none;
+}
+
+/* Ячейка со строкой сообщения (обрезка) */
+.td-ellipsis {
+    max-width: 420px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 4px;
+}
+.page-numbers {
+    display: flex;
+    gap: 4px;
+    margin: 0 8px;
+}
+.page-link {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+}
+.page-link:hover {
+    background: #f0f4ff;
+    border-color: #4a7cff;
+}
+.page-link.active {
+    background: #4a7cff;
+    color: #fff;
+    border-color: #4a7cff;
+    font-weight: 600;
+}
+.dots {
+    padding: 4px 6px;
+    color: #888;
+}
+
+
 /* Адаптивность форм */
 @media (max-width: 768px) {
     .checkbox-group {
