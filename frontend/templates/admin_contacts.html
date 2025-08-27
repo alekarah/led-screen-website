@@ -2,7 +2,7 @@
   <div class="form-section">
     <h2>
       Все заявки
-      <span class="count-big">{{len .contactsAll}}</span>
+      <span class="count-big">{{.total}}</span>
     </h2>
     <div class="filters" style="margin-bottom:16px; display:flex; gap:12px; flex-wrap:wrap;">
       <!-- Поиск -->
@@ -22,6 +22,13 @@
         <option value="today" {{if eq .dateRange "today"}}selected{{end}}>Сегодня</option>
         <option value="7d" {{if eq .dateRange "7d"}}selected{{end}}>Последние 7 дней</option>
         <option value="month" {{if eq .dateRange "month"}}selected{{end}}>Этот месяц</option>
+      </select>
+
+      <!-- Селектор размера страницы -->
+      <select id="limit-select" class="form-input">
+        <option value="25" {{if eq .limit 25}}selected{{end}}>25</option>
+        <option value="50" {{if eq .limit 50}}selected{{end}}>50</option>
+        <option value="100" {{if eq .limit 100}}selected{{end}}>100</option>
       </select>
 
       <button id="apply-filters" class="btn btn-small btn-blue">Применить</button>
@@ -77,6 +84,42 @@
         {{end}}
       </tbody>
     </table>
+  </div>
+  <!-- Пагинация -->
+  <div class="pagination">
+    <!-- Назад -->
+    <a class="btn btn-small"
+      href="?page={{.prevPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+      {{if le .page 1}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+      Назад
+    </a>
+
+    <!-- Номера страниц -->
+    <div class="page-numbers">
+      {{ $cur := .page }}
+      {{ $lim := .limit }}
+      {{ $search := .search }}
+      {{ $status := .status }}
+      {{ $date := .dateRange }}
+
+      {{ range .pageNumbers }}
+        {{ if eq . -1 }}
+          <span class="dots">…</span>
+        {{ else }}
+          <a class="page-link {{if eq . $cur}}active{{end}}"
+            href="?page={{.}}&limit={{$lim}}{{if $search}}&search={{$search}}{{end}}{{if $status}}&status={{$status}}{{end}}{{if $date}}&date={{$date}}{{end}}">
+            {{.}}
+          </a>
+        {{ end }}
+      {{ end }}
+    </div>
+
+    <!-- Вперёд -->
+    <a class="btn btn-small"
+      href="?page={{.nextPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+      {{if ge .page .pages}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+      Вперёд
+    </a>
   </div>
 {{end}}
 

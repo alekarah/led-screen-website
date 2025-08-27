@@ -207,11 +207,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const status = document.getElementById('status-filter')?.value || '';
         const date   = document.getElementById('date-filter')?.value || '';
 
-        const params = new URLSearchParams();
+        const params = new URLSearchParams();            // <-- сперва создаём
+
         if (search) params.set('search', search);
         if (status) params.set('status', status);
-        if (date) params.set('date', date);
+        if (date)   params.set('date', date);
+
+        const limitSel = document.getElementById('limit-select');
+        if (limitSel && limitSel.value) params.set('limit', limitSel.value);
+
+        params.set('page', '1'); // при применении фильтров начать с первой страницы
 
         window.location = '/admin/contacts' + (params.toString() ? '?' + params.toString() : '');
-    }
+        }
 });

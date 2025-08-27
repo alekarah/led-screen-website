@@ -277,16 +277,56 @@ body {
 }
 
 .btn-small {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
 }
 
 .badge-ok {
-  background: #e8f7ee;
-  color: #18794e;
-  font-weight: 600;
+    background: #e8f7ee;
+    color: #18794e;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 4px;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 4px;
+  margin: 0 8px;
+}
+
+.page-link {
   padding: 4px 8px;
   border-radius: 6px;
+  border: 1px solid #ddd;
+  color: #333;
+  text-decoration: none;
+}
+
+.page-link:hover {
+  background: #f0f4ff;
+  border-color: #4a7cff;
+}
+
+.page-link.active {
+  background: #4a7cff;
+  color: #fff;
+  border-color: #4a7cff;
+  font-weight: 600;
+}
+
+.dots {
+  padding: 4px 6px;
+  color: #888;
 }
 
 /* Тосты поверх всего */
