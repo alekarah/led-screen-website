@@ -11,6 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var moscowLoc, _ = time.LoadLocation("Europe/Moscow")
+
+func nowMoscow() time.Time {
+	return time.Now().In(moscowLoc)
+}
+
 // /admin/contacts — страница всех заявок (с пагинацией)
 func (h *Handlers) AdminContactsPage(c *gin.Context) {
 	var contacts []models.ContactForm
@@ -36,13 +42,20 @@ func (h *Handlers) AdminContactsPage(c *gin.Context) {
 
 	// --- Интервал дат ---
 	dateRange := c.Query("date")
+	now := nowMoscow()
+
 	switch dateRange {
 	case "today":
-		qb = qb.Where("DATE(created_at) = CURRENT_DATE")
+		start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc)
+		end := start.Add(24 * time.Hour)
+		qb = qb.Where("created_at >= ? AND created_at < ?", start.UTC(), end.UTC())
 	case "7d":
-		qb = qb.Where("created_at >= NOW() - INTERVAL '7 days'")
+		from := now.AddDate(0, 0, -7)
+		qb = qb.Where("created_at >= ?", from.UTC())
 	case "month":
-		qb = qb.Where("DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)")
+		start := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, moscowLoc)
+		end := start.AddDate(0, 1, 0)
+		qb = qb.Where("created_at >= ? AND created_at < ?", start.UTC(), end.UTC())
 	}
 
 	// --- Пагинация ---
@@ -243,13 +256,20 @@ func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
 	}
 
 	// Даты
+	now := nowMoscow()
+
 	switch c.Query("date") {
 	case "today":
-		qb = qb.Where("DATE(created_at) = CURRENT_DATE")
+		start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc)
+		end := start.Add(24 * time.Hour)
+		qb = qb.Where("created_at >= ? AND created_at < ?", start.UTC(), end.UTC())
 	case "7d":
-		qb = qb.Where("created_at >= NOW() - INTERVAL '7 days'")
+		from := now.AddDate(0, 0, -7)
+		qb = qb.Where("created_at >= ?", from.UTC())
 	case "month":
-		qb = qb.Where("DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)")
+		start := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, moscowLoc)
+		end := start.AddDate(0, 1, 0)
+		qb = qb.Where("created_at >= ? AND created_at < ?", start.UTC(), end.UTC())
 	}
 
 	// Вытащим все подходящие (без пагинации), отсортированные по дате
@@ -274,9 +294,6 @@ func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
 		"Имя", "Телефон", "Email", "Компания", "Тип проекта", "Сообщение", "Статус", "Дата",
 	})
 
-	// Локаль времени (Москва)
-	loc, _ := time.LoadLocation("Europe/Moscow")
-
 	// Данные
 	for _, cf := range contacts {
 		row := []string{
@@ -287,7 +304,7 @@ func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
 			cf.ProjectType,
 			cf.Message,
 			cf.Status,
-			cf.CreatedAt.In(loc).Format("02.01.2006 15:04"),
+			cf.CreatedAt.In(moscowLoc).Format("02.01.2006 15:04"),
 		}
 		_ = w.Write(row)
 	}

@@ -73,6 +73,8 @@
               <td class="status-cell">
                 {{if eq .Status "processed"}}
                   <span class="badge badge-ok">Обработано</span>
+                {{else if eq .Status "archived"}}
+                  <span class="badge">В архиве</span>
                 {{else}}
                   <button class="btn btn-small mark-done" type="button">Обработать</button>
                 {{end}}

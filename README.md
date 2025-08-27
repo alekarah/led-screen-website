@@ -73,7 +73,12 @@ led-screen-website/
 │   │   │   └── public-services.css
 │   │   ├── js/
 │   │   │   ├── admin-base.js
-│   │   │   ├── admin-contacts.js
+│   │   │   ├── admin-contacts-api.js
+│   │   │   ├── admin-contacts-bulk.js
+│   │   │   ├── admin-contacts-filters.js
+│   │   │   ├── admin-contacts-init.js
+│   │   │   ├── admin-contacts-modal.js
+│   │   │   ├── admin-contacts-ui.js
 │   │   │   ├── admin-projects-creation.js
 │   │   │   ├── admin-projects-editing.js
 │   │   │   ├── admin-projects-images.js
