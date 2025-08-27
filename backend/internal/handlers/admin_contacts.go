@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"encoding/csv"
 	"net/http"
 	"strconv"
+	"time"
 
 	"ledsite/internal/models"
 
@@ -177,4 +179,122 @@ func buildPageNumbers(current, total int) []int {
 	// последние две
 	res = append(res, total-1, total)
 	return res
+}
+
+// BulkUpdateContacts — массовая смена статуса: processed | new | archived
+func (h *Handlers) BulkUpdateContacts(c *gin.Context) {
+	var req struct {
+		Action string `json:"action"`
+		IDs    []uint `json:"ids"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": "Неверные данные"})
+		return
+	}
+	if len(req.IDs) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": "Не выбрано ни одной заявки"})
+		return
+	}
+
+	switch req.Action {
+	case "processed", "new", "archived":
+		// ok
+	default:
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": "Недопустимое действие"})
+		return
+	}
+
+	// Выполним массовый апдейт
+	if err := h.db.Model(&models.ContactForm{}).
+		Where("id IN ?", req.IDs).
+		Update("status", req.Action).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "error": "Не удалось обновить заявки"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"action":  req.Action,
+		"ids":     req.IDs,
+	})
+}
+
+// AdminContactsExportCSV — экспорт заявок в CSV с учётом фильтров (UTF-8 + BOM)
+func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
+	var contacts []models.ContactForm
+
+	// --- Базовый запрос как на странице ---
+	qb := h.db.Model(&models.ContactForm{})
+
+	// Поиск: q или search
+	q := c.Query("q")
+	if q == "" {
+		q = c.Query("search")
+	}
+	if q != "" {
+		like := "%" + q + "%"
+		qb = qb.Where("name ILIKE ? OR phone ILIKE ? OR email ILIKE ? OR message ILIKE ?", like, like, like, like)
+	}
+
+	// Статус
+	status := c.Query("status")
+	if status != "" {
+		qb = qb.Where("status = ?", status)
+	}
+
+	// Даты
+	switch c.Query("date") {
+	case "today":
+		qb = qb.Where("DATE(created_at) = CURRENT_DATE")
+	case "7d":
+		qb = qb.Where("created_at >= NOW() - INTERVAL '7 days'")
+	case "month":
+		qb = qb.Where("DATE_TRUNC('month', created_at) = DATE_TRUNC('month', CURRENT_DATE)")
+	}
+
+	// Вытащим все подходящие (без пагинации), отсортированные по дате
+	if err := qb.Order("created_at DESC").Find(&contacts).Error; err != nil {
+		c.String(http.StatusInternalServerError, "DB error")
+		return
+	}
+
+	// --- Заголовки ответа ---
+	filename := "contacts_export_" + time.Now().Format("20060102_150405") + ".csv"
+	c.Header("Content-Type", "text/csv; charset=utf-8")
+	c.Header("Content-Disposition", `attachment; filename="`+filename+`"`)
+
+	// --- Пишем BOM, чтобы Excel открыл UTF-8 корректно ---
+	c.Writer.Write([]byte{0xEF, 0xBB, 0xBF})
+
+	w := csv.NewWriter(c.Writer)
+	w.Comma = ';' // точка с запятой — безопаснее из-за запятых в тексте
+
+	// Шапка
+	_ = w.Write([]string{
+		"Имя", "Телефон", "Email", "Компания", "Тип проекта", "Сообщение", "Статус", "Дата",
+	})
+
+	// Локаль времени (Москва)
+	loc, _ := time.LoadLocation("Europe/Moscow")
+
+	// Данные
+	for _, cf := range contacts {
+		row := []string{
+			cf.Name,
+			cf.Phone,
+			cf.Email,
+			cf.Company,
+			cf.ProjectType,
+			cf.Message,
+			cf.Status,
+			cf.CreatedAt.In(loc).Format("02.01.2006 15:04"),
+		}
+		_ = w.Write(row)
+	}
+
+	w.Flush()
+	if err := w.Error(); err != nil {
+		// если вдруг ошибка записи — отдадим 500
+		c.Error(err)
+	}
 }

@@ -219,5 +219,161 @@ document.addEventListener('DOMContentLoaded', () => {
         params.set('page', '1'); // при применении фильтров начать с первой страницы
 
         window.location = '/admin/contacts' + (params.toString() ? '?' + params.toString() : '');
+    }
+
+    // === Экспорт CSV (с текущими фильтрами из URL) ===
+    document.getElementById('export-csv')?.addEventListener('click', () => {
+    const current = new URLSearchParams(location.search);
+    const p = new URLSearchParams();
+
+    // поддерживаем и search, и q (на будущее)
+    if (current.get('search')) p.set('q', current.get('search'));
+    else if (current.get('q')) p.set('q', current.get('q'));
+
+    if (current.get('status')) p.set('status', current.get('status'));
+    if (current.get('date'))   p.set('date',   current.get('date'));
+
+    const url = '/admin/contacts/export.csv' + (p.toString() ? ('?' + p.toString()) : '');
+    window.open(url, '_blank'); // скачивание в новой вкладке
+    });
+
+    // === Массовые действия: выбор чекбоксов ===
+    const selectAll = document.getElementById('select-all');
+    const bulkCount = document.getElementById('bulk-count');
+    const btnBulkProcess = document.getElementById('bulk-process');
+    const btnBulkArchive = document.getElementById('bulk-archive');
+    const btnBulkRestore = document.getElementById('bulk-restore');
+
+    // соберём id из отмеченных строк
+    function getSelectedIds() {
+        const ids = [];
+        document.querySelectorAll('input.row-select:checked').forEach(ch => {
+            const val = ch.value?.trim();
+            if (val) ids.push(Number(val));
+        });
+        return ids;
+    }
+
+    function updateBulkUI() {
+        const ids = getSelectedIds();
+        const n = ids.length;
+        if (bulkCount) bulkCount.textContent = `Выбрано: ${n}`;
+        const enabled = n > 0;
+        if (btnBulkProcess) btnBulkProcess.disabled = !enabled;
+        if (btnBulkArchive) btnBulkArchive.disabled = !enabled;
+        if (btnBulkRestore) btnBulkRestore.disabled = !enabled;
+    }
+
+    // «выбрать все на странице»
+    selectAll?.addEventListener('change', () => {
+        const checked = !!selectAll.checked;
+        document.querySelectorAll('input.row-select').forEach(ch => ch.checked = checked);
+        updateBulkUI();
+    });
+
+    // переключение отдельных строк (делегирование на tbody — так быстрее)
+    document.querySelector('table.table tbody')?.addEventListener('change', (e) => {
+        const ch = e.target.closest('input.row-select');
+        if (!ch) return;
+        // если сняли галочку у строки — снимаем и «выбрать все»
+        if (!ch.checked && selectAll && selectAll.checked) {
+            selectAll.checked = false;
         }
+        updateBulkUI();
+    });
+
+    // первичная инициализация
+    updateBulkUI();
+
+    // унифицированный вызов bulk-операции
+    async function bulkAction(action, ids) {
+        const res = await fetch('/admin/contacts/bulk', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action, ids })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === false) {
+            throw new Error(data.error || 'Не удалось выполнить массовое действие');
+        }
+        return data;
+    }
+
+    // обновление UI строки статуса (повторяем логику, как при одиночном действии)
+    function updateRowStatusUI(id, status) {
+        const tr = document.querySelector(`tr[data-id="${id}"]`);
+        if (!tr) return;
+
+        // кнопка «Подробнее» хранит статус в data-status — обновим
+        const detailsBtn = tr.querySelector('.js-contact-details');
+        if (detailsBtn) detailsBtn.dataset.status = status;
+
+        // текст/кнопка в ячейке статуса
+        const cell = tr.querySelector('.status-cell');
+        if (!cell) return;
+
+        if (status === 'processed') {
+            cell.innerHTML = '<span class="badge badge-ok">Обработано</span>';
+        } else if (status === 'new') {
+            cell.innerHTML = '<button class="btn btn-small mark-done" type="button">Обработать</button>';
+        } else { // archived
+            cell.innerHTML = '<span class="badge">В архиве</span>';
+        }
+    }
+
+    // навешиваем обработчики на панель
+    btnBulkProcess?.addEventListener('click', async () => {
+        const ids = getSelectedIds();
+        if (!ids.length) return;
+        try {
+            btnBulkProcess.disabled = true;
+            await bulkAction('processed', ids);
+            ids.forEach(id => updateRowStatusUI(id, 'processed'));
+            // снимаем выделение
+            document.querySelectorAll('input.row-select:checked').forEach(ch => ch.checked = false);
+            if (selectAll) selectAll.checked = false;
+            updateBulkUI();
+            showAdminMessage?.('Помечено как обработано', 'ok');
+        } catch (e) {
+            showAdminMessage?.(e.message, 'error');
+        } finally {
+            updateBulkUI();
+        }
+    });
+
+    btnBulkRestore?.addEventListener('click', async () => {
+        const ids = getSelectedIds();
+        if (!ids.length) return;
+        try {
+            btnBulkRestore.disabled = true;
+            await bulkAction('new', ids);
+            ids.forEach(id => updateRowStatusUI(id, 'new'));
+            document.querySelectorAll('input.row-select:checked').forEach(ch => ch.checked = false);
+            if (selectAll) selectAll.checked = false;
+            updateBulkUI();
+            showAdminMessage?.('Возвращены в новые', 'ok');
+        } catch (e) {
+            showAdminMessage?.(e.message, 'error');
+        } finally {
+            updateBulkUI();
+        }
+    });
+
+    btnBulkArchive?.addEventListener('click', async () => {
+        const ids = getSelectedIds();
+        if (!ids.length) return;
+        try {
+            btnBulkArchive.disabled = true;
+            await bulkAction('archived', ids);
+            ids.forEach(id => updateRowStatusUI(id, 'archived'));
+            document.querySelectorAll('input.row-select:checked').forEach(ch => ch.checked = false);
+            if (selectAll) selectAll.checked = false;
+            updateBulkUI();
+            showAdminMessage?.('Отправлено в архив', 'ok');
+        } catch (e) {
+            showAdminMessage?.(e.message, 'error');
+        } finally {
+            updateBulkUI();
+        }
+    });
 });

@@ -50,5 +50,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		admin.POST("/images/:id/crop", h.UpdateImageCrop)
 		admin.GET("/contacts", h.AdminContactsPage)
 		admin.POST("/contacts/:id/status", h.UpdateContactStatus)
+		admin.POST("/contacts/bulk", h.BulkUpdateContacts)
+		admin.GET("/contacts/export.csv", h.AdminContactsExportCSV)
 	}
 }

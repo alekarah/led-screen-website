@@ -197,6 +197,19 @@ body {
 .table a[href^="tel:"]:hover {
     border-bottom-color: rgba(74,144,226,.8);
 }
+.table .col-select {
+  width: 36px;
+  text-align: center;
+}
+.table .col-select input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.bulk-actions .btn[disabled] {
+  opacity: .55;
+  pointer-events: none;
+}
 
 /* Подзаголовочные пометки на дашборде */
 .subnote {
