@@ -7,25 +7,21 @@ import (
 )
 
 func Setup(router *gin.Engine, h *handlers.Handlers) {
-	// Middleware для логирования
+	// Глобальные middleware
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	// Healthcheck endpoint (для prod/devops)
-	router.GET("/healthz", func(c *gin.Context) {
-		c.String(200, "ok")
-	})
+	// Healthcheck
+	router.GET("/healthz", func(c *gin.Context) { c.String(200, "ok") })
 
-	// Главная страница
+	// Публичные страницы
 	router.GET("/", h.HomePage)
-
-	// Страницы сайта
 	router.GET("/projects", h.ProjectsPage)
 	router.GET("/services", h.ServicesPage)
 	router.GET("/contact", h.ContactPage)
 	router.GET("/privacy", h.PrivacyPage)
 
-	// API маршруты
+	// API (публичное)
 	api := router.Group("/api")
 	{
 		api.GET("/projects", h.GetProjects)
@@ -33,28 +29,43 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.GET("/admin/contacts-7d", h.AdminContacts7Days)
 	}
 
-	// Админ панель
+	// Админка
 	admin := router.Group("/admin")
 	{
 		admin.GET("/", h.AdminDashboard)
-		admin.GET("/projects", h.AdminProjects)
-		admin.POST("/projects", h.CreateProject)
-		admin.GET("/projects/:id", h.GetProject)
-		admin.POST("/projects/:id/update", h.UpdateProject)
-		admin.DELETE("/projects/:id", h.DeleteProject)
-		admin.POST("/projects/:id/reorder", h.ReorderProject)
-		admin.POST("/projects/bulk-reorder", h.BulkReorderProjects)
-		admin.POST("/projects/reset-order", h.ResetProjectOrder)
-		admin.POST("/upload-images", h.UploadImages)
-		admin.DELETE("/images/:id", h.DeleteImage)
-		admin.POST("/images/:id/crop", h.UpdateImageCrop)
-		admin.GET("/contacts", h.AdminContactsPage)
-		admin.GET("/contacts/archive", h.AdminContactsArchivePage)
-		admin.POST("/contacts/:id/status", h.UpdateContactStatus)
-		admin.POST("/contacts/bulk", h.BulkUpdateContacts)
-		admin.GET("/contacts/export.csv", h.AdminContactsExportCSV)
-		admin.PATCH("/contacts/:id/archive", h.ArchiveContact)
-		admin.PATCH("/contacts/:id/restore", h.RestoreContact)
-		admin.DELETE("/contacts/:id", h.DeleteContact)
+
+		// Проекты
+		pr := admin.Group("/projects")
+		{
+			pr.GET("", h.AdminProjects)
+			pr.POST("", h.CreateProject)
+			pr.GET("/:id", h.GetProject)
+			pr.POST("/:id/update", h.UpdateProject)
+			pr.DELETE("/:id", h.DeleteProject)
+			pr.POST("/:id/reorder", h.ReorderProject)
+			pr.POST("/bulk-reorder", h.BulkReorderProjects)
+			pr.POST("/reset-order", h.ResetProjectOrder)
+		}
+
+		// Изображения
+		img := admin.Group("/")
+		{
+			img.POST("upload-images", h.UploadImages)
+			img.DELETE("images/:id", h.DeleteImage)
+			img.POST("images/:id/crop", h.UpdateImageCrop)
+		}
+
+		// Заявки (контакты)
+		ct := admin.Group("/contacts")
+		{
+			ct.GET("", h.AdminContactsPage)
+			ct.GET("/archive", h.AdminContactsArchivePage)
+			ct.GET("/export.csv", h.AdminContactsExportCSV)
+			ct.POST("/bulk", h.BulkUpdateContacts)
+			ct.POST("/:id/status", h.UpdateContactStatus)
+			ct.PATCH("/:id/archive", h.ArchiveContact)
+			ct.PATCH("/:id/restore", h.RestoreContact)
+			ct.DELETE("/:id", h.DeleteContact)
+		}
 	}
 }

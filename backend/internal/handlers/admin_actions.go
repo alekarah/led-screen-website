@@ -11,33 +11,37 @@ import (
 
 // Смена статуса заявки (new | processed | archived)
 func (h *Handlers) UpdateContactStatus(c *gin.Context) {
-	id := c.Param("id")
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+
 	var body struct {
 		Status string `json:"status"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверные данные"})
+		jsonErr(c, http.StatusBadRequest, "Неверные данные")
 		return
 	}
-	if body.Status != "new" && body.Status != "processed" && body.Status != "archived" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Недопустимый статус"})
+	status, valid := parseStatus(body.Status)
+	if !valid {
+		jsonErr(c, http.StatusBadRequest, "Недопустимый статус")
 		return
 	}
-	now := nowMoscow().UTC()
+
+	now := NowMSK().UTC()
 	var archivedAt *time.Time
-	if body.Status == "archived" {
+	if status == "archived" {
 		archivedAt = &now
-	} else {
-		archivedAt = nil
 	}
 
 	if err := h.db.Model(&models.ContactForm{}).
 		Where("id = ?", id).
-		Updates(map[string]interface{}{"status": body.Status, "archived_at": archivedAt}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось обновить заявку"})
+		Updates(map[string]any{"status": status, "archived_at": archivedAt}).Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Не удалось обновить заявку")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Статус изменён", "status": body.Status})
+	jsonOK(c, gin.H{"message": "Статус изменён", "status": status})
 }
 
 // Массовая смена статуса
@@ -47,51 +51,57 @@ func (h *Handlers) BulkUpdateContacts(c *gin.Context) {
 		IDs    []uint `json:"ids"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil || len(req.IDs) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": "Неверные данные"})
+		jsonErr(c, http.StatusBadRequest, "Неверные данные")
 		return
 	}
-	switch req.Action {
-	case "processed", "new", "archived":
-	default:
-		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": "Недопустимое действие"})
+	action, valid := parseStatus(req.Action)
+	if !valid {
+		jsonErr(c, http.StatusBadRequest, "Недопустимое действие")
 		return
 	}
-	now := nowMoscow().UTC()
+
+	now := NowMSK().UTC()
 	var archivedAt *time.Time
-	if req.Action == "archived" {
+	if action == "archived" {
 		archivedAt = &now
-	} else {
-		archivedAt = nil
 	}
 
 	if err := h.db.Model(&models.ContactForm{}).
 		Where("id IN ?", req.IDs).
-		Updates(map[string]interface{}{"status": req.Action, "archived_at": archivedAt}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "error": "Не удалось обновить заявки"})
+		Updates(map[string]any{"status": action, "archived_at": archivedAt}).Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Не удалось обновить заявки")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"success": true, "action": req.Action, "ids": req.IDs})
+	jsonOK(c, gin.H{"success": true, "action": action, "ids": req.IDs})
 }
 
 // Архивировать одну заявку
 func (h *Handlers) ArchiveContact(c *gin.Context) {
-	id := c.Param("id")
-	now := nowMoscow().UTC()
-	if err := h.db.Model(&models.ContactForm{}).
-		Where("id = ?", id).
-		Updates(map[string]interface{}{"status": "archived", "archived_at": &now}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось архивировать"})
+	id, ok := mustID(c)
+	if !ok {
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "В архиве", "status": "archived"})
+
+	now := NowMSK().UTC()
+	if err := h.db.Model(&models.ContactForm{}).
+		Where("id = ?", id).
+		Updates(map[string]any{"status": "archived", "archived_at": &now}).Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Не удалось архивировать")
+		return
+	}
+	jsonOK(c, gin.H{"message": "В архиве", "status": "archived"})
 }
 
 // Восстановить из архива
 func (h *Handlers) RestoreContact(c *gin.Context) {
-	id := c.Param("id")
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+
 	var body struct {
 		To string `json:"to"`
-	} // "new" | "processed"
+	} // допустимо: "new" | "processed"
 	_ = c.ShouldBindJSON(&body)
 	if body.To != "processed" {
 		body.To = "new"
@@ -99,32 +109,36 @@ func (h *Handlers) RestoreContact(c *gin.Context) {
 
 	if err := h.db.Model(&models.ContactForm{}).
 		Where("id = ?", id).
-		Updates(map[string]interface{}{"status": body.To, "archived_at": nil}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось восстановить"})
+		Updates(map[string]any{"status": body.To, "archived_at": nil}).Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Не удалось восстановить")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Восстановлено", "status": body.To})
+	jsonOK(c, gin.H{"message": "Восстановлено", "status": body.To})
 }
 
 // Удалить заявку (hard=true — жёстко)
 func (h *Handlers) DeleteContact(c *gin.Context) {
-	id := c.Param("id")
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+
 	hard := c.Query("hard")
 	if hard == "true" || hard == "1" || hard == "yes" {
 		if err := h.db.Delete(&models.ContactForm{}, id).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось удалить"})
+			jsonErr(c, http.StatusInternalServerError, "Не удалось удалить")
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"message": "Удалено"})
+		jsonOK(c, gin.H{"message": "Удалено"})
 		return
 	}
-	// fallback: мягкий архив
-	now := nowMoscow().UTC()
+	// мягкий архив
+	now := NowMSK().UTC()
 	if err := h.db.Model(&models.ContactForm{}).
 		Where("id = ?", id).
-		Updates(map[string]interface{}{"status": "archived", "archived_at": &now}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось архивировать"})
+		Updates(map[string]any{"status": "archived", "archived_at": &now}).Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Не удалось архивировать")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "В архиве", "status": "archived"})
+	jsonOK(c, gin.H{"message": "В архиве", "status": "archived"})
 }

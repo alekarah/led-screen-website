@@ -1,30 +1,44 @@
 // API: все запросы к бэкенду в одном месте
 (function (w) {
-    const json = (res) => res.json().catch(() => ({}));
 
-    const api = {
-        async updateStatus(id, status) {
-        const res = await fetch(`/admin/contacts/${id}/status`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status })
-        });
-        const data = await json(res);
-        if (!res.ok) throw new Error(data.error || 'Не удалось изменить статус');
-        return data;
-        },
-
-        async bulk(action, ids) {
-        const res = await fetch('/admin/contacts/bulk', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action, ids })
-        });
-        const data = await json(res);
+    async function request(url, { method = 'GET', body, headers } = {}) {
+        const opts = { method, headers: headers || {} };
+        if (body !== undefined) {
+        opts.headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(body);
+        }
+        const res = await fetch(url, opts);
+        let data = {};
+        try { data = await res.json(); } catch (_) {}
         if (!res.ok || data.success === false) {
-            throw new Error(data.error || 'Не удалось выполнить массовое действие');
+        const msg = data.error || data.message || `HTTP ${res.status}`;
+        throw new Error(msg);
         }
         return data;
+    }
+
+    const api = {
+        request, // пусть будет доступен, вдруг пригодится где-то ещё
+
+        updateStatus(id, status) {
+        return request(`/admin/contacts/${id}/status`, { method: 'POST', body: { status } });
+        },
+
+        bulk(action, ids) {
+        return request('/admin/contacts/bulk', { method: 'POST', body: { action, ids } });
+        },
+
+        archive(id) {
+        return request(`/admin/contacts/${id}/archive`, { method: 'PATCH' });
+        },
+
+        restore(id, to = 'new') {
+        return request(`/admin/contacts/${id}/restore`, { method: 'PATCH', body: { to } });
+        },
+
+        remove(id, { hard = true } = {}) {
+        const url = `/admin/contacts/${id}` + (hard ? '?hard=true' : '');
+        return request(url, { method: 'DELETE' });
         },
 
         exportUrlFromLocation() {
@@ -35,32 +49,6 @@
         if (current.get('status')) p.set('status', current.get('status'));
         if (current.get('date'))   p.set('date',   current.get('date'));
         return '/admin/contacts/export.csv' + (p.toString() ? ('?' + p.toString()) : '');
-        },
-
-        async archive(id) {
-        const res = await fetch(`/admin/contacts/${id}/archive`, { method: 'PATCH' });
-        const data = await json(res);
-        if (!res.ok) throw new Error(data.error || 'Не удалось архивировать');
-        return data;
-        },
-
-        async restore(id, to = 'new') {
-        const res = await fetch(`/admin/contacts/${id}/restore`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ to })
-        });
-        const data = await json(res);
-        if (!res.ok) throw new Error(data.error || 'Не удалось восстановить');
-        return data;
-        },
-
-        async remove(id, { hard = true } = {}) {
-        const url = `/admin/contacts/${id}` + (hard ? '?hard=true' : '');
-        const res = await fetch(url, { method: 'DELETE' });
-        const data = await json(res);
-        if (!res.ok) throw new Error(data.error || 'Не удалось удалить');
-        return data;
         }
     };
 

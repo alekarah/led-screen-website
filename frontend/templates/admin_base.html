@@ -72,5 +72,97 @@
         {{template "contacts-archive-extra-js" .}}
     {{end}}
 
+    {{define "contacts-table-head-inbox"}}
+    <thead>
+    <tr>
+        <th style="width:36px">
+        <input type="checkbox" id="select-all" aria-label="Выбрать все на странице">
+        </th>
+        <th style="width:16%">Имя</th>
+        <th style="width:22%">Контакты</th>
+        <th>Компания</th>
+        <th style="width:16%">Тип</th>
+        <th style="width:12%">Статус</th>
+        <th style="width:14%">Действия</th>
+    </tr>
+    </thead>
+    {{end}}
+
+    {{define "contacts-table-head-archive"}}
+    <thead>
+    <tr>
+        <th style="width:36px">
+        <input type="checkbox" id="select-all" aria-label="Выбрать все на странице">
+        </th>
+        <th style="width:16%">Имя</th>
+        <th style="width:22%">Контакты</th>
+        <th>Компания</th>
+        <th style="width:16%">Тип</th>
+        <th style="width:12%">Дата</th>
+        <th style="width:14%">Действия</th>
+    </tr>
+    </thead>
+    {{end}}
+
+    {{define "contacts-pagination-inbox"}}
+    <div class="pagination">
+    <a class="btn btn-small"
+        href="?page={{.prevPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+        {{if le .page 1}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        Назад
+    </a>
+
+    <div class="page-numbers">
+        {{ $cur := .page }} {{ $lim := .limit }} {{ $search := .search }} {{ $status := .status }} {{ $date := .dateRange }}
+        {{ range .pageNumbers }}
+        {{ if eq . -1 }}
+            <span class="dots">…</span>
+        {{ else }}
+            <a class="page-link {{if eq . $cur}}active{{end}}"
+            href="?page={{.}}&limit={{$lim}}{{if $search}}&search={{$search}}{{end}}{{if $status}}&status={{$status}}{{end}}{{if $date}}&date={{$date}}{{end}}">
+            {{.}}
+            </a>
+        {{ end }}
+        {{ end }}
+    </div>
+
+    <a class="btn btn-small"
+        href="?page={{.nextPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+        {{if ge .page .pages}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        Вперёд
+    </a>
+    </div>
+    {{end}}
+
+    {{define "contacts-pagination-archive"}}
+    <div class="pagination">
+    <a class="btn btn-small"
+        href="?page={{.prevPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+        {{if le .page 1}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        Назад
+    </a>
+
+    <div class="page-numbers">
+        {{ $cur := .page }} {{ $lim := .limit }} {{ $search := .search }} {{ $date := .dateRange }}
+        {{ range .pageNumbers }}
+        {{ if eq . -1 }}
+            <span class="dots">…</span>
+        {{ else }}
+            <a class="page-link {{if eq . $cur}}active{{end}}"
+            href="?page={{.}}&limit={{$lim}}{{if $search}}&search={{$search}}{{end}}{{if $date}}&date={{$date}}{{end}}">
+            {{.}}
+            </a>
+        {{ end }}
+        {{ end }}
+    </div>
+
+    <a class="btn btn-small"
+        href="?page={{.nextPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+        {{if ge .page .pages}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        Вперёд
+    </a>
+    </div>
+    {{end}}
+
 </body>
 </html>

@@ -13,7 +13,6 @@
         <option value="">Все статусы</option>
         <option value="new" {{if eq .status "new"}}selected{{end}}>Новые</option>
         <option value="processed" {{if eq .status "processed"}}selected{{end}}>Обработанные</option>
-        <option value="archived" {{if eq .status "archived"}}selected{{end}}>Архив</option>
       </select>
 
       <!-- Интервал дат -->
@@ -51,19 +50,7 @@
     </div>
 
     <table class="table">
-      <thead>
-        <tr>
-          <th style="width:36px">
-            <input type="checkbox" id="select-all" aria-label="Выбрать все на странице">
-          </th>
-          <th style="width:16%">Имя</th>
-          <th style="width:22%">Контакты</th>
-          <th>Компания</th>
-          <th style="width:16%">Тип</th>
-          <th style="width:12%">Статус</th>
-          <th style="width:14%">Действия</th>
-        </tr>
-      </thead>
+      {{template "contacts-table-head-inbox" .}}
 
       <tbody>
         {{if .contactsAll}}
@@ -118,41 +105,7 @@
   </div>
 
   <!-- Пагинация -->
-  <div class="pagination">
-    <!-- Назад -->
-    <a class="btn btn-small"
-      href="?page={{.prevPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
-      {{if le .page 1}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
-      Назад
-    </a>
-
-    <!-- Номера страниц -->
-    <div class="page-numbers">
-      {{ $cur := .page }}
-      {{ $lim := .limit }}
-      {{ $search := .search }}
-      {{ $status := .status }}
-      {{ $date := .dateRange }}
-
-      {{ range .pageNumbers }}
-        {{ if eq . -1 }}
-          <span class="dots">…</span>
-        {{ else }}
-          <a class="page-link {{if eq . $cur}}active{{end}}"
-            href="?page={{.}}&limit={{$lim}}{{if $search}}&search={{$search}}{{end}}{{if $status}}&status={{$status}}{{end}}{{if $date}}&date={{$date}}{{end}}">
-            {{.}}
-          </a>
-        {{ end }}
-      {{ end }}
-    </div>
-
-    <!-- Вперёд -->
-    <a class="btn btn-small"
-      href="?page={{.nextPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
-      {{if ge .page .pages}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
-      Вперёд
-    </a>
-  </div>
+  {{template "contacts-pagination-inbox" .}}
 {{end}}
 
 {{define "contacts-modals"}}
@@ -191,6 +144,7 @@
 {{define "contacts-extra-js"}}
   <script src="/static/js/admin-contacts-api.js" defer></script>
   <script src="/static/js/admin-contacts-ui.js" defer></script>
+  <script src="/static/js/admin-contacts-shared.js" defer></script>
   <script src="/static/js/admin-contacts-filters.js" defer></script>
   <script src="/static/js/admin-contacts-modal.js" defer></script>
   <script src="/static/js/admin-contacts-bulk.js" defer></script>

@@ -10,6 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var csvHeadersContacts = []string{
+	"Имя", "Телефон", "Email", "Компания", "Тип проекта", "Сообщение", "Статус", "Дата",
+}
+
 // /admin/contacts — страница всех заявок (без архива)
 func (h *Handlers) AdminContactsPage(c *gin.Context) {
 	var contacts []models.ContactForm
@@ -148,7 +152,7 @@ func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
 	c.Writer.Write([]byte{0xEF, 0xBB, 0xBF})
 	w := csv.NewWriter(c.Writer)
 	w.Comma = ';'
-	_ = w.Write([]string{"Имя", "Телефон", "Email", "Компания", "Тип проекта", "Сообщение", "Статус", "Дата"})
+	_ = w.Write(csvHeadersContacts)
 	for _, cf := range contacts {
 		_ = w.Write([]string{
 			cf.Name, cf.Phone, cf.Email, cf.Company, cf.ProjectType, cf.Message, cf.Status,

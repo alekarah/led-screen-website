@@ -25,7 +25,7 @@ func main() {
 	cfg := config.Load()
 
 	// Подключаемся к базе данных
-	db, err := database.Connect(cfg.DatabaseURL)
+	db, err := database.Connect(cfg)
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}

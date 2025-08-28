@@ -11,37 +11,30 @@ import (
 
 // ReorderProject - изменение порядка одного проекта
 func (h *Handlers) ReorderProject(c *gin.Context) {
-	id := c.Param("id")
-	positionStr := c.PostForm("position")
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
 
+	positionStr := c.PostForm("position")
 	position, err := strconv.Atoi(positionStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Неверная позиция",
-		})
+		jsonErr(c, http.StatusBadRequest, "Неверная позиция")
 		return
 	}
 
 	var project models.Project
 	if err := h.db.First(&project, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Проект не найден",
-		})
+		jsonErr(c, http.StatusNotFound, "Проект не найден")
 		return
 	}
 
-	// Обновляем sort_order
 	project.SortOrder = position
 	if err := h.db.Save(&project).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Ошибка обновления порядка: " + err.Error(),
-		})
+		jsonErr(c, http.StatusInternalServerError, "Ошибка обновления порядка: "+err.Error())
 		return
 	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Порядок проекта обновлен",
-	})
+	jsonOK(c, gin.H{"message": "Порядок проекта обновлен"})
 }
 
 // BulkReorderProjects - массовое изменение порядка проектов

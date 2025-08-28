@@ -78,70 +78,52 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 
 // DeleteImage - удаление изображения
 func (h *Handlers) DeleteImage(c *gin.Context) {
-	id := c.Param("id")
-
-	var image models.Image
-	if err := h.db.First(&image, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Изображение не найдено",
-		})
+	id, ok := mustID(c)
+	if !ok {
 		return
 	}
 
-	// Удаляем файл с диска
+	var image models.Image
+	if err := h.db.First(&image, id).Error; err != nil {
+		jsonErr(c, http.StatusNotFound, "Изображение не найдено")
+		return
+	}
+
 	if err := deleteImageFile(image.FilePath); err != nil {
-		// Логируем ошибку, но продолжаем удаление из БД
 		logError("Ошибка удаления файла", image.FilePath, err)
 	}
 
-	// Удаляем запись из БД
 	h.db.Delete(&image)
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Изображение удалено",
-	})
+	jsonOK(c, gin.H{"message": "Изображение удалено"})
 }
 
 // UpdateImageCrop - обновление настроек кроппинга изображения
 func (h *Handlers) UpdateImageCrop(c *gin.Context) {
-	id := c.Param("id")
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
 
 	var image models.Image
 	if err := h.db.First(&image, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Изображение не найдено",
-		})
+		jsonErr(c, http.StatusNotFound, "Изображение не найдено")
 		return
 	}
 
-	// Парсим параметры кроппинга
 	cropData, err := parseCropParameters(c)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Неверные параметры кроппинга: " + err.Error(),
-		})
+		jsonErr(c, http.StatusBadRequest, "Неверные параметры кроппинга: "+err.Error())
 		return
 	}
-
-	// Валидируем значения
 	cropData = validateCropData(cropData)
 
-	// Обновляем настройки изображения
-	image.CropX = cropData.X
-	image.CropY = cropData.Y
-	image.CropScale = cropData.Scale
-
+	image.CropX, image.CropY, image.CropScale = cropData.X, cropData.Y, cropData.Scale
 	if err := h.db.Save(&image).Error; err != nil {
-		logError("Ошибка сохранения настроек кроппинга", id, err)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Ошибка сохранения настроек: " + err.Error(),
-		})
+		logError("Ошибка сохранения настроек кроппинга", c.Param("id"), err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сохранения настроек: "+err.Error())
 		return
 	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"image": image,
-	})
+	jsonOK(c, gin.H{"image": image})
 }
 
 // Вспомогательные функции

@@ -1,44 +1,69 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
+	"ledsite/internal/config"
 	"ledsite/internal/models"
 )
 
-// Connect подключается к базе данных PostgreSQL
-func Connect(databaseURL string) (*gorm.DB, error) {
-	db, err := gorm.Open(postgres.Open(databaseURL), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+func gormLogLevel(level string) logger.LogLevel {
+	switch level {
+	case "silent":
+		return logger.Silent
+	case "error":
+		return logger.Error
+	case "info":
+		return logger.Info
+	default:
+		return logger.Warn
+	}
+}
 
+// Connect подключается к БД с учётом логгера и пула соединений
+func Connect(cfg *config.Config) (*gorm.DB, error) {
+	db, err := gorm.Open(postgres.Open(cfg.DatabaseURL), &gorm.Config{
+		Logger: logger.Default.LogMode(gormLogLevel(cfg.DBLogLevel)),
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
+	}
+
+	// Пул соединений
+	var sqlDB *sql.DB
+	if sqlDB, err = db.DB(); err == nil {
+		if cfg.DBMaxOpenConns > 0 {
+			sqlDB.SetMaxOpenConns(cfg.DBMaxOpenConns)
+		}
+		if cfg.DBMaxIdleConns > 0 {
+			sqlDB.SetMaxIdleConns(cfg.DBMaxIdleConns)
+		}
+		if cfg.DBConnMaxLifetimeMin > 0 {
+			sqlDB.SetConnMaxLifetime(time.Duration(cfg.DBConnMaxLifetimeMin) * time.Minute)
+		}
 	}
 
 	return db, nil
 }
 
-// Migrate выполняет миграции базы данных
+// Migrate выполняет миграции
 func Migrate(db *gorm.DB) error {
-	err := db.AutoMigrate(
+	if err := db.AutoMigrate(
 		&models.Category{},
 		&models.Project{},
 		&models.Image{},
 		&models.Service{},
 		&models.ContactForm{},
 		&models.Settings{},
-	)
-
-	if err != nil {
+	); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
 	}
-
-	// Создаем начальные данные
 	return seedInitialData(db)
 }
 
