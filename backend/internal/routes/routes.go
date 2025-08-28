@@ -49,8 +49,12 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		admin.DELETE("/images/:id", h.DeleteImage)
 		admin.POST("/images/:id/crop", h.UpdateImageCrop)
 		admin.GET("/contacts", h.AdminContactsPage)
+		admin.GET("/contacts/archive", h.AdminContactsArchivePage)
 		admin.POST("/contacts/:id/status", h.UpdateContactStatus)
 		admin.POST("/contacts/bulk", h.BulkUpdateContacts)
 		admin.GET("/contacts/export.csv", h.AdminContactsExportCSV)
+		admin.PATCH("/contacts/:id/archive", h.ArchiveContact)
+		admin.PATCH("/contacts/:id/restore", h.RestoreContact)
+		admin.DELETE("/contacts/:id", h.DeleteContact)
 	}
 }

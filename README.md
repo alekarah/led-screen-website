@@ -35,9 +35,11 @@ led-screen-website/
 │   │   ├── database/
 │   │   │   └── database.go
 │   │   ├── handlers/
-│   │   │   ├── admin_contacts.go
+│   │   │   ├── admin_actions.go
 │   │   │   ├── admin_dashboard.go
+│   │   │   ├── admin_helpers.go
 │   │   │   ├── admin_images.go
+│   │   │   ├── admin_pages.go
 │   │   │   ├── admin_projects_crud.go
 │   │   │   ├── admin_sorting.go
 │   │   │   └── handlers.go
@@ -96,6 +98,7 @@ led-screen-website/
 │   │   │   └── favicon.png
 │   └── templates/
 │   │   ├── admin_base.html
+│   │   ├── admin_contacts_archive.html
 │   │   ├── admin_contacts.html
 │   │   ├── admin_dashboard.html
 │   │   ├── admin_projects.html

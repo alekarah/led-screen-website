@@ -35,6 +35,32 @@
         if (current.get('status')) p.set('status', current.get('status'));
         if (current.get('date'))   p.set('date',   current.get('date'));
         return '/admin/contacts/export.csv' + (p.toString() ? ('?' + p.toString()) : '');
+        },
+
+        async archive(id) {
+        const res = await fetch(`/admin/contacts/${id}/archive`, { method: 'PATCH' });
+        const data = await json(res);
+        if (!res.ok) throw new Error(data.error || 'Не удалось архивировать');
+        return data;
+        },
+
+        async restore(id, to = 'new') {
+        const res = await fetch(`/admin/contacts/${id}/restore`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ to })
+        });
+        const data = await json(res);
+        if (!res.ok) throw new Error(data.error || 'Не удалось восстановить');
+        return data;
+        },
+
+        async remove(id, { hard = true } = {}) {
+        const url = `/admin/contacts/${id}` + (hard ? '?hard=true' : '');
+        const res = await fetch(url, { method: 'DELETE' });
+        const data = await json(res);
+        if (!res.ok) throw new Error(data.error || 'Не удалось удалить');
+        return data;
         }
     };
 

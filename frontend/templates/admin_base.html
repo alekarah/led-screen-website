@@ -41,6 +41,8 @@
             {{template "admin-projects-content" .}}
         {{else if eq .PageID "admin-contacts"}}
             {{template "admin-contacts-content" .}}
+        {{else if eq .PageID "admin-contacts-archive"}}
+            {{template "admin-contacts-archive-content" .}}
         {{end}}
     </div>
 
@@ -50,6 +52,9 @@
     {{end}}
     {{if eq .PageID "admin-projects"}}
         {{template "project-modals" .}}
+    {{end}}
+    {{if eq .PageID "admin-contacts-archive"}}
+        {{template "contacts-archive-modals" .}}
     {{end}}
 
     <!-- Базовые скрипты -->
@@ -63,5 +68,9 @@
     {{if eq .PageID "admin-projects"}}
         {{template "projects-extra-js" .}}
     {{end}}
+    {{if eq .PageID "admin-contacts-archive"}}
+        {{template "contacts-archive-extra-js" .}}
+    {{end}}
+
 </body>
 </html>

@@ -1,0 +1,187 @@
+{{define "admin-contacts-archive-content"}}
+    <div class="form-section">
+        <h2>
+        Архив заявок
+        <span class="count-big">{{.total}}</span>
+        </h2>
+
+        <div class="filters" style="margin-bottom:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <!-- Поиск -->
+        <input type="text" id="search-input" class="form-input" placeholder="Поиск" value="{{.search}}">
+
+        <!-- Статус: только Архив, disabled -->
+        <select id="status-filter" class="form-input" disabled>
+            <option value="archived" selected>Архив</option>
+        </select>
+
+        <!-- Интервал дат -->
+        <select id="date-filter" class="form-input">
+            <option value="">Все даты</option>
+            <option value="today" {{if eq .dateRange "today"}}selected{{end}}>Сегодня</option>
+            <option value="7d" {{if eq .dateRange "7d"}}selected{{end}}>Последние 7 дней</option>
+            <option value="month" {{if eq .dateRange "month"}}selected{{end}}>Этот месяц</option>
+        </select>
+
+        <!-- Селектор размера страницы -->
+        <select id="limit-select" class="form-input">
+            <option value="25" {{if eq .limit 25}}selected{{end}}>25</option>
+            <option value="50" {{if eq .limit 50}}selected{{end}}>50</option>
+            <option value="100" {{if eq .limit 100}}selected{{end}}>100</option>
+        </select>
+
+        <button id="apply-filters" class="btn btn-small btn-blue">Применить</button>
+        <button id="export-csv" class="btn btn-small">Экспорт CSV</button>
+        <a id="go-back"
+            class="btn btn-small"
+            href="/admin/contacts?{{if .search}}search={{.search}}&{{end}}{{if .dateRange}}date={{.dateRange}}&{{end}}{{if .limit}}limit={{.limit}}&{{end}}page=1">
+            Назад
+        </a>
+
+        </div>
+
+        <!-- Панель массовых действий (архив) -->
+        <div class="bulk-actions" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin: 8px 0 12px;">
+        <div class="bulk-actions__title" style="color:#555;">Действия с выбранными:</div>
+        <button id="bulk-restore" class="btn btn-small btn-blue" disabled>Восстановить</button>
+        <button id="bulk-delete" class="btn btn-small btn-danger" disabled>Удалить выбранные</button>
+        <span id="bulk-count" style="color:#777; margin-left:8px;">Выбрано: 0</span>
+        </div>
+
+        <!-- Таблица -->
+        <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width:36px">
+                    <input type="checkbox" id="select-all" aria-label="Выбрать все на странице">
+                    </th>
+                    <th style="width:16%">Имя</th>
+                    <th style="width:22%">Контакты</th>
+                    <th>Компания</th>
+                    <th style="width:16%">Тип</th>
+                    <th style="width:12%">Дата</th>
+                    <th style="width:14%">Действия</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{if .contactsAll}}
+                    {{range .contactsAll}}
+                    <tr data-id="{{.ID}}">
+                        <td class="col-select">
+                        <input type="checkbox" class="row-select" value="{{.ID}}" aria-label="Выбрать заявку {{.ID}}">
+                        </td>
+
+                        <td>{{.Name}}</td>
+
+                        <td>
+                        {{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}
+                        <div style="color:#777;">{{.Email}}</div>
+                        </td>
+
+                        <td>{{.Company}}</td>
+                        <td>{{.ProjectType}}</td>
+
+                        <td class="date-cell">{{fmtTime .CreatedAt}}</td>
+
+                        <td class="actions">
+                        <button
+                        class="btn btn-small js-contact-details"
+                        type="button"
+                        data-id="{{.ID}}"
+                        data-name="{{.Name}}"
+                        data-phone="{{.Phone}}"
+                        data-email="{{.Email}}"
+                        data-company="{{.Company}}"
+                        data-type="{{.ProjectType}}"
+                        data-message="{{.Message}}"
+                        data-date="{{fmtTime .CreatedAt}}"
+                        {{with .ArchivedAt}}data-archived='{{.Format "02.01.2006 15:04"}}'{{else}}data-archived=''{{end}}
+                        data-status="{{.Status}}"
+                        >Подробнее</button>
+                        </td>
+                    </tr>
+                    {{end}}
+                {{else}}
+                    <tr><td colspan="7" style="color:#777;">Архив пуст</td></tr>
+                {{end}}
+            </tbody>
+
+        </table>
+        </div>
+
+        <!-- Пагинация -->
+        <div class="pagination">
+        <a class="btn btn-small"
+            href="?page={{.prevPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+            {{if le .page 1}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+            Назад
+        </a>
+
+        <div class="page-numbers">
+            {{ $cur := .page }}
+            {{ $lim := .limit }}
+            {{ $search := .search }}
+            {{ $date := .dateRange }}
+
+            {{ range .pageNumbers }}
+            {{ if eq . -1 }}
+                <span class="dots">…</span>
+            {{ else }}
+                <a class="page-link {{if eq . $cur}}active{{end}}"
+                href="?page={{.}}&limit={{$lim}}{{if $search}}&search={{$search}}{{end}}{{if $date}}&date={{$date}}{{end}}">
+                {{.}}
+                </a>
+            {{ end }}
+            {{ end }}
+        </div>
+
+        <a class="btn btn-small"
+            href="?page={{.nextPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
+            {{if ge .page .pages}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+            Вперёд
+        </a>
+        </div>
+    </div>
+{{end}}
+
+{{define "contacts-archive-modals"}}
+    <div id="contact-details-modal" class="modal-overlay hidden" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="contactDetailsTitle">
+        <button class="modal-close" type="button" aria-label="Закрыть">&times;</button>
+
+        <h3 id="contactDetailsTitle">Заявка</h3>
+
+        <div class="modal-body">
+            <div class="modal-grid">
+            <div><strong>Имя:</strong> <span id="cd-name">—</span></div>
+            <div><strong>Телефон:</strong> <a id="cd-phone" href="#" target="_blank">—</a></div>
+            <div><strong>Email:</strong> <a id="cd-email" href="#" target="_blank">—</a></div>
+            <div><strong>Компания:</strong> <span id="cd-company">—</span></div>
+            <div><strong>Тип проекта:</strong> <span id="cd-type">—</span></div>
+            <div><strong>Дата создания:</strong> <span id="cd-date">—</span></div>
+            <div><strong>Дата архивации:</strong> <span id="cd-archived">—</span></div>
+            </div>
+
+            <div class="modal-message">
+            <strong>Сообщение:</strong>
+            <div id="cd-message" class="prewrap"></div>
+            </div>
+
+            <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
+            <button id="cd-restore" class="btn btn-small btn-blue">Восстановить</button>
+            <button id="cd-delete" class="btn btn-small btn-danger">Удалить навсегда</button>
+            </div>
+        </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "contacts-archive-extra-js"}}
+    <script src="/static/js/admin-contacts-api.js" defer></script>
+    <script src="/static/js/admin-contacts-ui.js" defer></script>
+    <script src="/static/js/admin-contacts-archive-filters.js" defer></script>
+    <script src="/static/js/admin-contacts-archive-modal.js" defer></script>
+    <script src="/static/js/admin-contacts-archive-bulk.js" defer></script>
+    <script src="/static/js/admin-contacts-archive-init.js" defer></script>
+{{end}}

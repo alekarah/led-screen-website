@@ -76,16 +76,17 @@ type Service struct {
 
 // ContactForm - заявки с сайта
 type ContactForm struct {
-	ID          uint      `json:"id" gorm:"primaryKey"`
-	Name        string    `json:"name" gorm:"not null"`
-	Phone       string    `json:"phone" gorm:"not null"`
-	Email       string    `json:"email"`
-	Company     string    `json:"company"`
-	ProjectType string    `json:"project_type"`
-	Message     string    `json:"message"`
-	Source      string    `json:"source"` // откуда пришла заявка (контактная форма, калькулятор и т.д.)
-	Status      string    `json:"status" gorm:"type:varchar(20);default:'new'"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID          uint       `json:"id" gorm:"primaryKey"`
+	Name        string     `json:"name" gorm:"not null"`
+	Phone       string     `json:"phone" gorm:"not null"`
+	Email       string     `json:"email"`
+	Company     string     `json:"company"`
+	ProjectType string     `json:"project_type"`
+	Message     string     `json:"message"`
+	Source      string     `json:"source"` // откуда пришла заявка (контактная форма, калькулятор и т.д.)
+	Status      string     `json:"status" gorm:"type:varchar(20);default:'new';index"`
+	CreatedAt   time.Time  `json:"created_at" gorm:"index"`
+	ArchivedAt  *time.Time `json:"archived_at" gorm:"index"` // NULL = не в архиве
 }
 
 // Settings - настройки сайта

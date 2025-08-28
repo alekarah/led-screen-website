@@ -33,6 +33,12 @@
 
       <button id="apply-filters" class="btn btn-small btn-blue">Применить</button>
       <button id="export-csv" class="btn btn-small">Экспорт CSV</button>
+      <a id="go-archive"
+        class="btn btn-small"
+        href="/admin/contacts/archive?{{if .search}}search={{.search}}&{{end}}{{if .dateRange}}date={{.dateRange}}&{{end}}{{if .limit}}limit={{.limit}}&{{end}}status=archived&page=1">
+        Архив
+      </a>
+
     </div>
 
     <!-- Панель массовых действий -->
@@ -51,13 +57,14 @@
             <input type="checkbox" id="select-all" aria-label="Выбрать все на странице">
           </th>
           <th style="width:16%">Имя</th>
-          <th style="width:16%">Телефон</th>
-          <th>Сообщение</th>
-          <th style="width:16%">Дата</th>
+          <th style="width:22%">Контакты</th>
+          <th>Компания</th>
+          <th style="width:16%">Тип</th>
           <th style="width:12%">Статус</th>
           <th style="width:14%">Действия</th>
         </tr>
       </thead>
+
       <tbody>
         {{if .contactsAll}}
           {{range .contactsAll}}
@@ -65,10 +72,16 @@
               <td class="col-select">
                 <input type="checkbox" class="row-select" value="{{.ID}}" aria-label="Выбрать заявку {{.ID}}">
               </td>
+
               <td>{{.Name}}</td>
-              <td>{{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}</td>
-              <td class="td-ellipsis">{{.Message}}</td>
-              <td>{{fmtTime .CreatedAt}}</td>
+
+              <td>
+                {{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}
+                <div style="color:#777;">{{.Email}}</div>
+              </td>
+
+              <td>{{.Company}}</td>
+              <td>{{.ProjectType}}</td>
 
               <td class="status-cell">
                 {{if eq .Status "processed"}}
@@ -103,6 +116,7 @@
       </tbody>
     </table>
   </div>
+
   <!-- Пагинация -->
   <div class="pagination">
     <!-- Назад -->

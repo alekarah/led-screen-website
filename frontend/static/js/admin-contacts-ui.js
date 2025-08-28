@@ -29,10 +29,22 @@
         setRowStatus(tr, status);
     }
 
+    function removeRowById(id) {
+        const tr = document.querySelector(`tr[data-id="${id}"]`);
+        if (tr && tr.parentNode) {
+            tr.parentNode.removeChild(tr);
+            const counter = document.querySelector('.count-big');
+            if (counter) {
+                const n = parseInt(counter.textContent || '0', 10);
+                if (!isNaN(n) && n > 0) counter.textContent = String(n - 1);
+            }
+        }
+    }
+
     function show(type, msg) {
         // type: 'ok' | 'error'
         window.showAdminMessage?.(msg, type === 'error' ? 'error' : 'ok');
     }
 
-    w.ContactsUI = { setModalStatusBadge, setRowStatus, setRowStatusById, show };
+    w.ContactsUI = { setModalStatusBadge, setRowStatus, setRowStatusById, removeRowById, show };
 })(window);
