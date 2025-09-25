@@ -86,6 +86,8 @@
                         data-date="{{fmtTime .CreatedAt}}"
                         {{with .ArchivedAt}}data-archived='{{.Format "02.01.2006 15:04"}}'{{else}}data-archived=''{{end}}
                         data-status="{{.Status}}"
+                        data-remind-at='{{with .RemindAt}}{{.Format "2006-01-02T15:04"}}{{end}}'
+                        data-remind-flag='{{.RemindFlag}}'
                         >Подробнее</button>
                         </td>
                     </tr>
@@ -111,26 +113,48 @@
         <h3 id="contactDetailsTitle">Заявка</h3>
 
         <div class="modal-body">
-            <div class="modal-grid">
-            <div><strong>Имя:</strong> <span id="cd-name">—</span></div>
-            <div><strong>Телефон:</strong> <a id="cd-phone" href="#" target="_blank">—</a></div>
-            <div><strong>Email:</strong> <a id="cd-email" href="#" target="_blank">—</a></div>
-            <div><strong>Компания:</strong> <span id="cd-company">—</span></div>
-            <div><strong>Тип проекта:</strong> <span id="cd-type">—</span></div>
-            <div><strong>Дата создания:</strong> <span id="cd-date">—</span></div>
-            <div><strong>Дата архивации:</strong> <span id="cd-archived">—</span></div>
+            <div class="tabs" style="display:flex; gap:8px; margin-bottom:10px;">
+                <button id="tab-info-btn"  class="btn btn-small btn-blue" type="button">Информация</button>
+                <button id="tab-notes-btn" class="btn btn-small"          type="button">Заметки</button>
             </div>
 
-            <div class="modal-message">
-            <strong>Сообщение:</strong>
-            <div id="cd-message" class="prewrap"></div>
+            <!-- TAB: Информация -->
+            <div id="cd-tab-info">
+                <div class="modal-grid">
+                <div><strong>Имя:</strong> <span id="cd-name">—</span></div>
+                <div><strong>Телефон:</strong> <a id="cd-phone" href="#" target="_blank">—</a></div>
+                <div><strong>Email:</strong> <a id="cd-email" href="#" target="_blank">—</a></div>
+                <div><strong>Компания:</strong> <span id="cd-company">—</span></div>
+                <div><strong>Тип проекта:</strong> <span id="cd-type">—</span></div>
+                <div><strong>Дата создания:</strong> <span id="cd-date">—</span></div>
+                <div><strong>Дата архивации:</strong> <span id="cd-archived">—</span></div>
+                </div>
+
+                <div class="modal-message">
+                <strong>Сообщение:</strong>
+                <div id="cd-message" class="prewrap"></div>
+                </div>
+
+                <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
+                <button id="cd-restore" class="btn btn-small btn-blue">Восстановить</button>
+                <button id="cd-delete"  class="btn btn-small btn-danger">Удалить навсегда</button>
+                </div>
             </div>
 
-            <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
-            <button id="cd-restore" class="btn btn-small btn-blue">Восстановить</button>
-            <button id="cd-delete" class="btn btn-small btn-danger">Удалить навсегда</button>
+            <!-- TAB: Заметки -->
+            <div id="cd-tab-notes" class="hidden">
+
+                <div style="margin-top:12px;">
+                <ul id="cd-notes-list" style="margin:8px 0 12px; padding-left:18px;"></ul>
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <input id="cd-note-author" type="text" class="form-input" placeholder="Автор (необязательно)" style="max-width:220px;">
+                    <input id="cd-note-text"   type="text" class="form-input" placeholder="Новая заметка..." style="flex:1; min-width:240px;">
+                    <button id="cd-note-add"   class="btn btn-small btn-blue" type="button">Добавить</button>
+                </div>
+                </div>
             </div>
-        </div>
+            </div>
         </div>
     </div>
 {{end}}
@@ -140,6 +164,7 @@
     <script src="/static/js/admin-contacts-ui.js" defer></script>
     <script src="/static/js/admin-contacts-shared.js" defer></script>
     <script src="/static/js/admin-contacts-archive-filters.js" defer></script>
+    <script src="/static/js/admin-contacts-notes.js" defer></script>
     <script src="/static/js/admin-contacts-archive-modal.js" defer></script>
     <script src="/static/js/admin-contacts-archive-bulk.js" defer></script>
     <script src="/static/js/admin-contacts-archive-init.js" defer></script>

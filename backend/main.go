@@ -53,6 +53,7 @@ func main() {
 			loc, _ := time.LoadLocation("Europe/Moscow")
 			return t.In(loc).Format("02.01.2006 15:04")
 		},
+		"add": func(a, b int) int { return a + b },
 	}
 	router.SetFuncMap(funcMap)
 

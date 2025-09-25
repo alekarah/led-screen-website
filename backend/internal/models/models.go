@@ -87,6 +87,8 @@ type ContactForm struct {
 	Status      string     `json:"status" gorm:"type:varchar(20);default:'new';index"`
 	CreatedAt   time.Time  `json:"created_at" gorm:"index"`
 	ArchivedAt  *time.Time `json:"archived_at" gorm:"index"` // NULL = не в архиве
+	RemindAt    *time.Time `json:"remind_at" gorm:"index"`
+	RemindFlag  bool       `json:"remind_flag" gorm:"default:false"`
 }
 
 // Settings - настройки сайта
@@ -97,4 +99,13 @@ type Settings struct {
 	Type      string    `json:"type"` // text, number, boolean, json
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+// ContactNote - заметки по заявке
+type ContactNote struct {
+	ID        uint      `json:"id" gorm:"primaryKey"`
+	ContactID uint      `json:"contact_id" gorm:"index;not null"`
+	Text      string    `json:"text" gorm:"type:text;not null"`
+	Author    string    `json:"author" gorm:"type:varchar(100)"`
+	CreatedAt time.Time `json:"created_at" gorm:"index"`
 }

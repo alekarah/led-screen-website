@@ -92,6 +92,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 </script>
 
 <div class="form-section">
+  <h2>Перезвоны</h2>
+  <div class="stats-grid">
+    <a class="stat-card" href="/admin/contacts?reminder=today" style="text-decoration:none;color:inherit;">
+      <div class="stat-label">Сегодня</div>
+      <div class="stat-value">{{.reminders.today}}</div>
+    </a>
+    <a class="stat-card" href="/admin/contacts?reminder=overdue" style="text-decoration:none;color:inherit;">
+      <div class="stat-label">Просрочено</div>
+      <div class="stat-value">{{.reminders.overdue}}</div>
+    </a>
+  </div>
+
+
+  {{if .reminders.upcoming}}
+  <div style="margin-top:12px">
+    <h3 style="margin:0 0 8px 0;font-size:16px;">Ближайшие перезвоны (10)</h3>
+    <table class="contacts-table">
+      <thead>
+        <tr>
+          <th style="width:36px">#</th>
+          <th style="width:28%">Имя</th>
+          <th style="width:28%">Телефон</th>
+          <th>Когда</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range $i, $c := .reminders.upcoming}}
+        <tr>
+          <td>{{add $i 1}}</td>
+          <td>{{$c.Name}}</td>
+          <td>
+            {{if $c.Phone}}
+              <a href="tel:{{$c.Phone}}">{{$c.Phone}}</a>
+            {{else}} — {{end}}
+          </td>
+          <td>{{if $c.RemindAt}}{{fmtTime $c.RemindAt}}{{else}}—{{end}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+  {{end}}
+</div>
+
+
+<div class="form-section">
     <h2>Система</h2>
     <div class="sys-grid">
         <div class="sys-item">

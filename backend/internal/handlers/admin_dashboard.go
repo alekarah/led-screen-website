@@ -30,6 +30,30 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 	var newContacts7 int
 	h.db.Raw(`SELECT COUNT(*) FROM contact_forms WHERE created_at >= NOW() - INTERVAL '7 days'`).Scan(&newContacts7)
 
+	// --- ПЕРЕЗВОНЫ (сегодня / просрочено / ближайшие) ---
+	now := NowMSK()
+	startToday := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc)
+	endToday := startToday.Add(24 * time.Hour)
+
+	var remindToday int64
+	h.db.Model(&models.ContactForm{}).
+		Where("remind_flag = ? AND remind_at IS NOT NULL AND remind_at >= ? AND remind_at < ?",
+			true, startToday.UTC(), endToday.UTC()).
+		Count(&remindToday)
+
+	var remindOverdue int64
+	h.db.Model(&models.ContactForm{}).
+		Where("remind_flag = ? AND remind_at IS NOT NULL AND remind_at < ?",
+			true, now.UTC()).
+		Count(&remindOverdue)
+
+	// ближайшие 10 напоминаний (после текущего момента)
+	var remindUpcoming []models.ContactForm
+	h.db.Select("id, name, phone, remind_at").
+		Where("remind_flag = ? AND remind_at IS NOT NULL AND remind_at >= ?", true, now.UTC()).
+		Order("remind_at ASC").Limit(10).
+		Find(&remindUpcoming)
+
 	// --- СИСТЕМА ---
 	var dbOK bool
 	if sqlDB, err := h.db.DB(); err == nil {
@@ -46,13 +70,22 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "admin_base.html", gin.H{
-		"title":        "Админ панель",
+		"title":  "Админ панель",
+		"PageID": "admin-dashboard",
+
 		"stats":        stats,
 		"contacts":     latestContacts,
 		"newContacts7": newContacts7,
-		"sys":          sys,
-		"PageID":       "admin-dashboard",
+
+		"reminders": gin.H{
+			"today":    remindToday,
+			"overdue":  remindOverdue,
+			"upcoming": remindUpcoming, // []models.ContactForm (id,name,phone,remind_at)
+		},
+
+		"sys": sys,
 	})
+
 }
 
 // AdminProjects - управление проектами

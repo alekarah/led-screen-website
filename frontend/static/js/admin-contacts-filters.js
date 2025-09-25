@@ -1,15 +1,17 @@
 // Фильтры и экспорт
 (function (w) {
     function applyFilters() {
-        const search = document.getElementById('search-input')?.value || '';
-        const status = document.getElementById('status-filter')?.value || '';
-        const date   = document.getElementById('date-filter')?.value || '';
+        const search   = document.getElementById('search-input')?.value || '';
+        const status   = document.getElementById('status-filter')?.value || '';
+        const date     = document.getElementById('date-filter')?.value || '';
+        const reminder = document.getElementById('filter-reminder')?.value || '';
         const limitSel = document.getElementById('limit-select');
 
         const params = new URLSearchParams();
-        if (search) params.set('search', search);
-        if (status) params.set('status', status);
-        if (date)   params.set('date', date);
+        if (search)   params.set('search', search);
+        if (status)   params.set('status', status);
+        if (date)     params.set('date', date);
+        if (reminder) params.set('reminder', reminder);
         if (limitSel && limitSel.value) params.set('limit', limitSel.value);
         params.set('page', '1');
 

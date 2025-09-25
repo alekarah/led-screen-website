@@ -66,6 +66,12 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			ct.PATCH("/:id/archive", h.ArchiveContact)
 			ct.PATCH("/:id/restore", h.RestoreContact)
 			ct.DELETE("/:id", h.DeleteContact)
+
+			// Заметки и напоминания
+			ct.GET("/:id/notes", h.GetContactNotes)
+			ct.POST("/:id/notes", h.CreateContactNote)
+			ct.DELETE("/:id/notes/:note_id", h.DeleteContactNote)
+			ct.PATCH("/:id/reminder", h.UpdateContactReminder)
 		}
 	}
 }

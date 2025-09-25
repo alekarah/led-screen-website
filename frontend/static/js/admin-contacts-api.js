@@ -48,7 +48,24 @@
         else if (current.get('q')) p.set('q', current.get('q'));
         if (current.get('status')) p.set('status', current.get('status'));
         if (current.get('date'))   p.set('date',   current.get('date'));
+        if (current.get('reminder')) p.set('reminder', current.get('reminder'));
         return '/admin/contacts/export.csv' + (p.toString() ? ('?' + p.toString()) : '');
+        },
+
+        getNotes(id) {
+        return request(`/admin/contacts/${id}/notes`, { method: 'GET' });
+        },
+
+        addNote(id, { text, author }) {
+        return request(`/admin/contacts/${id}/notes`, { method: 'POST', body: { text, author } });
+        },
+
+        deleteNote(id, noteId) {
+        return request(`/admin/contacts/${id}/notes/${noteId}`, { method: 'DELETE' });
+        },
+
+        setReminder(id, { remind_at, remind_flag } = {}) {
+        return request(`/admin/contacts/${id}/reminder`, { method: 'PATCH', body: { remind_at, remind_flag } });
         }
     };
 

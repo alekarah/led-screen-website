@@ -23,6 +23,13 @@
         <option value="month" {{if eq .dateRange "month"}}selected{{end}}>Этот месяц</option>
       </select>
 
+      <select id="filter-reminder" class="form-input">
+        <option value="">Все напоминания</option>
+        <option value="today"    {{if eq .reminder "today"}}selected{{end}}>Сегодня</option>
+        <option value="overdue"  {{if eq .reminder "overdue"}}selected{{end}}>Просрочено</option>
+        <option value="upcoming" {{if eq .reminder "upcoming"}}selected{{end}}>Будущие</option>
+      </select>
+
       <!-- Селектор размера страницы -->
       <select id="limit-select" class="form-input">
         <option value="25" {{if eq .limit 25}}selected{{end}}>25</option>
@@ -30,7 +37,7 @@
         <option value="100" {{if eq .limit 100}}selected{{end}}>100</option>
       </select>
 
-      <button id="apply-filters" class="btn btn-small btn-blue">Применить</button>
+      <button id="apply-filters" type="button" class="btn btn-small btn-blue">Применить</button>
       <button id="export-csv" class="btn btn-small">Экспорт CSV</button>
       <a id="go-archive"
         class="btn btn-small"
@@ -93,6 +100,8 @@
                   data-message="{{.Message}}"
                   data-date="{{fmtTime .CreatedAt}}"
                   data-status="{{.Status}}"
+                  data-remind-at='{{with .RemindAt}}{{.Format "2006-01-02T15:04"}}{{end}}'
+                  data-remind-flag='{{.RemindFlag}}'
                 >Подробнее</button>
               </td>
             </tr>
@@ -117,24 +126,59 @@
       <h3 id="contactDetailsTitle">Заявка</h3>
 
       <div class="modal-body">
-        <div class="modal-grid">
-          <div><strong>Имя:</strong> <span id="cd-name">—</span></div>
-          <div><strong>Телефон:</strong> <a id="cd-phone" href="#" target="_blank">—</a></div>
-          <div><strong>Email:</strong> <a id="cd-email" href="#" target="_blank">—</a></div>
-          <div><strong>Компания:</strong> <span id="cd-company">—</span></div>
-          <div><strong>Тип проекта:</strong> <span id="cd-type">—</span></div>
-          <div><strong>Дата:</strong> <span id="cd-date">—</span></div>
-          <div><strong>Статус:</strong> <span id="cd-status" class="badge">—</span></div>
+        <!-- Табы -->
+        <div class="tabs" style="display:flex; gap:8px; margin-bottom:10px;">
+          <button id="tab-info-btn"  class="btn btn-small btn-blue" type="button">Информация</button>
+          <button id="tab-notes-btn" class="btn btn-small"          type="button">Заметки</button>
         </div>
 
-        <div class="modal-message">
-          <strong>Сообщение:</strong>
-          <div id="cd-message" class="prewrap"></div>
+        <!-- TAB: Информация -->
+        <div id="cd-tab-info">
+          <div class="modal-grid">
+            <div><strong>Имя:</strong> <span id="cd-name">—</span></div>
+            <div><strong>Телефон:</strong> <a id="cd-phone" href="#" target="_blank">—</a></div>
+            <div><strong>Email:</strong> <a id="cd-email" href="#" target="_blank">—</a></div>
+            <div><strong>Компания:</strong> <span id="cd-company">—</span></div>
+            <div><strong>Тип проекта:</strong> <span id="cd-type">—</span></div>
+            <div><strong>Дата:</strong> <span id="cd-date">—</span></div>
+            <div><strong>Статус:</strong> <span id="cd-status" class="badge">—</span></div>
+          </div>
+
+          <div class="modal-message">
+            <strong>Сообщение:</strong>
+            <div id="cd-message" class="prewrap"></div>
+          </div>
+
+          <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
+            <button id="cd-mark-processed" class="btn btn-small btn-success">Обработать</button>
+            <button id="cd-mark-new"       class="btn btn-small btn-blue">Вернуть в новые</button>
+            <button id="cd-archive"        class="btn btn-small btn-danger">Архивировать</button>
+          </div>
         </div>
-        <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
-          <button id="cd-mark-processed" class="btn btn-small btn-success">Обработать</button>
-          <button id="cd-mark-new" class="btn btn-small btn-blue">Вернуть в новые</button>
-          <button id="cd-archive" class="btn btn-small btn-danger">Архивировать</button>
+
+        <!-- TAB: Заметки -->
+        <div id="cd-tab-notes" class="hidden">
+          <!-- Напоминание -->
+          <div style="margin-bottom:14px;">
+            <strong>Перезвонить позже:</strong>
+            <div style="display:flex; gap:8px; align-items:center; margin-top:6px; flex-wrap:wrap;">
+              <input id="cd-remind-at" type="datetime-local" class="form-input" style="max-width:220px;">
+              <button id="cd-reminder-save"  class="btn btn-small btn-blue"  type="button">Сохранить</button>
+              <button id="cd-reminder-clear" class="btn btn-small btn-danger" type="button">Очистить</button>
+            </div>
+          </div>
+
+          <!-- Список заметок -->
+          <div style="margin-top:12px;">
+            <strong>Заметки:</strong>
+            <ul id="cd-notes-list" style="margin:8px 0 12px; padding-left:18px;"></ul>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <input id="cd-note-author" type="text" class="form-input" placeholder="Автор (необязательно)" style="max-width:220px;">
+              <input id="cd-note-text"   type="text" class="form-input" placeholder="Новая заметка..." style="flex:1; min-width:240px;">
+              <button id="cd-note-add"   class="btn btn-small btn-blue" type="button">Добавить</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -146,6 +190,7 @@
   <script src="/static/js/admin-contacts-ui.js" defer></script>
   <script src="/static/js/admin-contacts-shared.js" defer></script>
   <script src="/static/js/admin-contacts-filters.js" defer></script>
+  <script src="/static/js/admin-contacts-notes.js"></script>
   <script src="/static/js/admin-contacts-modal.js" defer></script>
   <script src="/static/js/admin-contacts-bulk.js" defer></script>
   <script src="/static/js/admin-contacts-init.js" defer></script>

@@ -158,24 +158,28 @@
     opacity: 0.8;
 }
 
-#search-input,
-#status-filter,
-#date-filter,
-#limit-select {
-  padding: 6px 10px;
+/* Единый вид всех контролов панели фильтров */
+.filters .form-input{
+  padding: 6px 6px;
   height: 36px;
   border-radius: 4px;
   font-size: 14px;
+  border: 1px solid #555;
+  background: #fff;
+  box-sizing: border-box;
 }
 
-#search-input:focus,
-#status-filter:focus,
-#date-filter:focus,
-#limit-select:focus {
+/* Единый фокус для всех (input + select) */
+.filters .form-input:focus{
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 2px rgba(26,115,232,.2);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
 }
+
+/* Базовые ширины селектов */
+.filters select.form-input{ width:140px; }
+#filter-reminder { width: 160px; }
+#limit-select{ width:50px; }
 
 /* Таблица */
 .table {
@@ -265,7 +269,6 @@
     padding: 4px 6px;
     color: #888;
 }
-
 
 /* Адаптивность форм */
 @media (max-width: 768px) {

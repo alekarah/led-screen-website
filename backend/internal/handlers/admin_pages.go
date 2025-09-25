@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/csv"
 	"net/http"
+	"strings"
 	"time"
 
 	"ledsite/internal/models"
@@ -25,6 +26,29 @@ func (h *Handlers) AdminContactsPage(c *gin.Context) {
 	status := c.Query("status")
 	if status == "new" || status == "processed" {
 		qb = qb.Where("status = ?", status)
+	}
+
+	reminder := strings.ToLower(strings.TrimSpace(c.Query("reminder")))
+	now := NowMSK()
+	startToday := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc)
+	endToday := startToday.Add(24 * time.Hour)
+
+	switch reminder {
+	case "today":
+		qb = qb.Where(
+			"remind_flag = ? AND remind_at IS NOT NULL AND remind_at >= ? AND remind_at < ?",
+			true, startToday.UTC(), endToday.UTC(),
+		)
+	case "overdue":
+		qb = qb.Where(
+			"remind_flag = ? AND remind_at IS NOT NULL AND remind_at < ?",
+			true, now.UTC(),
+		)
+	case "upcoming":
+		qb = qb.Where(
+			"remind_flag = ? AND remind_at IS NOT NULL AND remind_at >= ?",
+			true, now.UTC(),
+		)
 	}
 
 	// Пагинация
@@ -67,6 +91,7 @@ func (h *Handlers) AdminContactsPage(c *gin.Context) {
 		"search":      search,
 		"status":      status,
 		"dateRange":   dateRange,
+		"reminder":    reminder,
 	})
 }
 
