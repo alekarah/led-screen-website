@@ -20,7 +20,9 @@ func (h *Handlers) AdminContactsPage(c *gin.Context) {
 	var contacts []models.ContactForm
 
 	// Базовый запрос + выключаем архив
-	qb := h.baseContactsQB(c).Where("archived_at IS NULL")
+	qb := h.baseContactsQB(c).
+		Where("archived_at IS NULL").
+		Where("status <> ?", "archived")
 
 	// Фильтр по статусу (только среди неархивных)
 	status := c.Query("status")
@@ -157,7 +159,8 @@ func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
 	if status == "archived" {
 		qb = qb.Where("archived_at IS NOT NULL")
 	} else {
-		qb = qb.Where("archived_at IS NULL")
+		qb = qb.Where("archived_at IS NULL").
+			Where("status <> ?", "archived")
 		if status != "" {
 			qb = qb.Where("status = ?", status)
 		}

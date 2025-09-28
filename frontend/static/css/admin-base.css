@@ -283,6 +283,61 @@ body {
     color: #fff;
 }
 
+/* Dashboard: блок "Ближайшие перезвоны" */
+.dashboard-reminders .contacts-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin-top: 8px;
+}
+
+.dashboard-reminders .contacts-table th,
+.dashboard-reminders .contacts-table td {
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.dashboard-reminders .contacts-table th {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* # */
+.dashboard-reminders .contacts-table th:nth-child(1),
+.dashboard-reminders .contacts-table td:nth-child(1) {
+  width: 40px; color: #9ca3af;
+}
+
+/* Имя — тянется, обрезка по краю */
+.dashboard-reminders .contacts-table td:nth-child(2) {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Телефон — фикс.минимум */
+.dashboard-reminders .contacts-table th:nth-child(3),
+.dashboard-reminders .contacts-table td:nth-child(3) {
+  min-width: 170px;
+}
+
+/* Когда — справа, не переносим */
+.dashboard-reminders .contacts-table th:nth-child(4),
+.dashboard-reminders .contacts-table td:nth-child(4) {
+  width: 170px;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* Ссылки телефона */
+.dashboard-reminders .contacts-table a {
+  color: #2563eb; text-decoration: none;
+}
+.dashboard-reminders .contacts-table a:hover { text-decoration: underline; }
+
+/* Лёгкая "зебра" строк (опц.) */
+.dashboard-reminders .contacts-table tbody tr:nth-child(even) td { background: #fafafa; }
+
+
 @keyframes toastIn {
     from { opacity: 0; transform: translateY(-8px); }
     to   { opacity: 1; transform: translateY(0); }
