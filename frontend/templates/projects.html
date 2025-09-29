@@ -43,7 +43,12 @@
                         <span class="category-tag">{{.Name}}</span>
                         {{end}}
                     </div>
-                    <a href="/projects/{{.Slug}}" class="project-detail-btn">Подробнее</a>
+                    <a href="/projects/{{.Slug}}"
+                        class="project-detail-btn"
+                        data-project-id="{{.ID}}"
+                        data-project-slug="{{.Slug}}">
+                        Подробнее
+                    </a>
                 </div>    
             </div>
         </div>

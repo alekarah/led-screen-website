@@ -10,6 +10,25 @@
         btn: '.project-detail-btn'
     };
 
+    const VIEW_ENDPOINT_BY_ID = (id) => `/api/track/project-view/${id}`;
+
+    function markViewedOnce(key) {
+        const k = `viewed:${key}`;
+        if (sessionStorage.getItem(k)) return false;
+        sessionStorage.setItem(k, '1');
+    return true;
+    }
+
+    async function sendViewOnce({ id }) {
+        if (!id) return;
+        const key = `id:${id}`;
+        if (!markViewedOnce(key)) return;
+
+        try {
+            await fetch(VIEW_ENDPOINT_BY_ID(id), { method: 'POST' });
+        } catch (_) {}
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -105,10 +124,13 @@
         const imgSrc = imgEl?.getAttribute('src') || '';
         const imgAlt = imgEl?.getAttribute('alt') || (titleEl?.textContent?.trim() ?? 'Изображение проекта');
 
+        const projectId = btn.getAttribute('data-project-id');
+        sendViewOnce({ id: projectId });
+
         // картинка
         ui.mediaImg.src = imgSrc;
         ui.mediaImg.alt = imgAlt;
-        copyCropStyles(imgEl, ui.mediaImg); // <<< ВАЖНО: переносим кроп
+        copyCropStyles(imgEl, ui.mediaImg);
 
         // текст
         ui.title.textContent = titleEl?.textContent?.trim() ?? '';
