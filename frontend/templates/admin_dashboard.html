@@ -136,6 +136,32 @@ document.addEventListener('DOMContentLoaded', async () => {
   {{end}}
 </div>
 
+<div class="form-section">
+  {{if .analytics.topProjects}}
+    <div class="dashboard-analytics" style="margin-top:16px">
+      <h3 style="margin:0 0 8px 0;font-size:16px;">Топ-5 проектов (30 дней)</h3>
+
+      <table class="contacts-table">
+        <thead>
+          <tr>
+            <th style="width:36px">#</th>
+            <th>Проект</th>
+            <th style="width:120px; text-align:right;">Просмотры</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range $i, $p := .analytics.topProjects}}
+          <tr>
+            <td>{{add $i 1}}</td>
+            <td>{{$p.Title}}</td>
+            <td style="text-align:right;">{{$p.Views}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+  {{end}}
+</div>
 
 <div class="form-section">
     <h2>Система</h2>

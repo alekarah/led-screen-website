@@ -54,6 +54,43 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 		Order("remind_at ASC").Limit(10).
 		Find(&remindUpcoming)
 
+	// --- АНАЛИТИКА ПРОЕКТОВ (за последние 30 дней по MSK) ---
+	start30 := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc).AddDate(0, 0, -29)
+
+	// Топ-5 проектов
+	type TopProject struct {
+		ProjectID uint
+		Title     string
+		Views     int64
+	}
+	var topProjects []TopProject
+	if err := h.db.Table("project_view_dailies AS v").
+		Select("p.id AS project_id, p.title AS title, SUM(v.views) AS views").
+		Joins("JOIN projects p ON p.id = v.project_id").
+		Where("v.day >= ?", start30).
+		Group("p.id, p.title").
+		Order("views DESC").
+		Limit(5).
+		Scan(&topProjects).Error; err != nil {
+		// не валим страницу — просто отдаём пусто
+		topProjects = nil
+	}
+
+	// Сумма просмотров по дням (для простого графика/спарклайна)
+	type DailyViews struct {
+		Day   time.Time
+		Views int64
+	}
+	var views30 []DailyViews
+	if err := h.db.Table("project_view_dailies").
+		Select("day, SUM(views) AS views").
+		Where("day >= ?", start30).
+		Group("day").
+		Order("day ASC").
+		Scan(&views30).Error; err != nil {
+		views30 = nil
+	}
+
 	// --- СИСТЕМА ---
 	var dbOK bool
 	if sqlDB, err := h.db.DB(); err == nil {
@@ -81,6 +118,11 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 			"today":    remindToday,
 			"overdue":  remindOverdue,
 			"upcoming": remindUpcoming, // []models.ContactForm (id,name,phone,remind_at)
+		},
+
+		"analytics": gin.H{
+			"topProjects": topProjects,
+			"views30":     views30,
 		},
 
 		"sys": sys,

@@ -109,3 +109,13 @@ type ContactNote struct {
 	Author    string    `json:"author" gorm:"type:varchar(100)"`
 	CreatedAt time.Time `json:"created_at" gorm:"index"`
 }
+
+// ProjectViewDaily — агрегированные просмотры проектов по дням (UTC)
+type ProjectViewDaily struct {
+	ID        uint      `json:"id" gorm:"primaryKey"`
+	ProjectID uint      `json:"project_id" gorm:"not null;uniqueIndex:uniq_project_day"`
+	Day       time.Time `json:"day" gorm:"type:date;not null;uniqueIndex:uniq_project_day"`
+	Views     int       `json:"views" gorm:"default:1"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

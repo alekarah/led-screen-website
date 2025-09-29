@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"ledsite/internal/models"
 )
@@ -191,6 +192,51 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.",
 	})
+}
+
+// TrackProjectView — инкремент просмотров проекта за сегодняшний день (UTC).
+// POST /api/track/project-view/:id
+func (h *Handlers) TrackProjectView(c *gin.Context) {
+	pid, err := strconv.Atoi(c.Param("id"))
+	if err != nil || pid <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid project id"})
+		return
+	}
+
+	var exists int64
+	if err := h.db.Model(&models.Project{}).Where("id = ?", pid).Count(&exists).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "db error"})
+		return
+	}
+	if exists == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "project not found"})
+		return
+	}
+
+	now := NowMSK()
+	day := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc)
+
+	rec := models.ProjectViewDaily{
+		ProjectID: uint(pid),
+		Day:       day,
+		Views:     1,
+	}
+
+	if err := h.db.Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "project_id"},
+			{Name: "day"},
+		},
+		DoUpdates: clause.Assignments(map[string]any{
+			// важно: полностью квалифицируем левый столбец
+			"views": gorm.Expr(`"project_view_dailies"."views" + EXCLUDED."views"`),
+		}),
+	}).Create(&rec).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "db upsert error"})
+	}
+
+	// можно вернуть 204, но для наглядности вернем ok
+	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
 
 // Утилитные функции

@@ -62,6 +62,7 @@ func Migrate(db *gorm.DB) error {
 		&models.ContactForm{},
 		&models.Settings{},
 		&models.ContactNote{},
+		&models.ProjectViewDaily{},
 	); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
 	}

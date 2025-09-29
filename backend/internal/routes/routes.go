@@ -27,6 +27,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.GET("/projects", h.GetProjects)
 		api.POST("/contact", h.SubmitContact)
 		api.GET("/admin/contacts-7d", h.AdminContacts7Days)
+		api.POST("/track/project-view/:id", h.TrackProjectView)
 	}
 
 	// Админка

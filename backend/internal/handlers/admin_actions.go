@@ -30,7 +30,7 @@ func (h *Handlers) UpdateContactStatus(c *gin.Context) {
 		return
 	}
 
-	now := NowMSK().UTC()
+	now := NowMSKUTC()
 	var archivedAt *time.Time
 	if status == "archived" {
 		archivedAt = &now
@@ -61,7 +61,7 @@ func (h *Handlers) BulkUpdateContacts(c *gin.Context) {
 		return
 	}
 
-	now := NowMSK().UTC()
+	now := NowMSKUTC()
 	var archivedAt *time.Time
 	if action == "archived" {
 		archivedAt = &now
@@ -83,7 +83,7 @@ func (h *Handlers) ArchiveContact(c *gin.Context) {
 		return
 	}
 
-	now := NowMSK().UTC()
+	now := NowMSKUTC()
 	if err := h.db.Model(&models.ContactForm{}).
 		Where("id = ?", id).
 		Updates(map[string]any{"status": "archived", "archived_at": &now}).Error; err != nil {
@@ -134,7 +134,7 @@ func (h *Handlers) DeleteContact(c *gin.Context) {
 		return
 	}
 	// мягкий архив
-	now := NowMSK().UTC()
+	now := NowMSKUTC()
 	if err := h.db.Model(&models.ContactForm{}).
 		Where("id = ?", id).
 		Updates(map[string]any{"status": "archived", "archived_at": &now}).Error; err != nil {
@@ -181,7 +181,7 @@ func (h *Handlers) CreateContactNote(c *gin.Context) {
 		ContactID: contactID,
 		Text:      body.Text,
 		Author:    body.Author,
-		CreatedAt: NowMSK().UTC(),
+		CreatedAt: NowMSKUTC(),
 	}
 	if err := h.db.Create(&note).Error; err != nil {
 		jsonErr(c, http.StatusInternalServerError, "Не удалось создать заметку")

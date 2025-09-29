@@ -309,18 +309,15 @@ body {
   width: 40px; color: #9ca3af;
 }
 
-/* Имя — тянется, обрезка по краю */
 .dashboard-reminders .contacts-table td:nth-child(2) {
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
-/* Телефон — фикс.минимум */
 .dashboard-reminders .contacts-table th:nth-child(3),
 .dashboard-reminders .contacts-table td:nth-child(3) {
   min-width: 170px;
 }
 
-/* Когда — справа, не переносим */
 .dashboard-reminders .contacts-table th:nth-child(4),
 .dashboard-reminders .contacts-table td:nth-child(4) {
   width: 170px;
@@ -328,15 +325,53 @@ body {
   text-align: right;
 }
 
-/* Ссылки телефона */
 .dashboard-reminders .contacts-table a {
   color: #2563eb; text-decoration: none;
 }
 .dashboard-reminders .contacts-table a:hover { text-decoration: underline; }
 
-/* Лёгкая "зебра" строк (опц.) */
 .dashboard-reminders .contacts-table tbody tr:nth-child(even) td { background: #fafafa; }
 
+/* Dashboard: таблица для топ 5 проектов */
+.mini-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.mini-table th,
+.mini-table td {
+  padding: 8px 10px;
+  border-top: 1px solid #eee;
+  font-size: 14px;
+}
+.mini-table thead th {
+  background: #fafafa;
+  font-weight: 600;
+  border-top: none;
+}
+.mini-table td.preview {
+  width: 56px;
+}
+.mini-table td.preview img {
+  width: 48px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+.mini-table td.title a {
+  color: #222;
+  text-decoration: none;
+}
+.mini-table td.title a:hover {
+  text-decoration: underline;
+}
+.mini-table td.views {
+  text-align: right;
+  white-space: nowrap;
+}
 
 @keyframes toastIn {
     from { opacity: 0; transform: translateY(-8px); }

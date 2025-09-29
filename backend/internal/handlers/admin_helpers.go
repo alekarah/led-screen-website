@@ -17,6 +17,10 @@ func NowMSK() time.Time {
 	return time.Now().In(moscowLoc)
 }
 
+func NowMSKUTC() time.Time {
+	return NowMSK().UTC()
+}
+
 // applyDateFilter — применяет фильтр дат к запросу
 func applyDateFilter(qb *gorm.DB, dateRange string) *gorm.DB {
 	if dateRange == "" {
