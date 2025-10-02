@@ -22,7 +22,6 @@
     async function sendViewOnce({ id }) {
         if (!id) return;
         const key = `id:${id}`;
-        if (!markViewedOnce(key)) return;
 
         try {
             await fetch(VIEW_ENDPOINT_BY_ID(id), { method: 'POST' });

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -12,6 +13,8 @@ import (
 
 // AdminDashboard - главная страница админки
 func (h *Handlers) AdminDashboard(c *gin.Context) {
+	fmt.Println("AdminDashboard build:", time.Now())
+
 	var stats struct {
 		ProjectsCount int64
 		ImagesCount   int64
@@ -54,25 +57,28 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 		Order("remind_at ASC").Limit(10).
 		Find(&remindUpcoming)
 
-	// --- АНАЛИТИКА ПРОЕКТОВ (за последние 30 дней по MSK) ---
-	start30 := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc).AddDate(0, 0, -29)
-
 	// Топ-5 проектов
 	type TopProject struct {
-		ProjectID uint
-		Title     string
-		Views     int64
+		ProjectID   uint   `gorm:"column:project_id"`
+		Title       string `gorm:"column:title"`
+		Views       int64  `gorm:"column:views"`
+		Description string `gorm:"column:description"`
 	}
+
 	var topProjects []TopProject
 	if err := h.db.Table("project_view_dailies AS v").
-		Select("p.id AS project_id, p.title AS title, SUM(v.views) AS views").
+		Select(`
+			p.id    AS project_id,
+			p.title AS title,
+			SUM(v.views) AS views,
+			p.description AS description
+		`).
 		Joins("JOIN projects p ON p.id = v.project_id").
-		Where("v.day >= ?", start30).
-		Group("p.id, p.title").
+		Where("v.day >= CURRENT_DATE - INTERVAL '29 days'").
+		Group("p.id, p.title, p.description").
 		Order("views DESC").
 		Limit(5).
 		Scan(&topProjects).Error; err != nil {
-		// не валим страницу — просто отдаём пусто
 		topProjects = nil
 	}
 
@@ -84,7 +90,7 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 	var views30 []DailyViews
 	if err := h.db.Table("project_view_dailies").
 		Select("day, SUM(views) AS views").
-		Where("day >= ?", start30).
+		Where("day >= CURRENT_DATE - INTERVAL '29 days'").
 		Group("day").
 		Order("day ASC").
 		Scan(&views30).Error; err != nil {

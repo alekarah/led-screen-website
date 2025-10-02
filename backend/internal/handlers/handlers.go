@@ -197,6 +197,7 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 // TrackProjectView — инкремент просмотров проекта за сегодняшний день (UTC).
 // POST /api/track/project-view/:id
 func (h *Handlers) TrackProjectView(c *gin.Context) {
+	fmt.Println("TrackProjectView build:", time.Now())
 	pid, err := strconv.Atoi(c.Param("id"))
 	if err != nil || pid <= 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid project id"})
@@ -228,14 +229,13 @@ func (h *Handlers) TrackProjectView(c *gin.Context) {
 			{Name: "day"},
 		},
 		DoUpdates: clause.Assignments(map[string]any{
-			// важно: полностью квалифицируем левый столбец
 			"views": gorm.Expr(`"project_view_dailies"."views" + EXCLUDED."views"`),
 		}),
 	}).Create(&rec).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "db upsert error"})
+		return
 	}
 
-	// можно вернуть 204, но для наглядности вернем ok
 	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
 

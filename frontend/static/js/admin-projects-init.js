@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeModules();
         initCommonEventHandlers();
         setupGlobalSettings();
+        focusProjectFromQuery();
     } catch (error) {
         console.error('❌ Ошибка инициализации модулей:', error);
         showAdminMessage('Ошибка загрузки модулей управления проектами', 'error');
@@ -243,6 +244,25 @@ function copyToClipboard(text) {
         document.body.removeChild(textArea);
         showAdminMessage('Скопировано в буфер обмена', 'success');
     }
+}
+
+// Фокус на проект по параметру URL (?focus_id=123)
+function focusProjectFromQuery() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('focus_id');
+    if (!id) return;
+
+    const el = document.querySelector(`.project-item[data-project-id="${id}"]`);
+    if (!el) return;
+
+    try {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (_) {
+        el.scrollIntoView();
+    }
+
+    el.classList.add('project-focus');
+    setTimeout(() => el.classList.remove('project-focus'), 2500);
 }
 
 // Диагностические функции

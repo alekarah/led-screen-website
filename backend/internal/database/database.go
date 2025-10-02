@@ -66,6 +66,14 @@ func Migrate(db *gorm.DB) error {
 	); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
 	}
+
+	if err := db.Exec(`
+        CREATE UNIQUE INDEX IF NOT EXISTS uniq_project_day
+        ON project_view_dailies (project_id, day)
+    `).Error; err != nil {
+		return fmt.Errorf("ensure uniq_project_day index: %w", err)
+	}
+
 	return seedInitialData(db)
 }
 

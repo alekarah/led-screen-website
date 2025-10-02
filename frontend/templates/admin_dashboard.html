@@ -138,23 +138,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 <div class="form-section">
   {{if .analytics.topProjects}}
-    <div class="dashboard-analytics" style="margin-top:16px">
-      <h3 style="margin:0 0 8px 0;font-size:16px;">Топ-5 проектов (30 дней)</h3>
-
-      <table class="contacts-table">
+    <div class="dashboard-analytics">
+      <h2>Топ-5 проектов (30 дней)</h2>
+      <table class="mini-table">
         <thead>
           <tr>
-            <th style="width:36px">#</th>
+            <th>#</th>
             <th>Проект</th>
-            <th style="width:120px; text-align:right;">Просмотры</th>
+            <th>Просмотры</th>
           </tr>
         </thead>
         <tbody>
           {{range $i, $p := .analytics.topProjects}}
           <tr>
             <td>{{add $i 1}}</td>
-            <td>{{$p.Title}}</td>
-            <td style="text-align:right;">{{$p.Views}}</td>
+            <td class="project-cell">
+              <span class="project-tt">
+                <a href="/admin/projects?focus_id={{$p.ProjectID}}" class="project-link">
+                  {{$p.Title}}
+                </a>
+
+                {{if $p.Description}}
+                  <div class="project-tooltip" role="tooltip">
+                    <div class="desc">{{$p.Description}}</div>
+                  </div>
+                {{end}}
+              </span>
+            </td>
+            <td class="views">{{$p.Views}}</td>
           </tr>
           {{end}}
         </tbody>
