@@ -1,5 +1,32 @@
 /* ========== БАЗА (общие утилиты) ========== */
-body.modal-open { overflow:hidden; }
+
+body.modal-open{ overflow:hidden; }
+.modal{ background:var(--overlay); }
+.modal-content, .modal-overlay .modal{
+  background:var(--card-bg);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--modal-shadow);
+}
+.modal-header{ border-bottom:1px solid var(--line); }
+.close{ color:var(--text-500); }
+.close:hover{ 
+    color:var(--text-900); 
+    background:var(--hover); 
+}
+
+.modal-footer .btn-success{
+  background:var(--success); 
+  border:1px solid var(--success); 
+  color:#fff;
+}
+.modal-footer .btn-success:hover{ background:var(--success-700); }
+
+.modal-footer .btn-danger{
+  background:var(--danger); 
+  border:1px solid var(--danger); 
+  color:#fff;
+}
+.modal-footer .btn-danger:hover{ background:var(--danger-700); }
 
 /* плавное появление окон */
 @keyframes modalFadeIn {
@@ -12,7 +39,7 @@ body.modal-open { overflow:hidden; }
 .modal{
     display:none;
     position:fixed; inset:0;
-    background:rgba(0,0,0,.45);
+    background:var(--overlay);
     z-index:1000;
     backdrop-filter:blur(2px);
 }
@@ -36,7 +63,7 @@ body.modal-open { overflow:hidden; }
   justify-content:space-between;
   margin-bottom:16px; 
   padding-bottom:12px; 
-  border-bottom:1px solid #eee;
+  border-bottom:1px solid var(--line);
 }
 
 .modal-header h2{ 
@@ -53,7 +80,7 @@ body.modal-open { overflow:hidden; }
     border:0; 
     background:transparent; 
     cursor:pointer; 
-    color:#666;
+    color:var(--text-500);
     display:flex; 
     align-items:center; 
     justify-content:center; 
@@ -61,7 +88,7 @@ body.modal-open { overflow:hidden; }
 }
 
 .close:hover{ 
-    color:#111; 
+    color:var(--text-900); 
     background:#f3f4f6; 
 }
 
@@ -73,7 +100,7 @@ body.modal-open { overflow:hidden; }
     display:none;
     align-items:center; 
     justify-content:center;
-    background:rgba(0,0,0,.45);
+    background:var(--overlay);
     z-index:1000; 
     backdrop-filter:blur(2px);
 }
@@ -111,7 +138,7 @@ body.modal-open { overflow:hidden; }
 .modal-message{ 
     margin-top:12px; 
     padding-top:14px; 
-    border-top:1px dashed #e5e7eb; 
+    border-top:1px dashed var(--line-soft); 
 }
 
 #cd-message{ 
@@ -151,14 +178,14 @@ body.modal-open { overflow:hidden; }
     border:0; 
     background:transparent; 
     cursor:pointer; 
-    color:#666;
+    color:var(--text-500);
     display:flex; 
     align-items:center; 
     justify-content:center; 
     border-radius:50%;
 }
 .modal-overlay .modal .modal-close:hover{ 
-    color:#111; 
+    color:var(--text-900); 
     background:#f3f4f6; 
 }
 

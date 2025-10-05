@@ -7,9 +7,10 @@
     box-sizing: border-box; 
 }
 
-body { 
+html, body { 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background: #f5f5f5; 
+    background: var(--bg); 
+    color:var(--text-900);
 }
 
 .container { 
@@ -20,7 +21,7 @@ body {
 
 /* Шапка админки */
 .header { 
-    background: #333; 
+    background: var(--text-700); 
     color: white; 
     padding: 1rem; 
     margin-bottom: 2rem; 
@@ -47,7 +48,7 @@ body {
 
 /* Кнопки */
 .btn { 
-    background: #4A90E2; 
+    background: var(--adm-primary); 
     color: white; 
     padding: 0.75rem 1.5rem; 
     border: none; 
@@ -60,11 +61,11 @@ body {
 }
 
 .btn:hover { 
-    background: #357abd; 
+    background: var(--adm-primary-600); 
 }
 
 .btn-danger { 
-    background: #dc3545; 
+    background: var(--adm-toast-err); 
 }
 
 .btn-danger:hover { 
@@ -72,7 +73,7 @@ body {
 }
 
 .btn-success {
-    background: #28a745;
+    background: var(--adm-toast-ok);
 }
 
 .btn-success:hover {
@@ -81,12 +82,12 @@ body {
 
 .btn:disabled {
     background: #ccc;
-    color: #666;
+    color: var(--text-500);
     cursor: not-allowed;
 }
 
 .btn:focus {
-    outline: 2px solid #357abd;
+    outline: 2px solid var(--adm-primary-600);
     outline-offset: 2px;
 }
 
@@ -95,7 +96,7 @@ body {
   padding:0; 
   border:0; 
   background:transparent;
-  color:#4A90E2; 
+  color:var(--adm-primary); 
   font:inherit; 
   cursor:pointer;
 }
@@ -107,9 +108,8 @@ body {
 .hidden { 
     display: none; 
 }
-
 .muted    { 
-  color:#6b7280 !important; 
+  color:var(--adm-muted) !important; 
 }
 .nowrap   { 
   white-space:nowrap !important; 
@@ -145,12 +145,12 @@ body {
     padding: 2rem; 
     border-radius: 8px; 
     margin-bottom: 2rem; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px var(--adm-shadow-2);
 }
 
 .form-section h2 {
     margin-bottom: 1.5rem;
-    color: #333;
+    color: var(--text-700);
 }
 
 /* Главная админки */
@@ -165,7 +165,7 @@ body {
     background: white;
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px var(--adm-shadow-2);
     text-align: center;
 }
 
@@ -178,20 +178,20 @@ body {
 .stat-value {
     font-size: 2rem;
     font-weight: bold;
-    color: #4A90E2;
+    color: var(--adm-primary);
 }
 
 /* Подзаголовочные пометки на дашборде */
 .subnote {
     margin: 8px 0 24px;
-    color: #6b7280;
+    color: var(--adm-muted);
     font-size: 0.95rem;
     line-height: 1.4;
 }
 
 .subnote strong {
     font-weight: 700;
-    color: #111827;
+    color: var(--adm-text);
 }
 
 /* Блоки под графики */
@@ -212,19 +212,19 @@ body {
     background: #fff;
     border-radius: 8px;
     padding: 12px 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    box-shadow: 0 2px 8px var(--adm-shadow-1);
 }
 
 .sys-label {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--adm-muted);
     margin-bottom: 6px;
 }
 
 .sys-value {
     font-size: 16px;
     font-weight: 600;
-    color: #111827;
+    color: var(--adm-text);
 }
 
 .prewrap { white-space: pre-wrap; }
@@ -242,22 +242,22 @@ body {
 }
 
 .badge-ok {
-    background: #e8f7ee;
-    color: #18794e;
+    background: var(--adm-ok-bg);
+    color: var(--adm-ok-text);
     font-weight: 600;
     padding: 4px 8px;
     border-radius: 6px;
 }
 
 .badge-error {
-    background: #fde8ea;
-    color: #b42318;
+    background: var(--adm-err-bg);
+    color: var(--adm-err-text);
 }
 
 .count-big {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #4A90E2;
+  color: var(--adm-primary);
   margin-left: 10px;
 }
 
@@ -287,17 +287,17 @@ body {
     border-radius: 8px;
     font-size: 14px;
     line-height: 1.35;
-    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+    box-shadow: 0 8px 22px var(--adm-shadow-3);
     color: #fff;
-    background: #4A90E2;
+    background: var(--adm-primary);
     animation: toastIn .2s ease-out;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.toast.success { background: #28a745; }
-.toast.error   { background: #dc3545; }
+.toast.success { background: var(--adm-toast-ok); }
+.toast.error   { background: var(--adm-toast-err); }
 
 .toast .close {
     margin-left: 12px;

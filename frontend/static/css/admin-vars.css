@@ -1,0 +1,83 @@
+/* ========== Admin design tokens (общие переменные) ========== */
+:root{
+  /* Бренд и акценты */
+  --brand:#4A90E2;
+  --brand-600:#3b7bd0;
+  --brand-200:#9ad0f5; 
+  --focus-ring:#4A90E2;
+
+  /* Текст */
+  --text-900:#111827;           /* основной тёмный */
+  --text-800:#1f2937;
+  --text-700:#333333;
+  --text-600:#4b5563;
+  --text-500:#666666;
+  --text-400:#888888;
+  --muted:#9ca3af;
+
+  /* Фон / подложка / линии */
+  --bg:#f8f9fa;
+  --card-bg:#ffffff;
+  --overlay:rgba(0,0,0,.45);
+
+  --line:#eeeeee;
+  --line-soft:#e5e7eb;
+  --hover:#fafafa;
+
+  /* Карточки / тени / скругления */
+  --radius-sm:6px;
+  --radius:8px;
+  --radius-lg:12px;
+  --card-shadow:0 2px 4px rgba(0,0,0,.08);
+  --modal-shadow:0 18px 40px rgba(0,0,0,.12);
+
+  /* Кнопки успешные/опасные (для модалок) */
+  --success:#219653;
+  --success-700:#197a43;
+  --danger:#d93025;
+  --danger-700:#b6261c;
+}
+
+/* === Back-compat aliases (старые имена → новые токены) === */
+:root{
+  /* базовые */
+  --adm-bg:        var(--bg);
+  --adm-card:      var(--card-bg);
+  --adm-text:      var(--text-900);
+  --adm-muted:     var(--muted);
+
+  /* бренд */
+  --adm-primary:   var(--brand);
+  --adm-primary-600: var(--brand-600);
+
+  /* бордеры/акценты */
+  --adm-accent:    var(--brand-200);
+  --adm-border:    var(--line);
+
+  /* служебные (бейджи/алерты/тосты) */
+  --adm-ok-bg:     #e8f7ee;
+  --adm-ok-text:   #18794e;
+  --adm-err-bg:    #fde8ea;
+  --adm-err-text:  #b42318;
+  --adm-toast-ok:  #28a745;
+  --adm-toast-err: #dc3545;
+
+  /* тени на всякий */
+  --adm-shadow-1:  rgba(0,0,0,.06);
+  --adm-shadow-2:  rgba(0,0,0,.08);
+  --adm-shadow-3:  rgba(0,0,0,.18);
+}
+
+
+/* пример «тёмной» темы (на будущее)
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115;
+    --card-bg:#161a20;
+    --text-900:#f3f4f6;
+    --line:#2a2e35;
+    --hover:#1b2028;
+    --modal-shadow:0 18px 40px rgba(0,0,0,.5);
+  }
+}
+*/

@@ -59,9 +59,12 @@ led-screen-website/
 │   │   ├── uploads/
 │   │   ├── css/
 │   │   │   ├── admin-base.css
+│   │   │   ├── admin-contacts.css
+│   │   │   ├── admin-dashboard.css
 │   │   │   ├── admin-forms.css
 │   │   │   ├── admin-modals.css
 │   │   │   ├── admin-projects.css
+│   │   │   ├── admin-vars.css
 │   │   │   ├── crop-editor.css
 │   │   │   ├── led-effect.css
 │   │   │   ├── public-base.css

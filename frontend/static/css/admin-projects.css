@@ -1,273 +1,165 @@
-/* Стили проектов и сортировки */
+/* Admin / Projects */
 
-/* Список проектов */
-.projects-list { 
-    background: white; 
-    padding: 2rem; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+/* Карточка списка проектов */
+.projects-list{
+  background:var(--card-bg);
+  padding:2rem;
+  border-radius:var(--card-radius);
+  box-shadow:var(--card-shadow);
+}
+.projects-list h2{
+  margin:0 0 1.25rem;
+  color:var(--text-700);
 }
 
-.projects-list h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
+/* Строка проекта */
+.project-item{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:1rem;
+
+  padding:1.25rem 1.5rem;
+  border-bottom:1px solid var(--line);
+  user-select:none;
+  cursor:default;
+  transition:background .2s ease, box-shadow .2s ease;
+}
+.project-item:last-child{ border-bottom:none; }
+.project-item:hover{ background:var(--hover); }
+
+.project-info{ flex:1; }
+.project-info h3{
+  margin:0 0 .4rem;
+  color:var(--text-700);
+  font-weight:600;
+}
+.project-info p{
+  margin:0 0 .4rem;
+  color:var(--text-500);
+}
+.project-info small{
+  color:var(--text-400);
+  line-height:1.4;
 }
 
-/* Элементы проектов */
-.project-item { 
-    padding: 1.5rem; 
-    border-bottom: 1px solid #eee; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: flex-start; 
-    gap: 1rem;
-    cursor: default;
-    transition: all 0.3s ease;
-    user-select: none;
+.project-actions{
+  display:flex;
+  gap:.5rem;
+  flex-shrink:0;
 }
 
-.project-item:last-child {
-    border-bottom: none;
+/* Drag & Drop */
+.sortable-list{ min-height:200px; }
+.project-item.sortable-ghost{
+  opacity:.45;
+  background:#e3f2fd;
+}
+.project-item.sortable-chosen{
+  background:#f0f7ff;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  animation:dragStart .2s ease-out;
+}
+@keyframes dragStart{
+  from{ transform:scale(1); }
+  to{ transform:scale(1.02); }
 }
 
-.project-item:hover {
-    background: #f8f9fa;
+/* Хэндл перетаскивания */
+.drag-handle{
+  margin-right:.5rem;
+  padding:.5rem;
+  font-size:1.1rem;
+  color:#999;
+  cursor:grab;
+  transition:color .2s ease;
+}
+.drag-handle:hover{ color:var(--text-500); }
+.drag-handle:active{ cursor:grabbing; }
+.drag-handle:focus{
+  outline:2px solid var(--focus-ring);
+  outline-offset:2px;
 }
 
-.project-info { 
-    flex: 1;
+/* Миниатюра проекта */
+.project-thumbnail{
+  width:60px; height:45px;
+  flex-shrink:0;
+  overflow:hidden;
+  border-radius:6px;
+  background:var(--thumb-bg);
+  border:2px solid var(--thumb-border);
+  transition:border-color .2s ease;
+}
+.project-thumbnail:hover{ border-color:var(--brand); }
+.project-thumbnail img{
+  width:100%; height:100%;
+  object-fit:cover;
+  transition:transform .25s ease;
+}
+.project-thumbnail:hover img{ transform:scale(1.05); }
+
+/* Плейсхолдер (если нет изображения) */
+.no-image{
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.25rem; color:#999;
+  background:
+    linear-gradient(45deg,#f5f5f5 25%,transparent 25%),
+    linear-gradient(-45deg,#f5f5f5 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#f5f5f5 75%),
+    linear-gradient(-45deg,transparent 75%,#f5f5f5 75%);
+  background-size:10px 10px;
+  background-position:0 0,0 5px,5px -5px,-5px 0;
 }
 
-.project-info h3 { 
-    margin-bottom: 0.5rem; 
-    color: #333;
+/* Подсветка найденного проекта (?focus_id) */
+.project-item.project-focus{
+  background:#fff7cc;
+  box-shadow:inset 0 0 0 2px #facc15, 0 6px 20px rgba(0,0,0,.08);
+  position:relative; z-index:1;
+  transition:background .2s ease, box-shadow .2s ease;
+}
+.project-item.project-focus::after{
+  content:""; position:absolute; inset:0; border-radius:8px;
+  animation:focusPulse 1.4s ease-out 2; pointer-events:none;
+}
+@keyframes focusPulse{
+  0%{   box-shadow:0 0 0 0 rgba(250,204,21,.55); }
+  70%{  box-shadow:0 0 0 14px rgba(250,204,21,0); }
+  100%{ box-shadow:0 0 0 0 rgba(250,204,21,0); }
 }
 
-.project-info p { 
-    color: #666; 
-    margin-bottom: 0.5rem;
+/* Статусы (опционально) */
+.project-status{
+  display:inline-flex; align-items:center; gap:.25rem;
+  padding:.25rem .5rem; border-radius:12px;
+  font-size:.8rem; font-weight:500;
 }
+.project-status.featured{  background:#e8f4fd; color:#2c5aa0; }
+.project-status.draft{     background:#fff3cd; color:#856404; }
+.project-status.published{ background:#d4edda; color:#155724; }
 
-.project-info small {
-    color: #888;
-    line-height: 1.4;
+/* Статистика (опционально) */
+.project-stats{
+  display:flex; gap:1rem;
+  margin:0 0 1rem; padding:1rem;
+  background:#f8f9fa; border-radius:6px;
+  font-size:.9rem; color:var(--text-500);
 }
+.project-stats .stat-item{ display:flex; align-items:center; gap:.5rem; }
+.project-stats .stat-value{ font-weight:700; color:var(--brand); }
 
-.project-actions { 
-    display: flex; 
-    gap: 0.5rem; 
-    flex-shrink: 0;
+/* Адаптив*/
+@media (max-width:768px){
+  .project-item{ flex-direction:column; align-items:stretch; padding:1rem; }
+  .project-actions{ margin-top:.75rem; justify-content:flex-start; }
+  .project-thumbnail{ width:80px; height:60px; }
+  .drag-handle{ padding:.25rem; font-size:1rem; }
+  .project-stats{ flex-direction:column; gap:.5rem; }
 }
-
-/* Стили для drag & drop сортировки */
-.sortable-list {
-    min-height: 200px;
-}
-
-.project-item.sortable-ghost {
-    opacity: 0.4;
-    background: #e3f2fd;
-}
-
-.project-item.sortable-chosen {
-    background: #f0f7ff;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-}
-
-/* Хендл для перетаскивания */
-.drag-handle {
-    color: #999;
-    cursor: grab;
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
-    transition: color 0.3s;
-}
-
-.drag-handle:hover {
-    color: #666;
-}
-
-.drag-handle:active {
-    cursor: grabbing;
-}
-
-.drag-handle:focus {
-    outline: 2px solid #4A90E2;
-    outline-offset: 2px;
-}
-
-/* Миниатюры проектов */
-.project-thumbnail {
-    width: 60px;
-    height: 45px;
-    overflow: hidden;
-    border-radius: 6px;
-    background: #f5f5f5;
-    border: 2px solid #ddd;
-    flex-shrink: 0;
-    transition: border-color 0.3s;
-}
-
-.project-thumbnail:hover {
-    border-color: #4A90E2;
-}
-
-.project-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s;
-}
-
-.project-thumbnail:hover img {
-    transform: scale(1.05);
-}
-
-/* Плейсхолдер для проектов без изображений */
-.no-image {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #999;
-    background: linear-gradient(45deg, #f5f5f5 25%, transparent 25%), 
-                linear-gradient(-45deg, #f5f5f5 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #f5f5f5 75%), 
-                linear-gradient(-45deg, transparent 75%, #f5f5f5 75%);
-    background-size: 10px 10px;
-    background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-
-/* Статистика проектов (если добавим) */
-.project-stats {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.project-stats .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.project-stats .stat-value {
-    font-weight: bold;
-    color: #4A90E2;
-}
-
-/* Индикаторы состояния */
-.project-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-weight: 500;
-}
-
-.project-status.featured {
-    background: #e8f4fd;
-    color: #2c5aa0;
-}
-
-.project-status.draft {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.project-status.published {
-    background: #d4edda;
-    color: #155724;
-}
-
-/* Подсветка найденного проекта по ?focus_id */
-.project-item.project-focus {
-  background: #fff7cc;              /* мягкая жёлтая подложка */
-  box-shadow: inset 0 0 0 2px #facc15, 0 6px 20px rgba(0,0,0,.08);
-  transition: background .3s ease, box-shadow .3s ease;
-  position: relative;
-  z-index: 1;
-}
-
-.project-item.project-focus::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 8px;
-  animation: focusPulse 1.4s ease-out 2;
-  pointer-events: none;
-}
-
-@keyframes focusPulse {
-  0%   { box-shadow: 0 0 0 0 rgba(250, 204, 21, .55); }
-  70%  { box-shadow: 0 0 0 14px rgba(250, 204, 21, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0); }
-}
-
-/* Анимации при перетаскивании */
-@keyframes dragStart {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.02);
-    }
-}
-
-.project-item.sortable-chosen {
-    animation: dragStart 0.2s ease-out;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .project-item {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 1rem;
-    }
-    
-    .project-actions {
-        margin-top: 1rem;
-        justify-content: flex-start;
-    }
-    
-    .project-thumbnail {
-        width: 80px;
-        height: 60px;
-    }
-    
-    .drag-handle {
-        padding: 0.25rem;
-        font-size: 1rem;
-    }
-    
-    .project-stats {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .project-thumbnail {
-        width: 50px;
-        height: 38px;
-    }
-    
-    .project-item {
-        padding: 0.75rem;
-    }
-    
-    .projects-list {
-        padding: 1rem;
-    }
+@media (max-width:480px){
+  .projects-list{ padding:1rem; }
+  .project-item{ padding:.75rem; }
+  .project-thumbnail{ width:50px; height:38px; }
 }
