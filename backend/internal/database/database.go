@@ -74,6 +74,14 @@ func Migrate(db *gorm.DB) error {
 		return fmt.Errorf("ensure uniq_project_day index: %w", err)
 	}
 
+	if err := db.Exec(`
+		CREATE INDEX IF NOT EXISTS idx_pvd_project     ON project_view_dailies (project_id);
+		CREATE INDEX IF NOT EXISTS idx_pvd_day         ON project_view_dailies (day);
+		CREATE INDEX IF NOT EXISTS idx_pvd_project_day ON project_view_dailies (project_id, day);
+	`).Error; err != nil {
+		return fmt.Errorf("ensure pvd indexes: %w", err)
+	}
+
 	return seedInitialData(db)
 }
 

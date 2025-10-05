@@ -44,6 +44,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			pr.POST("/:id/update", h.UpdateProject)
 			pr.DELETE("/:id", h.DeleteProject)
 			pr.POST("/:id/reorder", h.ReorderProject)
+			pr.POST("/:id/reset-views", h.ResetProjectViews)
 			pr.POST("/bulk-reorder", h.BulkReorderProjects)
 			pr.POST("/reset-order", h.ResetProjectOrder)
 		}
@@ -54,6 +55,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			img.POST("upload-images", h.UploadImages)
 			img.DELETE("images/:id", h.DeleteImage)
 			img.POST("images/:id/crop", h.UpdateImageCrop)
+			img.POST("analytics/reset", h.ResetAllViews)
 		}
 
 		// Заявки (контакты)

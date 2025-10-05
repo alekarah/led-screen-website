@@ -146,6 +146,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             <th></th>
             <th>Проект</th>
             <th>Просмотры</th>
+            <th class="reset-col">
+              <button type="button" class="btn-link reset-all" id="reset-views-all">Сбросить всё</button>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -166,10 +169,32 @@ document.addEventListener('DOMContentLoaded', async () => {
               </span>
             </td>
             <td class="views">{{$p.Views}}</td>
+            <td class="reset-col">
+              <button type="button" class="btn-link reset-project" data-project-id="{{$p.ProjectID}}">сбросить</button>
+            </td>
           </tr>
           {{end}}
         </tbody>
       </table>
+      
+      <script>
+      document.addEventListener('click', async (e) => {
+        if (e.target.closest('#reset-views-all')) {
+          if (!confirm('Сбросить ВСЮ статистику просмотров?')) return;
+          const res = await fetch('/admin/analytics/reset', { method: 'POST' });
+          if (res.ok) location.reload();
+          return;
+        }
+        const projBtn = e.target.closest('.reset-project');
+        if (projBtn) {
+          const id = projBtn.dataset.projectId;
+          if (!id) return;
+          if (!confirm('Сбросить просмотры для проекта #' + id + '?')) return;
+          const res = await fetch(`/admin/projects/${id}/reset-views`, { method: 'POST' });
+          if (res.ok) location.reload();
+        }
+      });
+      </script>
     </div>
   {{end}}
 </div>

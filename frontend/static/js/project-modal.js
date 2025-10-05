@@ -12,20 +12,22 @@
 
     const VIEW_ENDPOINT_BY_ID = (id) => `/api/track/project-view/${id}`;
 
-    function markViewedOnce(key) {
-        const k = `viewed:${key}`;
-        if (sessionStorage.getItem(k)) return false;
-        sessionStorage.setItem(k, '1');
-    return true;
+    const VIEW_TTL_MIN = 10;
+
+    function nowSec(){ return Math.floor(Date.now()/1000); }
+
+    function viewedRecently(key, ttlMin){
+    try{
+        const raw = sessionStorage.getItem(key);
+        if(!raw) return false;
+        const ts = parseInt(raw, 10);
+        if(Number.isNaN(ts)) return false;
+        return (nowSec() - ts) < (ttlMin*60);
+    }catch(_){ return false; }
     }
 
-    async function sendViewOnce({ id }) {
-        if (!id) return;
-        const key = `id:${id}`;
-
-        try {
-            await fetch(VIEW_ENDPOINT_BY_ID(id), { method: 'POST' });
-        } catch (_) {}
+    function markViewedTTL(key){
+    try{ sessionStorage.setItem(key, String(nowSec())); }catch(_){}
     }
 
     if (document.readyState === 'loading') {
@@ -124,7 +126,11 @@
         const imgAlt = imgEl?.getAttribute('alt') || (titleEl?.textContent?.trim() ?? 'Изображение проекта');
 
         const projectId = btn.getAttribute('data-project-id');
-        sendViewOnce({ id: projectId });
+        const key = `pview:${projectId}`;
+        if (!viewedRecently(key, VIEW_TTL_MIN)) {
+        try { fetch(VIEW_ENDPOINT_BY_ID(projectId), { method: 'POST' }); } catch(_) {}
+        markViewedTTL(key);
+        }
 
         // картинка
         ui.mediaImg.src = imgSrc;

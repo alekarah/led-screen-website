@@ -175,3 +175,25 @@ func (h *Handlers) AdminContacts7Days(c *gin.Context) {
 
 	c.JSON(200, out)
 }
+
+// ResetAllViews — глобальный сброс всей статистики просмотров
+func (h *Handlers) ResetAllViews(c *gin.Context) {
+	if err := h.db.Exec(`TRUNCATE TABLE project_view_dailies RESTART IDENTITY`).Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики: "+err.Error())
+		return
+	}
+	jsonOK(c, gin.H{"ok": true})
+}
+
+// ResetProjectViews — сброс просмотров только для конкретного проекта
+func (h *Handlers) ResetProjectViews(c *gin.Context) {
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+	if err := h.db.Where("project_id = ?", id).Delete(&models.ProjectViewDaily{}).Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики проекта: "+err.Error())
+		return
+	}
+	jsonOK(c, gin.H{"ok": true})
+}

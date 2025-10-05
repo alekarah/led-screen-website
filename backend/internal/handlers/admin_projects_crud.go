@@ -128,7 +128,7 @@ func (h *Handlers) UpdateProject(c *gin.Context) {
 	jsonOK(c, gin.H{"message": "Проект успешно обновлен"})
 }
 
-// DeleteProject - удаление проекта
+// DeleteProject - удаление проекта + всего связанного (изображения, категории, просмотры)
 func (h *Handlers) DeleteProject(c *gin.Context) {
 	id, ok := mustID(c)
 	if !ok {
@@ -141,25 +141,46 @@ func (h *Handlers) DeleteProject(c *gin.Context) {
 		return
 	}
 
-	for _, image := range project.Images {
-		if err := deleteImageFile(image.FilePath); err != nil {
-			logError("Ошибка удаления файла", image.FilePath, err)
+	tx := h.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
 		}
-	}
+	}()
 
-	if err := h.db.Model(&project).Association("Categories").Clear(); err != nil {
+	if err := tx.Model(&project).Association("Categories").Clear(); err != nil {
+		tx.Rollback()
 		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления связей с категориями: "+err.Error())
 		return
 	}
 
-	if err := h.db.Where("project_id = ?", project.ID).Delete(&models.Image{}).Error; err != nil {
+	if err := tx.Where("project_id = ?", project.ID).Delete(&models.Image{}).Error; err != nil {
+		tx.Rollback()
 		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления изображений: "+err.Error())
 		return
 	}
 
-	if err := h.db.Delete(&project).Error; err != nil {
+	if err := tx.Where("project_id = ?", project.ID).Delete(&models.ProjectViewDaily{}).Error; err != nil {
+		tx.Rollback()
+		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления статистики просмотров: "+err.Error())
+		return
+	}
+
+	if err := tx.Delete(&project).Error; err != nil {
+		tx.Rollback()
 		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления проекта: "+err.Error())
 		return
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		jsonErr(c, http.StatusInternalServerError, "Ошибка завершения транзакции: "+err.Error())
+		return
+	}
+
+	for _, image := range project.Images {
+		if err := deleteImageFile(image.FilePath); err != nil {
+			logError("Ошибка удаления файла", image.FilePath, err)
+		}
 	}
 
 	jsonOK(c, gin.H{"message": "Проект успешно удален"})
