@@ -12,8 +12,8 @@
 .filter-btn {
     padding: 0.8rem 1.5rem;
     background: white;
-    border: 2px solid #667eea;
-    color: #667eea;
+    border: 2px solid var(--p-brand);
+    color: var(--p-brand);
     border-radius: 25px;
     text-decoration: none;
     display: inline-block;
@@ -23,7 +23,7 @@
 
 .filter-btn:hover,
 .filter-btn.active {
-    background: #667eea;
+    background: var(--p-brand);
     color: white;
 }
 
@@ -89,7 +89,7 @@
 .public-project-content h3 {
     font-size: 1.4rem;
     font-weight: bold;
-    color: #333;
+    color: var(--p-text-700);
     margin-bottom: 0.5rem;
     min-height: 2.8rem;
     line-height: 1.2;
@@ -97,14 +97,14 @@
 
 .public-project-content .project-size {
     font-size: 1rem;
-    color: #667eea;
+    color: var(--p-brand);
     font-weight: 600;
     margin-bottom: 0.5rem;
     min-height: 1.5rem;
 }
 
 .public-project-content .project-description {
-    color: #666;
+    color: var(--p-text-500);
     line-height: 1.4;
     margin-bottom: 0.7rem;
     font-size: 0.9rem;
@@ -131,11 +131,11 @@
     padding: 0.3rem 0.8rem;
     border-radius: 15px;
     font-size: 0.8rem;
-    color: #666;
+    color: var(--p-text-500);
 }
 
 .category-tag.active {
-    background: #667eea;
+    background: var(--p-brand);
     color: #fff;
     font-weight: 600;
 }
@@ -143,7 +143,7 @@
 /* Кнопка "Подробнее" */
 .project-detail-btn {
     display: inline-block;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     color: white;
     padding: 0.7rem 1.5rem;
     text-decoration: none;
@@ -191,6 +191,15 @@
     .public-project-card {
         width: 100%;
         max-width: 350px;
+    }
+    .project-modal__dialog {
+        grid-template-columns: 1fr;
+        width: min(760px, 96vw);
+        max-height: 92vh;
+    }
+    .project-modal__media {
+        height: 42vh;
+        background: #111;
     }
 }
 
@@ -274,7 +283,7 @@
 }
 
 .project-modal__size {
-    color: #667eea;
+    color: var(--p-brand);
     font-weight: 700;
     margin-bottom: .5rem;
 }
@@ -332,19 +341,6 @@
 .project-modal__body::-webkit-scrollbar-thumb {
     background: #d9d9d9;
     border-radius: 8px;
-}
-
-/* Мобильная/планшетная разбивка */
-@media (max-width: 900px) {
-    .project-modal__dialog {
-        grid-template-columns: 1fr;
-        width: min(760px, 96vw);
-        max-height: 92vh;
-    }
-    .project-modal__media {
-        height: 42vh; /* задаём высоту под contain */
-        background: #111;
-    }
 }
 
 /* Блокируем прокрутку body, когда модалка открыта */

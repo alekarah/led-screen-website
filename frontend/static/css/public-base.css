@@ -1,6 +1,6 @@
 /* Базовые стили публичной части сайта */
 
-/* Reset стили */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
@@ -14,8 +14,8 @@ html, body {
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    color: var(--p-text-700);
+    background-color: var(--p-bg-alt);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -23,13 +23,13 @@ body {
 
 /* Навигация */
 nav {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     padding: 1rem 0;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
@@ -41,7 +41,7 @@ nav {
     padding: 0 2rem;
 }
 
-/* Корневой блок логотипа */
+/* Логотип */
 .logo {
     display: inline-flex;
     align-items: center;
@@ -72,6 +72,7 @@ nav {
     text-shadow: 6px 0 10px rgba(0, 0, 0, .58);
     animation: textPulse 2.4s ease-in-out infinite;
 }
+
 .logo:hover .logo-icon {
     filter:
         drop-shadow(0 0 2px rgba(255, 247, 185, 1))
@@ -86,7 +87,7 @@ nav {
     animation-duration: 1.4s;
 }
 
-/* Ключевые кадры */
+/* Анимации */
 @keyframes ledPulse {
     0%, 100% {
         filter:
@@ -105,12 +106,8 @@ nav {
 }
 
 @keyframes textPulse {
-    0%, 100% {
-        text-shadow: 6px 0 10px rgba(0, 0, 0, .58);
-    }
-    50% {
-        text-shadow: 9px 0 18px rgba(0, 0, 0, .78);
-  }
+    0%, 100% { text-shadow: 6px 0 10px rgba(0, 0, 0, .58); }
+    50%      { text-shadow: 9px 0 18px rgba(0, 0, 0, .78); }
 }
 
 @media (max-width: 520px) {
@@ -118,6 +115,7 @@ nav {
     .logo-text { font-size: 1.45rem; }
 }
 
+/* Навигационные ссылки */
 .nav-links {
     display: flex;
     list-style: none;
@@ -125,15 +123,13 @@ nav {
 }
 
 .nav-links a {
-    color: white;
+    color: #fff;
     text-decoration: none;
     transition: opacity 0.3s;
     font-weight: 500;
 }
 
-.nav-links a:hover {
-    opacity: 0.8;
-}
+.nav-links a:hover { opacity: 0.8; }
 
 .nav-links a.active {
     border-bottom: 2px solid #fff;
@@ -141,7 +137,7 @@ nav {
     font-weight: bold;
 }
 
-/* Основной контент */
+/* Контент */
 .main-content {
     margin-top: 80px;
     padding: 3rem 0;
@@ -162,30 +158,29 @@ nav {
 
 .section-header h1 {
     font-size: 2.5rem;
-    color: #333;
+    color: var(--p-text-700);
     margin-bottom: 1rem;
     font-weight: 700;
 }
 
 .section-header p {
     font-size: 1.2rem;
-    color: #666;
+    color: var(--p-text-500);
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
 }
 
-footer {
-    flex-shrink: 0;
-}
+/* Footer */
+footer { flex-shrink: 0; }
 
-/* Для страницы политики обработки данных */
+/* Блок политики */
 .privacy-section .privacy-block {
-    max-width: 100%; 
+    max-width: 100%;
     margin: 2rem auto;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    background: var(--p-bg);
+    border-radius: var(--p-radius);
+    box-shadow: var(--p-shadow-1);
     padding: 2.2rem 2.5rem;
     font-size: 1.12rem;
     line-height: 1.7;
@@ -201,60 +196,38 @@ footer {
         max-width: 98vw;
         padding: 0 8px;
     }
-    .privacy-section .privacy-block {
-        padding: 1.3rem 1.1rem;
-    }
+    .privacy-section .privacy-block { padding: 1.3rem 1.1rem; }
 }
 
 @media (max-width: 600px) {
-    .privacy-section .privacy-block {
-        font-size: 1rem;
-    }
+    .privacy-section .privacy-block { font-size: 1rem; }
 }
 
-/* Базовые кнопки */
+/* Кнопки */
 .btn {
     display: inline-block;
-    background: #667eea;
-    color: white;
+    background: var(--p-brand);
+    color: #fff;
     padding: 12px 30px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: var(--p-radius-sm);
     font-weight: bold;
     transition: background-color 0.3s;
     border: none;
     cursor: pointer;
 }
 
-.btn:hover {
-    background: #5a6fd8;
-}
+.btn:hover { background: var(--p-brand-600); }
+.btn-primary { background: var(--p-brand); }
+.btn-secondary { background: #6c757d; }
+.btn-success { background: var(--p-success); }
+.btn-danger { background: #dc3545; }
 
-.btn-primary {
-    background: #667eea;
-}
+.btn-hero { background: #ff6b6b; }
+.btn-hero:hover { background: #ee5a5a; }
 
-.btn-secondary {
-    background: #6c757d;
-}
-
-.btn-success {
-    background: #28a745;
-}
-
-.btn-danger {
-    background: #dc3545;
-}
-
-.btn-hero {
-    background: #ff6b6b;
-}
-
-.btn-hero:hover {
-    background: #ee5a5a;
-}
-
-.btn:focus, .nav-links a:focus {
-    outline: 2px solid #667eea;
+.btn:focus,
+.nav-links a:focus {
+    outline: 2px solid var(--p-brand);
     outline-offset: 2px;
 }

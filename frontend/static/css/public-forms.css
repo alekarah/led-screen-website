@@ -16,7 +16,7 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: #333;
+    color: var(--p-text-700);
 }
 
 /* Поля ввода */
@@ -37,7 +37,7 @@
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--p-brand);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -111,7 +111,7 @@
 
 .checkbox-label a,
 .radio-label a {
-    color: #667eea;
+    color: var(--p-brand);
     text-decoration: underline;
 }
 
@@ -176,7 +176,7 @@
 }
 
 .form-success {
-    color: #28a745;
+    color: var(--p-success);
     background-color: #d4edda;
     border: 1px solid #c3e6cb;
     padding: 0.75rem;
@@ -197,7 +197,7 @@
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid var(--p-brand);
     outline-offset: 2px;
 }
 
@@ -230,7 +230,7 @@
 }
 .modal-text {
     margin: 0 auto 18px;
-    color: #4b5563;
+    color: var(--p-text-600);
 }
 .modal-text a { color: #2563eb; text-decoration: none; }
 .modal-text a:hover { text-decoration: underline; }
@@ -274,7 +274,7 @@
 .modal-close {
     position: absolute; top: 8px; right: 10px;
     border: 0; background: transparent; font-size: 26px; line-height: 1;
-    color: #9ca3af; cursor: pointer;
+    color: var(--p-muted); cursor: pointer;
 }
 .modal-close:hover { color: #6b7280; }
 
@@ -293,12 +293,12 @@
     min-width: 280px;
     max-width: 420px;
     background: #ffffff;
-    border-left: 6px solid #4b5563;
+    border-left: 6px solid var(--p-text-600);
     box-shadow: 0 10px 30px rgba(0,0,0,.15);
     border-radius: 10px;
     padding: 12px 14px;
     font-size: 14px;
-    color: #111827;
+    color: var(--p-text-900);
     animation: toast-in .2s ease-out;
 }
 
@@ -310,7 +310,7 @@
 .toast-close {
     position: absolute; top: 6px; right: 8px;
     border: 0; background: transparent; font-size: 18px;
-    color: #9ca3af; cursor: pointer;
+    color: var(--p-muted); cursor: pointer;
 }
 .toast-close:hover { color: #6b7280; }
 
@@ -318,7 +318,7 @@
 
 
 /* Адаптивность форм */
-@media (max-width: 768px) {
+@media (max-width: var(--bp-tablet)) { /* 768 */
     .form-row {
         grid-template-columns: 1fr;
         gap: 0.75rem;
@@ -341,7 +341,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: var(--bp-mobile)) { /* 480 */
     .form-group input,
     .form-group textarea,
     .form-group select {

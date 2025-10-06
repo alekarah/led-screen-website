@@ -200,3 +200,67 @@
         text-align: center;
     }
 }
+
+/* ======= Global responsive — only site-wide patterns ======= */
+
+/* Tablet and below */
+@media (max-width: var(--bp-tablet)) {
+  /* Контейнеры */
+  .container { padding: 0 1rem; }
+
+  /* Шапка/навигация */
+  nav .nav-container { padding: 0 1rem; }
+  .nav-links { gap: 1rem; flex-wrap: wrap; }
+
+  /* Общие заголовки секций */
+  .section-header h1 { font-size: clamp(1.8rem, 3.8vw, 2.1rem); }
+  .section-header p  { font-size: 1.05rem; }
+
+  /* Глобальные кнопки */
+  .btn { padding: 10px 22px; }
+
+  /* Основной контент — чуть меньше вертикальных полей */
+  .main-content { padding: 2rem 0; }
+}
+
+/* Mobile and below */
+@media (max-width: var(--bp-mobile)) {
+  /* Лого в шапке */
+  .logo-icon { height: 24px; width: 18px; }
+  .logo-text { font-size: 1.45rem; }
+
+  /* Навигация */
+  .nav-links { gap: .75rem; }
+
+  /* Контейнеры и отступы */
+  .container { padding: 0 .75rem; }
+  .section-header { margin-bottom: 2rem; }
+  .section-header p { font-size: 1rem; }
+
+  /* Кнопки */
+  .btn { padding: 9px 18px; }
+}
+
+/* Универсальные утилиты */
+@media (max-width: var(--bp-tablet)){
+  .stack-md { display: grid; gap: 12px; }
+}
+@media (max-width: var(--bp-mobile)){
+  .hide-sm { display: none !important; }
+}
+
+/* === Global responsive from Home (глобальный контейнер на мобайле) === */
+@media (max-width: 700px){
+  .container{
+    padding: 0 .5rem;
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: var(--bp-mobile)){
+  .logo-icon { height: 24px; width: 18px; }
+  .logo-text { font-size: 1.45rem; }
+}

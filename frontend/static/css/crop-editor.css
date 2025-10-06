@@ -45,21 +45,21 @@
 }
 
 .modal-header h2 {
-    color: #333;
+    color: var(--p-text-700);
     margin: 0;
 }
 
 .close { 
     font-size: 1.8rem; 
     cursor: pointer; 
-    color: #666;
+    color: var(--p-text-500);
     transition: color 0.3s;
     padding: 0.5rem;
     line-height: 1;
 }
 
 .close:hover {
-    color: #333;
+    color: var(--p-text-700);
 }
 
 /* Редактор кроппинга */
@@ -106,7 +106,7 @@
     display: block; 
     margin-bottom: 0.75rem; 
     font-weight: 600; 
-    color: #333;
+    color: var(--p-text-700);
     font-size: 0.95rem;
 }
 
@@ -156,7 +156,7 @@
 
 .crop-value { 
     font-size: 0.9rem; 
-    color: #666; 
+    color: var(--p-text-500); 
     background: #f8f9fa;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
@@ -201,7 +201,7 @@
 }
 
 /* Адаптивность для модального окна */
-@media (max-width: 768px) {
+@media (max-width: var(--bp-tablet)) { /* 768 */
     .modal-content {
         width: 95%;
         margin: 5% auto;
@@ -236,7 +236,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: var(--bp-mobile)) { /* 480 */
     .crop-preview {
         height: 150px;
     }

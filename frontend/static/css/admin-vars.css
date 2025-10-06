@@ -30,29 +30,15 @@
   --radius-lg:12px;
   --card-shadow:0 2px 4px rgba(0,0,0,.08);
   --modal-shadow:0 18px 40px rgba(0,0,0,.12);
+  --adm-shadow-1:  rgba(0,0,0,.06);
+  --adm-shadow-2:  rgba(0,0,0,.08);
+  --adm-shadow-3:  rgba(0,0,0,.18);
 
   /* Кнопки успешные/опасные (для модалок) */
   --success:#219653;
   --success-700:#197a43;
   --danger:#d93025;
   --danger-700:#b6261c;
-}
-
-/* === Back-compat aliases (старые имена → новые токены) === */
-:root{
-  /* базовые */
-  --adm-bg:        var(--bg);
-  --adm-card:      var(--card-bg);
-  --adm-text:      var(--text-900);
-  --adm-muted:     var(--muted);
-
-  /* бренд */
-  --adm-primary:   var(--brand);
-  --adm-primary-600: var(--brand-600);
-
-  /* бордеры/акценты */
-  --adm-accent:    var(--brand-200);
-  --adm-border:    var(--line);
 
   /* служебные (бейджи/алерты/тосты) */
   --adm-ok-bg:     #e8f7ee;
@@ -61,13 +47,7 @@
   --adm-err-text:  #b42318;
   --adm-toast-ok:  #28a745;
   --adm-toast-err: #dc3545;
-
-  /* тени на всякий */
-  --adm-shadow-1:  rgba(0,0,0,.06);
-  --adm-shadow-2:  rgba(0,0,0,.08);
-  --adm-shadow-3:  rgba(0,0,0,.18);
 }
-
 
 /* пример «тёмной» темы (на будущее)
 @media (prefers-color-scheme: dark){

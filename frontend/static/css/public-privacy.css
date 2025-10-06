@@ -1,3 +1,20 @@
+/* Блок политики */
+.privacy-section .privacy-block {
+    max-width: 100%;
+    margin: 2rem auto;
+    background: var(--p-bg);
+    border-radius: var(--p-radius);
+    box-shadow: var(--p-shadow-1);
+    padding: 2.2rem 2.5rem;
+    font-size: 1.12rem;
+    line-height: 1.7;
+}
+
+.privacy-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .privacy-section {
     padding: 3rem 0 5rem 0;
     background: #fafbfc;
@@ -20,4 +37,16 @@
     color: #222;
     font-size: 1.09rem;
     line-height: 1.7;
+}
+
+@media (max-width: var(--bp-desktop)) { /* 1200 */
+    .privacy-section .container {
+        max-width: 98vw;
+        padding: 0 8px;
+    }
+    .privacy-section .privacy-block { padding: 1.3rem 1.1rem; }
+}
+
+@media (max-width: var(--bp-phablet)) { /* 640 */
+    .privacy-section .privacy-block { font-size: 1rem; }
 }

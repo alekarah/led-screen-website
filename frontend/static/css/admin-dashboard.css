@@ -71,7 +71,7 @@
 .dashboard-analytics .mini-table tbody tr:hover td{ background:var(--hover); }
 
 /* Разделительная полоса между thead и tbody */
-.dashboard-analytics .mini-table thead{ border-bottom:2px solid var(--adm-accent); }
+.dashboard-analytics .mini-table thead{ border-bottom:2px solid var(--brand-200); }
 .dashboard-analytics .mini-table tbody tr:first-child td{ border-top:none; }
 
 /* Ссылка-название проекта */

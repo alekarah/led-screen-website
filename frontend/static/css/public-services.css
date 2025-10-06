@@ -32,7 +32,7 @@
 }
 
 .service-card.featured {
-    border-color: #667eea;
+    border-color: var(--p-brand);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
 }
 
@@ -41,7 +41,7 @@
     position: absolute;
     top: -10px;
     right: 20px;
-    background: #667eea;
+    background: var(--p-brand);
     color: white;
     padding: 0.3rem 1rem;
     border-radius: 15px;
@@ -60,13 +60,13 @@
 
 .service-card h3 {
     font-size: 1.4rem;
-    color: #333;
+    color: var(--p-text-700);
     margin-bottom: 1rem;
     text-align: center;
 }
 
 .service-card > p {
-    color: #666;
+    color: var(--p-text-500);
     line-height: 1.6;
     margin-bottom: 1.5rem;
     text-align: center;
@@ -91,7 +91,7 @@
     content: "✓";
     position: absolute;
     left: 0;
-    color: #28a745;
+    color: var(--p-success);
     font-weight: bold;
 }
 
@@ -99,11 +99,11 @@
 .service-price {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #667eea;
+    color: var(--p-brand);
     text-align: center;
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: #f8f9ff;
+    background: var(--p-brand-soft);
     border-radius: 10px;
 }
 
@@ -124,7 +124,7 @@
     text-align: center;
     margin-bottom: 3rem;
     font-size: 2.5rem;
-    color: #333;
+    color: var(--p-text-700);
 }
 
 .screen-types {
@@ -161,11 +161,11 @@
 
 .screen-type h3 {
     font-size: 1.3rem;
-    color: #333;
+    color: var(--p-text-700);
 }
 
 .screen-type p {
-    color: #666;
+    color: var(--p-text-500);
     margin-bottom: 1rem;
     margin-top: auto !important;
 }
@@ -178,7 +178,7 @@
 }
 
 .screen-specs span {
-    background: #667eea;
+    background: var(--p-brand);
     color: white;
     padding: 0.3rem 0.8rem;
     border-radius: 15px;
@@ -196,7 +196,7 @@
     text-align: center;
     margin-bottom: 3rem;
     font-size: 2.5rem;
-    color: #333;
+    color: var(--p-text-700);
 }
 
 .process-steps {
@@ -215,7 +215,7 @@
 .step-number {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -273,19 +273,19 @@
 
 .process-step h3 {
     font-size: 1.2rem;
-    color: #333;
+    color: var(--p-text-700);
     margin-bottom: 0.5rem;
 }
 
 .process-step p {
-    color: #666;
+    color: var(--p-text-500);
     line-height: 1.5;
     font-size: 0.95rem;
 }
 
 /* Секция призыва к действию */
 .cta-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     color: white;
     padding: 4rem 0;
     text-align: center;
@@ -325,14 +325,14 @@
 }
 
 /* Адаптивность */
-@media (max-width: 1024px) {
+@media (max-width: var(--bp-laptop)) { /* 1024 */
     .cta-content p {
         white-space: normal;
         max-width: 600px;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--bp-tablet)) { /* 768 */
     .services-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -394,7 +394,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: var(--bp-mobile)) { /* 480 */
     .services-main {
         padding: 1rem 0 2rem;
     }

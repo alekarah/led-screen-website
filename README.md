@@ -75,7 +75,8 @@ led-screen-website/
 │   │   │   ├── public-privacy.css
 │   │   │   ├── public-projects.css
 │   │   │   ├── public-responsive.css
-│   │   │   └── public-services.css
+│   │   │   ├── public-services.css
+│   │   │   └── public-vars.css
 │   │   ├── js/
 │   │   │   ├── admin-base.js
 │   │   │   ├── admin-contacts-api.js

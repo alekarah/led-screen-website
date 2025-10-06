@@ -48,7 +48,7 @@ html, body {
 
 /* Кнопки */
 .btn { 
-    background: var(--adm-primary); 
+    background: var(--brand); 
     color: white; 
     padding: 0.75rem 1.5rem; 
     border: none; 
@@ -61,7 +61,7 @@ html, body {
 }
 
 .btn:hover { 
-    background: var(--adm-primary-600); 
+    background: var(--brand-600); 
 }
 
 .btn-danger { 
@@ -87,7 +87,7 @@ html, body {
 }
 
 .btn:focus {
-    outline: 2px solid var(--adm-primary-600);
+    outline: 2px solid var(--brand-600);
     outline-offset: 2px;
 }
 
@@ -96,7 +96,7 @@ html, body {
   padding:0; 
   border:0; 
   background:transparent;
-  color:var(--adm-primary); 
+  color: var(--brand); 
   font:inherit; 
   cursor:pointer;
 }
@@ -109,7 +109,7 @@ html, body {
     display: none; 
 }
 .muted    { 
-  color:var(--adm-muted) !important; 
+  color: var(--muted) !important; 
 }
 .nowrap   { 
   white-space:nowrap !important; 
@@ -178,20 +178,20 @@ html, body {
 .stat-value {
     font-size: 2rem;
     font-weight: bold;
-    color: var(--adm-primary);
+    color: var(--brand);
 }
 
 /* Подзаголовочные пометки на дашборде */
 .subnote {
     margin: 8px 0 24px;
-    color: var(--adm-muted);
+    color: var(--muted);
     font-size: 0.95rem;
     line-height: 1.4;
 }
 
 .subnote strong {
     font-weight: 700;
-    color: var(--adm-text);
+    color: var(--text-900);
 }
 
 /* Блоки под графики */
@@ -217,14 +217,14 @@ html, body {
 
 .sys-label {
     font-size: 12px;
-    color: var(--adm-muted);
+    color: var(--muted);
     margin-bottom: 6px;
 }
 
 .sys-value {
     font-size: 16px;
     font-weight: 600;
-    color: var(--adm-text);
+    color: var(--text-900);
 }
 
 .prewrap { white-space: pre-wrap; }
@@ -257,7 +257,7 @@ html, body {
 .count-big {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--adm-primary);
+  color: var(--brand);
   margin-left: 10px;
 }
 
@@ -289,7 +289,7 @@ html, body {
     line-height: 1.35;
     box-shadow: 0 8px 22px var(--adm-shadow-3);
     color: #fff;
-    background: var(--adm-primary);
+    background: var(--brand);
     animation: toastIn .2s ease-out;
     display: flex;
     justify-content: space-between;

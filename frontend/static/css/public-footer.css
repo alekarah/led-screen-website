@@ -2,7 +2,7 @@
 
 /* Базовый простой футер */
 .simple-footer {
-    background: #333;
+    background: var(--p-text-700);
     color: white;
     padding: 1rem 0;
     margin-top: 3rem;
@@ -18,7 +18,7 @@
 
 .footer-info h3 {
     margin-bottom: 0.5rem;
-    color: #667eea;
+    color: var(--p-brand);
     font-size: 1.2rem;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .footer-contact a {
-    color: #667eea;
+    color: var(--p-brand);
     text-decoration: none;
     transition: color 0.3s;
 }
@@ -44,7 +44,7 @@
 }
 
 .footer-contact a:focus, .footer-social a:focus {
-    outline: 2px solid #667eea;
+    outline: 2px solid var(--p-brand);
     outline-offset: 2px;
 }
 
@@ -80,7 +80,7 @@
 
 /* Статистический футер (для портфолио) */
 .stats-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     color: white;
     padding: 3rem 0;
     margin-top: 3rem;
@@ -162,12 +162,12 @@
 }
 
 .footer-social a:hover {
-    color: #667eea;
+    color: var(--p-brand);
     transform: scale(1.12);
 }
 
 /* Адаптивность футеров */
-@media (max-width: 768px) {
+@media (max-width: var(--bp-tablet)) { /* 768 */
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
@@ -201,7 +201,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: var(--bp-mobile)) { /* 480 */
     .footer-content {
         gap: 1rem;
     }
