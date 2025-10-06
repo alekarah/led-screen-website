@@ -49,11 +49,11 @@
 
     <!-- Панель массовых действий -->
     <div class="bulk-actions">
-      <div class="bulk-actions__title" style="color:#555;">Действия с выбранными:</div>
+      <div class="bulk-actions__title">Действия с выбранными:</div>
       <button id="bulk-process" class="btn btn-small" disabled>Обработать</button>
       <button id="bulk-restore" class="btn btn-small btn-blue" disabled>Вернуть в новые</button>
       <button id="bulk-archive" class="btn btn-small" disabled>Архивировать</button>
-      <span id="bulk-count" style="color:#777; margin-left:8px;">Выбрано: 0</span>
+      <span id="bulk-count" class="muted" style="margin-left:8px;">Выбрано: 0</span>
     </div>
 
     <table class="table contacts-table">
@@ -149,7 +149,7 @@
             <div id="cd-message" class="prewrap"></div>
           </div>
 
-          <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
+          <div class="modal-footer" style="margin-top:16px;">
             <button id="cd-mark-processed" class="btn btn-small btn-success">Обработать</button>
             <button id="cd-mark-new"       class="btn btn-small btn-blue">Вернуть в новые</button>
             <button id="cd-archive"        class="btn btn-small btn-danger">Архивировать</button>

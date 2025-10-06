@@ -1,37 +1,14 @@
 /* Admin — Contacts */
 
-.contacts-table{ 
-    background:var(--card-bg); 
-    border-radius:var(--radius); 
-    box-shadow:var(--card-shadow); 
-}
-.contacts-table th{ color:var(--text-600); }
-.contacts-table td{ color:var(--text-900); }
-
-
-/* Страницы контактов */
-.contacts-page,
-.contacts-archive {
-  display: block;
-}
-
-/* Панель фильтров/поиска/массовых действий */
-.contacts-toolbar{
-  margin-bottom:16px;
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-
-/* Таблица контактов (Inbox/Archive) */
+/* Каркас таблицы и типографика */
 .contacts-table{
   width:100%;
   border-collapse:collapse;
   table-layout:fixed;
-  background:#fff;
-  border-radius:10px;
+  background:var(--card-bg);
+  border-radius:var(--radius);
   overflow:hidden;
+  box-shadow:var(--card-shadow);
 }
 .contacts-table th,
 .contacts-table td{
@@ -39,14 +16,29 @@
   vertical-align:middle;
   border-top:1px solid var(--line);
   font-size:14px;
-  color:var(--text-900);
   text-align:left;
 }
 .contacts-table thead th{
   background:var(--hover);
   font-weight:600;
-  color:#6b7280;
+  color:var(--text-600);
   border-top:none;
+}
+.contacts-table td{ color:var(--text-900); }
+
+/* Страницы контактов */
+.contacts-page,
+.contacts-archive{
+  display:block;
+}
+
+/* Панель фильтров/поиска/массовых действий */
+.contacts-toolbar{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-bottom:1rem !important; /* перебиваем публичный отступ */
 }
 
 /* Базовая раскладка колонок */
@@ -63,11 +55,11 @@
 .contacts-table th:nth-child(4),
 .contacts-table td:nth-child(5),
 .contacts-table th:nth-child(5){
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-.contacts-table .status-cell{
+  overflow:hidden;
+  text-overflow:ellipsis;
   white-space:nowrap;
 }
+.contacts-table .status-cell{ white-space:nowrap; }
 .contacts-table .date-cell{
   white-space:nowrap;
   font-variant-numeric: tabular-nums;
@@ -79,53 +71,46 @@
 
 /* Чередование строк и hover */
 .contacts-table tbody tr:nth-child(even) td{ background:var(--hover); }
-.contacts-table tbody tr:hover td{ background:#f6f7fb; }
+.contacts-table tbody tr:hover td{ background:var(--hover); }
 
 /* Ссылки внутри таблицы */
 .contacts-table a{
-  color:#2563eb; 
+  color:var(--brand);
   text-decoration:none;
 }
 .contacts-table a:hover{ text-decoration:underline; }
 
 /* Панель массовых действий и табы в модалке */
 .bulk-actions{
-  display:flex; 
-  gap:8px; 
-  align-items:center; 
-  flex-wrap:wrap; 
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
   margin:8px 0 12px;
 }
-.bulk-actions__title{ color:#555; }
+.bulk-actions__title{ color:var(--text-600); }
 
-/* Табы внутри модалки контактов */
 .tabs{
-  display:flex; 
-  gap:8px; 
+  display:flex;
+  gap:8px;
   margin-bottom:10px;
 }
 
 /* Напоминание и заметки (модалка) */
 .reminder-block{ margin-bottom:14px; }
 .reminder-row{
-  display:flex; 
-  gap:8px; 
-  align-items:center; 
-  margin-top:6px; 
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-top:6px;
   flex-wrap:wrap;
 }
-.notes-list{ 
-    margin:8px 0 12px; 
-    padding-left:18px; 
+.notes-list{
+  margin:8px 0 12px;
+  padding-left:18px;
 }
-.notes-controls{ 
-    display:flex; 
-    gap:8px; 
-    flex-wrap:wrap; 
-}
-
-/* Переопределяем публичный отступ для фильтров в админке */
-.contacts-toolbar,
-.filters.contacts-toolbar {
-  margin-bottom: 1rem !important;
+.notes-controls{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }

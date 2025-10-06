@@ -110,11 +110,6 @@ nav {
     50%      { text-shadow: 9px 0 18px rgba(0, 0, 0, .78); }
 }
 
-@media (max-width: 520px) {
-    .logo-icon { height: 24px; }
-    .logo-text { font-size: 1.45rem; }
-}
-
 /* Навигационные ссылки */
 .nav-links {
     display: flex;
@@ -173,35 +168,6 @@ nav {
 
 /* Footer */
 footer { flex-shrink: 0; }
-
-/* Блок политики */
-.privacy-section .privacy-block {
-    max-width: 100%;
-    margin: 2rem auto;
-    background: var(--p-bg);
-    border-radius: var(--p-radius);
-    box-shadow: var(--p-shadow-1);
-    padding: 2.2rem 2.5rem;
-    font-size: 1.12rem;
-    line-height: 1.7;
-}
-
-.privacy-section .container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-@media (max-width: 1200px) {
-    .privacy-section .container {
-        max-width: 98vw;
-        padding: 0 8px;
-    }
-    .privacy-section .privacy-block { padding: 1.3rem 1.1rem; }
-}
-
-@media (max-width: 600px) {
-    .privacy-section .privacy-block { font-size: 1rem; }
-}
 
 /* Кнопки */
 .btn {

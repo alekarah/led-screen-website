@@ -22,20 +22,23 @@
 </head>
 <body>
     <!-- Шапка -->
-    <div class="header">
+    <header class="header">
         <div class="container">
-        <h1>Админ панель</h1>
-        <ul class="nav-links">
-            <li><a href="/admin">Главная</a></li>
-            <li><a href="/admin/contacts">Заявки</a></li>
-            <li><a href="/admin/projects">Проекты</a></li>
-            <li><a href="/">На сайт</a></li>
-        </ul>
+            <h1>Админ панель</h1>
+            <nav aria-label="Основная навигация">
+            <ul class="nav-links">
+                <li><a href="/admin" {{if eq .PageID "admin-dashboard"}}aria-current="page"{{end}}>Главная</a></li>
+                <li><a href="/admin/contacts" {{if eq .PageID "admin-contacts"}}aria-current="page"{{end}}>Заявки</a></li>
+                <li><a href="/admin/projects" {{if eq .PageID "admin-projects"}}aria-current="page"{{end}}>Проекты</a></li>
+                <li><a href="/">На сайт</a></li>
+            </ul>
+            </nav>
         </div>
-    </div>
+    </header>
+
 
     <!-- Контент -->
-    <div class="container">
+    <main class="container">
         <div id="message"></div>
 
         {{if eq .PageID "admin-dashboard"}}
@@ -47,7 +50,7 @@
         {{else if eq .PageID "admin-contacts-archive"}}
             {{template "admin-contacts-archive-content" .}}
         {{end}}
-    </div>
+    </main>
 
     <!-- ВСТАВКА МОДАЛОК СТРОГО ПОСЛЕ КОНТЕНТА СТРАНИЦЫ -->
     {{if eq .PageID "admin-contacts"}}
@@ -61,7 +64,7 @@
     {{end}}
 
     <!-- Базовые скрипты -->
-    <script src="/static/js/admin-base.js"></script>
+    <script src="/static/js/admin-base.js" defer></script>
     <script>window.showMessage = window.showAdminMessage;</script>
 
     <!-- Страничные скрипты -->
@@ -111,7 +114,7 @@
     <div class="pagination">
     <a class="btn btn-small"
         href="?page={{.prevPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}{{if .reminder}}&reminder={{.reminder}}{{end}}"
-        {{if le .page 1}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        {{if le .page 1}}aria-disabled="true" tabindex="-1"{{end}}>
         Назад
     </a>
 
@@ -131,7 +134,7 @@
 
     <a class="btn btn-small"
         href="?page={{.nextPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .status}}&status={{.status}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}{{if .reminder}}&reminder={{.reminder}}{{end}}"
-        {{if ge .page .pages}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        {{if ge .page .pages}}aria-disabled="true" tabindex="-1"{{end}}>
         Вперёд
     </a>
     </div>
@@ -142,7 +145,7 @@
     <div class="pagination">
     <a class="btn btn-small"
         href="?page={{.prevPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
-        {{if le .page 1}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        {{if le .page 1}}aria-disabled="true" tabindex="-1"{{end}}>
         Назад
     </a>
 
@@ -162,7 +165,7 @@
 
     <a class="btn btn-small"
         href="?page={{.nextPage}}&limit={{.limit}}{{if .search}}&search={{.search}}{{end}}{{if .dateRange}}&date={{.dateRange}}{{end}}"
-        {{if ge .page .pages}}aria-disabled="true" tabindex="-1" style="pointer-events:none;opacity:.6"{{end}}>
+        {{if ge .page .pages}}aria-disabled="true" tabindex="-1"{{end}}>
         Вперёд
     </a>
     </div>
