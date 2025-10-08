@@ -30,6 +30,16 @@ body.modal-open { overflow: hidden; }
   background: var(--hover);
 }
 
+/* ── Кнопка закрытия модалки */
+.modal .close,
+.modal .modal-close{
+  position: absolute;
+  top: 14px;
+  right: 16px;
+
+  cursor: pointer;
+}
+
 /* Заголовок модалки (общий) */
 .modal-header{
   display: flex;
