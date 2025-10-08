@@ -217,6 +217,7 @@
 .table a[href^="tel:"] {
     text-decoration: none;
     border-bottom: 1px dashed rgba(74,144,226,.4);
+    font-weight: 600;
 }
 .table a[href^="tel:"]:hover {
     border-bottom-color: rgba(74,144,226,.8);
@@ -269,12 +270,12 @@
 }
 .page-link:hover {
     background: #f0f4ff;
-    border-color: #4a7cff;
+    border-color: var(--brand);
 }
 .page-link.active {
-    background: #4a7cff;
+    background: var(--brand);
     color: #fff;
-    border-color: #4a7cff;
+    border-color: var(--brand);
     font-weight: 600;
 }
 .dots {

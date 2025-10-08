@@ -36,7 +36,6 @@ body.modal-open { overflow: hidden; }
   position: absolute;
   top: 14px;
   right: 16px;
-
   cursor: pointer;
 }
 
@@ -153,7 +152,11 @@ body.modal-open { overflow: hidden; }
   line-height: 1.5;
 }
 /* Ссылки в деталях */
-#cd-phone, #cd-email{ text-decoration: underline; }
+#cd-phone, #cd-email{ 
+  text-decoration: underline; 
+  color: var(--brand-600);
+  font-weight: 600;
+}
 
 /* Отступы внутри полей "Автор" и "Новая заметка" */
 #cd-note-author,

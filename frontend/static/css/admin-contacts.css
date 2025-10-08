@@ -26,6 +26,10 @@
 }
 .contacts-table td{ color:var(--text-900); }
 
+.contacts-table .actions {
+  text-align: left !important;
+}
+
 /* Страницы контактов */
 .contacts-page,
 .contacts-archive{
@@ -75,7 +79,7 @@
 
 /* Ссылки внутри таблицы */
 .contacts-table a{
-  color:var(--brand);
+  color:var(--brand-600);
   text-decoration:none;
 }
 .contacts-table a:hover{ text-decoration:underline; }
