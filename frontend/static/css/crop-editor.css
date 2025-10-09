@@ -79,7 +79,7 @@
     margin: 0 auto 1rem auto;
     border: 3px solid #4A90E2;
     position: relative;
-    background: #f8f9fa;
+    background: var(--bg);
     flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
 }
@@ -157,7 +157,7 @@
 .crop-value { 
     font-size: 0.9rem; 
     color: var(--p-text-500); 
-    background: #f8f9fa;
+    background: var(--bg);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     display: inline-block;

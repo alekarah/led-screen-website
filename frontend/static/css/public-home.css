@@ -33,7 +33,7 @@
 /* Секция услуг */
 .services {
     padding: 4rem 0;
-    background: #f8f9fa;
+    background: var(--p-bg-alt);
 }
 
 .services h2 {

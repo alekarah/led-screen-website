@@ -116,7 +116,7 @@
 
 /* Секция типов экранов */
 .screen-types-section {
-    background: #f8f9fa;
+    background: var(--p-bg-alt);
     padding: 4rem 0;
 }
 
@@ -189,7 +189,7 @@
 /* Секция процесса работы */
 .process-section {
     padding: 4rem 0;
-    background: white;
+    background: var(--p-bg-alt);
 }
 
 .process-section h2 {

@@ -25,10 +25,6 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 	h.db.Model(&models.Image{}).Count(&stats.ImagesCount)
 	h.db.Model(&models.ContactForm{}).Count(&stats.ContactsCount)
 
-	// последние 5 заявок
-	var latestContacts []models.ContactForm
-	h.db.Order("created_at DESC").Limit(5).Find(&latestContacts)
-
 	// заявки за 7 дней
 	var newContacts7 int
 	h.db.Raw(`SELECT COUNT(*) FROM contact_forms WHERE created_at >= NOW() - INTERVAL '7 days'`).Scan(&newContacts7)
@@ -49,13 +45,6 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 		Where("remind_flag = ? AND remind_at IS NOT NULL AND remind_at < ?",
 			true, now.UTC()).
 		Count(&remindOverdue)
-
-	// ближайшие 10 напоминаний (после текущего момента)
-	var remindUpcoming []models.ContactForm
-	h.db.Select("id, name, phone, remind_at").
-		Where("remind_flag = ? AND remind_at IS NOT NULL AND remind_at >= ?", true, now.UTC()).
-		Order("remind_at ASC").Limit(10).
-		Find(&remindUpcoming)
 
 	// Топ-5 проектов
 	type TopProject struct {
@@ -117,13 +106,11 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 		"PageID": "admin-dashboard",
 
 		"stats":        stats,
-		"contacts":     latestContacts,
 		"newContacts7": newContacts7,
 
 		"reminders": gin.H{
-			"today":    remindToday,
-			"overdue":  remindOverdue,
-			"upcoming": remindUpcoming, // []models.ContactForm (id,name,phone,remind_at)
+			"today":   remindToday,
+			"overdue": remindOverdue,
 		},
 
 		"analytics": gin.H{

@@ -125,7 +125,7 @@
     border: 2px solid #ddd;
     border-radius: 8px;
     position: relative;
-    background: #f8f9fa;
+    background: var(--bg);
 }
 
 .image-item img { 

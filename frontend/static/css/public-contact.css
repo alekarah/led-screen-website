@@ -55,7 +55,7 @@
 
 /* Секция формы обратной связи */
 .contact-form-section {
-    background: white;
+    background: var(--p-bg-alt);
     padding: 3rem 2rem;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
@@ -85,7 +85,7 @@
 
 /* Дополнительная информация */
 .additional-info-section {
-    background: #f8f9fa;
+    background: var(--p-bg-alt);
     padding: 3rem 0;
     margin-top: 3rem;
 }

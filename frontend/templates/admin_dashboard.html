@@ -103,37 +103,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="stat-value">{{.reminders.overdue}}</div>
     </a>
   </div>
-
-
-  {{if .reminders.upcoming}}
-  <div class="dashboard-reminders" style="margin-top:12px">
-    <h3 style="margin:0 0 8px 0;font-size:16px;">Ближайшие перезвоны (10)</h3>
-    <table class="contacts-table">
-      <thead>
-        <tr>
-          <th style="width:36px">#</th>
-          <th style="width:28%">Имя</th>
-          <th style="width:28%">Телефон</th>
-          <th>Когда</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{range $i, $c := .reminders.upcoming}}
-        <tr>
-          <td>{{add $i 1}}</td>
-          <td>{{$c.Name}}</td>
-          <td>
-            {{if $c.Phone}}
-              <a href="tel:{{$c.Phone}}">{{$c.Phone}}</a>
-            {{else}} — {{end}}
-          </td>
-          <td>{{if $c.RemindAt}}{{fmtTime $c.RemindAt}}{{else}}—{{end}}</td>
-        </tr>
-        {{end}}
-      </tbody>
-    </table>
-  </div>
-  {{end}}
 </div>
 
 <div class="form-section">
@@ -143,11 +112,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       <table class="mini-table">
         <thead>
           <tr>
-            <th></th>
+            <th aria-label="Позиция в рейтинге"></th>
             <th>Проект</th>
             <th>Просмотры</th>
             <th class="reset-col">
-              <button type="button" class="btn-link reset-all" id="reset-views-all">Сбросить всё</button>
+              <button type="button" class="btn-link reset-all" id="reset-views-all"
+                aria-label="Сбросить статистику просмотров по всем проектам">Сбросить всё</button>
             </th>
           </tr>
         </thead>
@@ -170,7 +140,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             </td>
             <td class="views">{{$p.Views}}</td>
             <td class="reset-col">
-              <button type="button" class="btn-link reset-project" data-project-id="{{$p.ProjectID}}">сбросить</button>
+              <button type="button" class="btn-link reset-project"
+                data-project-id="{{$p.ProjectID}}"
+                aria-label="Сбросить просмотры проекта «{{$p.Title}}»">сбросить</button>
             </td>
           </tr>
           {{end}}
