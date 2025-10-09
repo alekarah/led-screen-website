@@ -1,4 +1,4 @@
-/* ========== БАЗА (общие утилиты) ========== */
+/* Стили модалок */
 
 body.modal-open { overflow: hidden; }
 
@@ -82,7 +82,7 @@ body.modal-open { overflow: hidden; }
   animation: modalFadeIn .22s ease-out;
 }
 
-/* ========== Вариант А: МОДАЛКИ ПРОЕКТОВ (.modal → .modal-content) ========== */
+/* Вариант А: МОДАЛКИ ПРОЕКТОВ (.modal → .modal-content) */
 
 /* Overlay */
 .modal{
@@ -103,7 +103,7 @@ body.modal-open { overflow: hidden; }
   padding: 20px 24px;
 }
 
-/* ========== Вариант Б: МОДАЛКА КОНТАКТОВ (.modal-overlay → .modal) ========== */
+/* Вариант Б: МОДАЛКА КОНТАКТОВ (.modal-overlay → .modal) */
 
 /* Overlay */
 .modal-overlay{
@@ -162,7 +162,7 @@ body.modal-open { overflow: hidden; }
 #cd-note-author,
 #cd-note-text { padding: 6px 10px; }
 
-/* ========== Адаптив ========== */
+/* Адаптив */
 @media (max-width: var(--bp-mobile)){
   .modal-content{
     padding: 16px 18px;
