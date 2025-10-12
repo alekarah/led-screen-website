@@ -21,7 +21,9 @@
   --p-line-soft:    #eeeeee;
   --p-hover:        #fafafa;
 
-  /* Тени/скругления */
+  /* Размеры/тени/скругления */
+  --p-container:    1200px;
+  --p-header-h:     80px;
   --p-radius-sm:    8px;
   --p-radius:       12px;
   --p-shadow-1:     0 5px 15px rgba(0,0,0,0.10);
@@ -36,7 +38,7 @@
   --bp-desktop:    1200px;  /* контейнер = 1140–1200, 3–4 колонки */
   --bp-laptop:     1024px;  /* ноутбуки: упрощаем сетки, уменьшаем типографику */
 
-  /* Tablet / Phone (у тебя уже есть tablet/mobile) */
+  /* Tablet / Phone */
   --bp-tablet:      768px;  /* 2 колонки → 1, формы в столбик */
   --bp-phablet:     640px;  /* мелкие правки перед «мобилой» (меню, карточки) */
   --bp-mobile:      480px;  /* мобильный основной */

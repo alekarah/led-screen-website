@@ -36,6 +36,10 @@
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
 }
 
+.service-card.featured:hover { 
+    border-color: color-mix(in oklab, var(--p-brand), white 20%); 
+}
+
 .service-card.featured::before {
     content: "Популярно";
     position: absolute;
@@ -112,6 +116,11 @@
     text-align: center;
     padding: 0.875rem 1.5rem;
     margin-top: auto;
+}
+
+.service-card .btn:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--p-brand), white 25%);
+  outline-offset: 2px;
 }
 
 /* Секция типов экранов */
@@ -441,4 +450,8 @@
         font-size: 0.9rem;
         padding: 0.875rem 1.5rem;
     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-steps .step-number { animation: none !important; }
 }

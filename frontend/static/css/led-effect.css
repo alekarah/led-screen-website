@@ -79,3 +79,39 @@
 .led-effect--subtle::after  { opacity: .7; }
 
 /* Адаптив — сам эффект менять не нужно; размеры контента регулируйте в своих CSS */
+
+
+/* --- Безопасные улучшения для LED-эффекта --- */
+
+/* 1) Скругления карточек передаем псевдоэлементам */
+.led-effect::before,
+.led-effect::after { border-radius: inherit; }
+
+/* 2) Переменные-тонкие ручки (опционально) */
+.led-effect {
+  --led-scanlines-opacity: .9;
+  --led-sweep-opacity: .8;
+}
+
+/* применяем их */
+.led-effect::before { opacity: var(--led-scanlines-opacity); }
+.led-effect::after  { opacity: var(--led-sweep-opacity); }
+
+/* 3) Учитываем prefers-reduced-motion — останавливаем анимации */
+@media (prefers-reduced-motion: reduce) {
+  .led-effect::before,
+  .led-effect::after {
+    animation: none !important;
+  }
+}
+
+/* 4) Аккуратный фолбэк, если soft-light не поддерживается */
+@supports not (mix-blend-mode: soft-light) {
+  .led-effect::before { mix-blend-mode: normal; opacity: .3; }
+}
+
+/* 5) Микро-оптимизация анимации блика (чуть меньше «шевеления» в GPU) */
+@keyframes led-sweep-alt {
+  0%   { transform: translate3d(-20%,0,0) rotate(0.001deg); opacity: .65; }
+  100% { transform: translate3d( 20%,0,0) rotate(0.001deg); opacity: .90; }
+}

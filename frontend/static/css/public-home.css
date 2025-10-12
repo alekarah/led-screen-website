@@ -108,7 +108,7 @@
 
 .home-project-card:hover {
     transform: translateY(-6px) scale(1.03);
-    box-shadow: 0 10px 28px rgba(102,126,234,0.10);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* Прямоугольные изображения для главной */
@@ -176,26 +176,14 @@
     border-radius: 26px;
     box-shadow: 0 2px 18px rgba(102,126,234,0.11);
     transition: background 0.25s, transform 0.17s;
-    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
     text-decoration: none;
 }
 .see-all-projects-btn:hover {
-    background: linear-gradient(90deg, #475fc7, #5d3370 100%);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px) scale(1.04);
     color: #fff;
     text-decoration: none;
-}
-
-/* Footer */
-footer {
-    background: var(--p-text-700);
-    color: white;
-    text-align: center;
-    padding: 2rem 0;
-}
-
-footer p {
-    margin-bottom: 0.5rem;
 }
 
 /* Адаптивность */
@@ -218,7 +206,7 @@ footer p {
         flex-direction: column !important;
         align-items: center !important;
         gap: 1.2rem !important;
-        width: 100vw !important;
+        width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -228,11 +216,22 @@ footer p {
         margin: 0 auto 1.2rem auto !important;
     }
     .project-image-rect {
-        width: 90vw !important;
+        width: 100% !important;
         max-width: 220px !important;
         min-width: 180px;
         height: calc(90vw * 0.68) !important;
         max-height: 150px !important;
         min-height: 120px !important;
     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-project-card,
+  .service-card {
+    transition: none !important;
+  }
+  .home-project-card:hover,
+  .service-card:hover {
+    transform: none !important;
+  }
 }

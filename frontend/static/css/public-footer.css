@@ -1,5 +1,12 @@
 /* Стили футеров для всех страниц */
 
+footer {
+    background: var(--p-text-700);
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+}
+
 /* Базовый простой футер */
 .simple-footer {
     background: var(--p-text-700);
@@ -58,9 +65,7 @@
 }
 
 .simple-footer .footer-bottom {
-    border-top: 1px solid #555;
     padding-top: 1rem;
-    padding-bottom: 0.75rem;
     text-align: center;
     font-size: 0.9rem;
     color: #ccc;
@@ -240,4 +245,8 @@
     .stats-section {
         padding: 2rem 0;
     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-item { animation: none !important; opacity: 1 !important; transform: none !important; }
 }

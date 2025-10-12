@@ -8,9 +8,18 @@
 
     <!-- Фильтры -->
     <div class="filters">
-        <a href="/projects" class="filter-btn {{if not .activeCategory}}active{{end}}">Все проекты</a>
+        <a href="/projects"
+            class="filter-btn {{if not .activeCategory}}active{{end}}"
+            {{if not .activeCategory}}aria-current="page"{{end}}>
+            Все проекты
+        </a>
+
         {{range .categories}}
-        <a href="/projects?category={{.Slug}}" class="filter-btn {{if eq $.activeCategory .Slug}}active{{end}}">{{.Name}}</a>
+            <a href="/projects?category={{.Slug}}"
+            class="filter-btn {{if eq $.activeCategory .Slug}}active{{end}}"
+            {{if eq $.activeCategory .Slug}}aria-current="page"{{end}}>
+            {{.Name}}
+            </a>
         {{end}}
     </div>
 

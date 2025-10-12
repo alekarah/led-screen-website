@@ -48,11 +48,17 @@
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
+    will-change: transform, box-shadow;
 }
 
 .public-project-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.public-project-card:focus-within {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 /* Изображения проектов */
@@ -345,3 +351,27 @@
 
 /* Блокируем прокрутку body, когда модалка открыта */
 body.modal-open { overflow: hidden; }
+
+/* Фильтры: фокус как ховер */
+.filter-btn:focus-visible {
+  outline: none;
+  background: var(--p-brand);
+  color: #fff;
+}
+
+/* Кнопка "Подробнее": фокус как ховер */
+.project-detail-btn:focus-visible {
+  outline: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-project-card,
+  .public-project-image img,
+  .project-detail-btn {
+    transition: none !important;
+  }
+}
