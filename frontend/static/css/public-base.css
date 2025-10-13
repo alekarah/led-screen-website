@@ -201,6 +201,14 @@ footer { flex-shrink: 0; }
     outline-offset: 2px;
 }
 
+/* Кнопка отправки: второй спан скрыт по умолчанию */
+button[type="submit"] .btn-loading { display: none; }
+button[type="submit"].is-loading .btn-text { display: none; }
+button[type="submit"].is-loading .btn-loading { display: inline; }
+
+/* Utilities */
+.hidden { display: none !important; }
+
 @media (prefers-reduced-motion: reduce){
   .logo-icon, .logo-text{ animation: none !important; transition: none !important; }
 }

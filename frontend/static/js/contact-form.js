@@ -110,41 +110,58 @@ async function submitContactForm(data) {
 
 // Инициализация маски для телефона
 function initPhoneMask() {
-    const phoneInput = document.getElementById('phone');
-    if (!phoneInput) return;
-    
-    phoneInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        
-        // Автоматически добавляем +7 если номер начинается с 8
-        if (value.startsWith('8')) {
-            value = '7' + value.slice(1);
-        }
-        
-        // Форматируем номер
-        if (value.startsWith('7')) {
-            value = value.slice(1);
-            if (value.length >= 1) {
-                e.target.value = `+7 (${value.slice(0, 3)}${value.length > 3 ? ') ' + value.slice(3, 6) : ''}${value.length > 6 ? '-' + value.slice(6, 8) : ''}${value.length > 8 ? '-' + value.slice(8, 10) : ''}`;
-            } else {
-                e.target.value = '+7';
-            }
-        } else if (value) {
-            e.target.value = '+7 (' + value.slice(0, 3) + (value.length > 3 ? ') ' + value.slice(3, 6) : '') + (value.length > 6 ? '-' + value.slice(6, 8) : '') + (value.length > 8 ? '-' + value.slice(8, 10) : '');
-        }
-    });
-    
-    // Устанавливаем начальное значение
-    if (!phoneInput.value) {
-        phoneInput.value = '+7';
+  const input = document.getElementById('phone');
+  if (!input) return;
+
+  const PREFIX = '+7';
+
+  // Подставляем +7 только при фокусе, чтобы плейсхолдер был виден
+  input.addEventListener('focus', () => {
+    if (input.value.trim() === '') {
+      input.value = PREFIX + ' ';
+      // курсор в конец
+      requestAnimationFrame(() => {
+        input.selectionStart = input.selectionEnd = input.value.length;
+      });
     }
-    
-    // Не даем удалить +7
-    phoneInput.addEventListener('keydown', function(e) {
-        if (e.target.value.length <= 2 && (e.key === 'Backspace' || e.key === 'Delete')) {
-            e.preventDefault();
-        }
-    });
+  });
+
+  // Если пользователь ничего не ввёл кроме +7 — чистим поле (вернётся плейсхолдер)
+  input.addEventListener('blur', () => {
+    if (input.value.trim() === PREFIX || input.value.trim() === PREFIX + '') {
+      input.value = '';
+    }
+  });
+
+  // Форматирование номера
+  input.addEventListener('input', (e) => {
+    let digits = e.target.value.replace(/\D/g, '');
+
+    // 8 -> 7
+    if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+
+    // Дальше всегда форматируем как +7 (XXX) XXX-XX-XX
+    if (!digits) return;
+
+    if (!digits.startsWith('7')) digits = '7' + digits;
+
+    const rest = digits.slice(1);
+    let out = '+7';
+    if (rest.length) out += ' (' + rest.slice(0, 3);
+    if (rest.length > 3) out += ') ' + rest.slice(3, 6);
+    if (rest.length > 6) out += '-' + rest.slice(6, 8);
+    if (rest.length > 8) out += '-' + rest.slice(8, 10);
+
+    e.target.value = out;
+  });
+
+  // Не даём удалить префикс
+  input.addEventListener('keydown', (e) => {
+    const v = input.value;
+    if ((e.key === 'Backspace' || e.key === 'Delete') && v.startsWith('+7') && input.selectionStart <= 2) {
+      e.preventDefault();
+    }
+  });
 }
 
 // Инициализация live валидации
@@ -272,11 +289,11 @@ function setSubmitState(loading) {
     const btnLoading = submitBtn?.querySelector('.btn-loading');
     
     if (loading) {
-        if (submitBtn) submitBtn.disabled = true;
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.classList.add('is-loading'); }
         if (btnText) btnText.classList.add('hidden');
         if (btnLoading) btnLoading.classList.remove('hidden');
     } else {
-        if (submitBtn) submitBtn.disabled = false;
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.classList.remove('is-loading'); }
         if (btnText) btnText.classList.remove('hidden');
         if (btnLoading) btnLoading.classList.add('hidden');
     }

@@ -19,7 +19,9 @@
   --p-bg-alt:       #f1f3f6;
   --p-line:         #e5e7eb;
   --p-line-soft:    #eeeeee;
+  --p-line-strong:  #cfd6e2;
   --p-hover:        #fafafa;
+
 
   /* Размеры/тени/скругления */
   --p-container:    1200px;

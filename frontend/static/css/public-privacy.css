@@ -1,52 +1,54 @@
-/* Блок политики */
-.privacy-section .privacy-block {
-    max-width: 100%;
-    margin: 2rem auto;
-    background: var(--p-bg);
-    border-radius: var(--p-radius);
-    box-shadow: var(--p-shadow-1);
-    padding: 2.2rem 2.5rem;
-    font-size: 1.12rem;
-    line-height: 1.7;
+/* Политика персональных данных
+   ---------------------------- */
+
+.privacy-section {
+  padding: 3rem 0 5rem;
+  background: var(--p-bg-alt);
 }
 
 .privacy-section .container {
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.privacy-section {
-    padding: 3rem 0 5rem 0;
-    background: #fafbfc;
+/* Карточка с текстом политики внутри секции */
+.privacy-section .privacy-block {
+  max-width: 100%;
+  margin: 2rem auto;
+  background: var(--p-bg);
+  border-radius: var(--p-radius);
+  box-shadow: var(--p-shadow-1);
+  padding: 2.2rem 2.5rem;
+  font-size: 1.12rem;
+  line-height: 1.7;
+  color: var(--p-text-900, #1b1b1b);
 }
 
 .privacy-section h2 {
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    text-align: center;
-    color: #1b1b1b;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  text-align: center;
+  color: var(--p-text-900, #1b1b1b);
 }
 
-.privacy-block {
-    background: #fff;
-    border-radius: 18px;
-    padding: 2rem 1.2rem;
-    max-width: 700px;
-    margin: 0 auto;
-    box-shadow: 0 2px 12px rgba(50,50,50,0.08);
-    color: #222;
-    font-size: 1.09rem;
-    line-height: 1.7;
+/* Читаемость списков */
+.privacy-section .privacy-block ul {
+  margin: 0.75rem 0 1rem;
+  padding-left: 1.25rem;
+}
+.privacy-section .privacy-block li + li {
+  margin-top: 0.4rem;
 }
 
+/* Адаптив */
 @media (max-width: var(--bp-desktop)) { /* 1200 */
-    .privacy-section .container {
-        max-width: 98vw;
-        padding: 0 8px;
-    }
-    .privacy-section .privacy-block { padding: 1.3rem 1.1rem; }
+  .privacy-section .container {
+    max-width: 98vw;
+    padding: 0 8px;
+  }
+  .privacy-section .privacy-block { padding: 1.3rem 1.1rem; }
 }
 
 @media (max-width: var(--bp-phablet)) { /* 640 */
-    .privacy-section .privacy-block { font-size: 1rem; }
+  .privacy-section .privacy-block { font-size: 1rem; }
 }

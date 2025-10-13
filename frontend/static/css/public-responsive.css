@@ -1,256 +1,122 @@
 /* Адаптивные стили для публичной части */
 
-/* Планшеты и маленькие экраны */
-@media (max-width: 768px) {
-    /* Навигация */
-    .nav-container {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 0 1rem;
-    }
-
-    .nav-links {
-        gap: 1rem;
-    }
-
-    /* Основной контент */
-    .main-content {
-        margin-top: 120px;
-        padding: 2rem 0;
-    }
-
-    .container {
-        padding: 0 1rem;
-    }
-
-    /* Заголовки */
-    .section-header h1 {
-        font-size: 2rem;
-    }
-
-    .section-header p {
-        font-size: 1rem;
-    }
-
-    /* Hero секция */
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero p {
-        font-size: 1rem;
-        padding: 0 1rem;
-    }
-
-    /* Проекты */
-    .projects .project-card {
-        max-width: none;
-        width: 100%;
-    }
-
-    /* Фильтры */
-    .filters {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .filter-btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-
-    /* Услуги */
-    .services-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .service-card {
-        padding: 1.5rem;
-    }
-
-    /* Статистика */
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-    }
-
-    .stat-item h3 {
-        font-size: 2rem;
-    }
-
-    .stat-item p {
-        font-size: 1rem;
-    }
-
-    /* Footer */
-    footer {
-        padding: 1.5rem 0;
-    }
-}
-
-/* Мобильные устройства */
-@media (max-width: 480px) {
-    /* Навигация */
-    .nav-container {
-        padding: 0 0.5rem;
-    }
-
-    .logo {
-        font-size: 1.3rem;
-    }
-
-    .nav-links {
-        gap: 0.75rem;
-    }
-
-    .nav-links a {
-        font-size: 0.9rem;
-    }
-
-    /* Основной контент */
-    .main-content {
-        margin-top: 140px;
-        padding: 1.5rem 0;
-    }
-
-    .container {
-        padding: 0 0.75rem;
-    }
-
-    /* Заголовки */
-    .section-header h1 {
-        font-size: 1.8rem;
-    }
-
-    .section-header p {
-        font-size: 0.95rem;
-    }
-
-    /* Hero секция */
-    .hero {
-        padding: 3rem 0;
-    }
-
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .hero p {
-        font-size: 0.95rem;
-    }
-
-    /* Кнопки */
-    .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-
-    /* Проекты */
-    .project-content {
-        padding: 1rem;
-    }
-
-    .project-title {
-        font-size: 1.2rem;
-    }
-
-    .project-size {
-        font-size: 1rem;
-    }
-
-    /* Услуги */
-    .services {
-        padding: 3rem 0;
-    }
-
-    .service-card {
-        padding: 1rem;
-    }
-
-    .service-card h3 {
-        font-size: 1.2rem;
-    }
-
-    /* Статистика */
-    .stats-section {
-        padding: 2rem 0;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .stat-item h3 {
-        font-size: 1.8rem;
-    }
-
-    .stat-item p {
-        font-size: 0.95rem;
-    }
-
-    /* Фильтры */
-    .filter-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-        width: 100%;
-        max-width: 200px;
-        text-align: center;
-    }
-}
-
-/* ======= Global responsive — only site-wide patterns ======= */
-
-/* Tablet and below */
+/* ===== Tablet and below (<= 768) ===== */
 @media (max-width: var(--bp-tablet)) {
-  /* Контейнеры */
-  .container { padding: 0 1rem; }
 
-  /* Шапка/навигация */
-  nav .nav-container { padding: 0 1rem; }
+  /* Шапка / навигация */
+  .nav-container { 
+    flex-direction: column; 
+    gap: 1rem; 
+    padding: 0 1rem; 
+  }
   .nav-links { gap: 1rem; flex-wrap: wrap; }
 
-  /* Общие заголовки секций */
-  .section-header h1 { font-size: clamp(1.8rem, 3.8vw, 2.1rem); }
-  .section-header p  { font-size: 1.05rem; }
+  /* Контейнеры / отступы */
+  .container { padding: 0 1rem; }
 
-  /* Глобальные кнопки */
-  .btn { padding: 10px 22px; }
+  /* Основной контент */
+  .main-content { 
+    margin-top: 120px;
+    padding: 2rem 0;
+  }
 
-  /* Основной контент — чуть меньше вертикальных полей */
-  .main-content { padding: 2rem 0; }
-}
+  /* Заголовки секций */
+  .section-header h1 { font-size: 2rem; }
+  .section-header p  { font-size: 1rem; }
 
-/* Mobile and below */
-@media (max-width: var(--bp-mobile)) {
-  /* Лого в шапке */
-  .logo-icon { height: 24px; width: 18px; }
-  .logo-text { font-size: 1.45rem; }
+  /* Hero */
+  .hero h1 { font-size: 2.5rem; }
+  .hero p  { font-size: 1rem; padding: 0 1rem; }
 
-  /* Навигация */
-  .nav-links { gap: .75rem; }
+  /* Проекты */
+  .projects .project-card { max-width: none; width: 100%; }
 
-  /* Контейнеры и отступы */
-  .container { padding: 0 .75rem; }
-  .section-header { margin-bottom: 2rem; }
-  .section-header p { font-size: 1rem; }
+  /* Фильтры проектов */
+  .filters { 
+    flex-direction: column; 
+    align-items: center; 
+    gap: .75rem; 
+  }
+  .filter-btn { padding: .6rem 1.2rem; font-size: .9rem; }
 
-  /* Кнопки */
-  .btn { padding: 9px 18px; }
-}
+  /* Услуги */
+  .services-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .service-card  { padding: 1.5rem; }
 
-/* Универсальные утилиты */
-@media (max-width: var(--bp-tablet)){
+  /* Статистика */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .stat-item h3 { font-size: 2rem; }
+  .stat-item p  { font-size: 1rem; }
+
+  /* Footer */
+  footer { padding: 1.5rem 0; }
+
+  /* Утилита */
   .stack-md { display: grid; gap: 12px; }
 }
-@media (max-width: var(--bp-mobile)){
+
+/* ===== Mobile and below (<= 480) ===== */
+@media (max-width: var(--bp-mobile)) {
+
+  /* Лого и навигация */
+  .logo-icon { height: 24px; width: 18px; }
+  .logo-text { font-size: 1.45rem; }
+  .nav-links { gap: .75rem; }
+  .nav-links a { font-size: .9rem; }
+
+  /* Контейнеры / отступы */
+  .container { padding: 0 .75rem; }
+
+  /* Основной контент */
+  .main-content { 
+    margin-top: 140px;
+    padding: 1.5rem 0; 
+  }
+
+  /* Заголовки секций */
+  .section-header { margin-bottom: 2rem; }
+  .section-header h1 { font-size: 1.8rem; }
+  .section-header p  { font-size: .95rem; }
+
+  /* Hero */
+  .hero       { padding: 3rem 0; }
+  .hero h1    { font-size: 2rem; }
+  .hero p     { font-size: .95rem; }
+
+  /* Кнопки */
+  .btn { padding: 10px 20px; font-size: .9rem; }
+
+  /* Карточки проектов */
+  .project-content { padding: 1rem; }
+  .project-title   { font-size: 1.2rem; }
+  .project-size    { font-size: 1rem; }
+
+  /* Услуги */
+  .services    { padding: 3rem 0; }
+  .service-card { padding: 1rem; }
+  .service-card h3 { font-size: 1.2rem; }
+
+  /* Статистика */
+  .stats-section { padding: 2rem 0; }
+  .stats-grid    { grid-template-columns: 1fr; gap: 1rem; }
+  .stat-item h3  { font-size: 1.8rem; }
+  .stat-item p   { font-size: .95rem; }
+
+  /* Фильтры проектов */
+  .filter-btn { 
+    padding: .5rem 1rem; 
+    font-size: .85rem; 
+    width: 100%; 
+    max-width: 200px; 
+    text-align: center; 
+  }
+
+  /* Утилита */
   .hide-sm { display: none !important; }
 }
 
-/* === Global responsive from Home (глобальный контейнер на мобайле) === */
-@media (max-width: 700px){
+/* ===== Special: global 700px container stretch ===== */
+@media (max-width: 700px) {
   .container{
     padding: 0 .5rem;
     width: 100vw;
@@ -258,9 +124,4 @@
     margin: 0 auto;
     box-sizing: border-box;
   }
-}
-
-@media (max-width: var(--bp-mobile)){
-  .logo-icon { height: 24px; width: 18px; }
-  .logo-text { font-size: 1.45rem; }
 }

@@ -58,13 +58,16 @@
             <form id="contactForm" class="contact-form" method="post" action="/api/contact">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="name">Имя *</label>
-                        <input type="text" id="name" name="name" required>
+                        <label for="name">Имя <span aria-hidden="true">*</span></label>
+                        <input id="name" name="name" type="text"
+                            required autocomplete="name"
+                            placeholder="Ваше имя">
                     </div>
                     
                     <div class="form-group">
-                        <label for="phone">Телефон *</label>
-                        <input type="tel" id="phone" name="phone" required 
+                        <label for="phone">Телефон <span aria-hidden="true">*</span></label>
+                        <input id="phone" name="phone" type="tel"
+                            required inputmode="tel" autocomplete="tel"
                             placeholder="+7 (___) ___-__-__">
                     </div>
                 </div>
@@ -72,14 +75,16 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" 
-                            placeholder="example@email.com">
+                        <input id="email" name="email" type="email"
+                            autocomplete="email"
+                            placeholder="name@example.com">
                     </div>
                     
                     <div class="form-group">
                         <label for="company">Компания</label>
-                        <input type="text" id="company" name="company" 
-                            placeholder="Название организации">
+                        <input id="company" name="company" type="text"
+                            autocomplete="organization"
+                            placeholder="Название компании">
                     </div>
                 </div>
                 
@@ -102,6 +107,9 @@
                             placeholder="Опишите ваш проект, размеры экрана, место установки и другие детали..."></textarea>
                 </div>
                 
+                <!-- Лайв-область для сообщений отправки -->
+                <p id="form-status" class="visually-hidden" aria-live="polite"></p>
+
                 <!-- Согласие на обработку данных -->
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label">
@@ -159,7 +167,7 @@
 
 <!-- Модалка успешной отправки -->
 <div id="contact-success-modal" class="modal-overlay hidden" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="contactSuccessTitle">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="contactSuccessTitle" tabindex="-1">
         <button class="modal-close" type="button" aria-label="Закрыть">&times;</button>
 
         <div class="modal-header">
