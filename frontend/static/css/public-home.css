@@ -43,8 +43,7 @@
     color: var(--p-text-700);
 }
 
-.services-grid {
-    display: grid;
+.home-services .services-grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
@@ -71,7 +70,6 @@
 .service-card p {
     color: var(--p-text-500);
     line-height: 1.6;
-    margin-bottom: 0.5rem;
 }
 
 /* Проекты на главной странице */
@@ -184,54 +182,4 @@
     transform: translateY(-2px) scale(1.04);
     color: #fff;
     text-decoration: none;
-}
-
-/* Адаптивность */
-@media (max-width: var(--bp-laptop)) { /* 1024 */
-    .home-projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-        justify-content: center;
-        gap: 1.5rem;
-    }
-
-    .home-project-card:nth-child(3) {
-        grid-column: 1 / span 2;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-@media (max-width: var(--bp-tablet)) { /* 768 */
-    .home-projects-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 1.2rem !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    .home-project-card {
-        max-width: 250px !important;
-        width: 95vw !important;
-        margin: 0 auto 1.2rem auto !important;
-    }
-    .project-image-rect {
-        width: 100% !important;
-        max-width: 220px !important;
-        min-width: 180px;
-        height: calc(90vw * 0.68) !important;
-        max-height: 150px !important;
-        min-height: 120px !important;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-project-card,
-  .service-card {
-    transition: none !important;
-  }
-  .home-project-card:hover,
-  .service-card:hover {
-    transform: none !important;
-  }
 }

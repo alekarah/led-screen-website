@@ -39,16 +39,3 @@
 .privacy-section .privacy-block li + li {
   margin-top: 0.4rem;
 }
-
-/* Адаптив */
-@media (max-width: var(--bp-desktop)) { /* 1200 */
-  .privacy-section .container {
-    max-width: 98vw;
-    padding: 0 8px;
-  }
-  .privacy-section .privacy-block { padding: 1.3rem 1.1rem; }
-}
-
-@media (max-width: var(--bp-phablet)) { /* 640 */
-  .privacy-section .privacy-block { font-size: 1rem; }
-}

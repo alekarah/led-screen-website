@@ -209,6 +209,8 @@ button[type="submit"].is-loading .btn-loading { display: inline; }
 /* Utilities */
 .hidden { display: none !important; }
 
-@media (prefers-reduced-motion: reduce){
-  .logo-icon, .logo-text{ animation: none !important; transition: none !important; }
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }

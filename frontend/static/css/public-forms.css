@@ -212,20 +212,3 @@
   from{ transform:translateY(10px); opacity:0; }
   to{   transform:translateY(0);   opacity:1; }
 }
-
-/* Адаптив */
-@media (max-width: var(--bp-tablet)){ /* 768 */
-  .form-row{ grid-template-columns:1fr; gap:.75rem; }
-  .form-group{ margin-bottom:.75rem; }
-  .form-group :is(input, textarea, select){
-    padding:.65rem; font-size:.95rem;
-  }
-  .btn-large{ padding:.875rem 1.5rem; font-size:1rem; }
-}
-@media (max-width: var(--bp-mobile)){ /* 480 */
-  .form-group :is(input, textarea, select){
-    padding:.6rem; font-size:.9rem;
-  }
-  .checkbox-label, .radio-label{ font-size:.85rem; }
-  .btn-large{ padding:.75rem 1rem; font-size:.95rem; }
-}

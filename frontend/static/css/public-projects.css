@@ -179,55 +179,6 @@
     flex: 1;
 }
 
-/* Адаптивность */
-@media (max-width: 1190px) {
-    .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .projects-grid > .public-project-card:nth-last-child(1):nth-child(odd) {
-        grid-column: 1 / -1;
-        justify-self: center;
-    }
-}
-
-@media (max-width: 900px) {
-    .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .public-project-card {
-        width: 100%;
-        max-width: 350px;
-    }
-    .project-modal__dialog {
-        grid-template-columns: 1fr;
-        width: min(760px, 96vw);
-        max-height: 92vh;
-    }
-    .project-modal__media {
-        height: 42vh;
-        background: #111;
-    }
-}
-
-@media (max-width: 600px) {
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-    .public-project-card {
-        width: 98vw;
-        max-width: 98vw;
-    }
-    .public-project-image {
-        aspect-ratio: 4 / 3;
-        max-width: 350px;
-        margin: 0 auto;
-    }
-    .projects-grid > .public-project-card {
-        grid-column: auto !important;
-        justify-self: stretch;
-    }
-}
-
 /* === Project Modal (общие стили) === */
 .project-modal {
     position: fixed;
@@ -366,12 +317,4 @@ body.modal-open { overflow: hidden; }
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   color: #fff;
   text-decoration: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .public-project-card,
-  .public-project-image img,
-  .project-detail-btn {
-    transition: none !important;
-  }
 }
