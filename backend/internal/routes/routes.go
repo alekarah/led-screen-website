@@ -2,6 +2,7 @@ package routes
 
 import (
 	"ledsite/internal/handlers"
+	"ledsite/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,10 +31,16 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.POST("/track/project-view/:id", h.TrackProjectView)
 	}
 
-	// Админка
+	// Публичные роуты админки (без авторизации)
+	router.GET("/admin/login", h.ShowLoginPage)
+	router.POST("/admin/login", h.Login)
+
+	// Админка (защищённые роуты)
 	admin := router.Group("/admin")
+	admin.Use(middleware.AuthMiddleware()) // Применяем middleware для всех роутов ниже
 	{
 		admin.GET("/", h.AdminDashboard)
+		admin.GET("/logout", h.Logout)
 
 		// Проекты
 		pr := admin.Group("/projects")

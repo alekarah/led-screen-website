@@ -33,12 +33,29 @@ html, body {
   list-style: none;
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 .nav-links a {
   color: #fff;
   text-decoration: none;
 }
 .nav-links a:hover { text-decoration: underline; }
+
+/* Кнопка Выход прибита к правому краю */
+.nav-links li:last-child {
+  margin-left: auto;
+}
+
+.logout-link {
+  padding: 0.4rem 0.8rem;
+  background: rgba(217, 48, 37, 0.8);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.logout-link:hover {
+  background: var(--danger) !important;
+  text-decoration: none !important;
+}
 
 /* Кнопки */
 .btn{

@@ -119,3 +119,15 @@ type ProjectViewDaily struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+// Admin - администраторы системы для доступа к админ-панели
+type Admin struct {
+	ID           uint       `json:"id" gorm:"primaryKey"`
+	Username     string     `json:"username" gorm:"unique;not null;size:50"`
+	PasswordHash string     `json:"-" gorm:"not null"` // "-" означает не выводить в JSON
+	Email        string     `json:"email" gorm:"size:100"`
+	IsActive     bool       `json:"is_active" gorm:"default:true"`
+	LastLoginAt  *time.Time `json:"last_login_at"`
+	CreatedAt    time.Time  `json:"created_at"`
+	UpdatedAt    time.Time  `json:"updated_at"`
+}
