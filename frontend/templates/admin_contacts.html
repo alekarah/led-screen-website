@@ -55,61 +55,63 @@
       <span id="bulk-count" class="muted" style="margin-left:8px;">Выбрано: 0</span>
     </div>
 
-    <table class="table contacts-table">
-      {{template "contacts-table-head-inbox" .}}
+    <div class="table-wrapper">
+      <table class="table contacts-table">
+        {{template "contacts-table-head-inbox" .}}
 
-      <tbody>
-        {{if .contactsAll}}
-          {{range .contactsAll}}
-            <tr data-id="{{.ID}}">
-              <td class="col-select">
-                <input type="checkbox" class="row-select" value="{{.ID}}" aria-label="Выбрать заявку {{.ID}}">
-              </td>
+        <tbody>
+          {{if .contactsAll}}
+            {{range .contactsAll}}
+              <tr data-id="{{.ID}}">
+                <td class="col-select">
+                  <input type="checkbox" class="row-select" value="{{.ID}}" aria-label="Выбрать заявку {{.ID}}">
+                </td>
 
-              <td>{{.Name}}</td>
+                <td>{{.Name}}</td>
 
-              <td>
-                {{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}
-                <div style="color:#777;">{{.Email}}</div>
-              </td>
+                <td>
+                  {{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}
+                  <div style="color:#777;">{{.Email}}</div>
+                </td>
 
-              <td>{{.Company}}</td>
-              <td>{{.ProjectType}}</td>
+                <td>{{.Company}}</td>
+                <td>{{.ProjectType}}</td>
 
-              <td class="status-cell">
-                {{if eq .Status "processed"}}
-                  <span class="badge badge-ok">Обработано</span>
-                {{else if eq .Status "archived"}}
-                  <span class="badge">В архиве</span>
-                {{else}}
-                  <button class="btn btn-small mark-done" type="button">Обработать</button>
-                {{end}}
-              </td>
+                <td class="status-cell">
+                  {{if eq .Status "processed"}}
+                    <span class="badge badge-ok">Обработано</span>
+                  {{else if eq .Status "archived"}}
+                    <span class="badge">В архиве</span>
+                  {{else}}
+                    <button class="btn btn-small mark-done" type="button">Обработать</button>
+                  {{end}}
+                </td>
 
-              <td class="actions">
-                <button
-                  class="btn btn-small js-contact-details"
-                  type="button"
-                  data-id="{{.ID}}"
-                  data-name="{{.Name}}"
-                  data-phone="{{.Phone}}"
-                  data-email="{{.Email}}"
-                  data-company="{{.Company}}"
-                  data-type="{{.ProjectType}}"
-                  data-message="{{.Message}}"
-                  data-date="{{fmtTime .CreatedAt}}"
-                  data-status="{{.Status}}"
-                  data-remind-at='{{with .RemindAt}}{{.Format "2006-01-02T15:04"}}{{end}}'
-                  data-remind-flag='{{.RemindFlag}}'
-                >Подробнее</button>
-              </td>
-            </tr>
+                <td class="actions">
+                  <button
+                    class="btn btn-small js-contact-details"
+                    type="button"
+                    data-id="{{.ID}}"
+                    data-name="{{.Name}}"
+                    data-phone="{{.Phone}}"
+                    data-email="{{.Email}}"
+                    data-company="{{.Company}}"
+                    data-type="{{.ProjectType}}"
+                    data-message="{{.Message}}"
+                    data-date="{{fmtTime .CreatedAt}}"
+                    data-status="{{.Status}}"
+                    data-remind-at='{{with .RemindAt}}{{.Format "2006-01-02T15:04"}}{{end}}'
+                    data-remind-flag='{{.RemindFlag}}'
+                  >Подробнее</button>
+                </td>
+              </tr>
+            {{end}}
+          {{else}}
+            <tr><td colspan="7" style="color:#777;">Пока нет заявок</td></tr>
           {{end}}
-        {{else}}
-          <tr><td colspan="7" style="color:#777;">Пока нет заявок</td></tr>
-        {{end}}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Пагинация -->

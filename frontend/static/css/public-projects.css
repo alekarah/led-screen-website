@@ -33,7 +33,6 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
     margin-bottom: 3rem;
-    justify-items: center;
     justify-content: center;
 }
 
@@ -49,6 +48,7 @@
     display: flex;
     flex-direction: column;
     will-change: transform, box-shadow;
+    justify-self: center;
 }
 
 .public-project-card:hover {
@@ -317,4 +317,65 @@ body.modal-open { overflow: hidden; }
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   color: #fff;
   text-decoration: none;
+}
+
+/* Кнопка "Смотреть еще" */
+.load-more-container {
+  display: none;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Классы для центрирования неполных рядов (управляются JS) */
+.js-center-single-3col {
+  grid-column: 2 / 3 !important;
+}
+
+.js-center-double-3col-first {
+  justify-self: end !important;
+  margin-right: 0.625rem !important;
+}
+
+.js-center-double-3col-second {
+  justify-self: start !important;
+  margin-left: 0.625rem !important;
+}
+
+.js-center-single-2col {
+  grid-column: span 2 !important;
+  justify-self: center !important;
+}
+
+.load-more-btn {
+  background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
+  color: #fff !important;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none !important;
+  padding: 0.9em 2.1em;
+  border-radius: 26px;
+  box-shadow: 0 2px 18px rgba(102,126,234,0.11);
+  transition: background 0.25s, transform 0.17s, box-shadow 0.25s;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+}
+
+.load-more-btn:hover {
+  background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px) scale(1.04);
+  color: #fff !important;
+  text-decoration: none;
+  border: none !important;
+}
+
+.load-more-btn:active {
+  transform: translateY(0);
+  background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
+}
+
+.load-more-btn:focus-visible {
+  outline: 2px solid var(--p-brand);
+  outline-offset: 3px;
 }

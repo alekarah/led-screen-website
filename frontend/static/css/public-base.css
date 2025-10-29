@@ -33,12 +33,14 @@ nav {
 }
 
 .nav-container {
+    width: 100%;
     max-width: var(--p-container);
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
+    box-sizing: border-box;
 }
 
 /* Логотип */
@@ -142,9 +144,11 @@ nav {
 }
 
 .container {
+    width: 100%;
     max-width: var(--p-container);
     margin: 0 auto;
     padding: 0 2rem;
+    box-sizing: border-box;
 }
 
 /* Заголовки секций */

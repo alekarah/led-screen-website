@@ -1,13 +1,59 @@
 /* Адаптивные стили для публичной части */
 
+/* Большие экраны (< 1300px) */
+@media (max-width: 1300px) {
+  /* Контейнеры немного уже */
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Средние десктопы (< 1200px) */
 @media (max-width: 1200px) {
+  /* Контейнеры */
+  .container {
+    max-width: 1000px;
+    padding: 0 1.5rem;
+  }
+
   /* Проекты */
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
-  .projects-grid > .public-project-card:nth-last-child(1):nth-child(odd) {
+
+  /* Проекты на главной */
+  .home-projects-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  /* Услуги на главной - центрирование и выравнивание */
+  .home-services .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+    align-items: stretch;
+    justify-items: center;
+  }
+
+  .home-services .services-grid .service-card:first-child {
     grid-column: 1 / -1;
     justify-self: center;
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .home-services .services-grid .service-card:nth-child(2),
+  .home-services .services-grid .service-card:nth-child(3) {
+    width: 100%;
+    max-width: 450px;
+  }
+
+  /* Услуги */
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 1.75rem;
   }
 
   /* Приватность */
@@ -15,34 +61,65 @@
     max-width: 98vw;
     padding: 0 8px;
   }
-  .privacy-section .privacy-block { padding: 1.3rem 1.1rem; }
+  .privacy-section .privacy-block {
+    padding: 1.3rem 1.1rem;
+  }
 }
 
-@media (max-width: 1024px) {
-  /* Главная */
-  .home-services .services-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
-    justify-items: center;
-    grid-auto-flow: row dense;
+/* Маленькие десктопы (< 1100px) */
+@media (max-width: 1100px) {
+  /* Главная - услуги (все одинаковой ширины) */
+  .home-services .services-grid .service-card {
+    max-width: 420px;
   }
+
   .home-services .services-grid .service-card:first-child {
-    grid-column: 1 / -1;
-    justify-self: center;
-    max-width: 560px;
-    width: 100%;
+    max-width: 420px;
   }
+
   .home-services .services-grid .service-card:nth-child(2),
   .home-services .services-grid .service-card:nth-child(3) {
-    width: 100%;
-    max-width: 520px;
+    max-width: 420px;
+  }
+
+  /* Карточки проектов */
+  .public-project-card {
+    max-width: 420px;
+  }
+}
+
+/* Планшеты большие (< 1024px) */
+@media (max-width: 1024px) {
+  /* Контейнеры */
+  .container {
+    max-width: 960px;
+    padding: 0 1.25rem;
+  }
+
+  /* Главная - услуги (все одинаковой ширины) */
+  .home-services .services-grid .service-card {
+    max-width: 380px;
+  }
+
+  .home-services .services-grid .service-card:first-child {
+    max-width: 380px;
+  }
+
+  .home-services .services-grid .service-card:nth-child(2),
+  .home-services .services-grid .service-card:nth-child(3) {
+    max-width: 380px;
   }
 
   /* Услуги */
-    .cta-content p {
-        white-space: normal;
-        max-width: 600px;
-    }
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .cta-content p {
+    white-space: normal;
+    max-width: 600px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -56,14 +133,16 @@
     display: none;
   }
 
-  /* Проекты */
+  /* Проекты - 2 колонки с меньшими карточками */
   .projects-grid {
-    grid-template-columns: 1fr;;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
   }
   .public-project-card {
     width: 100%;
-    max-width: 350px;
+    max-width: 320px;
   }
+
   .project-modal__dialog {
     grid-template-columns: 1fr;
     width: min(760px, 96vw);
@@ -121,10 +200,37 @@
   .projects .project-card { max-width: none; width: 100%; }
 
   /* Фильтры проектов */
-  .filters { 
-    gap: .75rem; 
+  .filters {
+    gap: .75rem;
   }
   .filter-btn { padding: .6rem 1.2rem; font-size: .9rem; }
+
+  /* Проекты - 1 колонка */
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  .public-project-card {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  /* Услуги на главной - одна колонка, 600px ширина */
+  .home-services .services-grid {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    justify-items: center;
+  }
+
+  .home-services .services-grid .service-card {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .home-services .services-grid .service-card:first-child, 
+  .home-services .services-grid .service-card:nth-child(2),
+  .home-services .services-grid .service-card:nth-child(3) {
+    max-width: 600px;
+  }
 
   /* Услуги */
   .services { padding: 3rem 0; }
@@ -230,16 +336,75 @@
 }
 
 @media (max-width: 600px) {
-  /* Главная */
-  .home-services .services-grid {
-    grid-template-columns: 1fr;
+  /* Все сетки с minmax на 1 колонку */
+  .home-services .services-grid,
+  .services-grid,
+  .contact-cards,
+  .info-blocks,
+  .screen-types {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Карточки услуг - 100% ширины */
+  .home-services .services-grid .service-card {
+    max-width: 100%;
+  }
+
+  .home-services .services-grid .service-card:first-child {
+    max-width: 100%;
   }
 }
 
 @media (max-width: 480px) {
+  /* ВАЖНО: Все сетки переводим на 1 колонку */
+  .home-services .services-grid,
+  .services-grid,
+  .contact-cards,
+  .info-blocks,
+  .screen-types,
+  .stats-grid,
+  .home-projects-grid,
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   /* Главная */
-  .projects { padding: 2rem 0 3rem; }
-  .projects h2 { font-size: 1.7rem; margin-bottom: 1.6rem; }
+  .projects {
+    padding: 1.5rem 0 1.5rem;
+  }
+  .projects h2 {
+    font-size: 1.7rem;
+    margin-bottom: 1.6rem;
+  }
+
+  /* Кнопка "Смотреть все проекты" - меньше отступы */
+  .projects > .container > div:last-child {
+    margin-top: 1rem !important;
+  }
+
+  .see-all-projects-btn {
+    margin-top: 0 !important;
+  }
+
+  /* Карточки проектов главной - на всю ширину */
+  .home-project-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Карточки портфолио - сохраняем фиксированную ширину */
+  .public-project-card {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  /* Изображения в карточках */
+  .project-image-rect {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+  }
+
   .home-project-card h3 { font-size: 1.1rem; }
   .projects .project-size { font-size: 1rem; }
   .home-project-card p { font-size: .95rem; }
@@ -247,6 +412,7 @@
   /* Лого и навигация */
   .logo-icon { height: 24px; width: 18px; }
   .logo-text { font-size: 1.45rem; }
+  .nav-container { padding: 0 .75rem; }
   .nav-links { gap: .75rem; }
   .nav-links a { font-size: .9rem; }
 
@@ -290,12 +456,16 @@
   .stat-item p   { font-size: .95rem; }
 
   /* Фильтры проектов */
-  .filter-btn { 
-    padding: .5rem 1rem; 
-    font-size: .85rem; 
-    width: 100%; 
-    max-width: 200px; 
-    text-align: center; 
+  .filters {
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    padding: .5rem .85rem;
+    font-size: .85rem;
+    width: auto;
+    flex: 0 1 auto;
+    text-align: center;
   }
 
   /* Утилита */
@@ -350,12 +520,31 @@
   .screen-types-section,
   .cta-section { padding: 3rem 0; }
   .cta-content h2 { font-size: 1.8rem; }
-  .cta-buttons { max-width: 280px; }
+  .cta-buttons {
+    max-width: 100%;
+    width: 100%;
+  }
   .cta-buttons .btn {
-    min-width: 200px;
-    max-width: 260px;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
     font-size: 0.9rem;
     padding: 0.875rem 1.5rem;
+  }
+}
+
+/* Очень маленькие экраны (≤375px) - iPhone SE и меньше */
+@media (max-width: 375px) {
+  /* Карточки портфолио - на всю ширину */
+  .public-project-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Фильтры */
+  .filter-btn {
+    padding: .45rem .75rem;
+    font-size: .8rem;
   }
 }
 

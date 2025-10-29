@@ -24,14 +24,14 @@
     </div>
 
     <!-- Сетка проектов -->
-    <div class="projects-grid">
+    <div class="projects-grid" id="projectsGrid">
         {{range .projects}}
         <div class="public-project-card">
             <div class="public-project-image">
                 {{if .Images}}
                     {{$firstImage := index .Images 0}}
-                    <img src="/static/uploads/{{$firstImage.Filename}}" 
-                        alt="{{.Title}}" 
+                    <img src="/static/uploads/{{$firstImage.Filename}}"
+                        alt="{{.Title}}"
                         loading="lazy"
                         style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}})
                                         translate({{mul (sub $firstImage.CropX 50) 2}}%, {{mul (sub $firstImage.CropY 50) 2}}%);
@@ -58,10 +58,15 @@
                         data-project-slug="{{.Slug}}">
                         Подробнее
                     </a>
-                </div>    
+                </div>
             </div>
         </div>
         {{end}}
+    </div>
+
+    <!-- Кнопка "Смотреть еще" -->
+    <div class="load-more-container" id="loadMoreContainer">
+        <button class="btn load-more-btn" id="loadMoreBtn">Смотреть еще</button>
     </div>
 </div>
 {{end}}
@@ -90,8 +95,4 @@
         </div>
     </div>
 </section>
-{{end}}
-
-{{define "extra-js"}}
-<script src="/static/js/project-modal.js" defer></script>
 {{end}}
