@@ -51,34 +51,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const visibleCount = visibleCards.length;
     const lastRowCount = visibleCount % columns;
 
-    console.log('Ширина:', window.innerWidth);
-    console.log('Колонок:', columns);
-    console.log('Видимых карточек:', visibleCount);
-    console.log('В последнем ряду:', lastRowCount);
-
     if (lastRowCount > 0 && columns > 1) {
       const firstInLastRow = visibleCount - lastRowCount;
-      console.log('Центрируем от индекса:', firstInLastRow);
 
       if (columns === 3) {
         // 3 колонки
         if (lastRowCount === 1) {
           // Одна карточка - во вторую колонку
           visibleCards[firstInLastRow].classList.add('js-center-single-3col');
-          console.log('1 карточка в 3 колонках - центр');
         } else if (lastRowCount === 2) {
           // Две карточки - центрируем
           visibleCards[firstInLastRow].classList.add('js-center-double-3col-first');
           visibleCards[firstInLastRow + 1].classList.add('js-center-double-3col-second');
-          console.log('2 карточки в 3 колонках - центр');
         }
       } else if (columns === 2 && lastRowCount === 1) {
         // 2 колонки, одна карточка - span на обе колонки и центр
         visibleCards[firstInLastRow].classList.add('js-center-single-2col');
-        console.log('1 карточка в 2 колонках - центр');
       }
-    } else {
-      console.log('Центрирование не требуется');
     }
 
     // Показать/скрыть кнопку

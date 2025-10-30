@@ -6,6 +6,28 @@
   .container {
     max-width: 1140px;
   }
+
+  /* Типы LED экранов - 2 колонки вместо 4 */
+  .screen-types {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+
+  .screen-type {
+    max-width: 400px;
+    width: 100%;
+  }
+
+  /* Контактные карточки - 2 колонки вместо 4 */
+  .contact-cards {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+
+  .contact-card {
+    max-width: 400px;
+    width: 100%;
+  }
 }
 
 /* Средние десктопы (< 1200px) */
@@ -26,6 +48,47 @@
   .home-projects-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 2rem;
+  }
+
+  /* Услуги - уменьшаем отступы */
+  .services-main {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .screen-types-section {
+    padding: 3rem 0;
+  }
+
+  .screen-types-section h2 {
+    margin-bottom: 2.5rem;
+  }
+
+  .process-section {
+    padding: 3rem 0;
+  }
+
+  .process-section h2 {
+    margin-bottom: 2.5rem;
+  }
+
+  .cta-section {
+    padding: 3rem 0;
+  }
+
+  /* Контакты - блоки "Быстрый старт" и тд */
+  .info-blocks {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+
+  .info-block {
+    max-width: 450px;
+    width: 100%;
+  }
+
+  .info-block:first-child {
+    grid-column: 1 / -1;
+    max-width: 500px;
   }
 
   /* Услуги на главной - центрирование и выравнивание */
@@ -69,14 +132,8 @@
 /* Маленькие десктопы (< 1100px) */
 @media (max-width: 1100px) {
   /* Главная - услуги (все одинаковой ширины) */
-  .home-services .services-grid .service-card {
-    max-width: 420px;
-  }
-
-  .home-services .services-grid .service-card:first-child {
-    max-width: 420px;
-  }
-
+  .home-services .services-grid .service-card,
+  .home-services .services-grid .service-card:first-child,
   .home-services .services-grid .service-card:nth-child(2),
   .home-services .services-grid .service-card:nth-child(3) {
     max-width: 420px;
@@ -97,14 +154,8 @@
   }
 
   /* Главная - услуги (все одинаковой ширины) */
-  .home-services .services-grid .service-card {
-    max-width: 380px;
-  }
-
-  .home-services .services-grid .service-card:first-child {
-    max-width: 380px;
-  }
-
+  .home-services .services-grid .service-card,
+  .home-services .services-grid .service-card:first-child,
   .home-services .services-grid .service-card:nth-child(2),
   .home-services .services-grid .service-card:nth-child(3) {
     max-width: 380px;
@@ -114,6 +165,30 @@
   .services-grid {
     grid-template-columns: repeat(2, minmax(260px, 1fr));
     gap: 1.5rem;
+  }
+
+  .services-main {
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  .screen-types-section {
+    padding: 2.5rem 0;
+  }
+
+  .screen-types-section h2 {
+    margin-bottom: 2rem;
+  }
+
+  .process-section {
+    padding: 2.5rem 0;
+  }
+
+  .process-section h2 {
+    margin-bottom: 2rem;
+  }
+
+  .cta-section {
+    padding: 2.5rem 0;
   }
 
   .cta-content p {
@@ -179,7 +254,13 @@
   .nav-links { gap: 1rem; flex-wrap: wrap; }
 
   /* Контейнеры / отступы */
-  .container { padding: 0 1rem; }
+  .container {
+    padding: 0 1rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
 
   /* Основной контент */
   .main-content { 
@@ -235,8 +316,33 @@
   /* Услуги */
   .services { padding: 3rem 0; }
   .services h2 { font-size: 2rem; margin-bottom: 2rem; }
-  .services-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .service-card { padding: 1.25rem; }
+
+  /* Страница услуг - уменьшаем отступы и заголовки */
+  .services-main {
+    padding: 1rem 0 2rem;
+  }
+
+  .screen-types-section {
+    padding: 2rem 0;
+  }
+
+  .screen-types-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .process-section {
+    padding: 2rem 0;
+  }
+
+  .process-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-section {
+    padding: 2rem 0;
+  }
 
   /* Статистика */
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
@@ -250,11 +356,36 @@
   .stack-md { display: grid; gap: 12px; }
 
   /* Контакты */
-  .contact-cards { grid-template-columns: 1fr;}
+  .contact-cards {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .contact-card {
+    padding: 1.5rem;
+    max-width: 480px;
+    width: 100%;
+  }
+
   .contact-form-section { padding: 2rem 1rem;}
-  .contact-card {padding: 1.5rem;}  .additional-info-section { padding: 2rem 0;}
-  .info-blocks { grid-template-columns: 1fr; gap: 1.5rem;} 
-  .info-block { padding: 1.5rem; }
+
+  .additional-info-section { padding: 2rem 0;}
+
+  .info-blocks {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    justify-items: center;
+  }
+
+  .info-block {
+    padding: 1.5rem;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .info-block:first-child {
+    grid-column: auto;
+  }
 
     /* Футер */
   .footer-content {
@@ -263,14 +394,8 @@
     gap: 1.5rem;
     margin-bottom: 1rem;
   }
-  .simple-footer { padding: 1.5rem 0;} 
-  .footer-info h3 { font-size: 1.1rem; }    
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }   
-  .stat-item h3 { font-size: 2rem; }    
-  .stat-item p { font-size: 1rem; }
+  .simple-footer { padding: 1.5rem 0;}
+  .footer-info h3 { font-size: 1.1rem; }
   .stats-section { padding: 2.5rem 0;}
 
   .form-row{ grid-template-columns:1fr; gap:.75rem; }
@@ -321,21 +446,8 @@
   }
 }
 
-@media (max-width: 700px) {
-  .container{
-    padding: 0 .75rem;
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
-}
-
-@media (max-width: 640px) {
-  .privacy-section .privacy-block { font-size: 1rem; }
-}
-
 @media (max-width: 600px) {
+  .privacy-section .privacy-block { font-size: 1rem; }
   /* Все сетки с minmax на 1 колонку */
   .home-services .services-grid,
   .services-grid,
@@ -421,12 +533,11 @@
 
   /* Основной контент */
   .main-content { 
-    margin-top: 140px;
     padding: 1.5rem 0; 
   }
 
   /* Заголовки секций */
-  .section-header { margin-bottom: 2rem; }
+  .section-header { margin-bottom: 1.5rem; }
   .section-header h1 { font-size: 1.8rem; }
   .section-header p  { font-size: .95rem; }
 
@@ -473,30 +584,40 @@
 
   /* Контакты */
   .contact-icon { font-size: 2rem; }
-  .contact-card { padding: 1rem;}
-  .contact-form-section { padding: 1.5rem 1rem; }
+
+  .contact-info-section {
+    margin-bottom: 2rem;
+  }
+
+  .contact-card {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .contact-form-section {
+    padding: 1.5rem 1rem;
+    margin-bottom: 2rem;
+  }
+
   .contact-form .btn-large { width: 100%; }
-  .info-block { padding: 1rem;}
+
+  .info-block {
+    padding: 1rem;
+    max-width: 100%;
+  }
 
   /* Футер */
-  .footer-content { gap: 1rem; }    
-  .footer-info h3 { font-size: 1rem; }    
+  .footer-content { gap: 1rem; }
+  .footer-info h3 { font-size: 1rem; }
   .footer-info p,
-  .footer-contact p { font-size: 0.9rem; }    
+  .footer-contact p { font-size: 0.9rem; }
   .footer-bottom {
     font-size: 0.8rem;
     padding-top: 0.75rem;
-  }    
-  .simple-footer.compact .footer-bottom { font-size: 0.8rem;}    
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }    
-  .stat-item h3 { font-size: 1.8rem; }    
-  .stat-item p { font-size: 0.95rem;}    
-  .stats-section { padding: 2rem 0;}
+  }
+  .simple-footer.compact .footer-bottom { font-size: 0.8rem;}
 
-  /* Футер */
+  /* Формы */
   .form-group :is(input, textarea, select){
     padding:.6rem; font-size:.9rem;
   }
@@ -504,7 +625,7 @@
   .btn-large{ padding:.75rem 1rem; font-size:.95rem; }
 
   /* Услуги */
- .services-main { padding: 1rem 0 2rem; }
+ .services-main { padding: 1rem 0 1.5rem; }
   .service-card { padding: 1rem;}
   .service-price {
     font-size: 1.1rem;
@@ -518,7 +639,9 @@
   }
   .process-section,
   .screen-types-section,
-  .cta-section { padding: 3rem 0; }
+  .cta-section { padding: 1.5rem 0; }
+  .screen-types-section h2,
+  .process-section h2 { font-size: 1.7rem; margin-bottom: 1.5rem; }
   .cta-content h2 { font-size: 1.8rem; }
   .cta-buttons {
     max-width: 100%;
@@ -545,6 +668,31 @@
   .filter-btn {
     padding: .45rem .75rem;
     font-size: .8rem;
+  }
+
+  /* Услуги - еще меньше заголовки и отступы */
+  .services-main {
+    padding: 0.75rem 0 1rem;
+  }
+
+  .screen-types-section,
+  .process-section,
+  .cta-section {
+    padding: 1.25rem 0;
+  }
+
+  .screen-types-section h2,
+  .process-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-content h2 {
+    font-size: 1.6rem;
+  }
+
+  .section-header h1 {
+    font-size: 1.75rem;
   }
 }
 

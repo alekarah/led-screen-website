@@ -177,7 +177,7 @@
 .modal-close{
   position:absolute; top:8px; right:10px;
   border:0; background:transparent;
-  font-size:26px; line-height:1; color:var(--p-muted);
+  font-size:26px; line-height:1; color:#9ca3af;
   cursor:pointer;
 }
 .modal-close:hover{ color:#6b7280; }
@@ -205,7 +205,7 @@
 .toast-close{
   position:absolute; top:6px; right:8px;
   border:0; background:transparent; font-size:18px;
-  color:var(--p-muted); cursor:pointer;
+  color:#9ca3af; cursor:pointer;
 }
 .toast-close:hover{ color:#6b7280; }
 @keyframes toast-in{

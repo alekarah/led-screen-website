@@ -331,14 +331,9 @@ body.modal-open { overflow: hidden; }
   grid-column: 2 / 3 !important;
 }
 
-.js-center-double-3col-first {
-  justify-self: end !important;
-  margin-right: 0.625rem !important;
-}
-
+.js-center-double-3col-first,
 .js-center-double-3col-second {
-  justify-self: start !important;
-  margin-left: 0.625rem !important;
+  transform: translateX(57%) !important;
 }
 
 .js-center-single-2col {
@@ -349,7 +344,7 @@ body.modal-open { overflow: hidden; }
 .load-more-btn {
   background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
   color: #fff !important;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
   border: none !important;
   padding: 0.9em 2.1em;

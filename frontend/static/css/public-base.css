@@ -34,7 +34,7 @@ nav {
 
 .nav-container {
     width: 100%;
-    max-width: var(--p-container);
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -138,14 +138,14 @@ nav {
 
 /* Контент */
 .main-content {
-    margin-top: var(--p-header-h);
+    margin-top: 80px;
     padding: 3rem 0;
     flex: 1 0 auto;
 }
 
 .container {
     width: 100%;
-    max-width: var(--p-container);
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
     box-sizing: border-box;
@@ -182,7 +182,7 @@ footer { flex-shrink: 0; }
     color: #fff;
     padding: 12px 30px;
     text-decoration: none;
-    border-radius: var(--p-radius-sm);
+    border-radius: 8px;
     font-weight: bold;
     transition: background-color .2s ease, transform .1s ease;
     border: none;
@@ -190,7 +190,7 @@ footer { flex-shrink: 0; }
 }
 
 .btn:active{ transform: translateY(1px); }
-.btn:hover { background: var(--p-brand-600); }
+.btn:hover { background: #5567d7; }
 .btn-primary { background: var(--p-brand); }
 .btn-secondary { background: #6c757d; }
 .btn-success { background: var(--p-success); }

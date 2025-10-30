@@ -16,8 +16,8 @@
   max-width: 100%;
   margin: 2rem auto;
   background: var(--p-bg);
-  border-radius: var(--p-radius);
-  box-shadow: var(--p-shadow-1);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.10);
   padding: 2.2rem 2.5rem;
   font-size: 1.12rem;
   line-height: 1.7;
