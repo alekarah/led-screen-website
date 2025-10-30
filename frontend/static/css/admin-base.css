@@ -278,52 +278,9 @@ html, body {
 
   .form-section{ padding:1rem; }
 
-  /* Шапка и навигация */
-  .header {
-    padding: 0.75rem 1rem;
-  }
-
-  .header .container {
-    padding: 0;
-  }
-
+  /* Шапка */
   .header h1 {
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-  }
-
-  /* Вертикальная навигация */
-  .nav-links {
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: stretch;
-  }
-
-  .nav-links li {
-    width: 100%;
-  }
-
-  .nav-links a {
-    display: block;
-    padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-  }
-
-  .nav-links a:hover {
-    background: rgba(255, 255, 255, 0.2);
-    text-decoration: none;
-  }
-
-  /* Кнопка Выход в вертикальном меню */
-  .nav-links li:last-child {
-    margin-left: 0;
-    margin-top: 0.5rem;
-  }
-
-  .logout-link {
-    width: 100%;
-    text-align: center;
+    font-size: 1.75rem;
   }
 
   /* Статистика */
@@ -343,7 +300,23 @@ html, body {
 /* Мобильные (< 480px) */
 @media (max-width: 480px){
   .header h1 {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
+  }
+
+  /* Навигация с переносом */
+  .nav-links {
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+
+  /* Выход переносится на новую строку справа */
+  .nav-links li:last-child {
+    flex-basis: auto;
+    margin-left: auto;
+    margin-top: 0.5rem;
   }
 
   .stats-grid {

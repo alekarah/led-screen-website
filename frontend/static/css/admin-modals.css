@@ -184,14 +184,6 @@ body.modal-open { overflow: hidden; }
   .modal-header h2 {
     font-size: 18px;
   }
-
-  .modal-footer {
-    flex-direction: column;
-  }
-
-  .modal-footer .btn {
-    width: 100%;
-  }
 }
 
 /* Мобильные (< 480px) - почти fullscreen */
@@ -230,5 +222,14 @@ body.modal-open { overflow: hidden; }
 
   .modal-grid {
     row-gap: 8px;
+  }
+
+  /* Кнопки в столбик */
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
   }
 }

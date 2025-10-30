@@ -26,10 +26,6 @@
 }
 .contacts-table td{ color:var(--text-900); }
 
-.contacts-table .actions {
-  text-align: left !important;
-}
-
 /* Страницы контактов */
 .contacts-page,
 .contacts-archive{
@@ -63,14 +59,18 @@
   text-overflow:ellipsis;
   white-space:nowrap;
 }
-.contacts-table .status-cell{ white-space:nowrap; }
+.contacts-table .status-cell{
+  white-space:nowrap;
+  min-width: 150px;
+}
 .contacts-table .date-cell{
   white-space:nowrap;
   font-variant-numeric: tabular-nums;
 }
 .contacts-table .actions{
   white-space:nowrap;
-  text-align:right;
+  text-align: left;
+  min-width: 140px;
 }
 
 /* Чередование строк и hover */
@@ -93,6 +93,13 @@
   margin:8px 0 12px;
 }
 .bulk-actions__title{ color:var(--text-600); }
+
+
+/* Группа кнопок действий в тулбаре */
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+}
 
 .tabs{
   display:flex;
@@ -123,17 +130,22 @@
    АДАПТИВНОСТЬ ДЛЯ ТАБЛИЦ
    ============================================ */
 
-/* Планшеты (768-1024px) - горизонтальный скролл */
-@media (max-width: 1024px){
+/* Средние экраны (< 1200px) */
+@media (max-width: 1150px){
+  /* Кнопки действий (Применить, Экспорт, Архив) на отдельной строке справа */
   .contacts-toolbar {
-    flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
   }
 
-  .contacts-toolbar > * {
-    width: 100%;
+  .toolbar-actions {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
   }
+}
 
+/* Планшеты (< 1024px) */
+@media (max-width: 1024px){
   .contacts-table {
     font-size: 13px;
   }
@@ -141,6 +153,28 @@
   .contacts-table th,
   .contacts-table td {
     padding: 8px 10px;
+  }
+}
+
+/* Средние экраны (< 1150px) */
+@media (max-width: 1150px){
+  /* Переключаем таблицу на auto layout для лучшей адаптивности */
+  .contacts-table {
+    table-layout: auto;
+  }
+}
+
+/* Средние экраны (< 900px) - горизонтальный скролл */
+@media (max-width: 900px){
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -10px;
+    padding: 0 10px;
+  }
+
+  .contacts-table {
+    min-width: 850px;
   }
 }
 
@@ -161,16 +195,6 @@
   .contacts-table th,
   .contacts-table td {
     padding: 6px 8px;
-  }
-
-  .bulk-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .bulk-actions > select,
-  .bulk-actions > button {
-    width: 100%;
   }
 }
 

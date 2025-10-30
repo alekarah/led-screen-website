@@ -29,13 +29,15 @@
             <option value="100" {{if eq .limit 100}}selected{{end}}>100</option>
         </select>
 
-        <button id="apply-filters" class="btn btn-small btn-blue">Применить</button>
-        <button id="export-csv" class="btn btn-small">Экспорт CSV</button>
-        <a id="go-back"
+        <div class="toolbar-actions">
+          <button id="apply-filters" class="btn btn-small btn-blue">Применить</button>
+          <button id="export-csv" class="btn btn-small">Экспорт CSV</button>
+          <a id="go-back"
             class="btn btn-small"
             href="/admin/contacts?{{if .search}}search={{.search}}&{{end}}{{if .dateRange}}date={{.dateRange}}&{{end}}{{if .limit}}limit={{.limit}}&{{end}}page=1">
             Назад
-        </a>
+          </a>
+        </div>
 
         </div>
 

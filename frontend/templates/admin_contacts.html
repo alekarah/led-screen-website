@@ -37,12 +37,14 @@
         <option value="100" {{if eq .limit 100}}selected{{end}}>100</option>
       </select>
 
-      <button id="apply-filters" type="button" class="btn btn-small btn-blue">Применить</button>
-      <button id="export-csv" class="btn btn-small">Экспорт CSV</button>
-      <button id="go-archive" type="button" class="btn btn-small"
-        href="/admin/contacts/archive?{{if .search}}search={{.search}}&{{end}}{{if .dateRange}}date={{.dateRange}}&{{end}}{{if .limit}}limit={{.limit}}&{{end}}status=archived&page=1">
-        Архив
-      </button>
+      <div class="toolbar-actions">
+        <button id="apply-filters" type="button" class="btn btn-small btn-blue">Применить</button>
+        <button id="export-csv" class="btn btn-small">Экспорт CSV</button>
+        <button id="go-archive" type="button" class="btn btn-small"
+          href="/admin/contacts/archive?{{if .search}}search={{.search}}&{{end}}{{if .dateRange}}date={{.dateRange}}&{{end}}{{if .limit}}limit={{.limit}}&{{end}}status=archived&page=1">
+          Архив
+        </button>
+      </div>
 
     </div>
 
