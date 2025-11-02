@@ -138,8 +138,8 @@
 }
 
 .alert-error {
-  background: var(--adm-err-bg);
-  color: var(--adm-err-text);
+  background: #fde8ea;
+  color: #b42318;
   border: 1px solid #f5c2c7;
 }
 

@@ -50,8 +50,8 @@ input[type="radio"]{
 .form-group textarea{ height:100px; resize:vertical; }
 
 /* Группы чекбоксов */
-.checkbox-group{ display:flex; gap:1rem; flex-wrap:wrap; }
-.checkbox-item{ display:flex; align-items:center; gap:.5rem; }
+.checkbox-group{ display:flex; gap:1rem; }
+.checkbox-item{ align-items:center; }
 
 /* Выделенный чекбокс "Показать на главной" */
 .featured-checkbox{
@@ -186,7 +186,7 @@ input[type="radio"]{
   background: var(--brand); color:#fff; border-color: var(--brand);
   font-weight:600;
 }
-.dots{ padding:4px 6px; color: var(--text-400); }
+.dots{ padding:4px 6px; color: #888888; }
 
 /* ============================================
    АДАПТИВНОСТЬ ФОРМ

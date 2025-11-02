@@ -72,10 +72,10 @@ html, body {
 }
 .btn:hover{ background: var(--brand-600); }
 
-.btn-danger{ background: var(--adm-toast-err); color:#fff; }
+.btn-danger{ background: var(--danger); color:#fff; }
 .btn-danger:hover{ background: var(--danger-700); }
 
-.btn-success{ background: var(--adm-toast-ok); color:#fff; }
+.btn-success{ background: var(--success); color:#fff; }
 .btn-success:hover{ background: var(--success-700); }
 
 .btn-blue{ background: var(--brand); color:#fff; }
@@ -124,7 +124,7 @@ html, body {
   padding:2rem;
   border-radius: var(--radius);
   margin-bottom:2rem;
-  box-shadow: 0 4px 12px var(--adm-shadow-2);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 .form-section h2{
   margin-bottom:1.5rem;
@@ -142,7 +142,7 @@ html, body {
   background: var(--card-bg);
   border-radius: var(--radius);
   padding:1.5rem;
-  box-shadow: 0 4px 12px var(--adm-shadow-2);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
   text-align:center;
 }
 .stat-label{
@@ -181,11 +181,11 @@ html, body {
   background: var(--card-bg);
   border-radius: var(--radius);
   padding:12px 14px;
-  box-shadow: 0 2px 8px var(--adm-shadow-1);
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
 .sys-label{
   font-size:12px;
-  color: var(--text-400);
+  color: #888888;
   margin-bottom:6px;
 }
 .sys-value{
@@ -208,15 +208,15 @@ html, body {
   color:#1a73e8;
 }
 .badge-ok{
-  background: var(--adm-ok-bg);
-  color: var(--adm-ok-text);
+  background: #e8f7ee;
+  color: #18794e;
   font-weight:600;
   padding:4px 8px;
   border-radius:6px;
 }
 .badge-error{
-  background: var(--adm-err-bg);
-  color: var(--adm-err-text);
+  background: #fde8ea;
+  color: #b42318;
 }
 
 .count-big{
@@ -247,13 +247,13 @@ html, body {
   padding:10px 14px;
   border-radius: var(--radius);
   font-size:14px; line-height:1.35;
-  box-shadow: 0 8px 22px var(--adm-shadow-3);
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
   color:#fff; background: var(--brand);
   animation: toastIn .2s ease-out;
   display:flex; justify-content:space-between; align-items:center;
 }
-.toast.success{ background: var(--adm-toast-ok); }
-.toast.error{   background: var(--adm-toast-err); }
+.toast.success{ background: var(--success); }
+.toast.error{   background: var(--danger); }
 .toast .close{
   margin-left:12px; background:transparent; border:0;
   font-size:18px; cursor:pointer; color:#fff;

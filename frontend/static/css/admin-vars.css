@@ -3,84 +3,34 @@
   /* Бренд и акценты */
   --brand:#4A90E2;
   --brand-600:#3b7bd0;
-  --brand-200:#9ad0f5; 
+  --brand-200:#9ad0f5;
   --focus-ring:#4A90E2;
 
   /* Текст */
-  --text-900:#111827;           /* основной тёмный */
-  --text-800:#1f2937;
+  --text-900:#111827;
   --text-700:#333333;
   --text-600:#4b5563;
   --text-500:#666666;
-  --text-400:#888888;
   --muted:#9ca3af;
 
   /* Фон / подложка / линии */
   --bg:#f1f3f6;
   --card-bg:#ffffff;
   --overlay:rgba(0,0,0,.45);
-
   --line:#eeeeee;
   --line-soft:#e5e7eb;
   --hover:#fafafa;
 
-  /* Карточки / тени / скругления */
+  /* Радиусы и тени */
   --radius-sm:6px;
   --radius:8px;
   --radius-lg:12px;
   --card-shadow:0 2px 4px rgba(0,0,0,.08);
   --modal-shadow:0 18px 40px rgba(0,0,0,.12);
-  --adm-shadow-1:  rgba(0,0,0,.06);
-  --adm-shadow-2:  rgba(0,0,0,.08);
-  --adm-shadow-3:  rgba(0,0,0,.18);
 
-  /* Кнопки успешные/опасные (для модалок) */
+  /* Кнопки успешные/опасные */
   --success:#219653;
   --success-700:#197a43;
   --danger:#d93025;
   --danger-700:#b6261c;
-
-  /* служебные (бейджи/алерты/тосты) */
-  --adm-ok-bg:     #e8f7ee;
-  --adm-ok-text:   #18794e;
-  --adm-err-bg:    #fde8ea;
-  --adm-err-text:  #b42318;
-  --adm-toast-ok:  #28a745;
-  --adm-toast-err: #dc3545;
-
-  /* Брейкпоинты (для единой ссылки в медиа) */
-
-  /* Desktop tiers */
-  --bp-desktop:    1200px;  /* контейнер = 1140–1200, 3–4 колонки */
-  --bp-laptop:     1024px;  /* ноутбуки: упрощаем сетки, уменьшаем типографику */
-
-  /* Tablet / Phone (у тебя уже есть tablet/mobile) */
-  --bp-tablet:      768px;  /* 2 колонки → 1, формы в столбик */
-  --bp-phablet:     640px;  /* мелкие правки перед «мобилой» (меню, карточки) */
-  --bp-mobile:      480px;  /* мобильный основной */
-}
-
-/* пример «тёмной» темы (на будущее)
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0f1115;
-    --card-bg:#161a20;
-    --text-900:#f3f4f6;
-    --line:#2a2e35;
-    --hover:#1b2028;
-    --modal-shadow:0 18px 40px rgba(0,0,0,.5);
-  }
-}
-*/
-/* === Back-compat aliases (старые имена → новые токены) === */
-:root{
-  /* бренд и акценты (для старых правил) */
-  --adm-primary:       var(--brand);
-  --adm-primary-600:   var(--brand-600);
-  --adm-accent:        var(--brand-200);
-  --adm-border:        var(--line);
-
-  /* превью в списке проектов */
-  --thumb-bg:          #f5f5f5;
-  --thumb-border:      #dddddd;
 }

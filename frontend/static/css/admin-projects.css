@@ -39,7 +39,7 @@
   color:var(--text-500);
 }
 .project-info small{
-  color:var(--text-400);
+  color:#888888;
   line-height:1.4;
 }
 
@@ -70,7 +70,7 @@
   margin-right:.5rem;
   padding:.5rem;
   font-size:1.1rem;
-  color:var(--text-400);
+  color:#888888;
   cursor:grab;
   transition:color .2s ease;
 }
@@ -87,8 +87,8 @@
   flex-shrink:0;
   overflow:hidden;
   border-radius:6px;
-  background:var(--thumb-bg);
-  border:2px solid var(--thumb-border);
+  background:#f5f5f5;
+  border:2px solid #dddddd;
   transition:border-color .2s ease;
 }
 .project-thumbnail:hover{ border-color:var(--brand); }
