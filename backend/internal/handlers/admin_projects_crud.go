@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -39,8 +40,9 @@ func (h *Handlers) CreateProject(c *gin.Context) {
 
 	// Сохраняем проект
 	if err := h.db.Create(&project).Error; err != nil {
+		log.Printf("Ошибка создания проекта '%s': %v", project.Title, err)
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Ошибка создания проекта: " + err.Error(),
+			"error": "Ошибка создания проекта",
 		})
 		return
 	}
@@ -112,7 +114,8 @@ func (h *Handlers) UpdateProject(c *gin.Context) {
 	project.Featured = c.PostForm("featured") == "on"
 
 	if err := h.db.Save(&project).Error; err != nil {
-		jsonErr(c, http.StatusInternalServerError, "Ошибка обновления проекта: "+err.Error())
+		log.Printf("Ошибка обновления проекта ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка обновления проекта")
 		return
 	}
 
@@ -150,30 +153,35 @@ func (h *Handlers) DeleteProject(c *gin.Context) {
 
 	if err := tx.Model(&project).Association("Categories").Clear(); err != nil {
 		tx.Rollback()
-		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления связей с категориями: "+err.Error())
+		log.Printf("Ошибка удаления связей с категориями для проекта ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления связей с категориями")
 		return
 	}
 
 	if err := tx.Where("project_id = ?", project.ID).Delete(&models.Image{}).Error; err != nil {
 		tx.Rollback()
-		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления изображений: "+err.Error())
+		log.Printf("Ошибка удаления изображений для проекта ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления изображений")
 		return
 	}
 
 	if err := tx.Where("project_id = ?", project.ID).Delete(&models.ProjectViewDaily{}).Error; err != nil {
 		tx.Rollback()
-		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления статистики просмотров: "+err.Error())
+		log.Printf("Ошибка удаления статистики просмотров для проекта ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления статистики просмотров")
 		return
 	}
 
 	if err := tx.Delete(&project).Error; err != nil {
 		tx.Rollback()
-		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления проекта: "+err.Error())
+		log.Printf("Ошибка удаления проекта ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка удаления проекта")
 		return
 	}
 
 	if err := tx.Commit().Error; err != nil {
-		jsonErr(c, http.StatusInternalServerError, "Ошибка завершения транзакции: "+err.Error())
+		log.Printf("Ошибка завершения транзакции при удалении проекта ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка завершения транзакции")
 		return
 	}
 

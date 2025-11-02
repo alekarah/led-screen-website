@@ -84,7 +84,6 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			pr.POST("/:id/reorder", h.ReorderProject)       // Изменение порядка одного проекта
 			pr.POST("/:id/reset-views", h.ResetProjectViews)// Сброс просмотров конкретного проекта
 			pr.POST("/bulk-reorder", h.BulkReorderProjects) // Массовая сортировка (drag & drop)
-			pr.POST("/reset-order", h.ResetProjectOrder)    // Сброс к алфавитному порядку
 		}
 
 		// Изображения - загрузка, удаление, кроппинг

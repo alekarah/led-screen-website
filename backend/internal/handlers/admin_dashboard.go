@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -163,7 +164,8 @@ func (h *Handlers) AdminContacts7Days(c *gin.Context) {
 // ResetAllViews — глобальный сброс всей статистики просмотров
 func (h *Handlers) ResetAllViews(c *gin.Context) {
 	if err := h.db.Exec(`TRUNCATE TABLE project_view_dailies RESTART IDENTITY`).Error; err != nil {
-		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики: "+err.Error())
+		log.Printf("Ошибка сброса статистики: %v", err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики")
 		return
 	}
 	jsonOK(c, gin.H{"ok": true})
@@ -176,7 +178,8 @@ func (h *Handlers) ResetProjectViews(c *gin.Context) {
 		return
 	}
 	if err := h.db.Where("project_id = ?", id).Delete(&models.ProjectViewDaily{}).Error; err != nil {
-		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики проекта: "+err.Error())
+		log.Printf("Ошибка сброса статистики проекта %d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики проекта")
 		return
 	}
 	jsonOK(c, gin.H{"ok": true})

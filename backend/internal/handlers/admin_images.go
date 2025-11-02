@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -49,6 +50,12 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 	for i, file := range files {
 		// Проверяем тип файла
 		if !isImageFile(file.Filename) {
+			continue
+		}
+
+		// Проверяем размер файла
+		if file.Size > h.maxUploadSize {
+			log.Printf("Файл %s слишком большой: %d байт (максимум: %d)", file.Filename, file.Size, h.maxUploadSize)
 			continue
 		}
 
@@ -112,15 +119,16 @@ func (h *Handlers) UpdateImageCrop(c *gin.Context) {
 
 	cropData, err := parseCropParameters(c)
 	if err != nil {
-		jsonErr(c, http.StatusBadRequest, "Неверные параметры кроппинга: "+err.Error())
+		log.Printf("Неверные параметры кроппинга для изображения %d: %v", id, err)
+		jsonErr(c, http.StatusBadRequest, "Неверные параметры кроппинга")
 		return
 	}
 	cropData = validateCropData(cropData)
 
 	image.CropX, image.CropY, image.CropScale = cropData.X, cropData.Y, cropData.Scale
 	if err := h.db.Save(&image).Error; err != nil {
-		logError("Ошибка сохранения настроек кроппинга", c.Param("id"), err)
-		jsonErr(c, http.StatusInternalServerError, "Ошибка сохранения настроек: "+err.Error())
+		log.Printf("Ошибка сохранения настроек кроппинга для изображения %d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сохранения настроек")
 		return
 	}
 	jsonOK(c, gin.H{"image": image})

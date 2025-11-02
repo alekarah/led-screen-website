@@ -27,7 +27,8 @@ import (
 // Handlers содержит зависимости для HTTP обработчиков.
 // Все методы handlers используют внедренное подключение к базе данных.
 type Handlers struct {
-	db *gorm.DB // Подключение к PostgreSQL через GORM
+	db            *gorm.DB // Подключение к PostgreSQL через GORM
+	maxUploadSize int64    // Максимальный размер загружаемого файла в байтах
 }
 
 // New создает новый экземпляр Handlers с внедренной зависимостью базы данных.
@@ -36,10 +37,13 @@ type Handlers struct {
 // Пример использования:
 //
 //	db, _ := database.Connect(cfg)
-//	handlers := handlers.New(db)
+//	handlers := handlers.New(db, cfg.MaxUploadSize)
 //	routes.Setup(router, handlers)
-func New(db *gorm.DB) *Handlers {
-	return &Handlers{db: db}
+func New(db *gorm.DB, maxUploadSize int64) *Handlers {
+	return &Handlers{
+		db:            db,
+		maxUploadSize: maxUploadSize,
+	}
 }
 
 // HomePage рендерит главную страницу сайта с избранными проектами и услугами.

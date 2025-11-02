@@ -36,7 +36,7 @@ func main() {
 	}
 
 	// Инициализируем handlers
-	h := handlers.New(db)
+	h := handlers.New(db, cfg.MaxUploadSize)
 
 	// Настраиваем Gin
 	if cfg.Environment == "production" {
