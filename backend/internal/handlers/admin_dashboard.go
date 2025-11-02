@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -13,8 +12,6 @@ import (
 
 // AdminDashboard - главная страница админки
 func (h *Handlers) AdminDashboard(c *gin.Context) {
-	fmt.Println("AdminDashboard build:", time.Now())
-
 	var stats struct {
 		ProjectsCount int64
 		ImagesCount   int64

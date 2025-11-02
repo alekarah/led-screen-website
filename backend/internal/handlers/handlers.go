@@ -271,7 +271,6 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 //
 // POST /api/track/project-view/:id
 func (h *Handlers) TrackProjectView(c *gin.Context) {
-	fmt.Println("TrackProjectView build:", time.Now())
 	pid, err := strconv.Atoi(c.Param("id"))
 	if err != nil || pid <= 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid project id"})
