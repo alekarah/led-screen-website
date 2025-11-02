@@ -1,3 +1,19 @@
+// Package config управляет конфигурацией приложения из переменных окружения.
+//
+// Все настройки загружаются из .env файла через godotenv или из системных переменных.
+// Если переменная не установлена - используется значение по умолчанию.
+//
+// Основные группы настроек:
+//   - Приложение (DatabaseURL, Port, Environment)
+//   - SMTP для отправки email (в разработке)
+//   - Загрузка файлов (UploadPath, MaxUploadSize)
+//   - Connection pooling для PostgreSQL
+//
+// Пример использования:
+//
+//	cfg := config.Load()
+//	db := database.Connect(cfg)
+//	router.Run(":" + cfg.Port)
 package config
 
 import (
@@ -5,26 +21,47 @@ import (
 	"strconv"
 )
 
+// Config содержит всю конфигурацию приложения.
+//
+// Значения загружаются из переменных окружения при вызове Load().
+// Все поля имеют разумные значения по умолчанию для разработки.
 type Config struct {
-	DatabaseURL string
-	Port        string
-	Environment string
+	// Основные настройки приложения
+	DatabaseURL string // PostgreSQL DSN (Data Source Name)
+	Port        string // Порт для HTTP сервера (например "8080")
+	Environment string // "development" или "production"
 
+	// SMTP для email уведомлений (в разработке, не используется)
 	SMTPHost     string
 	SMTPPort     string
 	SMTPUsername string
 	SMTPPassword string
 
-	UploadPath    string
-	MaxUploadSize int64
+	// Файловые загрузки
+	UploadPath    string // Путь для сохранения изображений
+	MaxUploadSize int64  // Максимальный размер файла в байтах (10MB)
 
-	// Настройки БД
-	DBLogLevel           string // silent|error|warn|info
-	DBMaxOpenConns       int
-	DBMaxIdleConns       int
-	DBConnMaxLifetimeMin int // минуты
+	// Настройки connection pool для PostgreSQL
+	DBLogLevel           string // Уровень логирования GORM: "silent", "error", "warn", "info"
+	DBMaxOpenConns       int    // Максимальное количество открытых соединений (рекомендуется 20-25)
+	DBMaxIdleConns       int    // Максимальное количество idle соединений (рекомендуется 10)
+	DBConnMaxLifetimeMin int    // Максимальное время жизни соединения в минутах (рекомендуется 30)
 }
 
+// Load загружает конфигурацию из переменных окружения с fallback на значения по умолчанию.
+//
+// Переменные окружения должны быть установлены до вызова этой функции.
+// Обычно загружаются через godotenv.Load() из .env файла.
+//
+// Рекомендуется вызывать в начале main():
+//
+//	godotenv.Load()
+//	cfg := config.Load()
+//
+// Для production обязательно установить:
+//   - DATABASE_URL (с сильным паролем)
+//   - JWT_SECRET (сгенерировать через openssl rand -base64 32)
+//   - ENVIRONMENT=production
 func Load() *Config {
 	return &Config{
 		DatabaseURL: getEnv("DATABASE_URL", "postgres://postgres:password@localhost:5432/led_display_db?sslmode=disable"),
@@ -46,6 +83,13 @@ func Load() *Config {
 	}
 }
 
+// getEnv возвращает значение переменной окружения или значение по умолчанию.
+//
+// Параметры:
+//   - key: имя переменной окружения
+//   - def: значение по умолчанию, если переменная не установлена
+//
+// Возвращает значение переменной или def, если переменная пуста.
 func getEnv(key, def string) string {
 	if v := os.Getenv(key); v != "" {
 		return v
@@ -53,6 +97,13 @@ func getEnv(key, def string) string {
 	return def
 }
 
+// getEnvInt возвращает целочисленное значение переменной окружения или значение по умолчанию.
+//
+// Параметры:
+//   - key: имя переменной окружения
+//   - def: значение по умолчанию, если переменная не установлена или не является числом
+//
+// Если преобразование в int не удается, возвращается def.
 func getEnvInt(key string, def int) int {
 	if v := os.Getenv(key); v != "" {
 		if n, err := strconv.Atoi(v); err == nil {

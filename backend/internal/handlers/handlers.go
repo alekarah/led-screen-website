@@ -1,3 +1,12 @@
+// Package handlers содержит HTTP обработчики для всех маршрутов приложения.
+//
+// Включает в себя:
+//   - Публичные страницы (главная, портфолио, услуги, контакты)
+//   - Публичные API (получение проектов, отправка заявок, трекинг просмотров)
+//   - Административные страницы и API (защищены JWT)
+//
+// Все handlers работают с GORM для доступа к базе данных и используют
+// Gin Context для обработки HTTP запросов и ответов.
 package handlers
 
 import (
@@ -15,15 +24,32 @@ import (
 	"ledsite/internal/models"
 )
 
+// Handlers содержит зависимости для HTTP обработчиков.
+// Все методы handlers используют внедренное подключение к базе данных.
 type Handlers struct {
-	db *gorm.DB
+	db *gorm.DB // Подключение к PostgreSQL через GORM
 }
 
+// New создает новый экземпляр Handlers с внедренной зависимостью базы данных.
+// Это центральная точка инициализации всех обработчиков приложения.
+//
+// Пример использования:
+//
+//	db, _ := database.Connect(cfg)
+//	handlers := handlers.New(db)
+//	routes.Setup(router, handlers)
 func New(db *gorm.DB) *Handlers {
 	return &Handlers{db: db}
 }
 
-// HomePage - главная страница
+// HomePage рендерит главную страницу сайта с избранными проектами и услугами.
+//
+// Отображает:
+//   - До 3 проектов с флагом featured=true (отсортированных по sort_order)
+//   - Если нет featured проектов - показывает последние 3 проекта
+//   - Основные услуги (featured services)
+//
+// GET /
 func (h *Handlers) HomePage(c *gin.Context) {
 	// Получаем проекты для главной страницы (только те, что помечены для показа)
 	var featuredProjects []models.Project
@@ -57,7 +83,14 @@ func (h *Handlers) HomePage(c *gin.Context) {
 	})
 }
 
-// ProjectsPage отображает страницу портфолио
+// ProjectsPage отображает страницу портфолио с возможностью фильтрации по категориям.
+//
+// Query параметры:
+//   - category (string): slug категории для фильтрации проектов
+//
+// Проекты отсортированы по sort_order (ASC), затем по created_at (DESC).
+//
+// GET /projects?category=shopping-centers
 func (h *Handlers) ProjectsPage(c *gin.Context) {
 	// Получаем параметр фильтрации
 	categorySlug := c.Query("category")
@@ -85,7 +118,10 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 	})
 }
 
-// ServicesPage - страница услуг
+// ServicesPage рендерит страницу со списком всех услуг компании.
+// Услуги отсортированы по полю sort_order.
+//
+// GET /services
 func (h *Handlers) ServicesPage(c *gin.Context) {
 	var services []models.Service
 	h.db.Order("sort_order").Find(&services)
@@ -97,7 +133,9 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 	})
 }
 
-// ContactPage - страница контактов
+// ContactPage рендерит страницу контактов с формой обратной связи.
+//
+// GET /contact
 func (h *Handlers) ContactPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":  "Контакты | LED экраны",
@@ -105,7 +143,9 @@ func (h *Handlers) ContactPage(c *gin.Context) {
 	})
 }
 
-// PrivacyPage - страница обработки персональных данных
+// PrivacyPage рендерит страницу политики обработки персональных данных.
+//
+// GET /privacy
 func (h *Handlers) PrivacyPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":  "Обработка персональных данных",
@@ -113,9 +153,21 @@ func (h *Handlers) PrivacyPage(c *gin.Context) {
 	})
 }
 
-// API Handlers
+// ==================== Публичные API ====================
 
-// GetProjects - API для получения проектов
+// GetProjects возвращает список проектов в формате JSON с поддержкой пагинации и фильтрации.
+//
+// Query параметры:
+//   - page (int): номер страницы (по умолчанию: 1)
+//   - limit (int): количество проектов на странице (по умолчанию: 12)
+//   - category (string): slug категории для фильтрации
+//
+// Ответ включает:
+//   - projects: массив проектов с категориями и изображениями
+//   - total: общее количество проектов
+//   - page, limit: параметры пагинации
+//
+// GET /api/projects?page=1&limit=12&category=shopping-centers
 func (h *Handlers) GetProjects(c *gin.Context) {
 	var projects []models.Project
 
@@ -148,7 +200,19 @@ func (h *Handlers) GetProjects(c *gin.Context) {
 	})
 }
 
-// SubmitContact - обработка формы обратной связи
+// SubmitContact обрабатывает отправку формы обратной связи от клиентов.
+//
+// Принимает данные в формате JSON или form-data:
+//   - name (required): имя клиента
+//   - phone (required): телефон
+//   - email (optional): email
+//   - company (optional): название компании
+//   - project_type (optional): тип проекта
+//   - message (optional): сообщение
+//
+// Статус заявки по умолчанию устанавливается в "new".
+//
+// POST /api/contact
 func (h *Handlers) SubmitContact(c *gin.Context) {
 	var form models.ContactForm
 
@@ -194,7 +258,17 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 	})
 }
 
-// TrackProjectView — инкремент просмотров проекта за сегодняшний день (UTC).
+// TrackProjectView увеличивает счетчик просмотров проекта за текущий день (по МСК).
+//
+// Использует UPSERT (INSERT ... ON CONFLICT) для атомарного инкремента счетчика.
+// Если запись за сегодняшний день уже существует - увеличивает views на 1,
+// иначе создает новую запись с views=1.
+//
+// Параметры:
+//   - id (path): ID проекта
+//
+// Просмотры агрегируются по дням в таблице project_view_dailies.
+//
 // POST /api/track/project-view/:id
 func (h *Handlers) TrackProjectView(c *gin.Context) {
 	fmt.Println("TrackProjectView build:", time.Now())
@@ -214,6 +288,7 @@ func (h *Handlers) TrackProjectView(c *gin.Context) {
 		return
 	}
 
+	// Получаем текущую дату по Московскому времени, обнуляем время до полуночи
 	now := NowMSK()
 	day := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc)
 
@@ -223,6 +298,8 @@ func (h *Handlers) TrackProjectView(c *gin.Context) {
 		Views:     1,
 	}
 
+	// UPSERT: если запись (project_id, day) существует - инкрементируем views,
+	// иначе создаем новую запись с views=1
 	if err := h.db.Clauses(clause.OnConflict{
 		Columns: []clause.Column{
 			{Name: "project_id"},
@@ -239,7 +316,17 @@ func (h *Handlers) TrackProjectView(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
 
-// Утилитные функции
+// ==================== Утилитные функции ====================
+
+// generateSlug создает URL-friendly slug из русского или английского названия.
+//
+// Выполняет:
+//   - Приведение к нижнему регистру
+//   - Замену пробелов на дефисы
+//   - Транслитерацию русских букв в латиницу
+//   - Добавление timestamp для гарантии уникальности
+//
+// Пример: "LED экран на ТЦ Мега" -> "led-ekran-na-tc-mega-1234567890"
 func generateSlug(title string) string {
 	slug := strings.ToLower(title)
 	slug = strings.ReplaceAll(slug, " ", "-")
@@ -277,10 +364,15 @@ func generateSlug(title string) string {
 	slug = strings.ReplaceAll(slug, "ю", "yu")
 	slug = strings.ReplaceAll(slug, "я", "ya")
 
-	// Добавляем timestamp для уникальности
+	// Добавляем Unix timestamp для гарантии уникальности slug
 	return fmt.Sprintf("%s-%d", slug, time.Now().Unix())
 }
 
+// isImageFile проверяет, является ли файл допустимым форматом изображения.
+//
+// Поддерживаемые форматы: .jpg, .jpeg, .png, .gif, .webp
+//
+// Используется для валидации загружаемых файлов проектов.
 func isImageFile(filename string) bool {
 	ext := strings.ToLower(filepath.Ext(filename))
 	allowedExts := []string{".jpg", ".jpeg", ".png", ".gif", ".webp"}

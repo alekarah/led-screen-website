@@ -1,3 +1,11 @@
+// Package middleware содержит HTTP middleware функции для обработки запросов.
+//
+// Middleware выполняются до основных handlers и используются для:
+//   - Аутентификации и авторизации (AuthMiddleware)
+//   - Логирования запросов (встроенный gin.Logger)
+//   - Обработки паник (встроенный gin.Recovery)
+//   - CORS (опционально)
+//   - Rate limiting (опционально)
 package middleware
 
 import (
@@ -7,7 +15,28 @@ import (
 	"ledsite/internal/handlers"
 )
 
-// AuthMiddleware проверяет наличие и валидность JWT токена
+// AuthMiddleware проверяет наличие и валидность JWT токена для защищённых роутов.
+//
+// Выполняет следующие проверки:
+//  1. Извлекает JWT токен из HTTP-only cookie "admin_token"
+//  2. Валидирует токен (подпись, срок действия)
+//  3. Извлекает claims (admin_id, admin_username)
+//  4. Сохраняет данные админа в gin.Context для использования в handlers
+//
+// При ошибке:
+//   - Удаляет невалидный cookie
+//   - Перенаправляет на /admin/login
+//   - Вызывает c.Abort() для прерывания цепочки обработчиков
+//
+// Используется для всех роутов под /admin/* (кроме /admin/login).
+//
+// Пример использования:
+//
+//	admin := router.Group("/admin")
+//	admin.Use(middleware.AuthMiddleware())
+//	{
+//	    admin.GET("/", h.AdminDashboard)
+//	}
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Получаем токен из cookie

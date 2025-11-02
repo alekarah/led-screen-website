@@ -1,3 +1,24 @@
+// Package database управляет подключением к PostgreSQL и миграциями.
+//
+// Основные функции:
+//   - Connect() - установка соединения с БД и настройка connection pool
+//   - Migrate() - автоматическое создание/обновление таблиц через GORM AutoMigrate
+//   - seedInitialData() - создание начальных данных (категории, услуги, настройки)
+//
+// Особенности:
+//   - Connection pooling настраивается через Config (MaxOpenConns, MaxIdleConns)
+//   - Уровень логирования SQL запросов управляется через DBLogLevel
+//   - Индексы создаются автоматически при миграции
+//   - Seed данные создаются только если их еще нет (идемпотентность)
+//
+// Пример использования:
+//
+//	cfg := config.Load()
+//	db, err := database.Connect(cfg)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	database.Migrate(db)
 package database
 
 import (
@@ -13,7 +34,16 @@ import (
 	"ledsite/internal/models"
 )
 
-func gormLogLevel(level string) logger.LogLevel {
+// gormLogLevel конвертирует строковое представление уровня логирования в GORM LogLevel.
+//
+// Поддерживаемые значения:
+//   - "silent" - не логировать SQL запросы
+//   - "error" - только ошибки
+//   - "warn" - ошибки и предупреждения (по умолчанию)
+//   - "info" - все запросы включая SELECT
+//
+// Используется для настройки GORM logger при подключении к БД.
+func gormLogLevel(level string) logger.LogLevel{
 	switch level {
 	case "silent":
 		return logger.Silent
@@ -26,7 +56,30 @@ func gormLogLevel(level string) logger.LogLevel {
 	}
 }
 
-// Connect подключается к БД с учётом логгера и пула соединений
+// Connect устанавливает подключение к PostgreSQL с настройками connection pool.
+//
+// Параметры:
+//   - cfg: конфигурация с DatabaseURL и параметрами connection pool
+//
+// Настраивает:
+//   - GORM logger (уровень логирования SQL запросов)
+//   - MaxOpenConns - максимальное количество открытых соединений
+//   - MaxIdleConns - максимальное количество idle соединений в pool
+//   - ConnMaxLifetime - максимальное время жизни соединения
+//
+// Connection pool важен для production:
+//   - Предотвращает исчерпание соединений PostgreSQL
+//   - Переиспользует соединения вместо создания новых
+//   - Автоматически закрывает устаревшие соединения
+//
+// Возвращает ошибку если не удалось подключиться к БД.
+//
+// Пример:
+//
+//	db, err := database.Connect(cfg)
+//	if err != nil {
+//	    log.Fatal("Failed to connect:", err)
+//	}
 func Connect(cfg *config.Config) (*gorm.DB, error) {
 	db, err := gorm.Open(postgres.Open(cfg.DatabaseURL), &gorm.Config{
 		Logger: logger.Default.LogMode(gormLogLevel(cfg.DBLogLevel)),
@@ -52,7 +105,27 @@ func Connect(cfg *config.Config) (*gorm.DB, error) {
 	return db, nil
 }
 
-// Migrate выполняет миграции
+// Migrate выполняет миграции базы данных и создает начальные данные.
+//
+// Выполняемые операции:
+//  1. GORM AutoMigrate для всех моделей (создает/обновляет таблицы)
+//  2. Создание дополнительных индексов для project_view_dailies
+//  3. Вызов seedInitialData() для создания начальных данных
+//
+// AutoMigrate безопасен:
+//   - Создает таблицы если их нет
+//   - Добавляет новые колонки
+//   - НЕ удаляет существующие данные
+//   - НЕ изменяет типы существующих колонок
+//
+// Для сложных миграций (изменение типов, удаление колонок) нужны отдельные SQL скрипты.
+//
+// Индексы для аналитики просмотров:
+//   - uniq_project_day: уникальный индекс (project_id, day) для UPSERT
+//   - idx_pvd_project: быстрый поиск по проекту
+//   - idx_pvd_day: быстрый поиск по дате
+//
+// Возвращает ошибку если миграция не удалась.
 func Migrate(db *gorm.DB) error {
 	if err := db.AutoMigrate(
 		&models.Category{},
@@ -86,13 +159,28 @@ func Migrate(db *gorm.DB) error {
 	return seedInitialData(db)
 }
 
-// seedInitialData создает начальные данные в базе
+// seedInitialData создает начальные данные в базе (идемпотентная операция).
+//
+// Создает:
+//   - 6 базовых категорий проектов (Рекламные щиты, АЗС, ТЦ, и т.д.)
+//   - 4 базовые услуги компании (Продажа, обслуживание, металлоконструкции)
+//   - Базовые настройки сайта (название, телефон, email, SEO)
+//
+// Особенности:
+//   - Проверяет существование по slug перед созданием (идемпотентность)
+//   - Можно запускать многократно - не создаст дубликаты
+//   - При первом запуске (>6 категорий) очищает старые тестовые данные
+//
+// Очистка старых категорий нужна для обратной совместимости
+// с предыдущей версией, где было больше категорий.
+//
+// Возвращает ошибку если не удалось создать данные.
 func seedInitialData(db *gorm.DB) error {
-	// Очищаем старые категории при первом запуске
+	// Проверяем количество категорий для обратной совместимости
 	var categoryCount int64
 	db.Model(&models.Category{}).Count(&categoryCount)
 
-	// Если категорий больше 6, значит есть старые - очищаем все
+	// Если категорий больше 6, значит это старая версия с тестовыми данными - очищаем
 	if categoryCount > 6 {
 		// Удаляем связи проектов с категориями
 		db.Exec("DELETE FROM project_categories")
@@ -111,6 +199,7 @@ func seedInitialData(db *gorm.DB) error {
 		{Name: "Ремонт модулей", Slug: "module-repair", Description: "Ремонт и замена модулей"},
 	}
 
+	// Создаем категории только если их еще нет (проверка по slug)
 	for _, category := range categories {
 		var existingCategory models.Category
 		if db.Where("slug = ?", category.Slug).First(&existingCategory).Error == gorm.ErrRecordNotFound {
@@ -160,6 +249,7 @@ func seedInitialData(db *gorm.DB) error {
 		},
 	}
 
+	// Создаем услуги только если их еще нет (проверка по slug)
 	for _, service := range services {
 		var existingService models.Service
 		if db.Where("slug = ?", service.Slug).First(&existingService).Error == gorm.ErrRecordNotFound {
@@ -179,6 +269,7 @@ func seedInitialData(db *gorm.DB) error {
 		{Key: "meta_description", Value: "Продажа и обслуживание LED экранов в Санкт-Петербурге. Интерьерные и уличные дисплеи, ремонт, металлоконструкции.", Type: "text"},
 	}
 
+	// Создаем настройки только если их еще нет (проверка по key)
 	for _, setting := range settings {
 		var existingSetting models.Settings
 		if db.Where("key = ?", setting.Key).First(&existingSetting).Error == gorm.ErrRecordNotFound {

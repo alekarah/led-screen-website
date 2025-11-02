@@ -1,197 +1,208 @@
-## Анализ бизнеса заказчика
+# 🖥️ LED Screen Website
 
-Компания Дмитрия Рудкина занимается:
+> Корпоративный веб-сайт для компании по продаже, ремонту и обслуживанию LED дисплеев
 
-- Продажей, ремонтом и обслуживанием LED дисплеев
-- Работает в Санкт-Петербурге и Ленинградской области
-- Изготавливает металлоконструкции и фундаментные блоки
-- Использует систему управления Novastar
-- Обслуживает 172 рекламных конструкции (204 LED дисплея)
-- Обслуживает 83 АЗС (124 LED дисплея)
-- Специализируется на интерьерных экранах для Питера и уличных для регионов
+[![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)](https://golang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?style=flat&logo=postgresql)](https://www.postgresql.org/)
+[![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 
-### Технологический стек:
+## 📋 О проекте
 
-- **Backend**: Go (Gin фреймворк) - для API, маршрутизации, обработки форм
-- **Python**: для обработки изображений, аналитики, возможно ML для рекомендаций (не реализовано)
-- **Frontend**: HTML5, CSS3, JavaScript
-- **База данных**: PostgreSQL
-- **Деплой**: Docker + возможно Nginx
-  
+Современный веб-сайт для компании, специализирующейся на LED дисплеях. Проект включает в себя публичную часть для клиентов и полнофункциональную административную панель для управления контентом.
 
-## Детальный план разработки
+> **⚠️ Примечание:** Этот проект выполнен на коммерческой основе для клиента. Публикация согласована с заказчиком и предназначена исключительно для демонстрации технических навыков в портфолио.
 
-### Этап 1: Архитектура и настройка проекта
+**Особенности:**
+- 🎨 Современный адаптивный дизайн
+- 🔐 Безопасная система авторизации (JWT)
+- 📊 CRM-система для управления заявками
+- 🖼️ Продвинутый редактор обрезки изображений
+- 📈 Встроенная аналитика просмотров
+- 💾 Экспорт данных в CSV
 
-**1.1 Структура проекта**
+## ✨ Возможности
+
+### Публичная часть
+- **Портфолио проектов** с фильтрацией по категориям
+- **Страница услуг** с интерактивными элементами
+- **Форма обратной связи** с валидацией
+- **Адаптивный дизайн** для всех устройств
+- **SEO-оптимизация** страниц
+
+### Административная панель
+- 🔐 **Авторизация** с JWT токенами
+- 📁 **Управление проектами**: CRUD операции, загрузка изображений, редактор обрезки
+- 📧 **CRM для заявок**: фильтрация, статусы, напоминания, заметки, архив
+- 📊 **Dashboard** с аналитикой и статистикой
+- 🎯 **Система категорий** для проектов
+- 📤 **Экспорт контактов** в CSV
+- 🔄 **Drag & Drop** сортировка проектов
+- 📱 **Адаптивный интерфейс** для мобильных устройств
+
+## 🛠 Технологический стек
+
+### Backend
+- **Go 1.21+** - основной язык бэкенда
+- **Gin** - веб-фреймворк
+- **GORM** - ORM для работы с БД
+- **JWT** - авторизация
+- **bcrypt** - хеширование паролей
+
+### Frontend
+- **HTML5, CSS3, JavaScript** (Vanilla JS)
+- **Адаптивная верстка** (медиа-запросы)
+- **CSS переменные** для темизации
+- **Fetch API** для взаимодействия с backend
+
+### База данных
+- **PostgreSQL 15** - основная БД
+- **pgAdmin** - для администрирования
+
+### DevOps
+- **Docker & Docker Compose** - контейнеризация
+- **Nginx** - веб-сервер (опционально)
+
+## 🚀 Установка и запуск
+
+### Требования
+- Go 1.21 или выше
+- Docker и Docker Compose
+- PostgreSQL 15 (или через Docker)
+
+### Быстрый старт
+
+1. **Клонируйте репозиторий:**
+```bash
+git clone https://github.com/yourusername/led-screen-website.git
+cd led-screen-website
+```
+
+2. **Создайте файл `.env` на основе `.env.example`:**
+```bash
+cp .env.example .env
+```
+
+3. **Настройте переменные окружения в `.env`:**
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_NAME=led_website
+JWT_SECRET=your_jwt_secret_key_here
+PORT=8080
+```
+
+4. **Запустите PostgreSQL через Docker:**
+```bash
+docker-compose up -d postgres
+```
+
+5. **Инициализируйте базу данных:**
+```bash
+psql -h localhost -U postgres -d led_website -f init.sql
+```
+
+6. **Установите зависимости Go:**
+```bash
+cd backend
+go mod download
+```
+
+7. **Запустите приложение:**
+```bash
+go run main.go
+```
+
+8. **Откройте браузер:**
+- Публичная часть: http://localhost:8080
+- Админ панель: http://localhost:8080/admin
+- **Логин по умолчанию:** `admin` / `admin123`
+
+### Запуск через Docker Compose
+
+```bash
+docker-compose up -d
+```
+
+Приложение будет доступно по адресу http://localhost:8080
+
+## 📁 Структура проекта
 
 ```
 led-screen-website/
-├── backend/
-│   ├── cmd/
-│   ├── internal/
-│   │   ├── config/
-│   │   │   └── config.go
-│   │   ├── database/
-│   │   │   └── database.go
-│   │   ├── handlers/
-│   │   │   ├── admin_actions.go
-│   │   │   ├── admin_dashboard.go
-│   │   │   ├── admin_helpers.go
-│   │   │   ├── admin_images.go
-│   │   │   ├── admin_pages.go
-│   │   │   ├── admin_projects_crud.go
-│   │   │   ├── admin_sorting.go
-│   │   │   └── handlers.go
-│   │   ├── models/
-│   │   │   └── models.go
-│   │   ├── routes/
-│   │   │   └── routes.go
-│   │   └── services/
-│   ├── main.go
-│   ├── go.sum
-│   └── go.mod
-├── python-services/
-│   ├── image_processor/
-│   └── analytics/
-├── frontend/
+├── backend/               # Go backend
+│   ├── cmd/               # Точки входа
+│   ├── internal/          # Внутренние пакеты
+│   │   ├── config/        # Конфигурация
+│   │   ├── database/      # Работа с БД
+│   │   ├── handlers/      # HTTP handlers
+│   │   ├── middleware/    # Middleware (auth, cors)
+│   │   ├── models/        # Модели данных
+│   │   ├── routes/        # Маршруты
+│   │   └── services/      # Бизнес-логика
+│   ├── main.go            # Главный файл
+│   ├── go.mod             # Go зависимости
+│   └── go.sum
+├── frontend/              # Frontend статика
 │   ├── static/
-│   │   ├── uploads/
-│   │   ├── css/
-│   │   │   ├── admin-base.css
-│   │   │   ├── admin-contacts.css
-│   │   │   ├── admin-dashboard.css
-│   │   │   ├── admin-forms.css
-│   │   │   ├── admin-modals.css
-│   │   │   ├── admin-projects.css
-│   │   │   ├── admin-vars.css
-│   │   │   ├── crop-editor.css
-│   │   │   ├── led-effect.css
-│   │   │   ├── public-base.css
-│   │   │   ├── public-contact.css
-│   │   │   ├── public-footer.css
-│   │   │   ├── public-forms.css
-│   │   │   ├── public-home.css
-│   │   │   ├── public-privacy.css
-│   │   │   ├── public-projects.css
-│   │   │   ├── public-responsive.css
-│   │   │   ├── public-services.css
-│   │   │   └── public-vars.css
-│   │   ├── js/
-│   │   │   ├── admin-base.js
-│   │   │   ├── admin-contacts-api.js
-│   │   │   ├── admin-contacts-archive-bulk.js
-│   │   │   ├── admin-contacts-archive-filters.js
-│   │   │   ├── admin-contacts-archive-init.js
-│   │   │   ├── admin-contacts-archive-modal.js
-│   │   │   ├── admin-contacts-bulk.js
-│   │   │   ├── admin-contacts-filters.js
-│   │   │   ├── admin-contacts-init.js
-│   │   │   ├── admin-contacts-modal.js
-│   │   │   ├── admin-contacts-notes.js
-│   │   │   ├── admin-contacts-shared.js
-│   │   │   ├── admin-contacts-ui.js
-│   │   │   ├── admin-projects-creation.js
-│   │   │   ├── admin-projects-editing.js
-│   │   │   ├── admin-projects-images.js
-│   │   │   ├── admin-projects-init.js
-│   │   │   ├── contact-form.js
-│   │   │   ├── crop-editor-api.js
-│   │   │   ├── crop-editor-core.js
-│   │   │   ├── crop-editor-presets.js
-│   │   │   ├── crop-editor-ui.js
-│   │   │   ├── project-modal.js
-│   │   │   ├── project-sorting.js
-│   │   │   └── services-steps.js
-│   │   └── images/
-│   │   │   ├── diod.png
-│   │   │   └── favicon.png
-│   └── templates/
-│   │   ├── admin_base.html
-│   │   ├── admin_contacts_archive.html
-│   │   ├── admin_contacts.html
-│   │   ├── admin_dashboard.html
-│   │   ├── admin_projects.html
-│   │   ├── contact.html
-│   │   ├── index.html
-│   │   ├── privacy.html
-│   │   ├── projects.html
-│   │   ├── public_base.html
-│   │   └── services.html
-├── init.sql
-├── .env.example
-├── docker-compose.yml
-└── README.md
+│   │   ├── css/           # Стили (разделены на admin/public)
+│   │   ├── js/            # JavaScript модули
+│   │   ├── images/        # Изображения
+│   │   └── uploads/       # Загруженные файлы
+│   └── templates/         # HTML шаблоны (Go templates)
+├── init.sql               # SQL для инициализации БД
+├── docker-compose.yml     # Docker Compose конфигурация
+├── .env.example           # Пример переменных окружения
+└── README.md              # Документация
 ```
 
-**1.2 База данных (PostgreSQL)** Основные таблицы:
+## 🗄️ База данных
 
-- `projects` (портфолио проектов)
-- `services` (услуги)
-- `contacts` (заявки)
-- `gallery_images` (фотографии)
-- `categories` (категории проектов)
+### Основные таблицы:
+- **projects** - портфолио проектов
+- **gallery_images** - изображения проектов
+- **categories** - категории проектов
+- **project_categories** - связь проектов и категорий
+- **contacts** - заявки от клиентов
+- **contact_notes** - заметки по заявкам
+- **users** - администраторы системы
 
-### Этап 2: Backend на Go
+Подробная схема БД доступна в [init.sql](init.sql)
 
-**2.1 Основные компоненты:**
+## 🔐 Безопасность
 
-- REST API для получения проектов, услуг
-- Обработка форм обратной связи
-- Админка для управления контентом
-- Загрузка и обработка изображений
+- ✅ JWT токены для авторизации
+- ✅ bcrypt хеширование паролей
+- ✅ Middleware защита админских роутов
+- ✅ CORS настройки
+- ✅ Валидация входных данных
+- ✅ SQL injection защита через GORM
 
-**2.2 Эндпоинты:**
+## 📚 Дополнительная документация
 
-```
-GET /api/projects - список проектов с фильтрацией
-GET /api/projects/:id - детали проекта
-GET /api/services - список услуг
-POST /api/contact - отправка заявки
-GET /admin/* - админ панель
-```
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) - Описание архитектуры проекта
+- [API.md](docs/API.md) - Документация API эндпоинтов
+- [DEPLOYMENT.md](docs/DEPLOYMENT.md) - Инструкция по деплою на production
 
-### Этап 3: Python сервисы
+## 📝 Лицензия
 
-**3.1 Обработка изображений:**
+Proprietary - All Rights Reserved
 
-- Автоматическое создание превью
-- Оптимизация размеров
-- Создание водяных знаков
+Этот проект является собственностью и защищен авторским правом. Использование, копирование, модификация или распространение без явного письменного разрешения владельца запрещено.
 
-**3.2 Аналитика:**
+## 💼 Разработчик
 
-- Подсчет просмотров проектов
-- Анализ популярных услуг
-- Метрики конверсии
+Проект разработан [@alekarah](https://github.com/alekarah) на коммерческой основе.
 
-### Этап 4: Frontend
+**Контакт для вопросов:** alekarah.all@gmail.com
 
-**4.1 Дизайн-система:**
+## 🙏 Благодарности
 
-- Светлая тема (в отличие от темной ekranika.ru)
-- Корпоративные цвета: синий (`#4A90E2`), белый, светло-серый
-- Современная типографика
-- Адаптивная верстка
+- [Gin Web Framework](https://gin-gonic.com/)
+- [GORM](https://gorm.io/)
+- [JWT-Go](https://github.com/golang-jwt/jwt)
 
-**4.2 Ключевые компоненты:**
+---
 
-- Героический блок с призывом к действию
-- Галерея проектов с фильтрацией
-- Интерактивная карта услуг
-- Форма заявки с валидацией
-- Слайдеры для портфолио
-
-### Этап 5: Контент и наполнение
-
-**5.1 Обработка фотографий заказчика:**
-
-- Категоризация по типам проектов
-- Создание описаний для каждого проекта
-- Оптимизация для веба
-
-**5.2 Текстовый контент:**
-
-- SEO-оптимизированные описания услуг
-- Преимущества компании
-- Технические характеристики
+⭐ Если вам понравился проект, поставьте звездочку!
