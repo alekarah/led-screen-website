@@ -61,8 +61,11 @@ fi
 if pgrep -x postgres > /dev/null 2>&1; then
     pg_pid=$(pgrep -x postgres | head -1)
     test_result "PostgreSQL запущен" "true" "PID: $pg_pid"
+elif docker ps --filter "name=postgres" --format "{{.Names}}" 2>/dev/null | grep -q postgres; then
+    docker_status=$(docker ps --filter "name=postgres" --format "{{.Names}}: {{.Status}}" 2>/dev/null | head -1)
+    test_result "PostgreSQL запущен" "true" "Docker: $docker_status"
 else
-    test_result "PostgreSQL запущен" "false" "Процесс postgres не найден"
+    test_result "PostgreSQL запущен" "false" "Процесс postgres не найден и нет Docker контейнера"
 fi
 
 # ========================================
@@ -170,8 +173,8 @@ fi
 # Админ логин страница
 test_endpoint "$base_url/admin/login" "Админ логин страница" "Вход"
 
-# Проверка что админ панель защищена
-admin_status=$(curl -s -o /dev/null -w "%{http_code}" "$base_url/admin/dashboard" 2>&1)
+# Проверка что админ панель защищена (главная страница админки)
+admin_status=$(curl -s -o /dev/null -w "%{http_code}" "$base_url/admin/" 2>&1)
 if [ "$admin_status" = "302" ] || [ "$admin_status" = "401" ]; then
     test_result "Админ панель защищена" "true" "Требуется авторизация"
 elif [ "$admin_status" = "200" ]; then

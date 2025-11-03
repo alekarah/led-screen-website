@@ -61,6 +61,7 @@ cd led-screen-website
 ### 2. Настройка переменных окружения
 
 ```bash
+cd backend
 # Создать .env файл
 cp .env.example .env
 
@@ -99,17 +100,9 @@ sudo postgresql-setup --initdb
 sudo systemctl start postgresql
 ```
 
-### 4. Инициализация базы данных
+**Примечание:** Инициализация базы данных выполняется автоматически через GORM миграции при первом запуске приложения (см. `backend/main.go`).
 
-```bash
-# Через Docker
-docker exec -i led-postgres psql -U postgres -d led_display_db < init.sql
-
-# Локальная установка
-psql -h localhost -U postgres -d led_display_db -f init.sql
-```
-
-### 5. Установка зависимостей Go
+### 4. Установка зависимостей Go
 
 ```bash
 cd backend
@@ -117,7 +110,7 @@ go mod download
 go mod verify
 ```
 
-### 6. Создание первого администратора
+### 5. Создание первого администратора
 
 ```bash
 cd cmd/create-admin
@@ -130,7 +123,7 @@ go run main.go
 go run cmd/create-admin/main.go
 ```
 
-### 7. Запуск приложения
+### 6. Запуск приложения
 
 ```bash
 cd backend
@@ -278,6 +271,7 @@ cd /opt/led-website
 git clone https://github.com/yourusername/led-screen-website.git .
 
 # Настроить .env
+cd backend
 cp .env.example .env
 nano .env
 ```
@@ -316,13 +310,9 @@ go build -o led-website -ldflags="-s -w" main.go
 ./led-website
 ```
 
-#### 7. Инициализация БД
+**Примечание:** База данных будет инициализирована автоматически через GORM миграции при первом запуске приложения.
 
-```bash
-psql -h localhost -U led_user -d led_display_db -f /opt/led-website/init.sql
-```
-
-#### 8. Создание администратора
+#### 7. Создание администратора
 
 ```bash
 cd /opt/led-website/backend/cmd/create-admin
@@ -388,7 +378,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
     networks:
       - led-network
@@ -659,7 +648,7 @@ RestartSec=5s
 
 # Environment
 Environment="ENVIRONMENT=production"
-EnvironmentFile=/opt/led-website/.env
+EnvironmentFile=/opt/led-website/backend/.env
 
 # Security
 NoNewPrivileges=true

@@ -3,15 +3,14 @@ services:
     image: postgres:15
     container_name: led-postgres
     environment:
-      POSTGRES_DB: led_display_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: ${POSTGRES_DB:-led_display_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password123}
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
 
   # Опционально: pgAdmin для управления БД через веб-интерфейс
@@ -19,8 +18,8 @@ services:
     image: dpage/pgadmin4
     container_name: led-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@ledsite.ru
-      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@ledsite.ru}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin123}
     ports:
       - "8081:80"
     depends_on:

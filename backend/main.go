@@ -24,6 +24,16 @@ func main() {
 	// Инициализируем конфигурацию
 	cfg := config.Load()
 
+	// КРИТИЧНАЯ ПРОВЕРКА: в production обязательно нужен уникальный JWT_SECRET
+	if cfg.Environment == "production" {
+		jwtSecret := os.Getenv("JWT_SECRET")
+		if jwtSecret == "" || jwtSecret == "your-secret-key-change-in-production" {
+			log.Fatal("CRITICAL SECURITY ERROR: Change JWT_SECRET in production!\n" +
+				"Generate a strong secret with: openssl rand -base64 32")
+		}
+		log.Println("✓ JWT_SECRET validation passed")
+	}
+
 	// Подключаемся к базе данных
 	db, err := database.Connect(cfg)
 	if err != nil {

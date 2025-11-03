@@ -20,7 +20,7 @@ import (
 func main() {
 	fmt.Println("=== Утилита создания администратора ===\n")
 
-	// Загружаем .env файл
+	// Загружаем .env файл из backend/.env
 	if err := godotenv.Load("../../.env"); err != nil {
 		log.Println("Warning: .env file not found, using environment variables")
 	}

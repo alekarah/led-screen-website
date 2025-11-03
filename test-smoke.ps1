@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # Smoke Test для LED Screen Website
 # ========================================
 # Быстрая автоматическая проверка критичных функций
@@ -61,7 +61,13 @@ try {
     if ($pgProcess) {
         Test-Result "PostgreSQL запущен" $true "PID: $($pgProcess.Id)"
     } else {
-        Test-Result "PostgreSQL запущен" $false "Процесс postgres не найден"
+        # Проверяем Docker контейнер
+        $dockerStatus = & docker ps --filter "name=postgres" --format "{{.Names}}: {{.Status}}" 2>&1
+        if ($LASTEXITCODE -eq 0 -and $dockerStatus -match "postgres") {
+            Test-Result "PostgreSQL запущен" $true "Docker: $dockerStatus"
+        } else {
+            Test-Result "PostgreSQL запущен" $false "Процесс postgres не найден и нет Docker контейнера"
+        }
     }
 } catch {
     Test-Result "PostgreSQL запущен" $false "Не удалось проверить"
@@ -177,7 +183,7 @@ Test-Endpoint "$baseUrl/admin/login" "Админ логин страница" "�
 
 # Проверка что админ панель защищена (должен редиректить на логин)
 try {
-    $adminResponse = Invoke-WebRequest -Uri "$baseUrl/admin/dashboard" -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue
+    $adminResponse = Invoke-WebRequest -Uri "$baseUrl/admin/" -UseBasicParsing -MaximumRedirection 0 -ErrorAction SilentlyContinue
     # Если редирект (302) или Unauthorized (401) - это правильно
     if ($adminResponse.StatusCode -in @(302, 401)) {
         Test-Result "Админ панель защищена" $true "Требуется авторизация"
