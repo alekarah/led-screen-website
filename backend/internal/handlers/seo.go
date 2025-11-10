@@ -1,0 +1,142 @@
+package handlers
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"ledsite/internal/models"
+)
+
+// Sitemap генерирует XML карту сайта для поисковых систем.
+//
+// Включает:
+//   - Статические страницы (главная, услуги, контакты и т.д.)
+//   - Динамические страницы проектов из БД
+//
+// Формат соответствует спецификации sitemap.org
+// Частота обновления и приоритет настроены для оптимальной индексации.
+//
+// GET /sitemap.xml
+func (h *Handlers) Sitemap(c *gin.Context) {
+	// Базовый URL сайта (production)
+	baseURL := "https://s-n-r.ru"
+
+	// Если development - использовать localhost
+	if c.Request.Host != "" {
+		if c.Request.TLS != nil {
+			baseURL = "https://" + c.Request.Host
+		} else {
+			baseURL = "http://" + c.Request.Host
+		}
+	}
+
+	// Получаем все проекты для динамических URL
+	var projects []models.Project
+	h.db.Select("id, slug, updated_at").Order("updated_at DESC").Find(&projects)
+
+	// Текущая дата для lastmod
+	now := time.Now().Format("2006-01-02")
+
+	// Начало XML
+	xml := `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`
+
+	// Статические страницы
+	staticPages := []struct {
+		loc        string
+		changefreq string
+		priority   string
+	}{
+		{baseURL + "/", "weekly", "1.0"},                    // Главная - максимальный приоритет
+		{baseURL + "/projects", "weekly", "0.9"},            // Портфолио
+		{baseURL + "/services", "monthly", "0.8"},           // Услуги
+		{baseURL + "/contact", "monthly", "0.7"},            // Контакты
+		{baseURL + "/privacy", "yearly", "0.3"},             // Политика конфиденциальности
+	}
+
+	for _, page := range staticPages {
+		xml += fmt.Sprintf(`  <url>
+    <loc>%s</loc>
+    <lastmod>%s</lastmod>
+    <changefreq>%s</changefreq>
+    <priority>%s</priority>
+  </url>
+`, page.loc, now, page.changefreq, page.priority)
+	}
+
+	// Динамические страницы проектов (если у вас есть отдельные страницы для проектов)
+	// Раскомментируйте если есть роут вида /projects/:slug
+	/*
+	for _, project := range projects {
+		lastmod := project.UpdatedAt.Format("2006-01-02")
+		xml += fmt.Sprintf(`  <url>
+    <loc>%s/projects/%s</loc>
+    <lastmod>%s</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+`, baseURL, project.Slug, lastmod)
+	}
+	*/
+
+	// Закрываем XML
+	xml += `</urlset>
+`
+
+	c.Header("Content-Type", "application/xml; charset=utf-8")
+	c.String(http.StatusOK, xml)
+}
+
+// RobotsTxt генерирует файл robots.txt с правилами для поисковых ботов.
+//
+// Включает:
+//   - Разрешения для всех ботов
+//   - Запрет на индексацию админ-панели
+//   - Ссылку на sitemap.xml
+//
+// GET /robots.txt
+func (h *Handlers) RobotsTxt(c *gin.Context) {
+	// Базовый URL сайта
+	baseURL := "https://s-n-r.ru"
+
+	// Если development - использовать localhost
+	if c.Request.Host != "" {
+		if c.Request.TLS != nil {
+			baseURL = "https://" + c.Request.Host
+		} else {
+			baseURL = "http://" + c.Request.Host
+		}
+	}
+
+	robots := fmt.Sprintf(`# robots.txt для s-n-r.ru
+# LED экраны в Санкт-Петербурге
+
+# Разрешаем всем поисковым ботам индексировать сайт
+User-agent: *
+Allow: /
+
+# Запрещаем индексацию админ-панели
+Disallow: /admin/
+Disallow: /api/admin/
+
+# Запрещаем индексацию служебных файлов
+Disallow: /static/uploads/
+
+# Карта сайта для поисковых систем
+Sitemap: %s/sitemap.xml
+
+# Специальные правила для Яндекса
+User-agent: Yandex
+Allow: /
+
+# Специальные правила для Google
+User-agent: Googlebot
+Allow: /
+`, baseURL)
+
+	c.Header("Content-Type", "text/plain; charset=utf-8")
+	c.String(http.StatusOK, robots)
+}

@@ -46,6 +46,10 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 	// Healthcheck endpoint для мониторинга (Kubernetes, Docker, etc.)
 	router.GET("/healthz", func(c *gin.Context) { c.String(200, "ok") })
 
+	// SEO endpoints для поисковых систем
+	router.GET("/sitemap.xml", h.Sitemap)
+	router.GET("/robots.txt", h.RobotsTxt)
+
 	// Публичные страницы
 	router.GET("/", h.HomePage)
 	router.GET("/projects", h.ProjectsPage)

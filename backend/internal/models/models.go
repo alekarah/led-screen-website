@@ -12,7 +12,6 @@
 //   - Service - услуги компании
 //   - Admin - администраторы системы
 //   - ProjectViewDaily - аналитика просмотров
-//   - Settings - настройки сайта
 package models
 
 import (
@@ -148,23 +147,6 @@ type ContactForm struct {
 	ArchivedAt  *time.Time `json:"archived_at" gorm:"index"` // NULL = активная заявка, NOT NULL = архив
 	RemindAt    *time.Time `json:"remind_at" gorm:"index"`   // Дата/время напоминания для перезвона (МСК)
 	RemindFlag  bool       `json:"remind_flag" gorm:"default:false"` // Флаг активного напоминания
-}
-
-// Settings представляет настройки сайта (ключ-значение).
-//
-// Примеры настроек:
-//   - company_name, company_phone, company_email
-//   - meta_title, meta_description (SEO)
-//   - feature flags для включения/выключения функций
-//
-// Type определяет тип значения: "text", "number", "boolean", "json"
-type Settings struct {
-	ID        uint      `json:"id" gorm:"primaryKey"`
-	Key       string    `json:"key" gorm:"unique;not null"`
-	Value     string    `json:"value"`
-	Type      string    `json:"type"` // Тип значения: "text", "number", "boolean", "json"
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // ContactNote представляет заметку менеджера по заявке клиента.
