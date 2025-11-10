@@ -263,7 +263,7 @@ func seedInitialData(db *gorm.DB) error {
 	settings := []models.Settings{
 		{Key: "company_name", Value: "Service 'n' Repair LED Display", Type: "text"},
 		{Key: "company_phone", Value: "+7 (921) 429-17-02", Type: "text"},
-		{Key: "company_email", Value: "info@ledsite.ru", Type: "text"},
+		{Key: "company_email", Value: "rudkin_ds@mail.ru", Type: "text"},
 		{Key: "company_address", Value: "Санкт-Петербург и Ленинградская область", Type: "text"},
 		{Key: "meta_title", Value: "LED экраны в СПб | Продажа, монтаж, обслуживание", Type: "text"},
 		{Key: "meta_description", Value: "Продажа и обслуживание LED экранов в Санкт-Петербурге. Интерьерные и уличные дисплеи, ремонт, металлоконструкции.", Type: "text"},
