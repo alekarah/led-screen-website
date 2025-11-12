@@ -28,7 +28,7 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 
 	// Проверяем что проект существует
 	var project models.Project
-	if err := h.db.First(&project, projectID).Error; err != nil {
+	if dbErr := h.db.First(&project, projectID).Error; dbErr != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": "Проект не найден",
 		})

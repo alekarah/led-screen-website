@@ -94,16 +94,16 @@ func (h *Handlers) Sitemap(c *gin.Context) {
 	// Динамические страницы проектов (если у вас есть отдельные страницы для проектов)
 	// Раскомментируйте если есть роут вида /projects/:slug
 	/*
-		for _, project := range projects {
-			lastmod := project.UpdatedAt.Format("2006-01-02")
-			xml += fmt.Sprintf(`  <url>
-	    <loc>%s/projects/%s</loc>
-	    <lastmod>%s</lastmod>
-	    <changefreq>monthly</changefreq>
-	    <priority>0.6</priority>
-	  </url>
-	`, baseURL, project.Slug, lastmod)
-		}
+			for _, project := range projects {
+				lastmod := project.UpdatedAt.Format("2006-01-02")
+				xml += fmt.Sprintf(`  <url>
+		    <loc>%s/projects/%s</loc>
+		    <lastmod>%s</lastmod>
+		    <changefreq>monthly</changefreq>
+		    <priority>0.6</priority>
+		  </url>
+		`, baseURL, project.Slug, lastmod)
+			}
 	*/
 
 	// Закрываем XML

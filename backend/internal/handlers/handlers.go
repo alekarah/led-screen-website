@@ -176,8 +176,14 @@ func (h *Handlers) GetProjects(c *gin.Context) {
 	var projects []models.Project
 
 	// Параметры пагинации
-	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "12"))
+	page := 1
+	if p, err := strconv.Atoi(c.DefaultQuery("page", "1")); err == nil && p > 0 {
+		page = p
+	}
+	limit := 12
+	if l, err := strconv.Atoi(c.DefaultQuery("limit", "12")); err == nil && l > 0 {
+		limit = l
+	}
 	offset := (page - 1) * limit
 
 	// Фильтрация по категории

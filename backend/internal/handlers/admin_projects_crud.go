@@ -121,7 +121,9 @@ func (h *Handlers) UpdateProject(c *gin.Context) {
 		return
 	}
 
-	h.db.Model(&project).Association("Categories").Clear()
+	if err := h.db.Model(&project).Association("Categories").Clear(); err != nil {
+		log.Printf("Ошибка очистки категорий для проекта ID=%d: %v", project.ID, err)
+	}
 	for _, idStr := range c.PostFormArray("categories") {
 		if categoryId, err := strconv.Atoi(idStr); err == nil {
 			var category models.Category

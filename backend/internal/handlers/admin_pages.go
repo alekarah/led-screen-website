@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/csv"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -199,6 +200,6 @@ func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
 	}
 	w.Flush()
 	if err := w.Error(); err != nil {
-		_ = c.Error(err) // c.Error return value is intentionally ignored
+		log.Printf("CSV flush error: %v", err)
 	}
 }
