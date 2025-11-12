@@ -12,6 +12,35 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Go приложение
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: led-app
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password123}@postgres:5432/${POSTGRES_DB:-led_display_db}?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      PORT: 8080
+      UPLOAD_PATH: ../frontend/static/uploads
+      MAX_UPLOAD_SIZE: 10485760
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./frontend/static/uploads:/root/static/uploads
+      - ./frontend/templates:/root/templates
+      - ./frontend/static:/root/static
+    restart: unless-stopped
 
   # Опционально: pgAdmin для управления БД через веб-интерфейс
   pgadmin:

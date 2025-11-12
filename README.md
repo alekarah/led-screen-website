@@ -6,6 +6,8 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?style=flat&logo=postgresql)](https://www.postgresql.org/)
 [![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 [![Production](https://img.shields.io/badge/Production-Live-success)](https://s-n-r.ru)
+[![CI](https://github.com/alekarah/led-screen-website/actions/workflows/ci.yml/badge.svg)](https://github.com/alekarah/led-screen-website/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/alekarah/led-screen-website/branch/main/graph/badge.svg)](https://codecov.io/gh/alekarah/led-screen-website)
 
 **🌐 Production сайт:** [https://s-n-r.ru](https://s-n-r.ru)
 
@@ -23,6 +25,7 @@
 - 📈 Встроенная аналитика просмотров
 - 💾 Экспорт данных в CSV
 - 🔍 SEO-оптимизация (sitemap.xml, robots.txt)
+- 🧪 Unit тесты и CI/CD (GitHub Actions)
 
 ## ✨ Возможности
 
@@ -211,6 +214,31 @@ led-screen-website/
 **Для ускорения индексации:**
 1. Добавьте sitemap в [Google Search Console](https://search.google.com/search-console)
 2. Добавьте sitemap в [Яндекс.Вебмастер](https://webmaster.yandex.ru)
+
+## 🧪 Тестирование
+
+Проект включает автоматизированное тестирование и CI/CD:
+
+### Unit тесты
+```bash
+cd backend
+go test ./... -v -cover
+```
+
+**Покрытие тестами:**
+- ✅ **Handlers** (API endpoints) - основные публичные эндпоинты
+- ✅ **Middleware** (JWT Auth) - 100% покрытие
+- ✅ **SEO** (sitemap.xml, robots.txt) - полное покрытие
+
+### CI/CD Pipeline (GitHub Actions)
+
+При каждом push в `main` или `develop` автоматически:
+1. **Тестирование** - запуск всех unit тестов
+2. **Линтинг** - проверка кода с golangci-lint
+3. **Сборка** - компиляция бинарника
+4. **Coverage** - загрузка отчета о покрытии в Codecov
+
+Статус сборки и покрытие тестами можно увидеть в badges вверху README.
 
 ## 📚 Документация
 

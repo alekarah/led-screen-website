@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	fmt.Println("=== Утилита создания администратора ===\n")
+	fmt.Println("=== Утилита создания администратора ===")
 
 	// Загружаем .env файл из backend/.env
 	if err := godotenv.Load("../../.env"); err != nil {
