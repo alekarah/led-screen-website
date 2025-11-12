@@ -43,7 +43,10 @@ func main() {
 
 	// Ввод имени пользователя
 	fmt.Print("Введите имя пользователя (username): ")
-	username, _ := reader.ReadString('\n')
+	username, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("Error reading username: %v", err)
+	}
 	username = strings.TrimSpace(username)
 
 	if username == "" {
@@ -55,7 +58,10 @@ func main() {
 	if err := db.Where("username = ?", username).First(&existing).Error; err == nil {
 		fmt.Printf("\nПользователь '%s' уже существует!\n", username)
 		fmt.Print("Хотите обновить пароль? (y/n): ")
-		answer, _ := reader.ReadString('\n')
+		answer, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatalf("Error reading answer: %v", err)
+		}
 		answer = strings.TrimSpace(strings.ToLower(answer))
 
 		if answer != "y" && answer != "yes" && answer != "да" {
@@ -103,7 +109,10 @@ func main() {
 
 	// Создаём нового пользователя
 	fmt.Print("Введите email (необязательно): ")
-	email, _ := reader.ReadString('\n')
+	email, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf("Error reading email: %v", err)
+	}
 	email = strings.TrimSpace(email)
 
 	// Ввод пароля (скрытый)

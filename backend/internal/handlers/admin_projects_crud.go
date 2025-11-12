@@ -53,7 +53,9 @@ func (h *Handlers) CreateProject(c *gin.Context) {
 		if id, err := strconv.Atoi(idStr); err == nil {
 			var category models.Category
 			if h.db.First(&category, id).Error == nil {
-				h.db.Model(&project).Association("Categories").Append(&category)
+				if err := h.db.Model(&project).Association("Categories").Append(&category); err != nil {
+					log.Printf("Ошибка добавления категории ID=%d к проекту ID=%d: %v", id, project.ID, err)
+				}
 			}
 		}
 	}
@@ -124,7 +126,9 @@ func (h *Handlers) UpdateProject(c *gin.Context) {
 		if categoryId, err := strconv.Atoi(idStr); err == nil {
 			var category models.Category
 			if h.db.First(&category, categoryId).Error == nil {
-				h.db.Model(&project).Association("Categories").Append(&category)
+				if err := h.db.Model(&project).Association("Categories").Append(&category); err != nil {
+					log.Printf("Ошибка добавления категории ID=%d к проекту ID=%d: %v", categoryId, project.ID, err)
+				}
 			}
 		}
 	}

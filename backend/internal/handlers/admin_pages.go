@@ -177,18 +177,28 @@ func (h *Handlers) AdminContactsExportCSV(c *gin.Context) {
 	c.Header("Content-Type", "text/csv; charset=utf-8")
 	c.Header("Content-Disposition", `attachment; filename="`+filename+`"`)
 
-	c.Writer.Write([]byte{0xEF, 0xBB, 0xBF})
+	// UTF-8 BOM для корректного открытия в Excel
+	if _, err := c.Writer.Write([]byte{0xEF, 0xBB, 0xBF}); err != nil {
+		c.String(http.StatusInternalServerError, "Error writing BOM")
+		return
+	}
 	w := csv.NewWriter(c.Writer)
 	w.Comma = ';'
-	_ = w.Write(csvHeadersContacts)
+	if err := w.Write(csvHeadersContacts); err != nil {
+		c.String(http.StatusInternalServerError, "Error writing CSV header")
+		return
+	}
 	for _, cf := range contacts {
-		_ = w.Write([]string{
+		if err := w.Write([]string{
 			cf.Name, cf.Phone, cf.Email, cf.Company, cf.ProjectType, cf.Message, cf.Status,
 			cf.CreatedAt.In(moscowLoc).Format("02.01.2006 15:04"),
-		})
+		}); err != nil {
+			c.String(http.StatusInternalServerError, "Error writing CSV row")
+			return
+		}
 	}
 	w.Flush()
 	if err := w.Error(); err != nil {
-		c.Error(err)
+		_ = c.Error(err) // c.Error return value is intentionally ignored
 	}
 }

@@ -11,7 +11,16 @@ import (
 	"gorm.io/gorm"
 )
 
-var moscowLoc, _ = time.LoadLocation("Europe/Moscow")
+// moscowLoc is the Moscow timezone location
+// time.LoadLocation for "Europe/Moscow" cannot fail in practice
+var moscowLoc = func() *time.Location {
+	loc, err := time.LoadLocation("Europe/Moscow")
+	if err != nil {
+		// Fallback to UTC if Moscow timezone is not available
+		return time.UTC
+	}
+	return loc
+}()
 
 func NowMSK() time.Time {
 	return time.Now().In(moscowLoc)

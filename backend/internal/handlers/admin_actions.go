@@ -103,7 +103,10 @@ func (h *Handlers) RestoreContact(c *gin.Context) {
 	var body struct {
 		To string `json:"to"`
 	} // допустимо: "new" | "processed"
-	_ = c.ShouldBindJSON(&body)
+	// Игнорируем ошибку binding - используем значение по умолчанию если не передано
+	if err := c.ShouldBindJSON(&body); err != nil {
+		body.To = "new" // default value
+	}
 	if body.To != "processed" {
 		body.To = "new"
 	}
