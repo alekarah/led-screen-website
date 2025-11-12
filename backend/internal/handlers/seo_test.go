@@ -118,10 +118,64 @@ func TestRobotsTxt_Format(t *testing.T) {
 				nextLine := lines[i+1]
 				assert.True(t,
 					strings.HasPrefix(nextLine, "Allow:") ||
-					strings.HasPrefix(nextLine, "Disallow:") ||
-					nextLine == "",
+						strings.HasPrefix(nextLine, "Disallow:") ||
+						nextLine == "",
 					"После User-agent должна быть директива или пустая строка")
 			}
 		}
 	}
+}
+
+// TestSitemap_HTTPS проверяет что production домен использует HTTPS
+func TestSitemap_HTTPS(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.GET("/sitemap.xml", h.Sitemap)
+
+	// Эмулируем запрос к production домену
+	req, _ := http.NewRequest("GET", "/sitemap.xml", nil)
+	req.Host = "s-n-r.ru"
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	body := w.Body.String()
+
+	// Production домен должен использовать HTTPS
+	assert.Contains(t, body, "<loc>https://s-n-r.ru/</loc>")
+	assert.NotContains(t, body, "<loc>http://s-n-r.ru/</loc>")
+}
+
+// TestSitemap_ForwardedProto проверяет поддержку X-Forwarded-Proto заголовка
+func TestSitemap_ForwardedProto(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.GET("/sitemap.xml", h.Sitemap)
+
+	// Эмулируем запрос через nginx reverse proxy с SSL
+	req, _ := http.NewRequest("GET", "/sitemap.xml", nil)
+	req.Host = "example.com"
+	req.Header.Set("X-Forwarded-Proto", "https")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	body := w.Body.String()
+
+	// Должен использовать HTTPS из заголовка
+	assert.Contains(t, body, "<loc>https://example.com/</loc>")
+}
+
+// TestRobotsTxt_HTTPS проверяет что robots.txt использует HTTPS для sitemap
+func TestRobotsTxt_HTTPS(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.GET("/robots.txt", h.RobotsTxt)
+
+	// Эмулируем запрос к production домену
+	req, _ := http.NewRequest("GET", "/robots.txt", nil)
+	req.Host = "s-n-r.ru"
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	body := w.Body.String()
+
+	// Sitemap должен быть по HTTPS
+	assert.Contains(t, body, "Sitemap: https://s-n-r.ru/sitemap.xml")
+	assert.NotContains(t, body, "Sitemap: http://s-n-r.ru/sitemap.xml")
 }

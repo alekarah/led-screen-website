@@ -60,7 +60,10 @@ func main() {
 		"sub": func(a, b float64) float64 { return a - b },
 		"fmtTime": func(t time.Time) string {
 			// Мск, если нужна локаль с часовым поясом
-			loc, _ := time.LoadLocation("Europe/Moscow")
+			loc, err := time.LoadLocation("Europe/Moscow")
+			if err != nil {
+				loc = time.UTC // fallback to UTC
+			}
 			return t.In(loc).Format("02.01.2006 15:04")
 		},
 		"add": func(a, b int) int { return a + b },

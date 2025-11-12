@@ -43,7 +43,7 @@ import (
 //   - "info" - все запросы включая SELECT
 //
 // Используется для настройки GORM logger при подключении к БД.
-func gormLogLevel(level string) logger.LogLevel{
+func gormLogLevel(level string) logger.LogLevel {
 	switch level {
 	case "silent":
 		return logger.Silent

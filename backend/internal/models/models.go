@@ -141,11 +141,11 @@ type ContactForm struct {
 	Company     string     `json:"company"`
 	ProjectType string     `json:"project_type"`
 	Message     string     `json:"message"`
-	Source      string     `json:"source"` // Источник заявки: "contact_form", "calculator", "phone_call" и т.д.
+	Source      string     `json:"source"`                                             // Источник заявки: "contact_form", "calculator", "phone_call" и т.д.
 	Status      string     `json:"status" gorm:"type:varchar(20);default:'new';index"` // Статус: "new", "processed", "archived"
 	CreatedAt   time.Time  `json:"created_at" gorm:"index"`
-	ArchivedAt  *time.Time `json:"archived_at" gorm:"index"` // NULL = активная заявка, NOT NULL = архив
-	RemindAt    *time.Time `json:"remind_at" gorm:"index"`   // Дата/время напоминания для перезвона (МСК)
+	ArchivedAt  *time.Time `json:"archived_at" gorm:"index"`         // NULL = активная заявка, NOT NULL = архив
+	RemindAt    *time.Time `json:"remind_at" gorm:"index"`           // Дата/время напоминания для перезвона (МСК)
 	RemindFlag  bool       `json:"remind_flag" gorm:"default:false"` // Флаг активного напоминания
 }
 

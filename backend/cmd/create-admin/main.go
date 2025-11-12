@@ -42,8 +42,9 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 
 	// Ввод имени пользователя
+	var username, email string
 	fmt.Print("Введите имя пользователя (username): ")
-	username, err := reader.ReadString('\n')
+	username, err = reader.ReadString('\n')
 	if err != nil {
 		log.Fatalf("Error reading username: %v", err)
 	}
@@ -58,9 +59,9 @@ func main() {
 	if err := db.Where("username = ?", username).First(&existing).Error; err == nil {
 		fmt.Printf("\nПользователь '%s' уже существует!\n", username)
 		fmt.Print("Хотите обновить пароль? (y/n): ")
-		answer, err := reader.ReadString('\n')
-		if err != nil {
-			log.Fatalf("Error reading answer: %v", err)
+		answer, readErr := reader.ReadString('\n')
+		if readErr != nil {
+			log.Fatalf("Error reading answer: %v", readErr)
 		}
 		answer = strings.TrimSpace(strings.ToLower(answer))
 
@@ -70,30 +71,32 @@ func main() {
 		}
 
 		// Обновляем пароль существующего пользователя
+		var pwd, pwdConfirm string
+		var pwdErr error
 		fmt.Print("Введите новый пароль: ")
-		password, err := readPassword()
-		if err != nil {
-			log.Fatalf("Error reading password: %v", err)
+		pwd, pwdErr = readPassword()
+		if pwdErr != nil {
+			log.Fatalf("Error reading password: %v", pwdErr)
 		}
 
-		if len(password) < 8 {
+		if len(pwd) < 8 {
 			log.Fatal("Пароль должен содержать минимум 8 символов")
 		}
 
 		fmt.Print("\nПовторите пароль: ")
-		passwordConfirm, err := readPassword()
-		if err != nil {
-			log.Fatalf("Error reading password: %v", err)
+		pwdConfirm, pwdErr = readPassword()
+		if pwdErr != nil {
+			log.Fatalf("Error reading password: %v", pwdErr)
 		}
 
-		if password != passwordConfirm {
+		if pwd != pwdConfirm {
 			log.Fatal("\nПароли не совпадают")
 		}
 
 		// Хешируем пароль
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-		if err != nil {
-			log.Fatalf("Error hashing password: %v", err)
+		hashedPassword, pwdErr := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost)
+		if pwdErr != nil {
+			log.Fatalf("Error hashing password: %v", pwdErr)
 		}
 
 		existing.PasswordHash = string(hashedPassword)
@@ -109,15 +112,16 @@ func main() {
 
 	// Создаём нового пользователя
 	fmt.Print("Введите email (необязательно): ")
-	email, err := reader.ReadString('\n')
+	email, err = reader.ReadString('\n')
 	if err != nil {
 		log.Fatalf("Error reading email: %v", err)
 	}
 	email = strings.TrimSpace(email)
 
 	// Ввод пароля (скрытый)
+	var password, passwordConfirm string
 	fmt.Print("Введите пароль (минимум 8 символов): ")
-	password, err := readPassword()
+	password, err = readPassword()
 	if err != nil {
 		log.Fatalf("Error reading password: %v", err)
 	}
@@ -127,7 +131,7 @@ func main() {
 	}
 
 	fmt.Print("\nПовторите пароль: ")
-	passwordConfirm, err := readPassword()
+	passwordConfirm, err = readPassword()
 	if err != nil {
 		log.Fatalf("Error reading password: %v", err)
 	}

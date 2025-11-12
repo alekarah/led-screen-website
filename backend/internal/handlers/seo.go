@@ -3,11 +3,44 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"ledsite/internal/models"
 )
+
+// getBaseURL определяет базовый URL с правильным протоколом (http/https).
+// Учитывает работу за reverse proxy (nginx) через заголовки X-Forwarded-Proto и X-Forwarded-Host.
+func getBaseURL(c *gin.Context) string {
+	// Production домен всегда использует HTTPS
+	host := c.Request.Host
+	if host == "s-n-r.ru" || host == "www.s-n-r.ru" {
+		return "https://s-n-r.ru"
+	}
+
+	// Проверяем заголовки от reverse proxy (nginx)
+	proto := c.GetHeader("X-Forwarded-Proto")
+	if proto == "" {
+		// Если нет заголовка от proxy, проверяем TLS
+		if c.Request.TLS != nil {
+			proto = "https"
+		} else {
+			proto = "http"
+		}
+	}
+
+	// Используем X-Forwarded-Host если есть, иначе Host
+	forwardedHost := c.GetHeader("X-Forwarded-Host")
+	if forwardedHost != "" {
+		host = forwardedHost
+	}
+
+	// Убираем www. если есть
+	host = strings.TrimPrefix(host, "www.")
+
+	return proto + "://" + host
+}
 
 // Sitemap генерирует XML карту сайта для поисковых систем.
 //
@@ -20,17 +53,8 @@ import (
 //
 // GET /sitemap.xml
 func (h *Handlers) Sitemap(c *gin.Context) {
-	// Базовый URL сайта (production)
-	baseURL := "https://s-n-r.ru"
-
-	// Если development - использовать localhost
-	if c.Request.Host != "" {
-		if c.Request.TLS != nil {
-			baseURL = "https://" + c.Request.Host
-		} else {
-			baseURL = "http://" + c.Request.Host
-		}
-	}
+	// Определяем базовый URL с учетом SSL и reverse proxy
+	baseURL := getBaseURL(c)
 
 	// Получаем все проекты для динамических URL
 	var projects []models.Project
@@ -50,11 +74,11 @@ func (h *Handlers) Sitemap(c *gin.Context) {
 		changefreq string
 		priority   string
 	}{
-		{baseURL + "/", "weekly", "1.0"},                    // Главная - максимальный приоритет
-		{baseURL + "/projects", "weekly", "0.9"},            // Портфолио
-		{baseURL + "/services", "monthly", "0.8"},           // Услуги
-		{baseURL + "/contact", "monthly", "0.7"},            // Контакты
-		{baseURL + "/privacy", "yearly", "0.3"},             // Политика конфиденциальности
+		{baseURL + "/", "weekly", "1.0"},          // Главная - максимальный приоритет
+		{baseURL + "/projects", "weekly", "0.9"},  // Портфолио
+		{baseURL + "/services", "monthly", "0.8"}, // Услуги
+		{baseURL + "/contact", "monthly", "0.7"},  // Контакты
+		{baseURL + "/privacy", "yearly", "0.3"},   // Политика конфиденциальности
 	}
 
 	for _, page := range staticPages {
@@ -70,16 +94,16 @@ func (h *Handlers) Sitemap(c *gin.Context) {
 	// Динамические страницы проектов (если у вас есть отдельные страницы для проектов)
 	// Раскомментируйте если есть роут вида /projects/:slug
 	/*
-	for _, project := range projects {
-		lastmod := project.UpdatedAt.Format("2006-01-02")
-		xml += fmt.Sprintf(`  <url>
-    <loc>%s/projects/%s</loc>
-    <lastmod>%s</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-`, baseURL, project.Slug, lastmod)
-	}
+		for _, project := range projects {
+			lastmod := project.UpdatedAt.Format("2006-01-02")
+			xml += fmt.Sprintf(`  <url>
+	    <loc>%s/projects/%s</loc>
+	    <lastmod>%s</lastmod>
+	    <changefreq>monthly</changefreq>
+	    <priority>0.6</priority>
+	  </url>
+	`, baseURL, project.Slug, lastmod)
+		}
 	*/
 
 	// Закрываем XML
@@ -99,17 +123,8 @@ func (h *Handlers) Sitemap(c *gin.Context) {
 //
 // GET /robots.txt
 func (h *Handlers) RobotsTxt(c *gin.Context) {
-	// Базовый URL сайта
-	baseURL := "https://s-n-r.ru"
-
-	// Если development - использовать localhost
-	if c.Request.Host != "" {
-		if c.Request.TLS != nil {
-			baseURL = "https://" + c.Request.Host
-		} else {
-			baseURL = "http://" + c.Request.Host
-		}
-	}
+	// Определяем базовый URL с учетом SSL и reverse proxy
+	baseURL := getBaseURL(c)
 
 	robots := fmt.Sprintf(`# robots.txt для s-n-r.ru
 # LED экраны в Санкт-Петербурге

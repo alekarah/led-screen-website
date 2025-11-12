@@ -88,13 +88,13 @@ func (h *Handlers) Login(c *gin.Context) {
 	// Secure флаг включается автоматически в production для защиты токена через HTTPS
 	secure := os.Getenv("ENVIRONMENT") == "production"
 	c.SetCookie(
-		"admin_token",           // название cookie
-		token,                   // значение токена
-		3600*24*7,              // время жизни 7 дней (в секундах)
-		"/",                     // путь
-		"",                      // домен (пустая строка = текущий домен)
-		secure,                  // secure (автоматически true в production)
-		true,                    // httpOnly (защита от XSS)
+		"admin_token", // название cookie
+		token,         // значение токена
+		3600*24*7,     // время жизни 7 дней (в секундах)
+		"/",           // путь
+		"",            // домен (пустая строка = текущий домен)
+		secure,        // secure (автоматически true в production)
+		true,          // httpOnly (защита от XSS)
 	)
 
 	// Перенаправляем на главную страницу админки
@@ -107,7 +107,7 @@ func (h *Handlers) Logout(c *gin.Context) {
 	c.SetCookie(
 		"admin_token",
 		"",
-		-1,      // время жизни -1 = удалить
+		-1, // время жизни -1 = удалить
 		"/",
 		"",
 		false,

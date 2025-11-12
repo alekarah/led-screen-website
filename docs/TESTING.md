@@ -59,7 +59,7 @@ go test ./internal/handlers -run TestGetProjects -v
 
 **Тестовые файлы:**
 - `backend/internal/handlers/handlers_test.go` - 9 тестов для API
-- `backend/internal/handlers/seo_test.go` - 4 теста для SEO
+- `backend/internal/handlers/seo_test.go` - 7 тестов для SEO (включая HTTPS)
 - `backend/internal/middleware/auth_test.go` - 6 тестов для JWT
 
 ---
@@ -84,10 +84,12 @@ go test ./internal/handlers -run TestGetProjects -v
 - ⚠️ UPSERT просмотров (skip в SQLite)
 
 **SEO:**
-- ✅ Генерация sitemap.xml
+- ✅ Генерация sitemap.xml с правильным протоколом (https://)
 - ✅ Правильность приоритетов страниц
-- ✅ Генерация robots.txt
+- ✅ Генерация robots.txt с HTTPS sitemap
 - ✅ Корректность формата robots.txt
+- ✅ Поддержка X-Forwarded-Proto (nginx reverse proxy)
+- ✅ HTTPS для production домена (s-n-r.ru)
 
 #### Middleware (JWT Authorization)
 
@@ -565,10 +567,11 @@ func TestProjectCRUD(t *testing.T) {
 ## 📈 Статистика тестирования
 
 **Текущее состояние:**
-- ✅ 19 автоматических unit тестов
+- ✅ 22 автоматических unit тестов
 - ✅ 14 smoke tests
 - ✅ CI/CD pipeline настроен
 - ✅ Middleware покрытие: 100%
+- ✅ SEO оптимизировано для Google/Yandex (HTTPS)
 - ⚠️ Общее покрытие: ~7% (handlers + middleware)
 
 **Цель:**

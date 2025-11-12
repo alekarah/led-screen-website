@@ -60,10 +60,10 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 	// API (публичное) - JSON эндпоинты без авторизации
 	api := router.Group("/api")
 	{
-		api.GET("/projects", h.GetProjects)                      // Список проектов с пагинацией
-		api.POST("/contact", h.SubmitContact)                    // Отправка заявки от клиента
-		api.GET("/admin/contacts-7d", h.AdminContacts7Days)      // Статистика заявок за 7 дней (для dashboard)
-		api.POST("/track/project-view/:id", h.TrackProjectView)  // Трекинг просмотров проекта
+		api.GET("/projects", h.GetProjects)                     // Список проектов с пагинацией
+		api.POST("/contact", h.SubmitContact)                   // Отправка заявки от клиента
+		api.GET("/admin/contacts-7d", h.AdminContacts7Days)     // Статистика заявок за 7 дней (для dashboard)
+		api.POST("/track/project-view/:id", h.TrackProjectView) // Трекинг просмотров проекта
 	}
 
 	// Публичные роуты админки (без авторизации)
@@ -74,42 +74,42 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 	admin := router.Group("/admin")
 	admin.Use(middleware.AuthMiddleware()) // JWT проверка для всех роутов ниже
 	{
-		admin.GET("/", h.AdminDashboard)  // Главная страница админки с аналитикой
-		admin.GET("/logout", h.Logout)    // Выход (удаление JWT cookie)
+		admin.GET("/", h.AdminDashboard) // Главная страница админки с аналитикой
+		admin.GET("/logout", h.Logout)   // Выход (удаление JWT cookie)
 
 		// Проекты - CRUD операции и управление порядком
 		pr := admin.Group("/projects")
 		{
-			pr.GET("", h.AdminProjects)                     // Страница управления проектами
-			pr.POST("", h.CreateProject)                    // Создание нового проекта
-			pr.GET("/:id", h.GetProject)                    // Получение проекта для редактирования (JSON)
-			pr.POST("/:id/update", h.UpdateProject)         // Обновление проекта
-			pr.DELETE("/:id", h.DeleteProject)              // Удаление проекта с изображениями
-			pr.POST("/:id/reorder", h.ReorderProject)       // Изменение порядка одного проекта
-			pr.POST("/:id/reset-views", h.ResetProjectViews)// Сброс просмотров конкретного проекта
-			pr.POST("/bulk-reorder", h.BulkReorderProjects) // Массовая сортировка (drag & drop)
+			pr.GET("", h.AdminProjects)                      // Страница управления проектами
+			pr.POST("", h.CreateProject)                     // Создание нового проекта
+			pr.GET("/:id", h.GetProject)                     // Получение проекта для редактирования (JSON)
+			pr.POST("/:id/update", h.UpdateProject)          // Обновление проекта
+			pr.DELETE("/:id", h.DeleteProject)               // Удаление проекта с изображениями
+			pr.POST("/:id/reorder", h.ReorderProject)        // Изменение порядка одного проекта
+			pr.POST("/:id/reset-views", h.ResetProjectViews) // Сброс просмотров конкретного проекта
+			pr.POST("/bulk-reorder", h.BulkReorderProjects)  // Массовая сортировка (drag & drop)
 		}
 
 		// Изображения - загрузка, удаление, кроппинг
 		img := admin.Group("/")
 		{
-			img.POST("upload-images", h.UploadImages)          // Загрузка изображений для проекта
-			img.DELETE("images/:id", h.DeleteImage)            // Удаление изображения
-			img.POST("images/:id/crop", h.UpdateImageCrop)     // Обновление настроек кроппинга
-			img.POST("analytics/reset", h.ResetAllViews)       // Глобальный сброс статистики просмотров
+			img.POST("upload-images", h.UploadImages)      // Загрузка изображений для проекта
+			img.DELETE("images/:id", h.DeleteImage)        // Удаление изображения
+			img.POST("images/:id/crop", h.UpdateImageCrop) // Обновление настроек кроппинга
+			img.POST("analytics/reset", h.ResetAllViews)   // Глобальный сброс статистики просмотров
 		}
 
 		// Заявки (контакты) - CRM система
 		ct := admin.Group("/contacts")
 		{
-			ct.GET("", h.AdminContactsPage)                       // Страница активных заявок (с фильтрами)
-			ct.GET("/archive", h.AdminContactsArchivePage)        // Страница архива заявок
-			ct.GET("/export.csv", h.AdminContactsExportCSV)       // Экспорт в CSV (UTF-8 BOM)
-			ct.POST("/bulk", h.BulkUpdateContacts)                // Массовое изменение статуса
-			ct.POST("/:id/status", h.UpdateContactStatus)         // Изменение статуса одной заявки
-			ct.PATCH("/:id/archive", h.ArchiveContact)            // Архивирование заявки
-			ct.PATCH("/:id/restore", h.RestoreContact)            // Восстановление из архива
-			ct.DELETE("/:id", h.DeleteContact)                    // Удаление (soft или hard)
+			ct.GET("", h.AdminContactsPage)                 // Страница активных заявок (с фильтрами)
+			ct.GET("/archive", h.AdminContactsArchivePage)  // Страница архива заявок
+			ct.GET("/export.csv", h.AdminContactsExportCSV) // Экспорт в CSV (UTF-8 BOM)
+			ct.POST("/bulk", h.BulkUpdateContacts)          // Массовое изменение статуса
+			ct.POST("/:id/status", h.UpdateContactStatus)   // Изменение статуса одной заявки
+			ct.PATCH("/:id/archive", h.ArchiveContact)      // Архивирование заявки
+			ct.PATCH("/:id/restore", h.RestoreContact)      // Восстановление из архива
+			ct.DELETE("/:id", h.DeleteContact)              // Удаление (soft или hard)
 
 			// Заметки и напоминания для follow-up
 			ct.GET("/:id/notes", h.GetContactNotes)               // Получить все заметки по заявке
