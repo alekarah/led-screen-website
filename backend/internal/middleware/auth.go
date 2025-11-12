@@ -11,8 +11,9 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"ledsite/internal/handlers"
+
+	"github.com/gin-gonic/gin"
 )
 
 // AuthMiddleware проверяет наличие и валидность JWT токена для защищённых роутов.

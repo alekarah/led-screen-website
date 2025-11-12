@@ -35,8 +35,8 @@ func main() {
 	}
 
 	// Выполняем миграции (чтобы таблица admins существовала)
-	if err := database.Migrate(db); err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
+	if migrateErr := database.Migrate(db); migrateErr != nil {
+		log.Fatalf("Failed to migrate database: %v", migrateErr)
 	}
 
 	reader := bufio.NewReader(os.Stdin)
@@ -56,7 +56,7 @@ func main() {
 
 	// Проверяем, существует ли уже такой пользователь
 	var existing models.Admin
-	if err := db.Where("username = ?", username).First(&existing).Error; err == nil {
+	if dbErr := db.Where("username = ?", username).First(&existing).Error; dbErr == nil {
 		fmt.Printf("\nПользователь '%s' уже существует!\n", username)
 		fmt.Print("Хотите обновить пароль? (y/n): ")
 		answer, readErr := reader.ReadString('\n')
@@ -102,8 +102,8 @@ func main() {
 		existing.PasswordHash = string(hashedPassword)
 		existing.IsActive = true
 
-		if err := db.Save(&existing).Error; err != nil {
-			log.Fatalf("Failed to update admin: %v", err)
+		if saveErr := db.Save(&existing).Error; saveErr != nil {
+			log.Fatalf("Failed to update admin: %v", saveErr)
 		}
 
 		fmt.Printf("\n✓ Пароль для пользователя '%s' успешно обновлен!\n", username)

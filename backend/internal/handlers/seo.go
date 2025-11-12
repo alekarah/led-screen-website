@@ -6,8 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"ledsite/internal/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 // getBaseURL определяет базовый URL с правильным протоколом (http/https).
