@@ -187,6 +187,8 @@ led-screen-website/
 
 - **sitemap.xml** - автоматическая карта сайта (https://s-n-r.ru/sitemap.xml)
 - **robots.txt** - правила индексации (https://s-n-r.ru/robots.txt)
+- **Open Graph** - мета-теги для красивых превью в соцсетях (VK, Telegram, WhatsApp)
+- **Meta description & keywords** - для поисковых систем
 
 Добавлен sitemap в [Google Search Console](https://search.google.com/search-console) и [Яндекс.Вебмастер](https://webmaster.yandex.ru)
 

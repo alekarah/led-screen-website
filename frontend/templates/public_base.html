@@ -4,7 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.title}}</title>
-    
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{if .description}}{{.description}}{{else}}Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Гарантия качества.{{end}}">
+    <meta name="keywords" content="LED дисплеи, LED экраны, светодиодные экраны, продажа LED, монтаж LED, обслуживание LED, Санкт-Петербург">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:site_name" content="S'n'R - LED дисплеи">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:type" content="{{if .ogType}}{{.ogType}}{{else}}website{{end}}">
+    <meta property="og:title" content="{{if .ogTitle}}{{.ogTitle}}{{else}}{{.title}}{{end}}">
+    <meta property="og:description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}{{if .description}}{{.description}}{{else}}Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Гарантия качества.{{end}}{{end}}">
+    <meta property="og:url" content="https://s-n-r.ru{{if .ogUrl}}{{.ogUrl}}{{else}}/{{end}}">
+    <meta property="og:image" content="{{if .ogImage}}{{.ogImage}}{{else}}https://s-n-r.ru/static/images/og-preview.jpg{{end}}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Additional page-specific meta tags -->
+    {{block "meta-tags" .}}{{end}}
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/images/favicon.png">
 

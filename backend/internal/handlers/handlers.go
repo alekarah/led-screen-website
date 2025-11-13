@@ -80,10 +80,15 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		Find(&services)
 
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title":    "LED экраны в СПб | Service 'n' Repair",
-		"projects": featuredProjects,
-		"services": services,
-		"PageID":   "home",
+		"title":         "LED экраны в СПб | Service 'n' Repair",
+		"description":   "Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Портфолио проектов. Гарантия качества.",
+		"ogTitle":       "S'n'R - Продажа и обслуживание LED дисплеев",
+		"ogDescription": "Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Портфолио проектов. Гарантия качества.",
+		"ogUrl":         "/",
+		"ogImage":       "https://s-n-r.ru/static/images/og-preview.jpg",
+		"projects":      featuredProjects,
+		"services":      services,
+		"PageID":        "home",
 	})
 }
 
@@ -115,6 +120,10 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":          "Портфолио - LED Display",
+		"description":    "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
+		"ogTitle":        "Портфолио проектов LED дисплеев | S'n'R",
+		"ogDescription":  "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
+		"ogUrl":          "/projects",
 		"projects":       projects,
 		"categories":     categories,
 		"activeCategory": categorySlug,
@@ -131,9 +140,13 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 	h.db.Order("sort_order").Find(&services)
 
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title":    "Услуги | LED экраны",
-		"services": services,
-		"PageID":   "services",
+		"title":         "Услуги | LED экраны",
+		"description":   "Услуги по продаже, монтажу и обслуживанию LED дисплеев в СПб. Интерьерные и уличные экраны, металлоконструкции.",
+		"ogTitle":       "Услуги LED дисплеев | S'n'R",
+		"ogDescription": "Услуги по продаже, монтажу и обслуживанию LED дисплеев в СПб. Интерьерные и уличные экраны, металлоконструкции.",
+		"ogUrl":         "/services",
+		"services":      services,
+		"PageID":        "services",
 	})
 }
 
@@ -142,8 +155,12 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 // GET /contact
 func (h *Handlers) ContactPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title":  "Контакты | LED экраны",
-		"PageID": "contact",
+		"title":         "Контакты | LED экраны",
+		"description":   "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
+		"ogTitle":       "Контакты | S'n'R",
+		"ogDescription": "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
+		"ogUrl":         "/contact",
+		"PageID":        "contact",
 	})
 }
 
