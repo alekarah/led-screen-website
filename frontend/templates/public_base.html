@@ -23,6 +23,68 @@
     <!-- Additional page-specific meta tags -->
     {{block "meta-tags" .}}{{end}}
 
+    <!-- Schema.org Structured Data -->
+    {{if eq .PageID "home"}}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Service 'n' Repair",
+      "alternateName": "S'n'R",
+      "url": "https://s-n-r.ru",
+      "logo": "https://s-n-r.ru/static/images/diod.png",
+      "description": "Профессиональные LED решения в Санкт-Петербурге. Продажа, монтаж и обслуживание LED дисплеев.",
+      "email": "rudkin_ds@mail.ru",
+      "telephone": "+7-921-429-17-02",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Санкт-Петербург",
+        "addressRegion": "Ленинградская область",
+        "addressCountry": "RU"
+      }
+    }
+    </script>
+    {{else if eq .PageID "contact"}}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Service 'n' Repair",
+      "alternateName": "S'n'R",
+      "url": "https://s-n-r.ru",
+      "logo": "https://s-n-r.ru/static/images/diod.png",
+      "description": "Продажа, монтаж и обслуживание LED дисплеев в Санкт-Петербурге и Ленинградской области",
+      "email": "rudkin_ds@mail.ru",
+      "telephone": "+7-921-429-17-02",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Санкт-Петербург",
+        "addressRegion": "Ленинградская область",
+        "addressCountry": "RU"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Saturday", "Sunday"],
+          "opens": "10:00",
+          "closes": "16:00"
+        }
+      ],
+      "priceRange": "$$",
+      "areaServed": {
+        "@type": "City",
+        "name": "Санкт-Петербург"
+      }
+    }
+    </script>
+    {{end}}
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/images/favicon.png">
     <link rel="apple-touch-icon" href="/static/images/favicon.png">
