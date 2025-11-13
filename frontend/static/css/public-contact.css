@@ -150,3 +150,104 @@
     position: absolute;
     left: 0;
 }
+
+/* Секция "О компании" */
+.about-company-section {
+    background: white;
+    padding: 4rem 0;
+    margin: 3rem 0;
+}
+
+.about-company-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.about-company-image {
+    position: relative;
+}
+
+.about-company-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: block;
+}
+
+.about-company-text h2 {
+    color: var(--p-text-700);
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.about-intro {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    color: var(--p-text-600);
+}
+
+.about-company-text p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    color: var(--p-text-600);
+}
+
+.about-founder {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--p-bg-alt);
+    border-radius: 10px;
+    border-left: 4px solid var(--p-brand);
+}
+
+.about-founder p {
+    margin-bottom: 0.5rem;
+    color: var(--p-text-700);
+}
+
+.about-founder p:last-child {
+    margin-bottom: 0;
+}
+
+.founder-experience {
+    color: var(--p-text-500);
+    font-style: italic;
+}
+
+/* Секция карты */
+.service-area-section {
+    background: var(--p-bg-alt);
+    padding: 4rem 0;
+    margin-top: 3rem;
+}
+
+.service-area-section h2 {
+    text-align: center;
+    color: var(--p-text-700);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.service-area-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--p-text-600);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.map-container {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background: white;
+}
+
+.map-container iframe {
+    display: block;
+    border: none;
+}
