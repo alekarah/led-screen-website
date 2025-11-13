@@ -44,11 +44,12 @@ frontend/.cache/
 
 # Go bin, vendor, tmp
 bin/
-vendor/
 tmp/
 backend/tmp/
 backend/bin/
 backend/vendor/
+# Но разрешить JS vendor библиотеки во frontend
+!frontend/static/js/vendor/
 
 # IDE и редакторы
 .vscode/
