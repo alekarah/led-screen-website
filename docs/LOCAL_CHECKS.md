@@ -6,236 +6,117 @@
 
 ## Быстрый старт
 
-```powershell
-# В корне проекта:
+**Запуск автоматической проверки:**
+
+```bash
+# Windows (PowerShell)
 .\check-code.ps1
+
+# Linux/macOS/Git Bash
+./check-code.sh
 ```
 
-Этот скрипт проверит:
-- ✅ Все тесты проходят
-- ✅ Код отформатирован
-- ✅ Линтер не находит ошибок
+**Скрипт автоматически:**
+- ✅ Запускает все 22 unit теста
+- ✅ Форматирует код (gofmt)
+- ✅ Проверяет линтером (golangci-lint, если установлен)
+
+**Workflow перед push:**
+```bash
+./check-code.sh           # Проверка кода
+git add .                 # Добавить изменения
+git commit -m "message"   # Коммит
+git push                  # Push в GitHub
+```
 
 ---
 
 ## Ручная проверка
 
-Если хотите проверить вручную:
+Если нужно запустить команды отдельно:
 
-### 1. Запуск тестов
-
-```powershell
+```bash
 cd backend
+
+# 1. Тесты (22 unit теста)
 go test ./... -v
-```
 
-**Что проверяет:** все 22 unit теста
-
-**Ожидаемый результат:**
-```
-PASS
-ok  	ledsite/internal/handlers	1.8s
-ok  	ledsite/internal/middleware	0.8s
-```
-
-### 2. Форматирование кода
-
-```powershell
-cd backend
+# 2. Форматирование
 go fmt ./...
+
+# 3. Линтер (50+ проверок: shadowing, errcheck, formatting)
+golangci-lint run ./...
 ```
-
-**Что делает:** автоматически форматирует весь Go код
-
-### 3. Проверка линтером
-
-```powershell
-cd backend
-golangci-lint run
-```
-
-**Что проверяет:**
-- Ошибки компиляции
-- Variable shadowing (затенение переменных)
-- Unchecked errors (непроверенные ошибки)
-- Неиспользуемый код
-- Форматирование (gofmt, goimports)
-- И еще 50+ проверок
 
 ---
 
 ## Установка golangci-lint
 
-### Windows (PowerShell)
-
-**Вариант 1: Через Go (рекомендуется)**
-```powershell
+**Рекомендуется (все платформы):**
+```bash
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 ```
 
-**Вариант 2: Через Scoop**
-```powershell
-scoop install golangci-lint
-```
+**Альтернативы:**
+- Windows: `scoop install golangci-lint` или `choco install golangci-lint`
+- macOS: `brew install golangci-lint`
+- Linux: [официальный скрипт](https://golangci-lint.run/usage/install/)
 
-**Вариант 3: Через Chocolatey**
-```powershell
-choco install golangci-lint
-```
-
-**Проверка установки:**
-```powershell
+**Проверка:**
+```bash
 golangci-lint version
-# Должно показать: golangci-lint has version 1.xx.x
 ```
 
 ---
 
 ## Типичные ошибки линтера
 
-### 1. Variable shadowing (затенение переменных)
-
-**Ошибка:**
+**Variable shadowing:**
 ```go
-err := db.Connect()
-if err != nil { ... }
-
-// ❌ Затенение - создаётся новая переменная err
+// ❌ Создается новая переменная err
 if err := db.Migrate(); err != nil { ... }
-```
-
-**Исправление:**
-```go
-err := db.Connect()
-if err != nil { ... }
 
 // ✅ Используем другое имя
 if migrateErr := db.Migrate(); migrateErr != nil { ... }
 ```
 
-### 2. Unchecked errors (непроверенные ошибки)
-
-**Ошибка:**
+**Unchecked errors:**
 ```go
 // ❌ Ошибка игнорируется
 strconv.Atoi(c.Query("page"))
-```
 
-**Исправление:**
-```go
 // ✅ Проверяем ошибку
-page := 1
-if p, err := strconv.Atoi(c.Query("page")); err == nil && p > 0 {
-    page = p
-}
+if p, err := strconv.Atoi(c.Query("page")); err == nil { ... }
 ```
 
-### 3. Import formatting (порядок импортов)
-
-**Ошибка:**
-```go
-import (
-    "net/http"
-    "github.com/gin-gonic/gin"  // ❌ Сторонние импорты должны быть отдельно
-    "myproject/internal/models"
-)
-```
-
-**Исправление:**
-```go
-import (
-    "net/http"
-
-    "myproject/internal/models"
-
-    "github.com/gin-gonic/gin"
-)
-```
+Подробнее: [CODING_STYLE.md](CODING_STYLE.md)
 
 ---
 
-## Workflow перед push
+## CI/CD
 
-```powershell
-# 1. Проверяем код
-.\check-code.ps1
+GitHub Actions при каждом push проверяет:
+- ✅ Тесты (Test Job)
+- ✅ Линтер (Lint Job)
+- ✅ Сборка (Build Job)
 
-# 2. Если всё ОК - коммитим
-git add .
-git status  # Проверяем что добавили
-git commit -m "Описание изменений"
-
-# 3. Пушим в GitHub
-git push
-```
+Если локально всё проходит → в CI/CD тоже пройдёт!
 
 ---
 
-## Что проверяется в CI/CD
+## Настройки
 
-GitHub Actions автоматически запускает при каждом push:
+**Конфигурация линтера:** [.golangci.yml](../.golangci.yml)
 
-1. **Test Job** - все unit тесты
-2. **Lint Job** - golangci-lint (те же проверки)
-3. **Build Job** - компиляция проекта
+**VS Code рекомендации:**
+- Расширения: Go (официальное), golangci-lint
+- Включить автоформатирование: `"editor.formatOnSave": true`
 
-Если локально всё проходит - в CI/CD тоже пройдёт! ✅
-
----
-
-## Настройка линтера
-
-Конфигурация в [.golangci.yml](../.golangci.yml):
-
-```yaml
-linters:
-  enable:
-    - errcheck      # Проверка ошибок
-    - gosimple      # Упрощение кода
-    - govet         # Go vet (включая variable shadowing)
-    - ineffassign   # Бесполезные присваивания
-    - staticcheck   # Статический анализ
-    - unused        # Неиспользуемый код
-```
+**Troubleshooting:**
+- `command not found` → установите линтер (см. выше)
+- `Линтер падает` → запустите `golangci-lint run --verbose`
+- `go install не работает` → проверьте `$GOPATH/bin` в PATH
 
 ---
 
-## Советы
-
-1. **Запускайте проверку перед каждым commit**
-   ```powershell
-   .\check-code.ps1 && git commit -m "message"
-   ```
-
-2. **Используйте VS Code расширения:**
-   - Go (официальное от Google)
-   - golangci-lint (показывает ошибки прямо в редакторе)
-
-3. **Настройте автосохранение с форматированием:**
-   ```json
-   // settings.json в VS Code
-   {
-       "go.formatTool": "goimports",
-       "editor.formatOnSave": true
-   }
-   ```
-
----
-
-## Troubleshooting
-
-**Проблема:** `golangci-lint: command not found`
-- **Решение:** Установите линтер (см. раздел "Установка")
-
-**Проблема:** Тесты проходят, но линтер падает
-- **Решение:** Запустите `golangci-lint run --verbose` для деталей
-
-**Проблема:** Не могу установить через go install
-- **Решение:** Проверьте что `$GOPATH/bin` добавлен в PATH
-
----
-
-**Версия документа:** 1.0
-**Дата:** Ноябрь 2025
-
-**Проверяйте код локально - экономьте время! ⚡**
+**Проверяйте код локально - экономьте время!** ⚡

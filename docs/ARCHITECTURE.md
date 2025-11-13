@@ -2,16 +2,6 @@
 
 > Описание архитектуры LED Screen Website - корпоративного сайта для компании по продаже и обслуживанию LED дисплеев
 
-## 📋 Содержание
-
-- [Общий обзор](#общий-обзор)
-- [Backend архитектура](#backend-архитектура)
-- [Frontend архитектура](#frontend-архитектура)
-- [База данных](#база-данных)
-- [Паттерны проектирования](#паттерны-проектирования)
-- [Безопасность](#безопасность)
-- [Производительность](#производительность)
-
 ---
 
 ## Общий обзор
@@ -46,13 +36,7 @@
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Технологический стек
-
-- **Backend**: Go 1.21+, Gin Web Framework, GORM ORM
-- **Frontend**: Vanilla JavaScript (ES6+), HTML5, CSS3
-- **Database**: PostgreSQL 15
-- **Auth**: JWT (JSON Web Tokens)
-- **DevOps**: Docker, Docker Compose
+**Технологический стек:** См. [README.md](../README.md#-технологический-стек)
 
 ---
 
@@ -92,68 +76,34 @@ backend/
 
 ### 🔄 Жизненный цикл запроса
 
-1. **Инициализация** (main.go):
-   ```go
-   godotenv.Load()           // Загрузка .env
-   cfg := config.Load()      // Конфигурация
-   db := database.Connect()  // Подключение к БД
-   database.Migrate()        // Миграции
-   handlers.New(db)          // Создание handlers с DI
-   routes.Setup()            // Настройка роутов
-   router.Run()              // Запуск сервера
-   ```
+**Инициализация (main.go):**
+```
+Load .env → Config → DB Connect → Migrate → Handlers (DI) → Routes → Run Server
+```
 
-2. **Обработка запроса**:
-   ```
-   HTTP Request
-      ↓
-   Gin Router (routes/routes.go)
-      ↓
-   Middleware (auth.go) - если защищенный роут
-      ↓
-   Handler (handlers/*.go)
-      ↓
-   GORM Query (models через database)
-      ↓
-   PostgreSQL Database
-      ↓
-   Response (JSON или HTML template)
-   ```
+**Обработка запроса:**
+```
+HTTP Request → Gin Router → Middleware (auth) → Handler → GORM → PostgreSQL → Response
+```
 
-3. **Типы маршрутов**:
-   - **Публичные**: `/`, `/projects`, `/services`, `/contact`, `/privacy`
-   - **API публичное**: `/api/projects`, `/api/contact`
-   - **Админ незащищенные**: `/admin/login` (POST/GET)
-   - **Админ защищенные**: `/admin/*` (требуют JWT токен)
+**Типы маршрутов:**
+- Публичные: `/`, `/projects`, `/services`, `/contact`
+- API: `/api/projects`, `/api/contact`
+- Админ: `/admin/login` (открытый), `/admin/*` (JWT защита)
 
 ### 🔐 Система авторизации
 
-**Flow аутентификации:**
-
+**Аутентификация:**
 ```
-1. User → POST /admin/login (username, password)
-2. Handler проверяет bcrypt hash пароля
-3. Генерируется JWT token (HS256)
-4. Token сохраняется в HTTP-only cookie "admin_token"
-5. Редирект на /admin/
-
-Защищенные роуты:
-1. Request → AuthMiddleware
-2. Извлечение токена из cookie
-3. Валидация JWT (подпись + expiration)
-4. Извлечение claims (admin_id, username)
-5. Сохранение в gin.Context
-6. Передача управления handler'у
+POST /admin/login → bcrypt verify → JWT token (HS256) → HTTP-only cookie → redirect /admin/
 ```
 
-**JWT Claims структура:**
-```go
-type JWTClaims struct {
-    UserID   uint   `json:"user_id"`
-    Username string `json:"username"`
-    jwt.RegisteredClaims
-}
+**Защищенные роуты:**
 ```
+Request → AuthMiddleware → validate JWT → extract claims (admin_id, username) → gin.Context → Handler
+```
+
+**JWT Claims:** `{ user_id, username, exp }`
 
 ### 📦 Модели данных
 
@@ -263,35 +213,9 @@ frontend/
 - `admin-contacts-init.js` - инициализация
 
 **Архитектурные паттерны в JS:**
-
-1. **Module Pattern**:
-   ```javascript
-   const ContactsAPI = {
-       updateStatus: async (id, status) => { ... },
-       archiveContact: async (id) => { ... }
-   };
-   ```
-
-2. **Event-Driven Architecture**:
-   ```javascript
-   document.addEventListener('DOMContentLoaded', () => {
-       initFilters();
-       initBulkActions();
-       initModal();
-   });
-   ```
-
-3. **API Abstraction Layer**:
-   ```javascript
-   // admin-contacts-api.js
-   async function fetchWithAuth(url, options) {
-       const response = await fetch(url, {
-           ...options,
-           credentials: 'include'  // JWT cookie
-       });
-       return response.json();
-   }
-   ```
+- **Module Pattern**: `const ContactsAPI = { updateStatus: async (id, status) => {...} }`
+- **Event-Driven**: `DOMContentLoaded → initFilters() + initBulkActions() + initModal()`
+- **API Abstraction**: `fetchWithAuth(url, {credentials: 'include'}) → response.json()`
 
 ### 🔄 Взаимодействие Frontend ↔ Backend
 
@@ -310,59 +234,13 @@ Browser Request → Gin Handler → Go Template → HTML Response
 
 **Пример API взаимодействия:**
 ```javascript
-// Фронтенд (admin-contacts-api.js)
-async function updateContactStatus(id, status) {
-    const response = await fetch(`/admin/contacts/${id}/status`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        credentials: 'include',  // JWT cookie
-        body: JSON.stringify({ status })
-    });
-    return response.json();
-}
-
-// Бэкенд (admin_actions.go)
-func (h *Handlers) UpdateContactStatus(c *gin.Context) {
-    var input struct { Status string `json:"status"` }
-    c.BindJSON(&input)
-
-    contactID := c.Param("id")
-    h.db.Model(&models.ContactForm{}).
-        Where("id = ?", contactID).
-        Update("status", input.Status)
-
-    c.JSON(200, gin.H{"success": true})
-}
+// Frontend: fetch(`/admin/contacts/${id}/status`, {method: 'POST', credentials: 'include', body: JSON.stringify({status})})
+// Backend: c.BindJSON(&input) → h.db.Update("status", input.Status) → c.JSON(200, gin.H{"success": true})
 ```
 
 ---
 
 ## База данных
-
-### 🗄️ Схема таблиц
-
-```sql
--- Основные таблицы
-categories           (id, name, slug, description)
-projects             (id, title, slug, description, location, size,
-                      pixel_pitch, completed, featured, view_count,
-                      sort_order, created_at, updated_at)
-images               (id, project_id, filename, file_path,
-                      crop_x, crop_y, crop_scale, sort_order)
-contact_forms        (id, name, phone, email, company, project_type,
-                      message, status, created_at, archived_at,
-                      remind_at, remind_flag)
-contact_notes        (id, contact_id, text, author, created_at)
-admins               (id, username, password_hash, email, is_active,
-                      last_login_at, created_at, updated_at)
-project_view_dailies (id, project_id, day, views, created_at, updated_at)
-services             (id, name, slug, short_desc, description,
-                      icon, featured, sort_order)
-settings             (id, key, value, type, created_at, updated_at)
-
--- Промежуточные таблицы
-project_categories   (project_id, category_id)
-```
 
 ### 🔗 Связи и ограничения
 
@@ -410,168 +288,60 @@ CREATE INDEX idx_pvd_day ON project_view_dailies(day);
 
 ## Паттерны проектирования
 
-### 1. MVC (Model-View-Controller)
-
-```
-Models      → internal/models/models.go
-Views       → frontend/templates/*.html
-Controllers → internal/handlers/*.go
-```
-
-### 2. Dependency Injection
-
-```go
-// main.go
-db := database.Connect(cfg)
-handlers := handlers.New(db)  // DI базы данных
-
-// handlers/handlers.go
-type Handlers struct {
-    db *gorm.DB  // Зависимость
-}
-
-func New(db *gorm.DB) *Handlers {
-    return &Handlers{db: db}
-}
-```
-
-### 3. Middleware Pattern
-
-```go
-// routes/routes.go
-admin := router.Group("/admin")
-admin.Use(middleware.AuthMiddleware())  // Цепочка middleware
-{
-    admin.GET("/", h.AdminDashboard)
-    // ...
-}
-```
-
-### 4. Repository Pattern (частично)
-
-GORM выступает в роли Repository, абстрагируя SQL:
-```go
-// Вместо SQL запросов
-h.db.Where("status = ?", "new").Find(&contacts)
-h.db.Preload("Images").Find(&projects)
-```
-
-### 5. Configuration Pattern
-
-Централизованная конфигурация через `config/config.go`:
-```go
-cfg := config.Load()  // Один источник правды
-db := database.Connect(cfg)
-```
-
-### 6. Factory Pattern
-
-```go
-// handlers/handlers.go
-func New(db *gorm.DB) *Handlers {
-    return &Handlers{db: db}  // Фабрика handlers
-}
-```
+- **MVC**: Models (`models.go`) + Views (`templates/*.html`) + Controllers (`handlers/*.go`)
+- **Dependency Injection**: `handlers.New(db)` - DI базы данных в handlers
+- **Middleware**: `admin.Use(middleware.AuthMiddleware())` - цепочка middleware
+- **Repository**: GORM абстрагирует SQL (`h.db.Where().Find()`, `h.db.Preload()`)
+- **Configuration**: `config.Load()` - централизованная конфигурация
+- **Factory**: `handlers.New(db)` - фабрика handlers
 
 ---
 
 ## Безопасность
 
-### 🔐 Меры безопасности
+**Реализованные меры:**
+- JWT токены (HTTP-only cookies, expiration)
+- bcrypt хеширование паролей (cost 10)
+- Middleware защита всех админских роутов
+- SQL Injection защита (GORM prepared statements)
+- XSS защита (Go templates auto-escaping)
+- Валидация файлов (размер 10MB, MIME типы, UUID имена)
+- Логирование всех запросов (Gin Logger + GORM)
 
-1. **Аутентификация и авторизация**:
-   - JWT токены с истечением (expiration)
-   - HTTP-only cookies (защита от XSS)
-   - bcrypt хеширование паролей (cost factor 10)
-   - Middleware проверка на всех защищенных роутах
-
-2. **Защита от атак**:
-   - **SQL Injection**: GORM использует prepared statements
-   - **XSS**: Экранирование в Go templates (auto-escaping)
-   - **CSRF**: SameSite cookie attribute (опционально)
-   - **Path Traversal**: Валидация путей при загрузке файлов
-
-3. **Валидация данных**:
-   ```go
-   // Валидация в handlers
-   if input.Status != "new" && input.Status != "in_progress" {
-       c.JSON(400, gin.H{"error": "Invalid status"})
-       return
-   }
-   ```
-
-4. **Безопасность файлов**:
-   - Ограничение размера загружаемых файлов (10MB)
-   - Проверка MIME типов изображений
-   - Генерация уникальных имен файлов (UUID)
-   - Хранение вне корня веб-сервера (`uploads/` не в public)
-
-5. **Логирование**:
-   - Gin Logger middleware для всех запросов
-   - GORM логирование SQL запросов (уровень настраивается)
-
-### 🔒 Рекомендации для production
-
-1. Использовать HTTPS (TLS сертификаты)
-2. Настроить CORS ограничения
-3. Добавить Rate Limiting (защита от DDoS)
-4. Использовать Secure и HttpOnly флаги для cookies
-5. Включить GORM PrepareStmt для кеширования запросов
-6. Настроить регулярные бэкапы БД
+**Production рекомендации:**
+- HTTPS с TLS сертификатами
+- CORS ограничения
+- Rate Limiting (DDoS защита)
+- Secure + HttpOnly флаги cookies
+- Регулярные бэкапы БД
 
 ---
 
 ## Производительность
 
-### ⚡ Оптимизации
+**База данных:**
+- Connection pooling (MaxOpenConns: 20, MaxIdleConns: 10)
+- Индексы на часто запрашиваемые колонки
+- Eager loading (Preload) для связанных данных
+- Агрегация просмотров по дням (ProjectViewDaily)
 
-1. **База данных**:
-   - Connection pooling (MaxOpenConns: 20, MaxIdleConns: 10)
-   - Индексы на часто запрашиваемые колонки
-   - Eager loading (Preload) для связанных данных
-   - Агрегация просмотров по дням (ProjectViewDaily)
+**Backend:**
+- Gin Release Mode (production)
+- Recovery middleware (graceful panic recovery)
 
-2. **Backend**:
-   - Gin Release Mode для production
-   - Gin Recovery middleware (graceful panic recovery)
-   - Ленивая загрузка шаблонов
+**Frontend:**
+- Defer загрузка JavaScript
+- Lazy loading изображений
+- Debounce для поиска/фильтрации
 
-3. **Frontend**:
-   - Defer загрузка JavaScript
-   - CSS минимизация (production)
-   - Lazy loading изображений (intersection observer)
-   - Debounce для поиска и фильтрации
+**Кеширование:**
+- Статические файлы через Nginx (production)
+- Browser cache (CSS/JS/изображения)
+- GORM PrepareStmt (SQL кеширование)
 
-4. **Кеширование**:
-   - Статические файлы через Nginx (production)
-   - Browser cache для CSS/JS/изображений
-   - GORM PrepareStmt для кеширования SQL
-
-### 📊 Мониторинг
-
-**Healthcheck endpoint:**
-```
-GET /healthz → 200 OK
-```
-
-**Метрики для отслеживания:**
-- Response time (Gin Logger)
-- Database connection pool usage
-- Количество заявок за период
-- Просмотры проектов (ProjectViewDaily)
-
----
-
-## 🔄 Deployment Flow
-
-```
-Development → Testing → Staging → Production
-
-1. Локальная разработка (go run main.go)
-2. Docker сборка (docker-compose up)
-3. CI/CD pipeline (опционально)
-4. Production deployment (см. DEPLOYMENT.md)
-```
+**Мониторинг:**
+- Healthcheck: `GET /healthz → 200 OK`
+- Метрики: Response time, DB pool usage, просмотры проектов
 
 ---
 
