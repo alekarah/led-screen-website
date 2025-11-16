@@ -94,10 +94,11 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		// Изображения - загрузка, удаление, кроппинг
 		img := admin.Group("/")
 		{
-			img.POST("upload-images", h.UploadImages)      // Загрузка изображений для проекта
-			img.DELETE("images/:id", h.DeleteImage)        // Удаление изображения
-			img.POST("images/:id/crop", h.UpdateImageCrop) // Обновление настроек кроппинга
-			img.POST("analytics/reset", h.ResetAllViews)   // Глобальный сброс статистики просмотров
+			img.POST("upload-images", h.UploadImages)             // Загрузка изображений для проекта
+			img.DELETE("images/:id", h.DeleteImage)               // Удаление изображения
+			img.POST("images/:id/crop", h.UpdateImageCrop)        // Обновление настроек кроппинга
+			img.POST("images/:id/set-primary", h.SetPrimaryImage) // Установка главного изображения проекта
+			img.POST("analytics/reset", h.ResetAllViews)          // Глобальный сброс статистики просмотров
 		}
 
 		// Заявки (контакты) - CRM система

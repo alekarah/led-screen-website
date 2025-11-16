@@ -231,20 +231,40 @@ function initEditForms() {
                 });
                 
                 if (response.ok) {
+                    const result = await response.json();
+                    console.log('Результат загрузки:', result);
+
                     showAdminMessage('Изображения успешно загружены', 'success');
                     this.reset();
-                    
-                    // Обновляем изображения в модальном окне
+
+                    // Получаем текущий список изображений
                     const projectId = document.getElementById('edit_project_id').value;
-                    if (projectId) {
-                        setTimeout(async () => {
-                            try {
-                                const data = await fetch(`/admin/projects/${projectId}`).then(r => r.json());
-                                fillProjectImages(data.project.images || []);
-                            } catch (error) {
-                                console.error('Ошибка обновления изображений:', error);
+                    if (projectId && result.images && result.images.length > 0) {
+                        // Перезагружаем весь список изображений проекта
+                        try {
+                            const projectResponse = await fetch(`/admin/projects/${projectId}?_=${Date.now()}`, {
+                                cache: 'no-store'
+                            });
+
+                            if (projectResponse.ok) {
+                                const projectData = await projectResponse.json();
+                                console.log('Обновленный список изображений:', projectData.project.images);
+
+                                // Обновляем список изображений
+                                if (typeof fillProjectImages === 'function') {
+                                    fillProjectImages(projectData.project.images || []);
+                                } else {
+                                    console.error('fillProjectImages не найдена!');
+                                }
+                            } else {
+                                console.error('Не удалось загрузить обновленный список изображений');
+                                // Показываем хотя бы загруженные изображения
+                                showAdminMessage('Изображения загружены. Обновите страницу чтобы увидеть их.', 'info');
                             }
-                        }, 500);
+                        } catch (error) {
+                            console.error('Ошибка обновления списка:', error);
+                            showAdminMessage('Изображения загружены. Обновите страницу чтобы увидеть их.', 'info');
+                        }
                     }
                 } else {
                     const result = await response.json();

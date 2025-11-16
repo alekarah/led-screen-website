@@ -18,8 +18,11 @@ import (
 // UploadImages - загрузка изображений для проекта
 func (h *Handlers) UploadImages(c *gin.Context) {
 	projectIDStr := c.PostForm("project_id")
+	log.Printf("[DEBUG] Загрузка изображений для project_id: '%s'", projectIDStr)
+
 	projectID, err := strconv.Atoi(projectIDStr)
 	if err != nil {
+		log.Printf("[ERROR] Неверный project_id: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Неверный ID проекта",
 		})
@@ -29,6 +32,7 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 	// Проверяем что проект существует
 	var project models.Project
 	if dbErr := h.db.First(&project, projectID).Error; dbErr != nil {
+		log.Printf("[ERROR] Проект %d не найден: %v", projectID, dbErr)
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": "Проект не найден",
 		})
@@ -38,6 +42,7 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 	// Получаем загруженные файлы
 	form, err := c.MultipartForm()
 	if err != nil {
+		log.Printf("[ERROR] Ошибка обработки multipart form: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Ошибка обработки файлов",
 		})
@@ -45,37 +50,68 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 	}
 
 	files := form.File["images"]
+	log.Printf("[DEBUG] Получено файлов в поле 'images': %d", len(files))
+
 	var uploadedImages []models.Image
 
+	// Проверяем, есть ли уже изображения у проекта
+	var existingImagesCount int64
+	h.db.Model(&models.Image{}).Where("project_id = ?", projectID).Count(&existingImagesCount)
+
+	// Проверяем, есть ли уже главное изображение
+	var hasPrimaryImage bool
+	if existingImagesCount > 0 {
+		var primaryCount int64
+		h.db.Model(&models.Image{}).Where("project_id = ? AND is_primary = ?", projectID, true).Count(&primaryCount)
+		hasPrimaryImage = primaryCount > 0
+	}
+
 	for i, file := range files {
+		log.Printf("[DEBUG] Обработка файла #%d: %s (размер: %d байт)", i, file.Filename, file.Size)
+
 		// Проверяем тип файла
 		if !isImageFile(file.Filename) {
+			log.Printf("[WARN] Файл %s пропущен: неподдерживаемый тип", file.Filename)
 			continue
 		}
 
 		// Проверяем размер файла
 		if file.Size > h.maxUploadSize {
-			log.Printf("Файл %s слишком большой: %d байт (максимум: %d)", file.Filename, file.Size, h.maxUploadSize)
+			log.Printf("[WARN] Файл %s пропущен: слишком большой размер %d байт (максимум: %d)", file.Filename, file.Size, h.maxUploadSize)
 			continue
 		}
 
 		// Генерируем уникальное имя файла
 		filename := generateImageFilename(projectID, i, file.Filename)
+		log.Printf("[DEBUG] Сгенерировано имя файла: %s", filename)
 
 		// Сохраняем файл
 		filePath, err := saveUploadedFile(c, file, filename)
 		if err != nil {
-			logError("Ошибка сохранения файла", filename, err)
+			log.Printf("[ERROR] Ошибка сохранения файла %s: %v", filename, err)
 			continue
 		}
+		log.Printf("[DEBUG] Файл сохранен: %s", filePath)
 
 		// Создаем запись в базе
 		image := createImageRecord(projectID, filename, file, filePath, i)
 
+		// Первое изображение проекта автоматически становится главным
+		if !hasPrimaryImage && i == 0 {
+			image.IsPrimary = true
+			hasPrimaryImage = true // Чтобы остальные загружаемые изображения не стали главными
+			log.Printf("[DEBUG] Изображение %s установлено как главное", filename)
+		}
+
 		if err := h.db.Create(&image).Error; err == nil {
 			uploadedImages = append(uploadedImages, image)
+			log.Printf("[DEBUG] Изображение %s успешно добавлено в БД (ID: %d)", filename, image.ID)
+		} else {
+			log.Printf("[ERROR] Ошибка добавления изображения %s в БД: %v", filename, err)
 		}
 	}
+
+	log.Printf("[DEBUG] Итого успешно загружено изображений: %d из %d", len(uploadedImages), len(files))
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": fmt.Sprintf("Загружено %d изображений", len(uploadedImages)),
@@ -132,6 +168,61 @@ func (h *Handlers) UpdateImageCrop(c *gin.Context) {
 		return
 	}
 	jsonOK(c, gin.H{"image": image})
+}
+
+// SetPrimaryImage - установка изображения как главного для проекта
+func (h *Handlers) SetPrimaryImage(c *gin.Context) {
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+
+	// Находим изображение
+	var image models.Image
+	if err := h.db.First(&image, id).Error; err != nil {
+		jsonErr(c, http.StatusNotFound, "Изображение не найдено")
+		return
+	}
+
+	// Проверяем что изображение привязано к проекту
+	if image.ProjectID == nil {
+		jsonErr(c, http.StatusBadRequest, "Изображение не привязано к проекту")
+		return
+	}
+
+	// Начинаем транзакцию
+	tx := h.db.Begin()
+
+	// Сбрасываем флаг is_primary у всех изображений проекта
+	if err := tx.Model(&models.Image{}).
+		Where("project_id = ?", *image.ProjectID).
+		Update("is_primary", false).Error; err != nil {
+		tx.Rollback()
+		log.Printf("Ошибка сброса флага is_primary для проекта %d: %v", *image.ProjectID, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка установки главного изображения")
+		return
+	}
+
+	// Устанавливаем флаг is_primary для выбранного изображения
+	image.IsPrimary = true
+	if err := tx.Save(&image).Error; err != nil {
+		tx.Rollback()
+		log.Printf("Ошибка установки флага is_primary для изображения %d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка установки главного изображения")
+		return
+	}
+
+	// Подтверждаем транзакцию
+	if err := tx.Commit().Error; err != nil {
+		log.Printf("Ошибка подтверждения транзакции для изображения %d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка установки главного изображения")
+		return
+	}
+
+	jsonOK(c, gin.H{
+		"message": "Главное изображение установлено",
+		"image":   image,
+	})
 }
 
 // Вспомогательные функции

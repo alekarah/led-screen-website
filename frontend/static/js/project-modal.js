@@ -38,14 +38,17 @@
     return;
 
     function init() {
-        // === модалка ===
+        // === модалка с галереей ===
         const modal = document.createElement('div');
         modal.className = 'project-modal';
         modal.innerHTML = `
             <div class="project-modal__dialog" role="dialog" aria-modal="true" aria-label="Информация о проекте">
                 <button class="project-modal__close" aria-label="Закрыть">×</button>
                 <div class="project-modal__media">
+                    <button class="gallery-nav gallery-nav-prev" aria-label="Предыдущее изображение">‹</button>
                     <img id="projectModalImg" alt="">
+                    <button class="gallery-nav gallery-nav-next" aria-label="Следующее изображение">›</button>
+                    <div class="gallery-counter"></div>
                 </div>
                 <div class="project-modal__body">
                     <h3 class="project-modal__title"></h3>
@@ -69,38 +72,71 @@
             loc:   modal.querySelector('.project-modal__location'),
             tags:  modal.querySelector('.project-modal__tags'),
             link:  modal.querySelector('.project-modal__body .project-detail-btn'),
-            close: modal.querySelector('.project-modal__close')
+            close: modal.querySelector('.project-modal__close'),
+            prevBtn: modal.querySelector('.gallery-nav-prev'),
+            nextBtn: modal.querySelector('.gallery-nav-next'),
+            counter: modal.querySelector('.gallery-counter')
         };
 
-        // ——— утилита: скопировать кроп-стили из карточки в модалку ———
-        function copyCropStyles(fromImg, toImg) {
-            // 1) пробуем взять inline transform/object-position/object-fit (как на карточках/главной)
-            const style = fromImg.getAttribute('style') || '';
+        // Состояние галереи
+        let galleryState = {
+            images: [],
+            currentIndex: 0
+        };
 
-            const mTransform = style.match(/transform\s*:\s*([^;]+)/i);
-            const mObjPos   = style.match(/object-position\s*:\s*([^;]+)/i);
-            const mObjFit   = style.match(/object-fit\s*:\s*([^;]+)/i);
+        // ——— функции галереи ———
+        function showImageAtIndex(index) {
+            if (!galleryState.images || galleryState.images.length === 0) return;
 
-            if (mTransform) toImg.style.transform = mTransform[1].trim();
-            else            toImg.style.removeProperty('transform');
+            const totalImages = galleryState.images.length;
+            galleryState.currentIndex = ((index % totalImages) + totalImages) % totalImages;
 
-            toImg.style.objectPosition = (mObjPos ? mObjPos[1].trim() : 'center center');
-            toImg.style.objectFit      = (mObjFit ? mObjFit[1].trim() : 'cover');
+            const img = galleryState.images[galleryState.currentIndex];
 
-            // 2) запасной путь: если рендеришь data-* (cropScale/cropX/cropY)
-            if (!mTransform) {
-            const sx = parseFloat(fromImg.dataset.cropScale || '');
-            const cx = parseFloat(fromImg.dataset.cropX || '');
-            const cy = parseFloat(fromImg.dataset.cropY || '');
-            if (Number.isFinite(sx) && Number.isFinite(cx) && Number.isFinite(cy)) {
-                const tx = (cx - 50) * 2;
-                const ty = (cy - 50) * 2;
-                toImg.style.transform = `scale(${sx}) translate(${tx}%, ${ty}%)`;
-                toImg.style.objectPosition = 'center center';
-                toImg.style.objectFit = 'cover';
+            // Устанавливаем изображение
+            ui.mediaImg.src = `/static/uploads/${img.filename}`;
+            ui.mediaImg.alt = img.alt || img.original_name || '';
+
+            // Применяем crop стили
+            applyCropStyles(ui.mediaImg, img);
+
+            // Обновляем ссылку
+            ui.link.href = `/static/uploads/${img.filename}`;
+
+            // Обновляем счетчик
+            if (totalImages > 1) {
+                ui.counter.textContent = `${galleryState.currentIndex + 1} / ${totalImages}`;
+                ui.counter.style.display = 'block';
+                ui.prevBtn.style.display = 'flex';
+                ui.nextBtn.style.display = 'flex';
+            } else {
+                ui.counter.style.display = 'none';
+                ui.prevBtn.style.display = 'none';
+                ui.nextBtn.style.display = 'none';
             }
         }
-    }
+
+        function showNextImage() {
+            showImageAtIndex(galleryState.currentIndex + 1);
+        }
+
+        function showPrevImage() {
+            showImageAtIndex(galleryState.currentIndex - 1);
+        }
+
+        function applyCropStyles(imgEl, imageData) {
+            const scale = imageData.crop_scale || 1;
+            const cropX = imageData.crop_x || 50;
+            const cropY = imageData.crop_y || 50;
+
+            const tx = (cropX - 50) * 2;
+            const ty = (cropY - 50) * 2;
+
+            imgEl.style.transform = `scale(${scale}) translate(${tx}%, ${ty}%)`;
+            imgEl.style.objectPosition = 'center center';
+            imgEl.style.objectFit = 'cover';
+            imgEl.style.transformOrigin = 'center center';
+        }
 
     // ——— делегирование клика по "Подробнее" ———
     const grid = document.querySelector(SELECTORS.grid);
@@ -115,36 +151,71 @@
         const card = btn.closest('.public-project-card');
         if (!card) return;
 
-        const imgEl  = card.querySelector(SELECTORS.cardImage);
         const titleEl = card.querySelector(SELECTORS.cardTitle);
         const sizeEl  = card.querySelector(SELECTORS.cardSize);
         const descEl  = card.querySelector(SELECTORS.cardDesc);
         const locEl   = card.querySelector(SELECTORS.cardLoc);
         const tagsEl  = card.querySelector(SELECTORS.cardTags);
 
-        const imgSrc = imgEl?.getAttribute('src') || '';
-        const imgAlt = imgEl?.getAttribute('alt') || (titleEl?.textContent?.trim() ?? 'Изображение проекта');
+        // Парсим данные изображений из data-images
+        let images = [];
+        try {
+            const imagesData = btn.getAttribute('data-images');
+            if (imagesData) {
+                images = JSON.parse(imagesData);
+            }
+        } catch (err) {
+            console.error('Ошибка парсинга изображений:', err);
+        }
+
+        // Если нет изображений в data, используем изображение из карточки
+        if (!images || images.length === 0) {
+            const imgEl = card.querySelector(SELECTORS.cardImage);
+            const imgSrc = imgEl?.getAttribute('src') || '';
+            const imgAlt = imgEl?.getAttribute('alt') || '';
+
+            if (imgSrc) {
+                const filename = imgSrc.split('/').pop();
+                images = [{
+                    filename: filename,
+                    alt: imgAlt,
+                    crop_x: 50,
+                    crop_y: 50,
+                    crop_scale: 1
+                }];
+            }
+        }
+
+        // Инициализируем галерею
+        galleryState.images = images;
+
+        // Находим индекс главного изображения (is_primary) или используем первое
+        let startIndex = 0;
+        if (images.length > 0) {
+            const primaryIndex = images.findIndex(img => img.is_primary);
+            if (primaryIndex !== -1) {
+                startIndex = primaryIndex;
+            }
+        }
+
+        galleryState.currentIndex = startIndex;
 
         const projectId = btn.getAttribute('data-project-id');
         const key = `pview:${projectId}`;
         if (!viewedRecently(key, VIEW_TTL_MIN)) {
-        try { fetch(VIEW_ENDPOINT_BY_ID(projectId), { method: 'POST' }); } catch(_) {}
-        markViewedTTL(key);
+            try { fetch(VIEW_ENDPOINT_BY_ID(projectId), { method: 'POST' }); } catch(_) {}
+            markViewedTTL(key);
         }
 
-        // картинка
-        ui.mediaImg.src = imgSrc;
-        ui.mediaImg.alt = imgAlt;
-        copyCropStyles(imgEl, ui.mediaImg);
-
-        // текст
+        // Заполняем текстовую информацию
         ui.title.textContent = titleEl?.textContent?.trim() ?? '';
         ui.size.textContent  = sizeEl?.textContent?.trim() ?? '';
         ui.desc.textContent  = descEl?.textContent?.trim() ?? '';
         ui.loc.textContent   = locEl?.textContent?.trim() ?? '';
         ui.tags.innerHTML    = tagsEl?.innerHTML ?? '';
 
-        ui.link.href = imgSrc;
+        // Показываем первое (или главное) изображение
+        showImageAtIndex(startIndex);
 
         openModal();
     });
@@ -153,24 +224,37 @@
         function openModal() {
             modal.classList.add('is-open');
             document.body.classList.add('modal-open');
-            document.addEventListener('keydown', onEsc);
+            document.addEventListener('keydown', onKeydown);
             modal.addEventListener('click', onBackdrop);
             ui.close.addEventListener('click', closeModal);
+            ui.prevBtn.addEventListener('click', showPrevImage);
+            ui.nextBtn.addEventListener('click', showNextImage);
         }
 
         function closeModal() {
             modal.classList.remove('is-open');
             document.body.classList.remove('modal-open');
-            document.removeEventListener('keydown', onEsc);
+            document.removeEventListener('keydown', onKeydown);
             modal.removeEventListener('click', onBackdrop);
             ui.close.removeEventListener('click', closeModal);
+            ui.prevBtn.removeEventListener('click', showPrevImage);
+            ui.nextBtn.removeEventListener('click', showNextImage);
             // Чистим src, чтобы при следующем открытии не мигало на слабых сетях
             ui.mediaImg.removeAttribute('src');
         }
 
-        function onEsc(e) {
-            if (e.key === 'Escape') closeModal();
+        function onKeydown(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                showPrevImage();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                showNextImage();
+            }
         }
+
         function onBackdrop(e) {
             if (e.target === modal) closeModal(); // клик по подложке
         }

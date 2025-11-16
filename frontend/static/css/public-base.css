@@ -199,8 +199,15 @@ footer { flex-shrink: 0; }
 .btn-hero { background: #ff6b6b; }
 .btn-hero:hover { background: #ee5a5a; }
 
+/* Убираем outline при клике мышкой, но оставляем при навигации клавиатурой (Tab) */
 .btn:focus,
 .nav-links a:focus {
+    outline: none;
+}
+
+/* Показываем outline только при навигации клавиатурой для доступности */
+.btn:focus-visible,
+.nav-links a:focus-visible {
     outline: 2px solid var(--p-brand);
     outline-offset: 2px;
 }

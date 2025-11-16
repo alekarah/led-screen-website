@@ -15,11 +15,11 @@
                     <!-- Миниатюра проекта -->
                     <div class="project-thumbnail">
                         {{if .Images}}
-                            {{$firstImage := index .Images 0}}
-                            <img src="/static/uploads/{{$firstImage.Filename}}" 
-                                alt="{{.Title}}" 
-                                style="transform: scale({{if $firstImage.CropScale}}{{$firstImage.CropScale}}{{else}}1{{end}})
-                                                translate({{mul (sub $firstImage.CropX 50) 2}}%, {{mul (sub $firstImage.CropY 50) 2}}%);
+                            {{$primaryImg := primaryImage .Images}}
+                            <img src="/static/uploads/{{$primaryImg.Filename}}"
+                                alt="{{.Title}}"
+                                style="transform: scale({{if $primaryImg.CropScale}}{{$primaryImg.CropScale}}{{else}}1{{end}})
+                                                translate({{mul (sub $primaryImg.CropX 50) 2}}%, {{mul (sub $primaryImg.CropY 50) 2}}%);
                                         object-position: center center;
                                         transform-origin: center center;">
                         {{else}}

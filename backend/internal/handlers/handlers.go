@@ -410,12 +410,12 @@ func generateSlug(title string) string {
 
 // isImageFile проверяет, является ли файл допустимым форматом изображения.
 //
-// Поддерживаемые форматы: .jpg, .jpeg, .png, .gif, .webp
+// Поддерживаемые форматы: .jpg, .jpeg, .jfif, .png, .gif, .webp
 //
 // Используется для валидации загружаемых файлов проектов.
 func isImageFile(filename string) bool {
 	ext := strings.ToLower(filepath.Ext(filename))
-	allowedExts := []string{".jpg", ".jpeg", ".png", ".gif", ".webp"}
+	allowedExts := []string{".jpg", ".jpeg", ".jfif", ".png", ".gif", ".webp"}
 
 	for _, allowed := range allowedExts {
 		if ext == allowed {

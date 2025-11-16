@@ -8,6 +8,7 @@ import (
 	"ledsite/internal/models"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // CreateProject - создание нового проекта
@@ -74,7 +75,11 @@ func (h *Handlers) GetProject(c *gin.Context) {
 	}
 
 	var project models.Project
-	if err := h.db.Preload("Categories").Preload("Images").First(&project, id).Error; err != nil {
+	if err := h.db.Preload("Categories").
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_order ASC, id ASC")
+		}).
+		First(&project, id).Error; err != nil {
 		jsonErr(c, http.StatusNotFound, "Проект не найден")
 		return
 	}

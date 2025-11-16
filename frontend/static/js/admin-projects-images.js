@@ -99,6 +99,27 @@ function buildImageItem(image) {
     cropBtn.dataset.cropScale = cropScale;
     cropBtn.textContent = '✂️';
 
+    // Кнопка "Сделать главным" или индикатор главного изображения
+    const primaryBtn = document.createElement('button');
+    primaryBtn.type = 'button';
+    primaryBtn.dataset.imageId = image.id;
+
+    if (image.is_primary) {
+        // Если это главное изображение - показываем индикатор (желтая с черной звездой)
+        primaryBtn.className = 'primary-image-indicator';
+        primaryBtn.title = 'Главное изображение проекта';
+        primaryBtn.setAttribute('aria-label', 'Главное изображение проекта');
+        primaryBtn.textContent = '★';
+        primaryBtn.disabled = true;
+    } else {
+        // Если не главное - показываем кнопку для установки (серая с черной звездой)
+        primaryBtn.className = 'set-primary-image';
+        primaryBtn.title = 'Сделать главным изображением';
+        primaryBtn.setAttribute('aria-label', 'Сделать главным изображением');
+        primaryBtn.dataset.action = 'set-primary';
+        primaryBtn.textContent = '★';
+    }
+
     const delBtn = document.createElement('button');
     delBtn.className = 'delete-image';
     delBtn.type = 'button';
@@ -109,6 +130,7 @@ function buildImageItem(image) {
     delBtn.textContent = '×';
 
     controls.appendChild(cropBtn);
+    controls.appendChild(primaryBtn);
     controls.appendChild(delBtn);
 
     item.appendChild(previewWrap);
@@ -132,18 +154,24 @@ function enableImagesDelegation(root) {
         const action = btn.dataset.action;
 
         if (action === 'delete') {
-        await deleteImage(imageId);
-        return;
+            await deleteImage(imageId);
+            return;
         }
 
         if (action === 'crop') {
-        const x = Number(btn.dataset.cropX);
-        const y = Number(btn.dataset.cropY);
-        const scale = Number(btn.dataset.cropScale);
-        const filename = btn.dataset.filename;
-        if (typeof openCropEditor === 'function') {
-            openCropEditor(imageId, filename, x, y, scale);
+            const x = Number(btn.dataset.cropX);
+            const y = Number(btn.dataset.cropY);
+            const scale = Number(btn.dataset.cropScale);
+            const filename = btn.dataset.filename;
+            if (typeof openCropEditor === 'function') {
+                openCropEditor(imageId, filename, x, y, scale);
+            }
+            return;
         }
+
+        if (action === 'set-primary') {
+            await setPrimaryImage(imageId);
+            return;
         }
     });
 }
@@ -190,6 +218,44 @@ function removeImageFromDOM(imageId) {
     if (!el) return;
     el.style.animation = 'fadeOut .2s ease-out';
     setTimeout(() => el.remove(), 200);
+}
+
+async function setPrimaryImage(imageId) {
+    if (!imageId) {
+        showAdminMessage('Некорректный ID изображения', 'error');
+        return;
+    }
+
+    try {
+        showImageLoading(imageId, true);
+
+        const response = await fetch(`/admin/images/${imageId}/set-primary`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Ошибка установки главного изображения');
+        }
+
+        const result = await response.json();
+        showAdminMessage(result.message || 'Главное изображение установлено', 'success');
+
+        // Перезагружаем список изображений для обновления индикаторов
+        const projectId = document.getElementById('edit_project_id')?.value;
+        if (projectId) {
+            const projectData = await fetchData(`/admin/projects/${projectId}?_=${Date.now()}`);
+            fillProjectImages(projectData.project.images || []);
+        }
+    } catch (err) {
+        console.error('Ошибка установки главного изображения:', err);
+        showAdminMessage('Ошибка: ' + err.message, 'error');
+    } finally {
+        showImageLoading(imageId, false);
+    }
 }
 
 // =============================

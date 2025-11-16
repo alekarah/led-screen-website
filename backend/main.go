@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
 	"log"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"ledsite/internal/config"
 	"ledsite/internal/database"
 	"ledsite/internal/handlers"
+	"ledsite/internal/models"
 	"ledsite/internal/routes"
 )
 
@@ -67,6 +69,27 @@ func main() {
 			return t.In(loc).Format("02.01.2006 15:04")
 		},
 		"add": func(a, b int) int { return a + b },
+		"primaryImage": func(images []models.Image) models.Image {
+			// Ищем главное изображение (is_primary = true)
+			for _, img := range images {
+				if img.IsPrimary {
+					return img
+				}
+			}
+			// Если главного нет, возвращаем первое (или пустое если массив пустой)
+			if len(images) > 0 {
+				return images[0]
+			}
+			return models.Image{}
+		},
+		"toJSON": func(v interface{}) template.JS {
+			// Конвертируем любое значение в JSON для использования в JavaScript
+			b, err := json.Marshal(v)
+			if err != nil {
+				return template.JS("[]")
+			}
+			return template.JS(b)
+		},
 	}
 	router.SetFuncMap(funcMap)
 

@@ -76,6 +76,7 @@ type Project struct {
 //   - CropX, CropY, CropScale используются для настройки preview в crop-editor
 //   - SortOrder определяет порядок отображения изображений проекта
 //   - ProjectID может быть NULL для общих изображений (не привязанных к проекту)
+//   - IsPrimary отмечает главное изображение проекта (показывается в карточках и на главной)
 type Image struct {
 	ID            uint   `json:"id" gorm:"primaryKey"`
 	ProjectID     *uint  `json:"project_id"` // Nullable: может быть null для общих изображений
@@ -88,6 +89,7 @@ type Image struct {
 	Alt           string `json:"alt"`
 	Caption       string `json:"caption"`
 	SortOrder     int    `json:"sort_order" gorm:"default:0"`
+	IsPrimary     bool   `json:"is_primary" gorm:"default:false;index"` // Главное изображение проекта
 
 	// Настройки кроппинга для превью (используются в crop-editor.js)
 	CropX     float64 `json:"crop_x" gorm:"default:50"`      // Позиция X центра в процентах (0-100)
