@@ -1,0 +1,403 @@
+/* Стили для страницы "О LED-экранах" */
+
+/* Вводная секция */
+.led-intro-section {
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff8f5 100%);
+    padding: 3rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.led-intro-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.intro-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.intro-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.intro-icon {
+    font-size: 4rem;
+    flex-shrink: 0;
+    animation: ledPulse 3s ease-in-out infinite;
+}
+
+@keyframes ledPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.05); }
+}
+
+.intro-with-icon .intro-text {
+    margin-bottom: 0;
+    flex: 1;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--p-text-600);
+    margin-bottom: 1.5rem;
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.intro-text strong {
+    color: var(--p-text-700);
+    font-weight: 600;
+}
+
+/* Дополнительные описания для типов экранов */
+.screen-type .type-description {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--p-text-500);
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+/* Секция "Как выбрать экран" */
+.selection-guide-section {
+    background: white;
+    padding: 4rem 0;
+}
+
+.selection-guide-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    color: var(--p-text-700);
+}
+
+.selection-intro {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--p-text-600);
+    margin-bottom: 2.5rem;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.selection-factors {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.factor-item {
+    background: var(--p-bg-alt);
+    padding: 2rem;
+    border-radius: 15px;
+    border-left: 4px solid var(--p-brand);
+}
+
+.factor-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.factor-item h4 {
+    font-size: 1.2rem;
+    color: var(--p-text-700);
+    margin-bottom: 0.8rem;
+}
+
+.factor-item p {
+    color: var(--p-text-600);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.selection-tip {
+    background: linear-gradient(135deg, #fff8e1 0%, #fffbf0 100%);
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+    border-left: 4px solid #ffc107;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.selection-tip p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--p-text-700);
+    margin: 0;
+}
+
+.selection-tip a {
+    color: var(--p-brand);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.selection-tip a:hover {
+    color: var(--p-brand-2);
+}
+
+/* Секция таблицы сравнения */
+.comparison-table-section {
+    background: var(--p-bg-alt);
+    padding: 4rem 0;
+}
+
+.comparison-table-section h2 {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2.5rem;
+    color: var(--p-text-700);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.comparison-table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.comparison-table thead {
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
+    color: white;
+}
+
+.comparison-table th {
+    padding: 1.2rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.comparison-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background 0.2s ease;
+}
+
+.comparison-table tbody tr:hover {
+    background: #f8f9ff;
+}
+
+.comparison-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.comparison-table td {
+    padding: 1.2rem 1rem;
+    color: var(--p-text-600);
+}
+
+.comparison-table td strong {
+    color: var(--p-brand);
+    font-weight: 600;
+}
+
+.table-note {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--p-text-600);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.table-note a {
+    color: var(--p-brand);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.table-note a:hover {
+    text-decoration: underline;
+}
+
+/* Секция преимуществ */
+.advantages-section {
+    background: white;
+    padding: 4rem 0;
+}
+
+.advantages-section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    color: var(--p-text-700);
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.advantage-item {
+    background: var(--p-bg-alt);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.advantage-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.advantage-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.advantage-item h4 {
+    font-size: 1.1rem;
+    color: var(--p-text-700);
+    margin-bottom: 0.8rem;
+}
+
+.advantage-item p {
+    color: var(--p-text-500);
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+/* FAQ секция */
+.faq-section {
+    background: var(--p-bg-alt);
+    padding: 4rem 0;
+}
+
+.faq-section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    color: var(--p-text-700);
+}
+
+.faq-accordion {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+.faq-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+}
+
+.faq-question {
+    width: 100%;
+    background: white;
+    border: none;
+    padding: 1.5rem 2rem;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--p-text-700);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.faq-question:hover {
+    background: #f8f9ff;
+}
+
+.faq-question:focus {
+    outline: 2px solid var(--p-brand);
+    outline-offset: -2px;
+}
+
+.faq-icon {
+    font-size: 0.8rem;
+    color: var(--p-brand);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0 2rem;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 1000px;
+    padding: 1.5rem 2rem 2rem;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-answer p {
+    color: var(--p-text-600);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.faq-answer p:last-child {
+    margin-bottom: 0;
+}
+
+.faq-answer ol {
+    color: var(--p-text-600);
+    line-height: 1.7;
+    padding-left: 1.5rem;
+}
+
+.faq-answer li {
+    margin-bottom: 0.5rem;
+}
+
+.faq-answer strong {
+    color: var(--p-brand);
+    font-weight: 600;
+}

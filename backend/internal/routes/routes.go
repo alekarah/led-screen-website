@@ -54,6 +54,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 	router.GET("/", h.HomePage)
 	router.GET("/projects", h.ProjectsPage)
 	router.GET("/services", h.ServicesPage)
+	router.GET("/led-screens-guide", h.LEDGuidePage)
 	router.GET("/contact", h.ContactPage)
 	router.GET("/privacy", h.PrivacyPage)
 

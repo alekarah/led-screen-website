@@ -75,11 +75,12 @@ func (h *Handlers) Sitemap(c *gin.Context) {
 		changefreq string
 		priority   string
 	}{
-		{baseURL + "/", "weekly", "1.0"},          // Главная - максимальный приоритет
-		{baseURL + "/projects", "weekly", "0.9"},  // Портфолио
-		{baseURL + "/services", "monthly", "0.8"}, // Услуги
-		{baseURL + "/contact", "monthly", "0.7"},  // Контакты
-		{baseURL + "/privacy", "yearly", "0.3"},   // Политика конфиденциальности
+		{baseURL + "/", "weekly", "1.0"},                   // Главная - максимальный приоритет
+		{baseURL + "/projects", "weekly", "0.9"},           // Портфолио
+		{baseURL + "/led-screens-guide", "monthly", "0.8"}, // О LED-экранах (информационная страница)
+		{baseURL + "/services", "monthly", "0.8"},          // Услуги
+		{baseURL + "/contact", "monthly", "0.7"},           // Контакты
+		{baseURL + "/privacy", "yearly", "0.3"},            // Политика конфиденциальности
 	}
 
 	for _, page := range staticPages {

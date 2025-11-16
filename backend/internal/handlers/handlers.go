@@ -150,6 +150,20 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 	})
 }
 
+// LEDGuidePage рендерит информационную страницу о LED экранах.
+//
+// GET /led-screens-guide
+func (h *Handlers) LEDGuidePage(c *gin.Context) {
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
+		"title":         "Всё о LED-экранах: виды, выбор и частые вопросы | S'n'R",
+		"description":   "Узнайте всё о LED-экранах: различия уличных и интерьерных моделей, шаг пикселя, срок службы, советы по установке и ответы на частые вопросы.",
+		"ogTitle":       "LED-экраны — виды, выбор, частые вопросы | S'n'R Санкт-Петербург",
+		"ogDescription": "Полное руководство по выбору LED-экранов: типы, характеристики, сравнение, преимущества и ответы на частые вопросы.",
+		"ogUrl":         "/led-screens-guide",
+		"PageID":        "led-guide",
+	})
+}
+
 // ContactPage рендерит страницу контактов с формой обратной связи.
 //
 // GET /contact

@@ -197,7 +197,7 @@
 /* Секция процесса работы */
 .process-section {
     padding: 4rem 0;
-    background: var(--p-bg-alt);
+    background: var(--p-bg);
 }
 
 .process-section h2 {

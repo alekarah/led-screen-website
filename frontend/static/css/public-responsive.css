@@ -195,6 +195,9 @@
     white-space: normal;
     max-width: 600px;
   }
+  /* LED Guide */
+  .selection-factors { grid-template-columns: 1fr; gap: 1.5rem; }
+  .advantages-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
   /* О компании */
   .about-company-content { grid-template-columns: 250px 1fr; gap: 2rem; }
   .about-company-text h2 { font-size: 1.75rem; }
@@ -448,6 +451,23 @@
     max-width: 300px;
     font-size: 0.95rem;
   }
+  /* LED Guide */
+  .led-intro-section { padding: 2rem 0 3rem; }
+  .led-intro-section::before { width: 300px; height: 300px; top: -30%; right: -20%; }
+  .intro-with-icon { gap: 1.5rem; }
+  .intro-icon { font-size: 3rem; }
+  .intro-text { font-size: 1rem; padding: 1.2rem 1.5rem; }
+  .selection-guide-section, .comparison-table-section, .advantages-section, .faq-section { padding: 2.5rem 0; }
+  .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 2rem; margin-bottom: 2rem; }
+  .selection-intro { font-size: 1rem; }
+  .factor-item { padding: 1.5rem; }
+  .factor-icon { font-size: 2rem; }
+  .factor-item h4 { font-size: 1.1rem; }
+  .advantages-grid { grid-template-columns: 1fr; gap: 1.5rem; max-width: 500px; margin: 0 auto; }
+  .advantage-icon { font-size: 2.5rem; }
+  .faq-question { font-size: 1rem; padding: 1.2rem 1.5rem; }
+  .faq-answer { padding: 0 1.5rem; }
+  .faq-item.active .faq-answer { padding: 1.2rem 1.5rem 1.5rem; }
   /* О компании - вертикальная компоновка */
   .about-company-section { padding: 3rem 0; margin: 2rem 0; }
   .about-company-content { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
@@ -670,6 +690,28 @@
     font-size: 0.9rem;
     padding: 0.875rem 1.5rem;
   }
+  /* LED Guide */
+  .led-intro-section { padding: 1.5rem 0 2rem; }
+  .led-intro-section::before { width: 250px; height: 250px; top: -25%; right: -30%; }
+  .intro-with-icon { flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+  .intro-icon { font-size: 2.5rem; margin-top: 0; }
+  .intro-text { font-size: 0.95rem; padding: 1rem 1.2rem; }
+  .selection-guide-section, .comparison-table-section, .advantages-section, .faq-section { padding: 2rem 0; }
+  .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 1.7rem; margin-bottom: 1.5rem; }
+  .selection-intro { font-size: 0.95rem; }
+  .factor-item { padding: 1.2rem; }
+  .factor-icon { font-size: 1.8rem; }
+  .factor-item h4 { font-size: 1rem; }
+  .factor-item p { font-size: 0.9rem; }
+  .selection-tip { padding: 1.2rem 1.5rem; font-size: 0.95rem; }
+  .comparison-table { font-size: 0.85rem; }
+  .comparison-table th, .comparison-table td { padding: 0.8rem 0.6rem; }
+  .table-note { font-size: 0.9rem; }
+  .advantage-icon { font-size: 2.2rem; }
+  .advantage-item h4 { font-size: 1rem; }
+  .advantage-item p { font-size: 0.85rem; }
+  .faq-question { font-size: 0.95rem; padding: 1rem 1.2rem; }
+  .faq-answer p { font-size: 0.9rem; }
   /* О компании */
   .about-company-section { padding: 2rem 0; margin: 1.5rem 0; }
   .about-company-content { gap: 1.5rem; }
@@ -726,6 +768,16 @@
   .section-header h1 {
     font-size: 1.75rem;
   }
+  /* LED Guide */
+  .led-intro-section { padding: 1.25rem 0 1.75rem; }
+  .led-intro-section::before { width: 200px; height: 200px; }
+  .intro-icon { font-size: 2.2rem; }
+  .intro-text { font-size: 0.9rem; padding: 0.9rem 1rem; }
+  .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 1.5rem; }
+  .comparison-table { font-size: 0.8rem; }
+  .comparison-table th, .comparison-table td { padding: 0.6rem 0.4rem; }
+  .faq-question { font-size: 0.9rem; padding: 0.9rem 1rem; }
+  .faq-icon { font-size: 0.7rem; }
   /* О компании */
   .about-company-image { max-width: 180px; }
   .about-company-text h2 { font-size: 1.2rem; }
