@@ -96,6 +96,7 @@ body.modal-open { overflow: hidden; }
 
 /* Window */
 .modal-content{
+  position: relative;
   width: min(800px, 92vw);
   max-height: 85vh;
   overflow: auto;
@@ -161,6 +162,38 @@ body.modal-open { overflow: hidden; }
 /* Отступы внутри полей "Автор" и "Новая заметка" */
 #cd-note-author,
 #cd-note-text { padding: 6px 10px; }
+
+/* Кнопка подсказки по горячим клавишам в правом нижнем углу */
+.crop-help-button {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--brand-50);
+  border: 2px solid var(--brand-200);
+  color: var(--brand-600);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.crop-help-button:hover {
+  background: var(--brand-100);
+  border-color: var(--brand-300);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.crop-help-button:active {
+  transform: scale(0.98);
+}
 
 /* ============================================
    АДАПТИВНОСТЬ МОДАЛОК
@@ -231,5 +264,14 @@ body.modal-open { overflow: hidden; }
 
   .modal-footer .btn {
     width: 100%;
+  }
+
+  /* Кнопка подсказки на мобильных - меньше и ближе к краю */
+  .crop-help-button {
+    width: 44px;
+    height: 44px;
+    bottom: 12px;
+    right: 12px;
+    font-size: 20px;
   }
 }

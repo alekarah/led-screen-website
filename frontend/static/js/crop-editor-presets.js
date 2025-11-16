@@ -18,7 +18,9 @@ function applyCropPreset(presetName) {
     if (preset) {
         // Используем анимацию для плавного перехода
         animateToPreset(preset);
-        showMessage(`Применена предустановка: ${getPresetDisplayName(presetName)}`, 'success');
+        if (typeof showAdminMessage === 'function') {
+            showAdminMessage(`Применена предустановка: ${getPresetDisplayName(presetName)}`, 'success');
+        }
     }
 }
 
@@ -55,7 +57,9 @@ function copyCropSettings() {
     
     // Сохраняем в localStorage для последующего использования
     localStorage.setItem('cropSettings', JSON.stringify(settings));
-    showMessage('Настройки скопированы', 'success');
+    if (typeof showAdminMessage === 'function') {
+        showAdminMessage('Настройки скопированы', 'success');
+    }
 }
 
 // Вставка настроек кроппинга из буфера
@@ -68,16 +72,24 @@ function pasteCropSettings() {
             // Валидируем настройки
             if (isValidCropSettings(settings)) {
                 setCropValues(settings.cropX, settings.cropY, settings.cropScale);
-                showMessage('Настройки вставлены', 'success');
+                if (typeof showAdminMessage === 'function') {
+                    showAdminMessage('Настройки вставлены', 'success');
+                }
             } else {
-                showMessage('Некорректные сохраненные настройки', 'error');
+                if (typeof showAdminMessage === 'function') {
+                    showAdminMessage('Некорректные сохраненные настройки', 'error');
+                }
             }
         } else {
-            showMessage('Нет сохраненных настроек', 'error');
+            if (typeof showAdminMessage === 'function') {
+                showAdminMessage('Нет сохраненных настроек', 'error');
+            }
         }
     } catch (error) {
         console.error('Ошибка при вставке настроек:', error);
-        showMessage('Ошибка при вставке настроек', 'error');
+        if (typeof showAdminMessage === 'function') {
+            showAdminMessage('Ошибка при вставке настроек', 'error');
+        }
     }
 }
 
@@ -99,7 +111,13 @@ function initCropKeyboardShortcuts() {
     document.addEventListener('keydown', function(event) {
         // Проверяем, открыт ли редактор кроппинга
         if (!isCropEditorActive()) return;
-        
+
+        // НЕ блокируем горячие клавиши если фокус на input/textarea
+        const activeElement = document.activeElement;
+        if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+            return;
+        }
+
         const step = event.shiftKey ? 10 : 1; // Больший шаг при зажатом Shift
         const scaleStep = event.shiftKey ? 0.2 : 0.1;
         
@@ -175,27 +193,24 @@ function initCropKeyboardShortcuts() {
 
 // Показ справки по горячим клавишам
 function showKeyboardHelp() {
-    const helpText = `
-        🎯 Горячие клавиши редактора кроппинга:
-        
-        🔄 Навигация:
-        • ← → ↑ ↓ - перемещение (+ Shift для больших шагов)
-        • + / - - масштабирование
-        
-        💾 Управление:
-        • Ctrl+S - сохранить
-        • Ctrl+R - сбросить
-        • Ctrl+C - копировать настройки
-        • Ctrl+V - вставить настройки
-        • Esc - закрыть редактор
-        
-        ⚡ Предустановки:
-        • 1 - по центру
-        • 2 - увеличить
-        • 3 - уменьшить
-    `;
-    
-    showMessage(helpText, 'info');
+    const helpText = `🎯 Горячие клавиши редактора кроппинга:
+
+🔄 Навигация:
+• ← → ↑ ↓ - перемещение области кропа (+ Shift для больших шагов)
+• + / - или = / - - масштабирование (+ Shift для больших шагов)
+
+💾 Управление:
+• Ctrl+S - сохранить настройки кропа
+• Ctrl+R - сбросить к исходным настройкам
+• Ctrl+C - копировать настройки кропа
+• Ctrl+V - вставить настройки кропа
+
+⚡ Предустановки:
+• 1 - применить пресет "по центру"
+• 2 - применить пресет "увеличить"
+• 3 - применить пресет "уменьшить"`;
+
+    alert(helpText);
 }
 
 // Экспорт функций
