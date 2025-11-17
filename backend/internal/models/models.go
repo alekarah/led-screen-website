@@ -184,7 +184,7 @@ type ContactNote struct {
 // Трекинг происходит через /api/track/project-view/:id
 type ProjectViewDaily struct {
 	ID        uint      `json:"id" gorm:"primaryKey"`
-	ProjectID uint      `json:"project_id" gorm:"not null;index;constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
+	ProjectID uint      `json:"project_id" gorm:"not null;uniqueIndex:uniq_project_day;constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
 	Day       time.Time `json:"day" gorm:"type:date;not null;uniqueIndex:uniq_project_day"`
 	Views     int64     `json:"views" gorm:"default:1"`
 	CreatedAt time.Time `json:"created_at"`
