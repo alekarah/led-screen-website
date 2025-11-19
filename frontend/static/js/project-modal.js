@@ -93,15 +93,33 @@
 
             const img = galleryState.images[galleryState.currentIndex];
 
-            // Устанавливаем изображение
-            ui.mediaImg.src = `/static/uploads/${img.filename}`;
+            // Получаем путь к medium thumbnail (для галереи) с fallback к оригиналу
+            const mediumThumb = getThumbnailPath(img, 'medium');
+            const largeThumb = getThumbnailPath(img, 'large');
+
+            // Устанавливаем medium изображение для галереи
+            ui.mediaImg.src = `/static/uploads/${mediumThumb}`;
             ui.mediaImg.alt = img.alt || img.original_name || '';
 
-            // Применяем crop стили
-            applyCropStyles(ui.mediaImg, img);
+            // Применяем crop стили ТОЛЬКО если thumbnails не существуют (fallback к оригиналу)
+            if (!img.thumbnail_medium_path) {
+                // Старое изображение без thumbnails - применяем CSS transform
+                const scale = img.crop_scale || 1;
+                const cropX = img.crop_x || 50;
+                const cropY = img.crop_y || 50;
+                const tx = (cropX - 50) * 2;
+                const ty = (cropY - 50) * 2;
+                ui.mediaImg.style.transform = `scale(${scale}) translate(${tx}%, ${ty}%)`;
+                ui.mediaImg.style.objectFit = 'cover';
+                ui.mediaImg.style.transformOrigin = 'center center';
+            } else {
+                // Новое изображение с thumbnails - кроп уже применен на сервере
+                ui.mediaImg.style.transform = '';
+                ui.mediaImg.style.objectFit = 'contain';
+            }
 
-            // Обновляем ссылку
-            ui.link.href = `/static/uploads/${img.filename}`;
+            // Обновляем ссылку на large изображение для кнопки "Открыть"
+            ui.link.href = `/static/uploads/${largeThumb}`;
 
             // Обновляем счетчик
             if (totalImages > 1) {
@@ -116,26 +134,37 @@
             }
         }
 
+        // Получает путь к thumbnail нужного размера с fallback
+        function getThumbnailPath(img, size) {
+            let thumbPath = '';
+            switch (size) {
+                case 'small':
+                    thumbPath = img.thumbnail_small_path;
+                    break;
+                case 'medium':
+                    thumbPath = img.thumbnail_medium_path;
+                    break;
+                case 'large':
+                    thumbPath = img.thumbnail_large_path;
+                    break;
+            }
+
+            // Fallback к filename если thumbnail не существует
+            if (!thumbPath) {
+                return img.filename;
+            }
+
+            // Извлекаем только имя файла из полного пути
+            const parts = thumbPath.split(/[/\\]/);
+            return parts[parts.length - 1];
+        }
+
         function showNextImage() {
             showImageAtIndex(galleryState.currentIndex + 1);
         }
 
         function showPrevImage() {
             showImageAtIndex(galleryState.currentIndex - 1);
-        }
-
-        function applyCropStyles(imgEl, imageData) {
-            const scale = imageData.crop_scale || 1;
-            const cropX = imageData.crop_x || 50;
-            const cropY = imageData.crop_y || 50;
-
-            const tx = (cropX - 50) * 2;
-            const ty = (cropY - 50) * 2;
-
-            imgEl.style.transform = `scale(${scale}) translate(${tx}%, ${ty}%)`;
-            imgEl.style.objectPosition = 'center center';
-            imgEl.style.objectFit = 'cover';
-            imgEl.style.transformOrigin = 'center center';
         }
 
     // ——— делегирование клика по "Подробнее" ———

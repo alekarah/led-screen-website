@@ -82,6 +82,34 @@ func main() {
 			}
 			return models.Image{}
 		},
+		// getThumbnail возвращает путь к thumbnail нужного размера
+		// size: "small" (карточки), "medium" (галерея), "large" (просмотр)
+		// fallback к оригиналу если thumbnail не существует
+		"getThumbnail": func(img models.Image, size string) string {
+			var thumbPath string
+			switch size {
+			case "small":
+				thumbPath = img.ThumbnailSmallPath
+			case "medium":
+				thumbPath = img.ThumbnailMediumPath
+			case "large":
+				thumbPath = img.ThumbnailLargePath
+			default:
+				thumbPath = ""
+			}
+			// Fallback к filename если thumbnail не существует
+			if thumbPath == "" {
+				return img.Filename
+			}
+			// Извлекаем только имя файла из полного пути
+			parts := []rune(thumbPath)
+			for i := len(parts) - 1; i >= 0; i-- {
+				if parts[i] == '/' || parts[i] == '\\' {
+					return string(parts[i+1:])
+				}
+			}
+			return thumbPath
+		},
 		"toJSON": func(v interface{}) template.JS {
 			// Конвертируем любое значение в JSON для использования в JavaScript
 			b, err := json.Marshal(v)

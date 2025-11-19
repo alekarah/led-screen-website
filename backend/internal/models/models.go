@@ -77,19 +77,24 @@ type Project struct {
 //   - SortOrder определяет порядок отображения изображений проекта
 //   - ProjectID может быть NULL для общих изображений (не привязанных к проекту)
 //   - IsPrimary отмечает главное изображение проекта (показывается в карточках и на главной)
+//   - Thumbnails: автоматически генерируются в 3-х размерах (small, medium, large)
 type Image struct {
-	ID            uint   `json:"id" gorm:"primaryKey"`
-	ProjectID     *uint  `json:"project_id"` // Nullable: может быть null для общих изображений
-	Filename      string `json:"filename" gorm:"not null"`
-	OriginalName  string `json:"original_name"`
-	FilePath      string `json:"file_path" gorm:"not null"`
-	ThumbnailPath string `json:"thumbnail_path"`
-	FileSize      int64  `json:"file_size"`
-	MimeType      string `json:"mime_type"`
-	Alt           string `json:"alt"`
-	Caption       string `json:"caption"`
-	SortOrder     int    `json:"sort_order" gorm:"default:0"`
-	IsPrimary     bool   `json:"is_primary" gorm:"default:false;index"` // Главное изображение проекта
+	ID           uint   `json:"id" gorm:"primaryKey"`
+	ProjectID    *uint  `json:"project_id"` // Nullable: может быть null для общих изображений
+	Filename     string `json:"filename" gorm:"not null"`
+	OriginalName string `json:"original_name"`
+	FilePath     string `json:"file_path" gorm:"not null"`
+	FileSize     int64  `json:"file_size"`
+	MimeType     string `json:"mime_type"`
+	Alt          string `json:"alt"`
+	Caption      string `json:"caption"`
+	SortOrder    int    `json:"sort_order" gorm:"default:0"`
+	IsPrimary    bool   `json:"is_primary" gorm:"default:false;index"` // Главное изображение проекта
+
+	// Thumbnails (автоматически генерируются при загрузке и при изменении crop)
+	ThumbnailSmallPath  string `json:"thumbnail_small_path"`  // 400x300 для карточек (~50KB)
+	ThumbnailMediumPath string `json:"thumbnail_medium_path"` // 1200x900 для галереи (~180KB)
+	ThumbnailLargePath  string `json:"thumbnail_large_path"`  // 2000x1500 для просмотра (~500KB)
 
 	// Настройки кроппинга для превью (используются в crop-editor.js)
 	CropX     float64 `json:"crop_x" gorm:"default:50"`      // Позиция X центра в процентах (0-100)

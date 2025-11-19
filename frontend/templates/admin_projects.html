@@ -16,12 +16,15 @@
                     <div class="project-thumbnail">
                         {{if .Images}}
                             {{$primaryImg := primaryImage .Images}}
-                            <img src="/static/uploads/{{$primaryImg.Filename}}"
+                            {{$thumbPath := getThumbnail $primaryImg "small"}}
+                            <img src="/static/uploads/{{$thumbPath}}"
                                 alt="{{.Title}}"
+                                {{if not $primaryImg.ThumbnailSmallPath}}
                                 style="transform: scale({{if $primaryImg.CropScale}}{{$primaryImg.CropScale}}{{else}}1{{end}})
                                                 translate({{mul (sub $primaryImg.CropX 50) 2}}%, {{mul (sub $primaryImg.CropY 50) 2}}%);
                                         object-position: center center;
-                                        transform-origin: center center;">
+                                        transform-origin: center center;"
+                                {{end}}>
                         {{else}}
                             <div class="no-image">📷</div>
                         {{end}}

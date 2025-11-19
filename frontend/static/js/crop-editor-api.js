@@ -108,7 +108,8 @@ function updatePreviewTransform() {
     if (cropYValue) cropYValue.textContent = Math.round(cropY);
     if (cropScaleValue) cropScaleValue.textContent = cropScale.toFixed(1);    
     
-    // Преобразуем значения в правильный диапазон для CSS
+    // Преобразуем значения в CSS translate
+    // cropX=0% показывает правый край, cropX=100% показывает левый край
     const translateX = (cropX - 50) * 2; // Диапазон -100% до 100%
     const translateY = (cropY - 50) * 2; // Диапазон -100% до 100%
     

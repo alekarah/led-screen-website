@@ -103,6 +103,29 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 			log.Printf("[DEBUG] Изображение %s установлено как главное", filename)
 		}
 
+		// Генерируем thumbnails с дефолтным кроппингом (без трансформаций)
+		cropParams := CropParams{
+			X:     50,
+			Y:     50,
+			Scale: 1.0,
+		}
+		thumbnails, err := GenerateThumbnails(filePath, cropParams)
+		if err != nil {
+			log.Printf("[WARN] Не удалось создать thumbnails для %s: %v", filename, err)
+		} else {
+			// Сохраняем пути к thumbnails в модель
+			if path, ok := thumbnails[ThumbnailSmall.Suffix]; ok {
+				image.ThumbnailSmallPath = path
+			}
+			if path, ok := thumbnails[ThumbnailMedium.Suffix]; ok {
+				image.ThumbnailMediumPath = path
+			}
+			if path, ok := thumbnails[ThumbnailLarge.Suffix]; ok {
+				image.ThumbnailLargePath = path
+			}
+			log.Printf("[DEBUG] Thumbnails созданы для %s", filename)
+		}
+
 		if err := h.db.Create(&image).Error; err == nil {
 			uploadedImages = append(uploadedImages, image)
 			log.Printf("[DEBUG] Изображение %s успешно добавлено в БД (ID: %d)", filename, image.ID)
@@ -132,9 +155,13 @@ func (h *Handlers) DeleteImage(c *gin.Context) {
 		return
 	}
 
+	// Удаляем оригинал
 	if err := deleteImageFile(image.FilePath); err != nil {
 		logError("Ошибка удаления файла", image.FilePath, err)
 	}
+
+	// Удаляем все thumbnails
+	DeleteThumbnails(image.FilePath)
 
 	h.db.Delete(&image)
 	jsonOK(c, gin.H{"message": "Изображение удалено"})
@@ -161,7 +188,33 @@ func (h *Handlers) UpdateImageCrop(c *gin.Context) {
 	}
 	cropData = validateCropData(cropData)
 
+	// Обновляем параметры кроппинга
 	image.CropX, image.CropY, image.CropScale = cropData.X, cropData.Y, cropData.Scale
+
+	// Регенерируем thumbnails с новыми настройками кроппинга
+	cropParams := CropParams(cropData)
+
+	log.Printf("[DEBUG] UpdateImageCrop: ID=%d, FilePath=%s, Crop=(%.1f, %.1f, %.1fx)",
+		id, image.FilePath, cropParams.X, cropParams.Y, cropParams.Scale)
+
+	thumbnails, err := GenerateThumbnails(image.FilePath, cropParams)
+	if err != nil {
+		log.Printf("[ERROR] Не удалось регенерировать thumbnails для изображения %d: %v", id, err)
+	} else {
+		// Обновляем пути к thumbnails в модели
+		if path, ok := thumbnails[ThumbnailSmall.Suffix]; ok {
+			image.ThumbnailSmallPath = path
+		}
+		if path, ok := thumbnails[ThumbnailMedium.Suffix]; ok {
+			image.ThumbnailMediumPath = path
+		}
+		if path, ok := thumbnails[ThumbnailLarge.Suffix]; ok {
+			image.ThumbnailLargePath = path
+		}
+		log.Printf("[DEBUG] Thumbnails регенерированы для изображения %d с кроппингом (%.1f, %.1f, %.1fx)",
+			id, cropData.X, cropData.Y, cropData.Scale)
+	}
+
 	if err := h.db.Save(&image).Error; err != nil {
 		log.Printf("Ошибка сохранения настроек кроппинга для изображения %d: %v", id, err)
 		jsonErr(c, http.StatusInternalServerError, "Ошибка сохранения настроек")
