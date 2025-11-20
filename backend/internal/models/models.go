@@ -77,7 +77,7 @@ type Project struct {
 //   - SortOrder определяет порядок отображения изображений проекта
 //   - ProjectID может быть NULL для общих изображений (не привязанных к проекту)
 //   - IsPrimary отмечает главное изображение проекта (показывается в карточках и на главной)
-//   - Thumbnails: автоматически генерируются в 3-х размерах (small, medium, large)
+//   - Thumbnails: автоматически генерируются в 2-х размерах (small, medium)
 type Image struct {
 	ID           uint   `json:"id" gorm:"primaryKey"`
 	ProjectID    *uint  `json:"project_id"` // Nullable: может быть null для общих изображений
@@ -94,7 +94,6 @@ type Image struct {
 	// Thumbnails (автоматически генерируются при загрузке и при изменении crop)
 	ThumbnailSmallPath  string `json:"thumbnail_small_path"`  // 400x300 для карточек (~50KB)
 	ThumbnailMediumPath string `json:"thumbnail_medium_path"` // 1200x900 для галереи (~180KB)
-	ThumbnailLargePath  string `json:"thumbnail_large_path"`  // 2000x1500 для просмотра (~500KB)
 
 	// Настройки кроппинга для превью (используются в crop-editor.js)
 	CropX     float64 `json:"crop_x" gorm:"default:50"`      // Позиция X центра в процентах (0-100)

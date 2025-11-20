@@ -197,9 +197,12 @@ func (h *Handlers) DeleteProject(c *gin.Context) {
 	}
 
 	for _, image := range project.Images {
+		// Удаляем оригинал
 		if err := deleteImageFile(image.FilePath); err != nil {
 			logError("Ошибка удаления файла", image.FilePath, err)
 		}
+		// Удаляем все thumbnails
+		DeleteThumbnails(image.FilePath)
 	}
 
 	jsonOK(c, gin.H{"message": "Проект успешно удален"})

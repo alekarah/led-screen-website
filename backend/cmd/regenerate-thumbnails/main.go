@@ -86,10 +86,6 @@ func main() {
 			image.ThumbnailMediumPath = path
 			updated = true
 		}
-		if path, ok := thumbnails[handlers.ThumbnailLarge.Suffix]; ok {
-			image.ThumbnailLargePath = path
-			updated = true
-		}
 
 		if updated {
 			if err := db.Save(&image).Error; err != nil {

@@ -38,19 +38,10 @@ var (
 		Suffix: "_medium",
 	}
 
-	// ThumbnailLarge - для кнопки "Открыть изображение" (~500KB)
-	ThumbnailLarge = ThumbnailSize{
-		Name:   "large",
-		Width:  2000,
-		Height: 1500,
-		Suffix: "_large",
-	}
-
 	// AllThumbnailSizes - все размеры для генерации
 	AllThumbnailSizes = []ThumbnailSize{
 		ThumbnailSmall,
 		ThumbnailMedium,
-		ThumbnailLarge,
 	}
 )
 

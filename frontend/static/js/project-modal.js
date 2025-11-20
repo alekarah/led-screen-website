@@ -95,7 +95,6 @@
 
             // Получаем путь к medium thumbnail (для галереи) с fallback к оригиналу
             const mediumThumb = getThumbnailPath(img, 'medium');
-            const largeThumb = getThumbnailPath(img, 'large');
 
             // Устанавливаем medium изображение для галереи
             ui.mediaImg.src = `/static/uploads/${mediumThumb}`;
@@ -118,8 +117,8 @@
                 ui.mediaImg.style.objectFit = 'contain';
             }
 
-            // Обновляем ссылку на large изображение для кнопки "Открыть"
-            ui.link.href = `/static/uploads/${largeThumb}`;
+            // Обновляем ссылку на оригинал для кнопки "Открыть" (максимальное качество)
+            ui.link.href = `/static/uploads/${img.filename}`;
 
             // Обновляем счетчик
             if (totalImages > 1) {
@@ -143,9 +142,6 @@
                     break;
                 case 'medium':
                     thumbPath = img.thumbnail_medium_path;
-                    break;
-                case 'large':
-                    thumbPath = img.thumbnail_large_path;
                     break;
             }
 

@@ -29,6 +29,7 @@ import (
 type Handlers struct {
 	db            *gorm.DB // Подключение к PostgreSQL через GORM
 	maxUploadSize int64    // Максимальный размер загружаемого файла в байтах
+	uploadPath    string   // Путь для сохранения загружаемых файлов
 }
 
 // New создает новый экземпляр Handlers с внедренной зависимостью базы данных.
@@ -37,12 +38,13 @@ type Handlers struct {
 // Пример использования:
 //
 //	db, _ := database.Connect(cfg)
-//	handlers := handlers.New(db, cfg.MaxUploadSize)
+//	handlers := handlers.New(db, cfg.MaxUploadSize, cfg.UploadPath)
 //	routes.Setup(router, handlers)
-func New(db *gorm.DB, maxUploadSize int64) *Handlers {
+func New(db *gorm.DB, maxUploadSize int64, uploadPath string) *Handlers {
 	return &Handlers{
 		db:            db,
 		maxUploadSize: maxUploadSize,
+		uploadPath:    uploadPath,
 	}
 }
 

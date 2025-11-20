@@ -47,7 +47,9 @@
 ```
 backend/
 ├── cmd/                           # Утилиты командной строки
-│   └── create-admin/              # Создание администраторов
+│   ├── create-admin/              # Создание администраторов
+│   ├── regenerate-thumbnails/     # Регенерация thumbnails для всех изображений
+│   └── check-db/                  # Проверка состояния БД
 │       └── main.go
 ├── internal/                      # Внутренние пакеты (private)
 │   ├── config/                    # Конфигурация приложения
@@ -56,11 +58,13 @@ backend/
 │   │   └── database.go            # Подключение, миграции, seed
 │   ├── handlers/                  # HTTP обработчики
 │   │   ├── handlers.go            # Публичные страницы
+│   │   ├── seo.go                 # SEO handlers (sitemap.xml, robots.txt)
 │   │   ├── admin_auth.go          # Аутентификация
 │   │   ├── admin_dashboard.go     # Dashboard с аналитикой
 │   │   ├── admin_projects_crud.go # CRUD проектов
 │   │   ├── admin_actions.go       # Действия админа (контакты)
-│   │   ├── admin_images.go        # Загрузка и обработка изображений
+│   │   ├── admin_images.go        # Загрузка изображений и автогенерация thumbnails
+│   │   ├── image_processor.go     # Обработка изображений (thumbnails, crop)
 │   │   ├── admin_sorting.go       # Сортировка проектов
 │   │   ├── admin_pages.go         # Рендеринг админских страниц
 │   │   └── admin_helpers.go       # Вспомогательные функции
@@ -113,7 +117,7 @@ Request → AuthMiddleware → validate JWT → extract claims (admin_id, userna
 |--------|----------|---------------|
 | `Project` | Проекты портфолио | Title, Slug, Description, Location, Size, Featured, SortOrder, ViewCount |
 | `Category` | Категории проектов | Name, Slug, Description |
-| `Image` | Изображения проектов | ProjectID, Filename, FilePath, CropX/Y/Scale |
+| `Image` | Изображения проектов | ProjectID, Filename, FilePath, ThumbnailSmallPath, ThumbnailMediumPath, CropX/Y/Scale, IsPrimary |
 | `ContactForm` | Заявки клиентов | Name, Phone, Email, Status, ArchivedAt, RemindAt |
 | `ContactNote` | Заметки по заявкам | ContactID, Text, Author |
 | `Admin` | Администраторы | Username, PasswordHash, IsActive, LastLoginAt |
@@ -286,6 +290,30 @@ CREATE INDEX idx_pvd_day ON project_view_dailies(day);
 
 ---
 
+## Система обработки изображений
+
+**Автоматическая генерация thumbnails:**
+- **Small** (400×300px) - карточки проектов, главная страница
+- **Medium** (1200×900px) - модальное окно галереи
+- **Original** - кнопка "Открыть изображение"
+- Формат: JPEG (quality 85%), PNG с оптимизацией
+- Библиотека: `github.com/disintegration/imaging` (Lanczos resampling)
+
+**Crop Editor:**
+- Live preview через CSS transform
+- Параметры: CropX/Y (0-100%), CropScale (0.5-3.0x)
+- Регенерация thumbnails с применением кропа на сервере
+- Fallback к оригиналу для старых изображений
+
+**API:**
+- `POST /admin/upload-images` - загрузка и генерация thumbnails
+- `POST /admin/images/{id}/crop` - обновление кропа и регенерация
+- `DELETE /admin/images/{id}` - удаление оригинала + thumbnails
+
+**Утилита:** `backend/cmd/regenerate-thumbnails` - массовая регенерация
+
+---
+
 ## Паттерны проектирования
 
 - **MVC**: Models (`models.go`) + Views (`templates/*.html`) + Controllers (`handlers/*.go`)
@@ -331,7 +359,8 @@ CREATE INDEX idx_pvd_day ON project_view_dailies(day);
 
 **Frontend:**
 - Defer загрузка JavaScript
-- Lazy loading изображений
+- Автоматическая генерация thumbnails (400×300 для карточек, 1200×900 для галереи)
+- Lazy loading изображений с fallback к оригиналу
 - Debounce для поиска/фильтрации
 
 **Кеширование:**

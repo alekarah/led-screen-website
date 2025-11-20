@@ -20,12 +20,8 @@ import (
 // Setup настраивает все маршруты приложения на переданном Gin router.
 //
 // Параметры:
-//   - router: экземпляр gin.Engine для регистрации маршрутов
+//   - router: экземпляр gin.Engine для регистрации маршрутов (создан через gin.Default())
 //   - h: handlers с внедрённой зависимостью базы данных
-//
-// Глобальные middleware:
-//   - gin.Logger() - логирование всех HTTP запросов
-//   - gin.Recovery() - восстановление после паник
 //
 // Группы маршрутов:
 //   - Публичные страницы (без защиты)
@@ -39,9 +35,7 @@ import (
 //	routes.Setup(router, handlers)
 //	router.Run(":8080")
 func Setup(router *gin.Engine, h *handlers.Handlers) {
-	// Глобальные middleware для всех запросов
-	router.Use(gin.Logger())   // Логирование: [GIN] timestamp | status | latency | client IP | method | path
-	router.Use(gin.Recovery()) // Восстановление после паник с HTTP 500
+	// Примечание: gin.Default() в main.go уже включает Logger и Recovery middleware
 
 	// Healthcheck endpoint для мониторинга (Kubernetes, Docker, etc.)
 	router.GET("/healthz", func(c *gin.Context) { c.String(200, "ok") })

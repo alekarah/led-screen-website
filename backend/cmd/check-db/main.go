@@ -43,7 +43,6 @@ func main() {
 		fmt.Printf("  Crop: X=%v, Y=%v, Scale=%v\n", img.CropX, img.CropY, img.CropScale)
 		fmt.Printf("  Small:  %s\n", img.ThumbnailSmallPath)
 		fmt.Printf("  Medium: %s\n", img.ThumbnailMediumPath)
-		fmt.Printf("  Large:  %s\n", img.ThumbnailLargePath)
 		fmt.Println()
 	}
 }

@@ -48,7 +48,7 @@ func main() {
 	}
 
 	// Инициализируем handlers
-	h := handlers.New(db, cfg.MaxUploadSize)
+	h := handlers.New(db, cfg.MaxUploadSize, cfg.UploadPath)
 
 	// Настраиваем Gin
 	if cfg.Environment == "production" {
@@ -83,7 +83,7 @@ func main() {
 			return models.Image{}
 		},
 		// getThumbnail возвращает путь к thumbnail нужного размера
-		// size: "small" (карточки), "medium" (галерея), "large" (просмотр)
+		// size: "small" (карточки), "medium" (галерея)
 		// fallback к оригиналу если thumbnail не существует
 		"getThumbnail": func(img models.Image, size string) string {
 			var thumbPath string
@@ -92,8 +92,6 @@ func main() {
 				thumbPath = img.ThumbnailSmallPath
 			case "medium":
 				thumbPath = img.ThumbnailMediumPath
-			case "large":
-				thumbPath = img.ThumbnailLargePath
 			default:
 				thumbPath = ""
 			}

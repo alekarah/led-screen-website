@@ -46,7 +46,7 @@ func setupTestRouter(t *testing.T) (*gin.Engine, *Handlers) {
 	router := gin.New()
 
 	db := setupTestDB(t)
-	handlers := New(db, 10*1024*1024) // 10MB max upload
+	handlers := New(db, 10*1024*1024, "../../../frontend/static/uploads") // 10MB max upload
 
 	return router, handlers
 }

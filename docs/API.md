@@ -89,10 +89,14 @@
 ## Админ API: Изображения
 
 - `POST /admin/upload-images` - загрузить (Request: project_id*, images[], Formats: jpg/png/gif/webp, Max: 10MB)
-- `DELETE /admin/images/:id` - удалить (удаляет из БД и файловой системы)
+  - **Автогенерация thumbnails:** Small (400×300px) + Medium (1200×900px) с дефолтным кропом (50%, 50%, 1.0x)
+  - **Response:** `{message, images: [{id, filename, thumbnail_small_path, thumbnail_medium_path, is_primary}]}`
+- `DELETE /admin/images/:id` - удалить (удаляет оригинал + thumbnails из файловой системы и БД)
 - `POST /admin/images/:id/crop` - обновить кроппинг (Request: {crop_x: 0-100, crop_y: 0-100, crop_scale: 0.5-3.0})
+  - **Регенерация:** автоматически пересоздает thumbnails с новыми параметрами кропа
+- `POST /admin/images/:id/set-primary` - установить как главное изображение проекта (автоматически сбрасывает у других)
 
-**Note:** Имена файлов: `project_{id}_{timestamp}_{index}.ext`, путь: `../frontend/static/uploads/`
+**Note:** Имена файлов: `project_{id}_{timestamp}_{index}.ext`, Thumbnails: `*_small.ext`, `*_medium.ext`, Путь: `../frontend/static/uploads/`
 
 ---
 

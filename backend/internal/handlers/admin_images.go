@@ -86,7 +86,7 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 		log.Printf("[DEBUG] Сгенерировано имя файла: %s", filename)
 
 		// Сохраняем файл
-		filePath, err := saveUploadedFile(c, file, filename)
+		filePath, err := h.saveUploadedFile(c, file, filename)
 		if err != nil {
 			log.Printf("[ERROR] Ошибка сохранения файла %s: %v", filename, err)
 			continue
@@ -119,9 +119,6 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 			}
 			if path, ok := thumbnails[ThumbnailMedium.Suffix]; ok {
 				image.ThumbnailMediumPath = path
-			}
-			if path, ok := thumbnails[ThumbnailLarge.Suffix]; ok {
-				image.ThumbnailLargePath = path
 			}
 			log.Printf("[DEBUG] Thumbnails созданы для %s", filename)
 		}
@@ -208,9 +205,6 @@ func (h *Handlers) UpdateImageCrop(c *gin.Context) {
 		if path, ok := thumbnails[ThumbnailMedium.Suffix]; ok {
 			image.ThumbnailMediumPath = path
 		}
-		if path, ok := thumbnails[ThumbnailLarge.Suffix]; ok {
-			image.ThumbnailLargePath = path
-		}
 		log.Printf("[DEBUG] Thumbnails регенерированы для изображения %d с кроппингом (%.1f, %.1f, %.1fx)",
 			id, cropData.X, cropData.Y, cropData.Scale)
 	}
@@ -294,13 +288,12 @@ func generateImageFilename(projectID, index int, originalFilename string) string
 }
 
 // saveUploadedFile сохраняет загруженный файл
-func saveUploadedFile(c *gin.Context, file *multipart.FileHeader, filename string) (string, error) {
-	uploadPath := "../frontend/static/uploads"
-	if err := os.MkdirAll(uploadPath, 0755); err != nil {
+func (h *Handlers) saveUploadedFile(c *gin.Context, file *multipart.FileHeader, filename string) (string, error) {
+	if err := os.MkdirAll(h.uploadPath, 0755); err != nil {
 		return "", err
 	}
 
-	filePath := filepath.Join(uploadPath, filename)
+	filePath := filepath.Join(h.uploadPath, filename)
 	if err := c.SaveUploadedFile(file, filePath); err != nil {
 		return "", err
 	}
