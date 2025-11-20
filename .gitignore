@@ -34,6 +34,9 @@ frontend/static/uploads/
 frontend/static/tmp/
 frontend/.cache/
 
+# Uploads созданные утилитами (regenerate-thumbnails и т.д.)
+**/frontend/static/uploads/
+
 # Результаты сборки Go
 *.exe
 *.exe~
