@@ -39,13 +39,6 @@ function fillProjectImages(images) {
 
 // Строим карточку изображения как DOM‑узлы
 function buildImageItem(image) {
-    const cropX = image.crop_x ?? 50;
-    const cropY = image.crop_y ?? 50;
-    const cropScale = image.crop_scale || 1;
-
-    const translateX = (cropX - 50) * 2;
-    const translateY = (cropY - 50) * 2;
-
     const item = document.createElement('div');
     item.className = 'image-item';
     item.dataset.imageId = image.id;
@@ -54,12 +47,14 @@ function buildImageItem(image) {
     previewWrap.className = 'image-preview-container';
 
     const img = document.createElement('img');
-    img.src = `/static/uploads/${encodeURIComponent(image.filename)}`;
+    // Используем small thumbnail для превью, fallback к оригиналу
+    const previewSrc = image.thumbnail_small_path || image.filename;
+    // Извлекаем только имя файла из пути (на случай если в БД хранится полный путь)
+    const filename = previewSrc.split(/[/\\]/).pop();
+    img.src = `/static/uploads/${encodeURIComponent(filename)}`;
     img.alt = escapeHtml(image.alt || image.original_name || '');
+    img.dataset.originalFilename = image.filename; // для fallback
     img.onerror = () => handleImageError(img);
-    img.style.transform = `scale(${cropScale}) translate(${translateX}%, ${translateY}%)`;
-    img.style.objectPosition = 'center center';
-    img.style.transformOrigin = 'center center';
 
     const loading = document.createElement('div');
     loading.className = 'image-loading hidden';
@@ -317,9 +312,23 @@ function getOrCreatePreviewContainer(input) {
 // УТИЛИТЫ
 // =============================
 function handleImageError(img) {
-    img.src = '/static/images/placeholder.jpg';
-    img.alt = 'Изображение не найдено';
-    img.style.opacity = '0.5';
+    // Предотвращаем бесконечный цикл - если уже пробовали оригинал, показываем заглушку
+    if (img.dataset.triedOriginal === 'true') {
+        img.onerror = null; // убираем обработчик чтобы не было цикла
+        img.style.display = 'none'; // скрываем сломанное изображение
+        img.alt = 'Изображение не найдено';
+        return;
+    }
+
+    // Пробуем загрузить оригинал как fallback
+    const originalFilename = img.dataset.originalFilename;
+    if (originalFilename) {
+        img.dataset.triedOriginal = 'true';
+        img.src = `/static/uploads/${encodeURIComponent(originalFilename)}`;
+    } else {
+        img.onerror = null;
+        img.style.display = 'none';
+    }
 }
 
 function showImageLoading(imageId, show) {
