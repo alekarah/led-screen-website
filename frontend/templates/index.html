@@ -2,8 +2,8 @@
 <!-- Hero Section -->
 <section class="hero led-effect">
     <div class="container">
-        <h1>LED экраны для вашего бизнеса</h1>
-        <p>Продажа, монтаж и обслуживание LED дисплеев в Санкт-Петербурге и Ленинградской области</p>
+        <h1>Уличные и интерьерные LED экраны для вашего бизнеса</h1>
+        <p>Продажа, монтаж и обслуживание LED дисплеев</p>
         <a href="/contact" class="btn btn-hero">Получить консультацию</a>
     </div>
 </section>
@@ -11,14 +11,33 @@
 <!-- Services Section -->
 <section class="services home-services">
     <div class="container">
-        <h2>Наши услуги</h2>
+        <h2>LED решения</h2>
         <div class="services-grid">
-            {{range .services}}
             <div class="service-card">
-                <h3>{{.Name}}</h3>
-                <p>{{.ShortDesc}}</p>
+                <h3>Интерьерные решения</h3>
+                <p>LED экраны для офисов, торговых центров и помещений</p>
+                <a href="tel:+79214291702" class="service-btn">Получить консультацию</a>
             </div>
-            {{end}}
+            <div class="service-card">
+                <h3>Продажа уличных и интерьерных экранов</h3>
+                <p>Широкий выбор LED дисплеев для любых задач</p>
+                <a href="tel:+79214291702" class="service-btn">Получить консультацию</a>
+            </div>
+            <div class="service-card">
+                <h3>Размещение рекламы на экранах</h3>
+                <p>Разместите свою рекламу на наших LED экранах</p>
+                <a href="/contact?service=ad" class="service-btn service-btn-secondary">Отправить запрос на размещение</a>
+            </div>
+            <div class="service-card">
+                <h3>Аренда уличных и интерьерных экранов</h3>
+                <p>Аренда LED экранов для мероприятий и событий</p>
+                <a href="/contact?service=rent" class="service-btn service-btn-secondary">Заказать экран на мероприятие</a>
+            </div>
+            <div class="service-card">
+                <h3>Обслуживание LED экранов</h3>
+                <p>Техническое обслуживание и ремонт LED дисплеев</p>
+                <a href="tel:+79214291702" class="service-btn">Получить консультацию и вызвать специалиста</a>
+            </div>
         </div>
     </div>
 </section>
@@ -26,7 +45,7 @@
 <!-- Projects Section -->
 <section class="projects">
     <div class="container">
-        <h2>Последние проекты</h2>
+        <h2>Реализованные проекты</h2>
         <div class="home-projects-grid">
             {{range .projects}}
             <div class="home-project-card">
@@ -66,7 +85,7 @@
             {{end}}
         </div>
         <div style="width: 100%; display: flex; justify-content: center; margin-top: 2rem;">
-            <a href="/projects" class="see-all-projects-btn">Смотреть все проекты</a>
+            <a href="/projects" class="see-all-projects-btn">Больше проектов</a>
         </div>
     </div>
 </section>

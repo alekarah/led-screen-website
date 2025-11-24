@@ -139,6 +139,11 @@
     max-width: 420px;
   }
 
+  /* Адаптация высоты заголовков и кнопок */
+  .service-card h3 {
+    min-height: 4rem;
+  }
+
   /* Карточки проектов */
   .public-project-card {
     max-width: 420px;
@@ -280,7 +285,7 @@
   .section-header p  { font-size: 1rem; }
 
   /* Hero */
-  .hero { padding: 3rem 0; }
+  .hero { padding: 8rem 0 3rem 0; }
   .hero h1 { font-size: 2.2rem; }
   .hero p  { font-size: 1.05rem; }
 
@@ -314,10 +319,25 @@
     max-width: 600px;
   }
 
-  .home-services .services-grid .service-card:first-child, 
+  .home-services .services-grid .service-card:first-child,
   .home-services .services-grid .service-card:nth-child(2),
   .home-services .services-grid .service-card:nth-child(3) {
     max-width: 600px;
+  }
+
+  /* Уменьшаем min-height для мобильных */
+  .service-card h3 {
+    min-height: 3.5rem;
+  }
+
+  .service-btn {
+    min-height: 60px;
+  }
+
+  /* Кнопка "Больше проектов" */
+  .see-all-projects-btn {
+    font-size: 1.8em;
+    padding: 0.65em 1.1em;
   }
 
   /* Услуги */
@@ -484,6 +504,7 @@
 
 @media (max-width: 600px) {
   .privacy-section .privacy-block { font-size: 1rem; }
+
   /* Все сетки с minmax на 1 колонку */
   .home-services .services-grid,
   .services-grid,
@@ -532,6 +553,8 @@
 
   .see-all-projects-btn {
     margin-top: 0 !important;
+    font-size: 1.5em;
+    padding: 0.6em 1em;
   }
 
   /* Карточки проектов главной - на всю ширину */
@@ -561,8 +584,33 @@
   .logo-icon { height: 24px; width: 18px; }
   .logo-text { font-size: 1.45rem; }
   .nav-container { padding: 0 .75rem; }
-  .nav-links { gap: .75rem; }
-  .nav-links a { font-size: .9rem; }
+
+  /* Меню в две строки: первые 3 пункта, затем последние 2 */
+  .nav-links {
+    gap: 0 0.75rem;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  /* Все пункты нормального размера */
+  .nav-links li {
+    flex: 0 0 auto;
+  }
+
+  /* Используем order для управления порядком */
+  .nav-links li:nth-child(1) { order: 1; }
+  .nav-links li:nth-child(2) { order: 2; }
+  .nav-links li:nth-child(3) { order: 3; }
+  .nav-links li:nth-child(4) { order: 5; }
+  .nav-links li:nth-child(5) { order: 6; }
+
+  /* Добавляем invisible элемент для переноса строки после 3-го пункта */
+  .nav-links::before {
+    content: '';
+    flex-basis: 100%;
+    height: 0;
+    order: 4;
+  }
 
   /* Контейнеры / отступы */
   .container { padding: 0 .75rem; }
@@ -578,7 +626,7 @@
   .section-header p  { font-size: .95rem; }
 
   /* Hero */
-  .hero { padding: 2.4rem 0; }
+  .hero { padding: 9rem 0 3rem 0; }
   .hero h1 { font-size: 1.9rem; }
   .hero p  { font-size: 1rem; }
 
@@ -593,8 +641,6 @@
   /* Услуги */
   .services { padding: 2.2rem 0; }
   .services h2 { font-size: 1.7rem; }
-  .service-card h3 { font-size: 1.15rem; }
-  .service-card p { font-size: .95rem; }
 
   /* Статистика */
   .stats-section { padding: 2rem 0; }
@@ -744,6 +790,18 @@
     font-size: .8rem;
   }
 
+  /* Карточки услуг на главной - самые компактные */
+  .service-card h3 {
+    font-size: 1.15rem;
+    min-height: 3rem;
+  }
+  .service-card p { font-size: .95rem; }
+
+  .service-btn {
+    min-height: 55px;
+    font-size: 0.9rem;
+  }
+
   /* Услуги - еще меньше заголовки и отступы */
   .services-main {
     padding: 0.75rem 0 1rem;
@@ -768,6 +826,13 @@
   .section-header h1 {
     font-size: 1.75rem;
   }
+
+  /* Кнопка "Больше проектов" - самая маленькая */
+  .see-all-projects-btn {
+    font-size: 1.3em;
+    padding: 0.55em 0.9em;
+  }
+
   /* LED Guide */
   .led-intro-section { padding: 1.25rem 0 1.75rem; }
   .led-intro-section::before { width: 200px; height: 200px; }

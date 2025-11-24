@@ -206,6 +206,11 @@
     <link rel="icon" type="image/png" href="/static/images/favicon.png">
     <link rel="apple-touch-icon" href="/static/images/favicon.png">
 
+    <!-- Google Fonts - Tektur -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800&display=swap&subset=latin-ext" rel="stylesheet">
+
     <!-- Основные стили сайта -->
     <link rel="stylesheet" href="/static/css/public-vars.css">
     <link rel="stylesheet" href="/static/css/public-base.css">
@@ -240,10 +245,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/projects"
-                    class="{{if eq .PageID "projects"}}active{{end}}"
-                    {{if eq .PageID "projects"}}aria-current="page"{{end}}>
-                    Портфолио
+                    <a href="/services"
+                    class="{{if eq .PageID "services"}}active{{end}}"
+                    {{if eq .PageID "services"}}aria-current="page"{{end}}>
+                    Услуги
                     </a>
                 </li>
                 <li>
@@ -254,10 +259,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/services"
-                    class="{{if eq .PageID "services"}}active{{end}}"
-                    {{if eq .PageID "services"}}aria-current="page"{{end}}>
-                    Услуги
+                    <a href="/projects"
+                    class="{{if eq .PageID "projects"}}active{{end}}"
+                    {{if eq .PageID "projects"}}aria-current="page"{{end}}>
+                    Портфолио
                     </a>
                 </li>
                 <li>

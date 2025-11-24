@@ -139,7 +139,7 @@ nav {
 /* Контент */
 .main-content {
     margin-top: 80px;
-    padding: 3rem 0;
+    padding: 0 0 3rem 0;
     flex: 1 0 auto;
 }
 
@@ -196,7 +196,11 @@ footer { flex-shrink: 0; }
 .btn-success { background: var(--p-success); }
 .btn-danger { background: #dc3545; }
 
-.btn-hero { background: #ff6b6b; }
+.btn-hero { 
+    background: #ff6b6b; 
+    font-size: 20px;
+    padding: 1rem 2rem;
+}
 .btn-hero:hover { background: #ee5a5a; }
 
 /* Убираем outline при клике мышкой, но оставляем при навигации клавиатурой (Tab) */
