@@ -475,8 +475,13 @@
   .led-intro-section { padding: 2rem 0 3rem; }
   .led-intro-section::before { width: 300px; height: 300px; top: -30%; right: -20%; }
   .intro-with-icon { gap: 1.5rem; }
-  .intro-icon { font-size: 3rem; }
+  .intro-icon { width: 150px; }
   .intro-text { font-size: 1rem; padding: 1.2rem 1.5rem; }
+  .components-list { padding: 1.5rem !important; }
+  .components-list h3 { font-size: 1.3rem !important; }
+  .components-list li { font-size: 0.95rem; padding: 0.6rem 0 !important; }
+  .screen-types-section h2 { font-size: 2rem; }
+  .screen-types-section h3 { font-size: 1.3rem; }
   .selection-guide-section, .comparison-table-section, .advantages-section, .faq-section { padding: 2.5rem 0; }
   .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 2rem; margin-bottom: 2rem; }
   .selection-intro { font-size: 1rem; }
@@ -740,8 +745,15 @@
   .led-intro-section { padding: 1.5rem 0 2rem; }
   .led-intro-section::before { width: 250px; height: 250px; top: -25%; right: -30%; }
   .intro-with-icon { flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
-  .intro-icon { font-size: 2.5rem; margin-top: 0; }
+  .intro-icon { width: 120px; }
   .intro-text { font-size: 0.95rem; padding: 1rem 1.2rem; }
+  .components-list { padding: 1.2rem !important; }
+  .components-list h3 { font-size: 1.2rem !important; }
+  .components-list li { font-size: 0.9rem; }
+  .screen-types-section h2 { font-size: 1.7rem; }
+  .screen-types-section h3[style*="font-size"] { font-size: 1.3rem !important; }
+  .screen-type h3 { font-size: 1.1rem; }
+  .screen-type .type-description { font-size: 0.9rem; }
   .selection-guide-section, .comparison-table-section, .advantages-section, .faq-section { padding: 2rem 0; }
   .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 1.7rem; margin-bottom: 1.5rem; }
   .selection-intro { font-size: 0.95rem; }
@@ -836,8 +848,20 @@
   /* LED Guide */
   .led-intro-section { padding: 1.25rem 0 1.75rem; }
   .led-intro-section::before { width: 200px; height: 200px; }
-  .intro-icon { font-size: 2.2rem; }
+  .intro-icon { width: 100px; }
   .intro-text { font-size: 0.9rem; padding: 0.9rem 1rem; }
+  .components-list { padding: 1rem !important; border-radius: 10px !important; margin-top: 1.5rem !important; }
+  .components-list h3 { font-size: 1.1rem !important; margin-bottom: 1rem !important; }
+  .components-list li { font-size: 0.85rem; padding: 0.5rem 0 !important; }
+  .screen-types-section h2 { font-size: 1.5rem; }
+  .screen-types-section h3[style*="font-size"] { font-size: 1.2rem !important; }
+  .screen-type { padding: 1rem; }
+  .screen-type h3 { font-size: 1rem; }
+  .screen-type .type-description { font-size: 0.85rem; }
+  .screen-image { font-size: 2rem; }
+  .advantage-item { padding: 1rem; }
+  .advantage-item h4 { font-size: 0.95rem; }
+  .advantage-item p { font-size: 0.8rem; }
   .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 1.5rem; }
   .comparison-table { font-size: 0.8rem; }
   .comparison-table th, .comparison-table td { padding: 0.6rem 0.4rem; }

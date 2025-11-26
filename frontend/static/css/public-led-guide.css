@@ -35,7 +35,8 @@
 }
 
 .intro-icon {
-    font-size: 4rem;
+    width: 200px;
+    height: auto;
     flex-shrink: 0;
     animation: ledPulse 3s ease-in-out infinite;
 }
