@@ -179,8 +179,8 @@ func seedInitialData(db *gorm.DB) error {
 	var categoryCount int64
 	db.Model(&models.Category{}).Count(&categoryCount)
 
-	// Если категорий больше 6, значит это старая версия с тестовыми данными - очищаем
-	if categoryCount > 6 {
+	// Если категорий больше 5, значит это старая версия с тестовыми данными - очищаем
+	if categoryCount > 5 {
 		// Удаляем связи проектов с категориями
 		db.Exec("DELETE FROM project_categories")
 
@@ -190,12 +190,11 @@ func seedInitialData(db *gorm.DB) error {
 
 	// Создаем базовые категории
 	categories := []models.Category{
-		{Name: "Рекламные щиты", Slug: "billboards", Description: "Рекламные щиты различных размеров"},
-		{Name: "АЗС (автозаправки)", Slug: "gas-stations", Description: "Тотемы и фасады для автозаправочных станций"},
-		{Name: "Торговые центры", Slug: "shopping-centers", Description: "Экраны для торговых центров"},
-		{Name: "Фундаментные работы", Slug: "foundation-work", Description: "Изготовление и монтаж фундаментных блоков"},
-		{Name: "Обслуживание", Slug: "maintenance", Description: "Техническое обслуживание LED экранов"},
-		{Name: "Ремонт модулей", Slug: "module-repair", Description: "Ремонт и замена модулей"},
+		{Name: "Изготовление металлоконструкций", Slug: "metalwork", Description: "Проектирование и изготовление металлоконструкций для LED экранов"},
+		{Name: "Уличные решения digital реклама", Slug: "outdoor-solutions", Description: "LED экраны для наружной рекламы и уличной установки"},
+		{Name: "Интерьерные решения", Slug: "interior-solutions", Description: "LED экраны для помещений и интерьеров"},
+		{Name: "Медиафасады", Slug: "media-facades", Description: "Медиафасады и крупноформатные LED экраны для зданий"},
+		{Name: "Сервис LED экранов", Slug: "led-service", Description: "Техническое обслуживание, ремонт и настройка LED экранов"},
 	}
 
 	// Создаем категории только если их еще нет (проверка по slug)

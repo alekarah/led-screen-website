@@ -4,21 +4,30 @@
 .filters {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 1rem;
     margin-bottom: 3rem;
+    width: calc(100% + 25rem);
+    margin-left: -12rem;
+    padding: 0 2rem;
 }
 
 .filter-btn {
-    padding: 0.8rem 1.5rem;
+    padding: 0.7rem 1.5rem;
     background: white;
     border: 2px solid var(--p-brand);
     color: var(--p-brand);
     border-radius: 25px;
     text-decoration: none;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s;
     font-size: 1rem;
+    flex: 1 1 0;
+    line-height: 1.4;
+    min-height: 50px;
+    text-align: center;
 }
 
 .filter-btn:hover,

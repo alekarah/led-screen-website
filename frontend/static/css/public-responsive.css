@@ -900,4 +900,16 @@
   .project-detail-btn {
     transition: none !important;
   }
+
+  /* Адаптивные фильтры на портфолио */
+  .filters {
+    flex-wrap: wrap !important;
+  }
+
+  .filter-btn {
+    flex: 1 1 calc(50% - 0.5rem) !important;
+    min-height: 50px !important;
+    padding: 1rem 1.5rem !important;
+    font-size: 0.9rem !important;
+  }
 }
