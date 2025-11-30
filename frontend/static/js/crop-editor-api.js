@@ -158,11 +158,14 @@ async function saveCrop() {
             setTimeout(() => {
                 closeCropModal();
 
-                // Обновляем изображения в основной форме с принудительной перезагрузкой
-                const projectId = document.getElementById('edit_project_id')?.value;
-                if (projectId) {
-                    updateProjectImages(projectId);
-                }
+                // Даем серверу время регенерировать thumbnails
+                setTimeout(() => {
+                    // Обновляем изображения в основной форме с принудительной перезагрузкой
+                    const projectId = document.getElementById('edit_project_id')?.value;
+                    if (projectId) {
+                        updateProjectImages(projectId);
+                    }
+                }, 300);
             }, 500);
 
         } else {

@@ -51,8 +51,10 @@ function buildImageItem(image) {
     const previewSrc = image.thumbnail_small_path || image.filename;
     // Извлекаем только имя файла из пути (на случай если в БД хранится полный путь)
     const filename = previewSrc.split(/[/\\]/).pop();
-    // Добавляем cache-busting для принудительной перезагрузки после кроппинга
-    img.src = `/static/uploads/${encodeURIComponent(filename)}?t=${Date.now()}`;
+    // Добавляем агрессивный cache-busting для перезагрузки после кроппинга
+    // Используем ID изображения + timestamp + random для гарантии уникальности
+    const cacheBuster = `v=${image.id}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+    img.src = `/static/uploads/${encodeURIComponent(filename)}?${cacheBuster}`;
     img.alt = escapeHtml(image.alt || image.original_name || '');
     img.dataset.originalFilename = image.filename; // для fallback
     img.onerror = () => handleImageError(img);

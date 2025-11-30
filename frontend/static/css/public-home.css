@@ -148,8 +148,8 @@ body:has(.hero) .main-content {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     transition: transform 0.3s, box-shadow 0.3s;
     text-align: center;
-    padding: 1rem 0.8rem 1.2rem 0.8rem;
-    max-width: 250px;
+    padding: 1rem 1rem 1.3rem 1rem;
+    max-width: 320px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -162,9 +162,9 @@ body:has(.hero) .main-content {
 
 /* Прямоугольные изображения для главной */
 .project-image-rect {
-    width: 220px;
-    height: 150px;
-    max-width: 320px;
+    width: 280px;
+    height: 190px;
+    max-width: 100%;
     aspect-ratio: 25/18;
     overflow: hidden;
     margin: 0 auto 1.2rem auto;
@@ -194,13 +194,13 @@ body:has(.hero) .main-content {
 .home-project-card h3 {
     margin-bottom: 0.5rem;
     color: var(--p-text-700);
-    font-size: 1.3rem;
+    font-size: 1.4rem;
 }
 
 .projects .project-size {
     color: #4A90E2;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     margin-bottom: 1rem;
 }
 
@@ -215,9 +215,9 @@ body:has(.hero) .main-content {
 
 .home-project-card .category-tag {
     background: #f0f0f0;
-    padding: 0.3rem 0.8rem;
+    padding: 0.35rem 0.9rem;
     border-radius: 15px;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--p-text-500);
 }
 
@@ -226,10 +226,10 @@ body:has(.hero) .main-content {
     display: inline-block;
     background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     color: white;
-    padding: 0.6rem 1.2rem;
+    padding: 0.65rem 1.3rem;
     text-decoration: none;
     border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 600;
     transition: all 0.3s ease;
     text-align: center;

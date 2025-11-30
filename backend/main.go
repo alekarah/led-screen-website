@@ -116,6 +116,16 @@ func main() {
 			}
 			return template.JS(b)
 		},
+		// imgVersion возвращает unix timestamp обновления изображения для cache-busting
+		"imgVersion": func(img models.Image) int64 {
+			if !img.UpdatedAt.IsZero() {
+				return img.UpdatedAt.Unix()
+			}
+			if !img.CreatedAt.IsZero() {
+				return img.CreatedAt.Unix()
+			}
+			return 0
+		},
 	}
 	router.SetFuncMap(funcMap)
 

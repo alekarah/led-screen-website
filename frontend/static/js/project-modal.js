@@ -93,9 +93,10 @@
 
             // Получаем путь к medium thumbnail (для галереи) с fallback к оригиналу
             const mediumThumb = getThumbnailPath(img, 'medium');
+            const version = getImageVersion(img);
 
-            // Устанавливаем medium изображение для галереи
-            ui.mediaImg.src = `/static/uploads/${mediumThumb}`;
+            // Устанавливаем medium изображение для галереи с cache-busting
+            ui.mediaImg.src = `/static/uploads/${mediumThumb}?v=${version}`;
             ui.mediaImg.alt = img.alt || img.original_name || '';
 
             // Применяем crop стили ТОЛЬКО если thumbnails не существуют (fallback к оригиналу)
@@ -116,7 +117,7 @@
             }
 
             // Обновляем ссылку на оригинал для кнопки "Открыть" (максимальное качество)
-            ui.link.href = `/static/uploads/${img.filename}`;
+            ui.link.href = `/static/uploads/${img.filename}?v=${version}`;
 
             // Обновляем счетчик
             if (totalImages > 1) {
@@ -151,6 +152,19 @@
             // Извлекаем только имя файла из полного пути
             const parts = thumbPath.split(/[/\\]/);
             return parts[parts.length - 1];
+        }
+
+        // Получает версию изображения для cache-busting
+        function getImageVersion(img) {
+            // Используем updated_at если доступен, иначе created_at
+            if (img.updated_at) {
+                // Конвертируем ISO timestamp в unix timestamp (секунды)
+                return Math.floor(new Date(img.updated_at).getTime() / 1000);
+            }
+            if (img.created_at) {
+                return Math.floor(new Date(img.created_at).getTime() / 1000);
+            }
+            return 0;
         }
 
         function showNextImage() {

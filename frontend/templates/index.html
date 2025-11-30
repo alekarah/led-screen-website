@@ -52,8 +52,9 @@
                 {{if .Images}}
                     {{$primaryImg := primaryImage .Images}}
                     {{$thumbPath := getThumbnail $primaryImg "small"}}
+                    {{$version := imgVersion $primaryImg}}
                     <div class="project-image-rect">
-                        <img src="/static/uploads/{{$thumbPath}}"
+                        <img src="/static/uploads/{{$thumbPath}}?v={{$version}}"
                             alt="{{.Title}}"
                             loading="lazy"
                             {{if not $primaryImg.ThumbnailSmallPath}}

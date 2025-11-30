@@ -101,6 +101,7 @@ type Image struct {
 	CropScale float64 `json:"crop_scale" gorm:"default:1.0"` // Масштаб изображения (0.5-3.0)
 
 	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 
 	Project *Project `json:"project,omitempty" gorm:"foreignKey:ProjectID"`
 }

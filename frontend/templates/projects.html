@@ -31,7 +31,8 @@
                 {{if .Images}}
                     {{$primaryImg := primaryImage .Images}}
                     {{$thumbPath := getThumbnail $primaryImg "small"}}
-                    <img src="/static/uploads/{{$thumbPath}}"
+                    {{$version := imgVersion $primaryImg}}
+                    <img src="/static/uploads/{{$thumbPath}}?v={{$version}}"
                         alt="{{.Title}}"
                         loading="lazy"
                         {{if not $primaryImg.ThumbnailSmallPath}}
