@@ -114,7 +114,13 @@
                     <label for="edit_images">Добавить изображения:</label>
                     <input type="file" id="edit_images" name="images" multiple accept="image/*">
                 </div>
-                <button type="submit" class="btn">Загрузить</button>
+                <div class="upload-button-container">
+                    <button type="submit" class="btn">Загрузить</button>
+                    <div id="uploadSpinner" class="upload-spinner hidden">
+                        <div class="spinner"></div>
+                        <span>Загрузка изображений...</span>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -203,7 +209,7 @@
 
                 <div class="crop-control">
                     <label for="cropScale">Масштаб:</label>
-                    <input type="range" id="cropScale" min="0.5" max="3" step="0.1" value="1">
+                    <input type="range" id="cropScale" min="1" max="3" step="0.1" value="1">
                     <div class="crop-value">Значение: <span id="cropScaleValue">1</span>x</div>
                 </div>
 

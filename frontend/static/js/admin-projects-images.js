@@ -51,7 +51,8 @@ function buildImageItem(image) {
     const previewSrc = image.thumbnail_small_path || image.filename;
     // Извлекаем только имя файла из пути (на случай если в БД хранится полный путь)
     const filename = previewSrc.split(/[/\\]/).pop();
-    img.src = `/static/uploads/${encodeURIComponent(filename)}`;
+    // Добавляем cache-busting для принудительной перезагрузки после кроппинга
+    img.src = `/static/uploads/${encodeURIComponent(filename)}?t=${Date.now()}`;
     img.alt = escapeHtml(image.alt || image.original_name || '');
     img.dataset.originalFilename = image.filename; // для fallback
     img.onerror = () => handleImageError(img);
@@ -89,9 +90,9 @@ function buildImageItem(image) {
     // данные для редактора
     cropBtn.dataset.imageId = image.id;
     cropBtn.dataset.filename = image.filename;
-    cropBtn.dataset.cropX = cropX;
-    cropBtn.dataset.cropY = cropY;
-    cropBtn.dataset.cropScale = cropScale;
+    cropBtn.dataset.cropX = image.crop_x || 50;
+    cropBtn.dataset.cropY = image.crop_y || 50;
+    cropBtn.dataset.cropScale = image.crop_scale || 1;
     cropBtn.textContent = '✂️';
 
     // Кнопка "Сделать главным" или индикатор главного изображения

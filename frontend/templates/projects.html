@@ -47,9 +47,7 @@
             <div class="project-content public-project-content">
                 <h3 class="project-title">{{.Title}}</h3>
                 <div class="project-size">{{.Size}}</div>
-                <p class="project-description">{{.Description}}</p>
                 <div class="project-bottom">
-                    <div class="project-location">{{.Location}}</div>
                     <div class="project-categories">
                         {{range .Categories}}
                         <span class="category-tag">{{.Name}}</span>
@@ -59,6 +57,9 @@
                         class="project-detail-btn"
                         data-project-id="{{.ID}}"
                         data-project-slug="{{.Slug}}"
+                        data-pixel-pitch="{{.PixelPitch}}"
+                        data-location="{{.Location}}"
+                        data-description="{{.Description}}"
                         data-images='{{toJSON .Images}}'>
                         Подробнее
                     </a>

@@ -52,11 +52,10 @@
                 </div>
                 <div class="project-modal__body">
                     <h3 class="project-modal__title"></h3>
-                    <div class="project-modal__size"></div>
-                    <div class="project-modal__desc"></div>
+                    <div class="project-modal__specs"></div>
                     <div class="project-modal__location"></div>
-                    <div class="project-modal__tags"></div>
-                    <a class="project-detail-btn" target="_blank" rel="noopener" style="margin-top:.35rem;display:inline-block;">Открыть изображение</a>
+                    <div class="project-modal__desc"></div>
+                    <a class="project-detail-btn" target="_blank" rel="noopener">Открыть изображение</a>
                 </div>
             </div>
         `;
@@ -67,10 +66,9 @@
             dialog: modal.querySelector('.project-modal__dialog'),
             mediaImg: modal.querySelector('#projectModalImg'),
             title: modal.querySelector('.project-modal__title'),
-            size:  modal.querySelector('.project-modal__size'),
+            specs: modal.querySelector('.project-modal__specs'),
             desc:  modal.querySelector('.project-modal__desc'),
             loc:   modal.querySelector('.project-modal__location'),
-            tags:  modal.querySelector('.project-modal__tags'),
             link:  modal.querySelector('.project-modal__body .project-detail-btn'),
             close: modal.querySelector('.project-modal__close'),
             prevBtn: modal.querySelector('.gallery-nav-prev'),
@@ -167,6 +165,20 @@
     const grid = document.querySelector(SELECTORS.grid);
     if (!grid) return;
 
+    // Автооткрытие модалки по hash в URL (при переходе с главной)
+    if (window.location.hash) {
+        const slug = window.location.hash.substring(1); // убираем #
+        const targetBtn = document.querySelector(`[data-project-slug="${slug}"]`);
+        if (targetBtn) {
+            // Небольшая задержка для полной загрузки страницы
+            setTimeout(() => {
+                targetBtn.click();
+                // Убираем hash из URL после открытия модалки
+                history.replaceState(null, null, ' ');
+            }, 300);
+        }
+    }
+
     grid.addEventListener('click', (e) => {
         const btn = e.target.closest(SELECTORS.btn);
         if (!btn) return;
@@ -178,9 +190,11 @@
 
         const titleEl = card.querySelector(SELECTORS.cardTitle);
         const sizeEl  = card.querySelector(SELECTORS.cardSize);
-        const descEl  = card.querySelector(SELECTORS.cardDesc);
-        const locEl   = card.querySelector(SELECTORS.cardLoc);
-        const tagsEl  = card.querySelector(SELECTORS.cardTags);
+
+        // Получаем данные из data-атрибутов кнопки
+        const pixelPitch = btn.getAttribute('data-pixel-pitch') || '';
+        const location = btn.getAttribute('data-location') || '';
+        const description = btn.getAttribute('data-description') || '';
 
         // Парсим данные изображений из data-images
         let images = [];
@@ -234,10 +248,14 @@
 
         // Заполняем текстовую информацию
         ui.title.textContent = titleEl?.textContent?.trim() ?? '';
-        ui.size.textContent  = sizeEl?.textContent?.trim() ?? '';
-        ui.desc.textContent  = descEl?.textContent?.trim() ?? '';
-        ui.loc.textContent   = locEl?.textContent?.trim() ?? '';
-        ui.tags.innerHTML    = tagsEl?.innerHTML ?? '';
+
+        // Объединяем размер и пиксели в одну строку через разделитель
+        const size = sizeEl?.textContent?.trim() ?? '';
+        const specs = [size, pixelPitch].filter(Boolean).join('  •  ');
+        ui.specs.textContent = specs;
+
+        ui.loc.textContent   = location;
+        ui.desc.textContent  = description;
 
         // Показываем первое (или главное) изображение
         showImageAtIndex(startIndex);

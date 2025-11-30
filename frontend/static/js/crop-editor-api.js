@@ -153,18 +153,18 @@ async function saveCrop() {
         
         if (response.ok) {
             showCropMessage('Настройки изображения сохранены!', 'success');
-            
+
             // Закрываем модальное окно
             setTimeout(() => {
                 closeCropModal();
-                
-                // Обновляем изображения в основной форме
+
+                // Обновляем изображения в основной форме с принудительной перезагрузкой
                 const projectId = document.getElementById('edit_project_id')?.value;
                 if (projectId) {
                     updateProjectImages(projectId);
                 }
-            }, 1000);
-            
+            }, 500);
+
         } else {
             throw new Error(result.error || 'Ошибка сохранения');
         }
@@ -199,7 +199,7 @@ function showCropMessage(message, type = 'success') {
         window.showAdminMessage(message, type);
         return;
     }
-    
+
     // Если нет - показываем обычный alert
     if (type === 'error') {
         alert('❌ ' + message);

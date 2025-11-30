@@ -342,7 +342,7 @@ func validateCropData(data CropData) CropData {
 	if data.Y < 0 || data.Y > 100 {
 		data.Y = 50
 	}
-	if data.Scale < 0.5 || data.Scale > 3.0 {
+	if data.Scale < 1.0 || data.Scale > 3.0 {
 		data.Scale = 1.0
 	}
 	return data

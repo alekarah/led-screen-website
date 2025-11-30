@@ -53,6 +53,11 @@ input[type="radio"]{
 .checkbox-group{ display:flex; gap:1rem; }
 .checkbox-item{ align-items:center; }
 
+/* Убираем синюю рамку при фокусе на чекбоксах в категориях */
+.checkbox-group input[type="checkbox"]:focus {
+  outline: none;
+}
+
 /* Выделенный чекбокс "Показать на главной" */
 .featured-checkbox{
   background: #e8f4fd;
@@ -75,6 +80,39 @@ input[type="radio"]{
   margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--line);
 }
 .upload-section h3{ margin-bottom:1rem; color: var(--text-700); }
+
+/* Контейнер кнопки загрузки и спиннера */
+.upload-button-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Спиннер загрузки */
+.upload-spinner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--brand);
+  font-size: 0.9rem;
+}
+.upload-spinner.hidden {
+  display: none;
+}
+
+/* Анимация спиннера */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(74, 144, 226, 0.2);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 /* Сетка изображений */
 .images-grid{

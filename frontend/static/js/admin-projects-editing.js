@@ -222,14 +222,20 @@ function initEditForms() {
                 showAdminMessage('Выберите файлы для загрузки', 'error');
                 return;
             }
-            
+
+            // Показываем спиннер и отключаем кнопку
+            const spinner = document.getElementById('uploadSpinner');
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (spinner) spinner.classList.remove('hidden');
+            if (submitBtn) submitBtn.disabled = true;
+
             try {
                 const formData = new FormData(this);
                 const response = await fetch('/admin/upload-images', {
                     method: 'POST',
                     body: formData
                 });
-                
+
                 if (response.ok) {
                     const result = await response.json();
                     console.log('Результат загрузки:', result);
@@ -273,6 +279,12 @@ function initEditForms() {
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
                 showAdminMessage('Ошибка при загрузке изображений: ' + error.message, 'error');
+            } finally {
+                // Скрываем спиннер и включаем кнопку обратно
+                const spinner = document.getElementById('uploadSpinner');
+                const submitBtn = this.querySelector('button[type="submit"]');
+                if (spinner) spinner.classList.add('hidden');
+                if (submitBtn) submitBtn.disabled = false;
             }
         });
     }
