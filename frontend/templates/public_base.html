@@ -251,12 +251,28 @@
                     Услуги
                     </a>
                 </li>
-                <li>
+                <li class="nav-item-with-dropdown">
                     <a href="/led-screens-guide"
                     class="{{if eq .PageID "led-guide"}}active{{end}}"
                     {{if eq .PageID "led-guide"}}aria-current="page"{{end}}>
                     О LED-экранах
                     </a>
+                    {{if eq .PageID "led-guide"}}
+                    <!-- Dropdown Table of Contents -->
+                    <div class="nav-dropdown-toc">
+                        <div class="toc-dropdown-title">Содержание</div>
+                        <ul class="toc-dropdown-list">
+                            <li><a href="#what-is-led" class="toc-dropdown-link">Что такое LED-экран</a></li>
+                            <li><a href="#key-characteristics" class="toc-dropdown-link">Ключевые характеристики</a></li>
+                            <li><a href="#screen-types" class="toc-dropdown-link">Основные типы LED-экранов</a></li>
+                            <li><a href="#how-to-choose" class="toc-dropdown-link">Как выбрать LED-экран</a></li>
+                            <li><a href="#comparison-table" class="toc-dropdown-link">Таблица сравнения</a></li>
+                            <li><a href="#advantages" class="toc-dropdown-link">Преимущества и недостатки</a></li>
+                            <li><a href="#applications" class="toc-dropdown-link">Области применения</a></li>
+                            <li><a href="#faq" class="toc-dropdown-link">Часто задаваемые вопросы</a></li>
+                        </ul>
+                    </div>
+                    {{end}}
                 </li>
                 <li>
                     <a href="/projects"
@@ -318,6 +334,7 @@
 
     {{if eq .PageID "led-guide"}}
     <script src="/static/js/faq-accordion.js"></script>
+    <script src="/static/js/led-guide-navigation.js"></script>
     {{end}}
 
     {{block "extra-js" .}}{{end}}

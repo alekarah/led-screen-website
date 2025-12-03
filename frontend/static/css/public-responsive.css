@@ -1,5 +1,14 @@
 /* Адаптивные стили для публичной части */
 
+/* Очень большие экраны (< 1500px) */
+@media (max-width: 1500px) {
+  /* Фильтры проектов - reset calc to prevent overflow */
+  .filters {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
 /* Большие экраны (< 1300px) */
 @media (max-width: 1300px) {
   /* Контейнеры немного уже */
@@ -295,6 +304,9 @@
   /* Фильтры проектов */
   .filters {
     gap: .75rem;
+    width: 100%;
+    margin-left: 0;
+    flex-wrap: wrap;
   }
   .filter-btn { padding: .6rem 1.2rem; font-size: .9rem; }
 
