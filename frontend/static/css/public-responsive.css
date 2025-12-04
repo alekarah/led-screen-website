@@ -1,5 +1,18 @@
 /* Адаптивные стили для публичной части */
 
+/* Очень большие экраны (< 1600px) */
+@media (max-width: 1600px) {
+  /* LED Guide - сброс calc для предотвращения переполнения */
+  .advantages-grid,
+  .selection-factors,
+  .screen-types--wide,
+  .key-characteristics-list {
+    width: 100%;
+    margin-left: 0;
+    padding: 0 2rem;
+  }
+}
+
 /* Очень большие экраны (< 1500px) */
 @media (max-width: 1500px) {
   /* Фильтры проектов - reset calc to prevent overflow */
@@ -136,6 +149,15 @@
   .privacy-section .privacy-block {
     padding: 1.3rem 1.1rem;
   }
+
+  /* LED Guide - сетка преимуществ 3 колонки */
+  .advantages-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 /* Маленькие десктопы (< 1100px) */
@@ -247,6 +269,48 @@
   .project-modal__media {
     height: 42vh;
     background: #111;
+  }
+
+  /* LED Guide - показ кнопки преимуществ при 2 колонках */
+  .advantages-toggle-wrapper {
+    display: block;
+  }
+
+  .advantage-item--hidden {
+    display: none;
+  }
+
+  .advantages-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .selection-factors {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    margin-left: 0;
+    padding: 0 1rem;
+  }
+
+  .key-characteristics-list {
+    padding: 0 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  .applications-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .applications-grid .screen-type {
+    min-width: unset;
+    max-width: unset;
+  }
+
+  .faq-accordion {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
   }
 }
 
@@ -505,6 +569,96 @@
   .faq-question { font-size: 1rem; padding: 1.2rem 1.5rem; }
   .faq-answer { padding: 0 1.5rem; }
   .faq-item.active .faq-answer { padding: 1.2rem 1.5rem 1.5rem; }
+
+  /* LED Guide - дополнительные стили для мобильных */
+  .nav-dropdown-toc {
+    left: 0;
+    right: 0;
+    transform: translateX(0);
+    margin: 0.5rem 1rem;
+    min-width: unset;
+    max-width: unset;
+  }
+
+  .nav-item-with-dropdown:hover .nav-dropdown-toc {
+    transform: translateX(0) translateY(0);
+  }
+
+  .toc-dropdown-title {
+    font-size: 1rem;
+  }
+
+  .toc-dropdown-link {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.65rem;
+  }
+
+  .reading-progress-bar {
+    height: 3px;
+  }
+
+  .back-to-top {
+    width: 45px;
+    height: 45px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .back-to-top svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .btn-toggle-advantages {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-toggle-faq {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .selection-factors {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  .key-characteristics-list {
+    padding: 0;
+  }
+
+  .applications-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-accordion {
+    padding: 0;
+  }
+
+  .factor-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .factor-icon {
+    margin-bottom: 0.5rem;
+  }
+
+  .key-characteristic-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .key-characteristic-icon {
+    margin-bottom: 0.5rem;
+  }
+
   /* О компании - вертикальная компоновка */
   .about-company-section { padding: 3rem 0; margin: 2rem 0; }
   .about-company-content { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
@@ -782,6 +936,31 @@
   .advantage-item p { font-size: 0.85rem; }
   .faq-question { font-size: 0.95rem; padding: 1rem 1.2rem; }
   .faq-answer p { font-size: 0.9rem; }
+
+  /* LED Guide - ToC и дополнительные элементы */
+  .nav-dropdown-toc {
+    padding: 1rem;
+    margin: 0.5rem 0.5rem;
+  }
+
+  .toc-dropdown-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .toc-dropdown-link {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.6rem;
+  }
+
+  .back-to-top {
+    width: 40px;
+    height: 40px;
+    bottom: 15px;
+    right: 15px;
+  }
+
   /* О компании */
   .about-company-section { padding: 2rem 0; margin: 1.5rem 0; }
   .about-company-content { gap: 1.5rem; }

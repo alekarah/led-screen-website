@@ -3,7 +3,6 @@
 /* Вводная секция */
 .led-intro-section {
     background: linear-gradient(135deg, #f8f9ff 0%, #fff8f5 100%);
-    padding: 3rem 0 4rem;
     position: relative;
     overflow: hidden;
 }
@@ -49,7 +48,7 @@
     margin-top: 1rem;
 }
 
-/* Key Characteristics styles */
+/* Ключевые характеристики */
 .key-characteristics-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -132,7 +131,7 @@
 /* Секция "Как выбрать экран" */
 .selection-guide-section {
     background: white;
-    padding: 4rem 0;
+    padding: 3rem 0;
 }
 
 .selection-guide-section h2 {
@@ -223,16 +222,29 @@
     color: var(--p-brand-2);
 }
 
-/* Screen types wide expansion */
+/* Расширение для типов экранов */
 .screen-types--wide {
     width: calc(100% + 25rem);
     margin-left: -12.5rem;
 }
 
+/* Сетка областей применения */
+.applications-grid {
+    gap: 1.5rem;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.applications-grid .screen-type {
+    padding: 1.5rem 1.5rem;
+    min-width: 330px;
+    max-width: 330px;
+    justify-self: center;
+}
+
 /* Секция таблицы сравнения */
 .comparison-table-section {
     background: var(--p-bg-alt);
-    padding: 4rem 0;
+    padding: 3rem 0;
 }
 
 .comparison-table-section h2 {
@@ -315,7 +327,7 @@
 /* Секция преимуществ */
 .advantages-section {
     background: white;
-    padding: 4rem 0;
+    padding: 3rem 0;
 }
 
 .advantages-section h2 {
@@ -348,8 +360,7 @@
 }
 
 .advantage-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 2.5rem;
 }
 
 .advantage-item h4 {
@@ -364,15 +375,31 @@
     font-size: 0.9rem;
 }
 
+/* Анимация появления преимуществ */
+.advantage-item--shown {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* FAQ секция */
 .faq-section {
     background: var(--p-bg-alt);
-    padding: 4rem 0;
+    padding: 2.5rem 0;
 }
 
 .faq-section h2 {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     font-size: 2.5rem;
     color: var(--p-text-700);
 }
@@ -391,6 +418,16 @@
     transition: box-shadow 0.3s ease;
 }
 
+/* Скрытие вопросов FAQ */
+.faq-item--hidden {
+    display: none;
+}
+
+/* Анимация появления вопросов FAQ */
+.faq-item--shown {
+    animation: fadeInUp 0.5s ease-out;
+}
+
 .faq-item:hover {
     box-shadow: 0 4px 15px rgba(0,0,0,0.12);
 }
@@ -399,7 +436,7 @@
     width: 100%;
     background: white;
     border: none;
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.5rem;
     text-align: left;
     font-size: 1.1rem;
     font-weight: 600;
@@ -472,11 +509,48 @@
     font-weight: 600;
 }
 
+/* Кнопка раскрытия FAQ */
+.faq-toggle-wrapper {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-toggle-faq {
+    background: var(--p-brand);
+    color: white;
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-toggle-faq:hover {
+    background: var(--p-brand-2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-toggle-faq .toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.btn-toggle-faq.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+
 /* ========================================
-   НОВЫЕ СТИЛИ: Table of Contents, Progress Bar, Back to Top
+   Оглавление, Прогресс-бар, Кнопка "Наверх"
    ======================================== */
 
-/* Navigation Dropdown ToC */
+/* Выпадающее оглавление в навигации */
 .nav-item-with-dropdown {
     position: relative;
 }
@@ -559,7 +633,7 @@
     font-weight: 600;
 }
 
-/* Reading Progress Bar */
+/* Индикатор прогресса чтения */
 .reading-progress-bar {
     position: fixed;
     top: 0;
@@ -572,30 +646,10 @@
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
-/* Collapsible Advantages - hide items with this class */
-.advantage-item--hidden {
-    display: none;
-}
-
-/* Animate items when they are shown */
-.advantage-item--shown {
-    animation: fadeInUp 0.5s ease-out;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 .advantages-toggle-wrapper {
     text-align: center;
     margin-top: 2rem;
+    display: none; /* Скрыта на широких экранах */
 }
 
 .btn-toggle-advantages {
@@ -629,7 +683,7 @@
     transform: rotate(180deg);
 }
 
-/* Back to Top Button */
+/* Кнопка "Наверх" */
 .back-to-top {
     position: fixed;
     bottom: 30px;
@@ -667,12 +721,12 @@
     height: 24px;
 }
 
-/* Smooth scroll behavior */
+/* Плавная прокрутка */
 html {
     scroll-behavior: smooth;
 }
 
-/* Section offset for anchor links (compensate for fixed header if exists) */
+/* Отступ для якорных ссылок (компенсация фиксированной шапки) */
 .led-intro-section,
 .screen-types-section,
 .selection-guide-section,
@@ -680,173 +734,4 @@ html {
 .advantages-section,
 .faq-section {
     scroll-margin-top: 80px;
-}
-
-/* ========================================
-   RESPONSIVE STYLES
-   ======================================== */
-
-@media (max-width: 1600px) {
-    /* Reset calc to prevent overflow */
-    .advantages-grid,
-    .selection-factors,
-    .screen-types--wide,
-    .key-characteristics-list {
-        width: 100%;
-        margin-left: 0;
-        padding: 0 2rem;
-    }
-}
-
-@media (max-width: 1200px) {
-    /* Advantages grid - 3 columns on medium-large screens */
-    .advantages-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-        padding: 0 1.5rem;
-        width: 100%;
-        margin-left: 0;
-    }
-}
-
-@media (max-width: 900px) {
-    /* 2 columns on tablets */
-    .advantages-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-        padding: 0 1rem;
-    }
-
-    /* Selection factors - 1 column on tablets */
-    .selection-factors {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
-        margin-left: 0;
-        padding: 0 1rem;
-    }
-
-    /* Key characteristics - reset padding on tablets */
-    .key-characteristics-list {
-        padding: 0 1rem;
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    /* Navigation Dropdown ToC on mobile */
-    .nav-dropdown-toc {
-        left: 0;
-        right: 0;
-        transform: translateX(0);
-        margin: 0.5rem 1rem;
-        min-width: unset;
-        max-width: unset;
-    }
-
-    .nav-item-with-dropdown:hover .nav-dropdown-toc {
-        transform: translateX(0) translateY(0);
-    }
-
-    .toc-dropdown-title {
-        font-size: 1rem;
-    }
-
-    .toc-dropdown-link {
-        font-size: 0.85rem;
-        padding: 0.5rem 0.65rem;
-    }
-
-    /* Progress bar slightly thicker on mobile */
-    .reading-progress-bar {
-        height: 3px;
-    }
-
-    /* Back to top button smaller on mobile */
-    .back-to-top {
-        width: 45px;
-        height: 45px;
-        bottom: 20px;
-        right: 20px;
-    }
-
-    .back-to-top svg {
-        width: 20px;
-        height: 20px;
-    }
-
-    /* Collapsible advantages button */
-    .btn-toggle-advantages {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
-    }
-
-    /* Advantages grid - 1 column on mobile */
-    .advantages-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    /* Selection factors - 1 column on mobile */
-    .selection-factors {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        width: 100%;
-        margin-left: 0;
-        padding: 0;
-    }
-
-    /* Key characteristics - remove padding on mobile */
-    .key-characteristics-list {
-        padding: 0;
-    }
-
-    /* Factor items - stack icon above text on mobile */
-    .factor-item {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .factor-icon {
-        margin-bottom: 0.5rem;
-    }
-
-    /* Key characteristics - stack icon above text on mobile */
-    .key-characteristic-item {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .key-characteristic-icon {
-        margin-bottom: 0.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Navigation Dropdown ToC - more compact */
-    .nav-dropdown-toc {
-        padding: 1rem;
-        margin: 0.5rem 0.5rem;
-    }
-
-    .toc-dropdown-title {
-        font-size: 0.95rem;
-        margin-bottom: 0.75rem;
-        padding-bottom: 0.5rem;
-    }
-
-    .toc-dropdown-link {
-        font-size: 0.8rem;
-        padding: 0.45rem 0.6rem;
-    }
-
-    /* Back to top button */
-    .back-to-top {
-        width: 40px;
-        height: 40px;
-        bottom: 15px;
-        right: 15px;
-    }
 }

@@ -21,25 +21,15 @@
                 e.preventDefault();
 
                 var isCurrentlyActive = item.classList.contains('active');
-                var hasOtherActive = false;
 
-                // Проверяем, есть ли другие открытые элементы
+                // Закрываем все элементы
                 faqItems.forEach(function(otherItem) {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        hasOtherActive = true;
-                        otherItem.classList.remove('active');
-                    }
+                    otherItem.classList.remove('active');
                 });
 
-                // Если был другой открытый элемент и текущий закрыт,
-                // добавляем небольшую задержку для плавности
-                if (hasOtherActive && !isCurrentlyActive) {
-                    setTimeout(function() {
-                        item.classList.add('active');
-                    }, 150);
-                } else {
-                    // Просто переключаем текущий элемент
-                    item.classList.toggle('active');
+                // Если элемент был закрыт, открываем его
+                if (!isCurrentlyActive) {
+                    item.classList.add('active');
                 }
             });
 
@@ -53,11 +43,51 @@
         });
     }
 
+    function initFAQToggle() {
+        const toggleBtn = document.querySelector('.btn-toggle-faq');
+
+        if (!toggleBtn) {
+            return;
+        }
+
+        const hiddenItems = document.querySelectorAll('.faq-item--hidden');
+        const showText = toggleBtn.querySelector('.toggle-text-show');
+        const hideText = toggleBtn.querySelector('.toggle-text-hide');
+
+        toggleBtn.addEventListener('click', function() {
+            const isExpanded = toggleBtn.classList.contains('expanded');
+
+            if (isExpanded) {
+                // Скрыть дополнительные вопросы
+                hiddenItems.forEach(function(item) {
+                    item.classList.remove('faq-item--shown');
+                    item.classList.add('faq-item--hidden');
+                });
+                toggleBtn.classList.remove('expanded');
+                showText.style.display = 'inline';
+                hideText.style.display = 'none';
+            } else {
+                // Показать дополнительные вопросы
+                hiddenItems.forEach(function(item) {
+                    item.classList.remove('faq-item--hidden');
+                    item.classList.add('faq-item--shown');
+                });
+                toggleBtn.classList.add('expanded');
+                showText.style.display = 'none';
+                hideText.style.display = 'inline';
+            }
+        });
+    }
+
     // Инициализация при загрузке DOM
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFAQ);
+        document.addEventListener('DOMContentLoaded', function() {
+            initFAQ();
+            initFAQToggle();
+        });
     } else {
         // DOM уже загружен
         initFAQ();
+        initFAQToggle();
     }
 })();
