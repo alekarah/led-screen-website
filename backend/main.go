@@ -141,6 +141,8 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("Server starting on port %s", port)
-	log.Fatal(router.Run(":" + port))
+	// Bind только на localhost для безопасности (Nginx будет проксировать)
+	bindAddr := "127.0.0.1:" + port
+	log.Printf("Server starting on %s", bindAddr)
+	log.Fatal(router.Run(bindAddr))
 }
