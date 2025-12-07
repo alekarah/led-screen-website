@@ -1,15 +1,13 @@
 /* Стили проектов админки */
-
-/* Карточка списка проектов */
 .projects-list{
   background:var(--card-bg);
   padding:2rem;
-  border-radius: var(--radius);
-  box-shadow: var(--card-shadow);
+  border-radius:var(--radius);
+  box-shadow:var(--card-shadow);
 }
 .projects-list h2{
   margin:0 0 1.25rem;
-  color: var(--text-700);
+  color:var(--text-700);
 }
 
 /* Строка проекта */
@@ -51,15 +49,8 @@
 
 /* Drag & Drop */
 .sortable-list{ min-height:200px; }
-.project-item.sortable-ghost{
-  opacity:.45;
-  background:#eef6ff;
-}
-.project-item.sortable-chosen{
-  background:#f3f8ff;
-  box-shadow:0 5px 15px rgba(0,0,0,.15);
-  animation:dragStart .2s ease-out;
-}
+.project-item.sortable-ghost{ opacity:.45; background:#eef6ff; }
+.project-item.sortable-chosen{ background:#f3f8ff; box-shadow:0 5px 15px rgba(0,0,0,.15); animation:dragStart .2s ease-out; }
 @keyframes dragStart{
   from{ transform:scale(1); }
   to{ transform:scale(1.02); }
@@ -139,6 +130,13 @@
 .project-status.featured{  background:#e8f4fd; color:#2c5aa0; }
 .project-status.draft{     background:#fff3cd; color:#856404; }
 .project-status.published{ background:#d4edda; color:#155724; }
+
+/* Инлайн статусы featured в списке проектов */
+.featured-yes { color: #4A90E2; font-weight: bold; }
+.featured-no { color: #999; }
+
+/* Утилитарные классы для отступов */
+.mt-1, .project-upload-form { margin-top: 1rem; }
 
 /* Статистика (опционально) */
 .project-stats{

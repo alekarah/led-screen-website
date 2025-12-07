@@ -1,6 +1,4 @@
 /* Стили для главной страницы */
-
-/* Убираем все отступы у main-content на главной */
 body:has(.hero) .main-content {
     padding-top: 0;
     padding-bottom: 0;
@@ -51,18 +49,51 @@ body:has(.hero) .main-content {
     color: var(--p-text-700);
 }
 
-.home-services .services-grid {
+/* Пирамидальная компоновка 2-3 */
+.home-services .services-pyramid {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 2rem;
-    justify-content: center;
-    align-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Карточки услуг фиксированной ширины */
-.home-services .services-grid > * {
+.home-services .services-row {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: stretch; /* Все карточки одной высоты */
+}
+
+/* Верхний ряд: 2 карточки (крупнее) */
+.home-services .services-row-top .service-card {
+    flex: 0 1 450px;
+    max-width: 450px;
+    min-width: 320px;
+}
+
+/* Нижний ряд: 3 карточки (стандарт) */
+.home-services .services-row-bottom .service-card {
     flex: 0 1 350px;
-    min-width: 300px;
+    max-width: 350px;
+    min-width: 280px;
+}
+
+/* Карточки внутри рядов растягиваются на всю высоту ряда */
+.home-services .services-row .service-card {
+    height: auto; /* Позволяем stretch работать естественно */
+    min-height: 0; /* Сбрасываем min-height чтобы stretch работал */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Параграф в карточках услуг растягивается, кнопка прижимается к низу */
+.home-services .services-row .service-card p {
+    flex-grow: 1;
+}
+
+.home-services .services-row .service-card .service-btn {
+    margin-top: auto;
 }
 
 .service-card {
@@ -110,22 +141,15 @@ body:has(.hero) .main-content {
     justify-content: center;
     text-align: center;
 }
-
 .service-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102,126,234,0.3);
     color: white;
 }
-
-.service-btn-secondary {
-    background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
-}
+.service-btn-secondary { background: linear-gradient(90deg, #ff6b6b, #ee5a5a); }
 
 /* Проекты на главной странице */
-.projects {
-    padding: 0 0 3rem 0;
-}
-
+.projects { padding: 0 0 3rem 0; }
 .projects h2 {
     text-align: center;
     margin-bottom: 3rem;
@@ -196,7 +220,6 @@ body:has(.hero) .main-content {
     color: var(--p-text-700);
     font-size: 1.4rem;
 }
-
 .projects .project-size {
     color: #4A90E2;
     font-weight: bold;
@@ -262,4 +285,19 @@ body:has(.hero) .main-content {
     transform: translateY(-2px) scale(1.04);
     color: #fff;
     text-decoration: none;
+}
+
+/* Контейнер для кнопки "Больше проектов" */
+.see-all-projects-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+/* Утилитарный класс для flex контейнеров */
+.project-info-flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }

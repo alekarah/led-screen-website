@@ -335,3 +335,24 @@ button[aria-disabled="true"]{
   pointer-events: none;
   opacity: .6;
 }
+
+/* Утилитарные классы для ширин колонок таблиц */
+.col-width-select {
+  width: 36px;
+}
+
+.col-width-16 {
+  width: 16%;
+}
+
+.col-width-22 {
+  width: 22%;
+}
+
+.col-width-14 {
+  width: 14%;
+}
+
+.col-width-12 {
+  width: 12%;
+}

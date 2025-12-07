@@ -1,6 +1,4 @@
 /* Стили для страницы "О LED-экранах" */
-
-/* Вводная секция */
 .led-intro-section {
     background: linear-gradient(135deg, #f8f9ff 0%, #fff8f5 100%);
     position: relative;
@@ -67,7 +65,7 @@
     align-items: flex-start;
 }
 
-.key-characteristic-icon {
+.key-characteristic-icon, .factor-icon {
     font-size: 2.5rem;
     flex-shrink: 0;
     width: 50px;
@@ -75,27 +73,29 @@
     align-items: center;
     justify-content: center;
 }
-
-.key-characteristic-content {
-    flex: 1;
-}
-
-.key-characteristic-content h3 {
+.key-characteristic-content, .factor-content { flex: 1; }
+.key-characteristic-content h3, .factor-item h4 {
     font-size: 1.2rem;
     color: var(--p-text-700);
     margin-bottom: 0.8rem;
-}
-
-.key-characteristic-content p {
-    color: var(--p-text-600);
-    line-height: 1.6;
-    font-size: 0.95rem;
 }
 
 @keyframes ledPulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.85; transform: scale(1.05); }
 }
+
+/* Общие стили для заголовков секций */
+.selection-guide-section h2,
+.comparison-table-section h2,
+.advantages-section h2,
+.faq-section h2 {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2.5rem;
+    color: var(--p-text-700);
+}
+.advantages-section h2 { margin-bottom: 3rem; }
 
 .intro-with-icon .intro-text {
     margin-bottom: 0;
@@ -134,13 +134,6 @@
     padding: 3rem 0;
 }
 
-.selection-guide-section h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-    color: var(--p-text-700);
-}
-
 .selection-intro {
     font-size: 1.1rem;
     line-height: 1.7;
@@ -170,27 +163,7 @@
     gap: 1.5rem;
     align-items: flex-start;
 }
-
-.factor-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
-    width: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.factor-content {
-    flex: 1;
-}
-
-.factor-item h4 {
-    font-size: 1.2rem;
-    color: var(--p-text-700);
-    margin-bottom: 0.8rem;
-}
-
-.factor-item p {
+.factor-item p, .key-characteristic-content p {
     color: var(--p-text-600);
     line-height: 1.6;
     font-size: 0.95rem;
@@ -245,13 +218,6 @@
 .comparison-table-section {
     background: var(--p-bg-alt);
     padding: 3rem 0;
-}
-
-.comparison-table-section h2 {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    font-size: 2.5rem;
-    color: var(--p-text-700);
 }
 
 .table-wrapper {
@@ -329,14 +295,6 @@
     background: white;
     padding: 3rem 0;
 }
-
-.advantages-section h2 {
-    text-align: center;
-    margin-bottom: 3rem;
-    font-size: 2.5rem;
-    color: var(--p-text-700);
-}
-
 .advantages-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -375,20 +333,13 @@
     font-size: 0.9rem;
 }
 
-/* Анимация появления преимуществ */
-.advantage-item--shown {
+/* Анимация появления элементов */
+.advantage-item--shown, .faq-item--shown {
     animation: fadeInUp 0.5s ease-out;
 }
-
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* FAQ секция */
@@ -396,14 +347,6 @@
     background: var(--p-bg-alt);
     padding: 2.5rem 0;
 }
-
-.faq-section h2 {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    font-size: 2.5rem;
-    color: var(--p-text-700);
-}
-
 .faq-accordion {
     max-width: 900px;
     margin: 0 auto;
@@ -419,14 +362,7 @@
 }
 
 /* Скрытие вопросов FAQ */
-.faq-item--hidden {
-    display: none;
-}
-
-/* Анимация появления вопросов FAQ */
-.faq-item--shown {
-    animation: fadeInUp 0.5s ease-out;
-}
+.faq-item--hidden { display: none; }
 
 .faq-item:hover {
     box-shadow: 0 4px 15px rgba(0,0,0,0.12);
@@ -734,4 +670,46 @@ html {
 .advantages-section,
 .faq-section {
     scroll-margin-top: 80px;
+}
+
+/* Утилитарные классы для заголовков секций */
+.section-heading {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.section-heading-large {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.section-heading-red {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #e74c3c;
+}
+
+/* Утилитарные классы для сеток */
+.advantages-grid-flex {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.disadvantage-item {
+    border-left: 3px solid #e74c3c;
+    flex: 0 1 360px;
+}
+
+.applications-grid-centered {
+    justify-content: center;
+}
+
+/* Утилитарный класс для скрытия элементов */
+.toggle-text-hide {
+    display: none;
 }

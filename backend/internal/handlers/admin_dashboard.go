@@ -129,11 +129,16 @@ func (h *Handlers) AdminProjects(c *gin.Context) {
 	var categories []models.Category
 	h.db.Find(&categories)
 
+	// Подсчитываем количество проектов отмеченных для показа на главной
+	var featuredCount int64
+	h.db.Model(&models.Project{}).Where("featured = ?", true).Count(&featuredCount)
+
 	c.HTML(http.StatusOK, "admin_base.html", gin.H{
-		"title":      "Управление проектами",
-		"projects":   projects,
-		"categories": categories,
-		"PageID":     "admin-projects",
+		"title":         "Управление проектами",
+		"projects":      projects,
+		"categories":    categories,
+		"featuredCount": featuredCount,
+		"PageID":        "admin-projects",
 	})
 }
 

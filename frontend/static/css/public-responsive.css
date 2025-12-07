@@ -113,26 +113,19 @@
     max-width: 500px;
   }
 
-  /* Услуги на главной - центрирование и выравнивание */
-  .home-services .services-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  /* Услуги на главной - адаптация пирамиды для средних экранов */
+  .home-services .services-row {
     gap: 1.75rem;
-    align-items: stretch;
-    justify-items: center;
   }
 
-  .home-services .services-grid .service-card:first-child {
-    grid-column: 1 / -1;
-    justify-self: center;
-    max-width: 560px;
-    width: 100%;
+  .home-services .services-row-top .service-card {
+    flex: 0 1 400px;
+    max-width: 400px;
   }
 
-  .home-services .services-grid .service-card:nth-child(2),
-  .home-services .services-grid .service-card:nth-child(3) {
-    width: 100%;
-    max-width: 450px;
+  .home-services .services-row-bottom .service-card {
+    flex: 0 1 300px;
+    max-width: 300px;
   }
 
   /* Услуги */
@@ -162,12 +155,15 @@
 
 /* Маленькие десктопы (< 1100px) */
 @media (max-width: 1100px) {
-  /* Главная - услуги (все одинаковой ширины) */
-  .home-services .services-grid .service-card,
-  .home-services .services-grid .service-card:first-child,
-  .home-services .services-grid .service-card:nth-child(2),
-  .home-services .services-grid .service-card:nth-child(3) {
-    max-width: 420px;
+  /* Главная - услуги пирамида (немного меньше) */
+  .home-services .services-row-top .service-card {
+    flex: 0 1 380px;
+    max-width: 380px;
+  }
+
+  .home-services .services-row-bottom .service-card {
+    flex: 0 1 280px;
+    max-width: 280px;
   }
 
   /* Адаптация высоты заголовков и кнопок */
@@ -189,12 +185,15 @@
     padding: 0 1.25rem;
   }
 
-  /* Главная - услуги (все одинаковой ширины) */
-  .home-services .services-grid .service-card,
-  .home-services .services-grid .service-card:first-child,
-  .home-services .services-grid .service-card:nth-child(2),
-  .home-services .services-grid .service-card:nth-child(3) {
-    max-width: 380px;
+  /* Главная - услуги пирамида (планшеты) */
+  .home-services .services-row-top .service-card {
+    flex: 0 1 350px;
+    max-width: 350px;
+  }
+
+  .home-services .services-row-bottom .service-card {
+    flex: 0 1 260px;
+    max-width: 260px;
   }
 
   /* Услуги */
@@ -247,8 +246,26 @@
     gap: 1.5rem;
     justify-items: center;
   }
-  .home-projects-grid .home-project-card:nth-child(n+3) {
+  /* Показываем 4 проекта на средних экранах */
+  .home-projects-grid .home-project-card:nth-child(n+5) {
     display: none;
+  }
+
+  /* Услуги - уменьшаем размеры для средних экранов */
+  .home-services .services-row {
+    gap: 1.5rem;
+  }
+
+  .home-services .services-row-top .service-card {
+    flex: 0 1 320px;
+    max-width: 320px;
+    min-width: 260px;
+  }
+
+  .home-services .services-row-bottom .service-card {
+    flex: 0 1 240px;
+    max-width: 240px;
+    min-width: 200px;
   }
 
   /* Проекты - 2 колонки с меньшими карточками */
@@ -383,22 +400,21 @@
     max-width: 350px;
   }
 
-  /* Услуги на главной - одна колонка, 600px ширина */
-  .home-services .services-grid {
-    grid-template-columns: 1fr;
-    align-items: stretch;
-    justify-items: center;
+  /* Услуги на главной - одна колонка (мобильные) */
+  .home-services .services-pyramid {
+    max-width: 600px;
   }
 
-  .home-services .services-grid .service-card {
+  .home-services .services-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home-services .services-row-top .service-card,
+  .home-services .services-row-bottom .service-card {
+    flex: 1 1 auto;
+    max-width: 600px;
     width: 100%;
-    max-width: 600px;
-  }
-
-  .home-services .services-grid .service-card:first-child,
-  .home-services .services-grid .service-card:nth-child(2),
-  .home-services .services-grid .service-card:nth-child(3) {
-    max-width: 600px;
   }
 
   /* Уменьшаем min-height для мобильных */
@@ -677,7 +693,6 @@
   .privacy-section .privacy-block { font-size: 1rem; }
 
   /* Все сетки с minmax на 1 колонку */
-  .home-services .services-grid,
   .services-grid,
   .contact-cards,
   .info-blocks,
@@ -685,19 +700,19 @@
     grid-template-columns: 1fr !important;
   }
 
-  /* Карточки услуг - 100% ширины */
-  .home-services .services-grid .service-card {
+  /* Карточки услуг на главной - 100% ширины */
+  .home-services .services-pyramid {
     max-width: 100%;
   }
 
-  .home-services .services-grid .service-card:first-child {
+  .home-services .services-row-top .service-card,
+  .home-services .services-row-bottom .service-card {
     max-width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   /* ВАЖНО: Все сетки переводим на 1 колонку */
-  .home-services .services-grid,
   .services-grid,
   .contact-cards,
   .info-blocks,
@@ -706,6 +721,16 @@
   .home-projects-grid,
   .projects-grid {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Услуги на главной - одна колонка с уменьшенными отступами */
+  .home-services .services-pyramid {
+    gap: 1.5rem;
+  }
+
+  /* Показываем 3 проекта на мобильных */
+  .home-projects-grid .home-project-card:nth-child(n+4) {
+    display: none;
   }
 
   /* Главная */
@@ -1088,7 +1113,9 @@
 
   .public-project-card,
   .public-project-image img,
-  .project-detail-btn {
+  .project-detail-btn,
+  .contact-card,
+  .info-block {
     transition: none !important;
   }
 

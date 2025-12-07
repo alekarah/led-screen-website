@@ -1,9 +1,14 @@
 /* Стили дашборда админки */
-
 .dashboard-card{
   background:var(--card-bg);
   border-radius:var(--radius);
   box-shadow:var(--card-shadow);
+}
+
+/* Ссылка для stat-card без подчеркивания */
+.stat-card-link{
+  text-decoration: none;
+  color: inherit;
 }
 
 /* Компактный контейнер секции */

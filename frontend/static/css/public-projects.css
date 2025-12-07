@@ -1,6 +1,4 @@
 /* Стили для страницы портфолио */
-
-/* Фильтры */
 .filters {
     display: flex;
     justify-content: center;
@@ -59,14 +57,10 @@
     justify-self: center;
 }
 
-.public-project-card:hover {
+.public-project-card:hover,
+.public-project-card:focus-within {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.public-project-card:focus-within {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 /* Изображения проектов */
@@ -160,9 +154,7 @@
 }
 
 /* Контейнер для нижних элементов */
-.project-bottom {
-    margin-top: auto;
-}
+.project-bottom { margin-top: auto; }
 
 /* Стили только для публичных карточек */
 .public-project-card .project-content {

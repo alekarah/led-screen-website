@@ -58,12 +58,12 @@ input[type="radio"]{
   outline: none;
 }
 
-/* Выделенный чекбокс "Показать на главной" */
+/* Выделенный чекбокс "Показать на главной" и предупреждение*/
 .featured-checkbox{
   background: #e8f4fd;
   border:2px solid var(--brand);
   border-radius: var(--radius);
-  padding:1rem; margin:1rem 0;
+  padding:1rem; margin-top:1rem;
   display:flex; align-items:center; gap:.75rem;
   transition: background-color .3s;
 }
@@ -74,10 +74,19 @@ input[type="radio"]{
 .featured-checkbox label{
   font-weight:700; color:#2c5aa0; margin:0; font-size:1.1rem; cursor:pointer;
 }
+.featured-warning{
+  color: #ff9800; 
+  font-size: 0.9rem; 
+  margin: 0.5rem 0 2rem; 
+  padding: 0.5rem; 
+  background: #fff3e0; 
+  border-left: 3px solid #ff9800; 
+  border-radius: 4px;
+}
 
 /* Секция загрузки */
 .upload-section{
-  margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--line);
+  padding-top:1.5rem; border-top:1px solid var(--line);
 }
 .upload-section h3{ margin-bottom:1rem; color: var(--text-700); }
 

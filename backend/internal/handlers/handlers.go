@@ -51,8 +51,8 @@ func New(db *gorm.DB, maxUploadSize int64, uploadPath string) *Handlers {
 // HomePage рендерит главную страницу сайта с избранными проектами и услугами.
 //
 // Отображает:
-//   - До 3 проектов с флагом featured=true (отсортированных по sort_order)
-//   - Если нет featured проектов - показывает последние 3 проекта
+//   - До 6 проектов с флагом featured=true (отсортированных по sort_order)
+//   - Если нет featured проектов - показывает последние 6 проектов
 //   - Основные услуги (featured services)
 //
 // GET /
@@ -63,7 +63,7 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		Preload("Categories").
 		Preload("Images").
 		Order("sort_order ASC, created_at DESC").
-		Limit(3).
+		Limit(6).
 		Find(&featuredProjects)
 
 	// Если нет рекомендуемых проектов, показываем последние
@@ -71,7 +71,7 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		h.db.Preload("Categories").
 			Preload("Images").
 			Order("sort_order ASC, created_at DESC").
-			Limit(3).
+			Limit(6).
 			Find(&featuredProjects)
 	}
 

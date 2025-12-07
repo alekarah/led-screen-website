@@ -46,7 +46,7 @@
         <div class="bulk-actions__title">Действия с выбранными:</div>
         <button id="bulk-restore" class="btn btn-small btn-blue" disabled>Восстановить</button>
         <button id="bulk-delete" class="btn btn-small btn-danger" disabled>Удалить выбранные</button>
-        <span id="bulk-count" class="muted" style="margin-left:8px;">Выбрано: 0</span>
+        <span id="bulk-count" class="muted bulk-count">Выбрано: 0</span>
         </div>
 
         <!-- Таблица -->
@@ -66,7 +66,7 @@
 
                         <td>
                         {{if .Phone}}<a href="tel:{{.Phone}}">{{.Phone}}</a>{{else}}—{{end}}
-                        <div style="color:#777;">{{.Email}}</div>
+                        <div class="muted-email">{{.Email}}</div>
                         </td>
 
                         <td>{{.Company}}</td>
@@ -95,7 +95,7 @@
                     </tr>
                     {{end}}
                 {{else}}
-                    <tr><td colspan="7" style="color:#777;">Архив пуст</td></tr>
+                    <tr><td colspan="7" class="empty-message">Архив пуст</td></tr>
                 {{end}}
             </tbody>
 
@@ -137,7 +137,7 @@
                 <div id="cd-message" class="prewrap"></div>
                 </div>
 
-                <div class="modal-footer" style="margin-top:16px; display:flex; gap:10px;">
+                <div class="modal-footer">
                 <button id="cd-restore" class="btn btn-small btn-blue">Восстановить</button>
                 <button id="cd-delete"  class="btn btn-small btn-danger">Удалить навсегда</button>
                 </div>
@@ -146,12 +146,12 @@
             <!-- TAB: Заметки -->
             <div id="cd-tab-notes" class="hidden">
 
-                <div style="margin-top:12px;">
+                <div class="note-form">
                 <ul id="cd-notes-list" class="notes-list"></ul>
 
                 <div class="notes-controls">
-                    <input id="cd-note-author" type="text" class="form-input" placeholder="Автор (необязательно)" style="max-width:220px;">
-                    <input id="cd-note-text"   type="text" class="form-input" placeholder="Новая заметка..." style="flex:1; min-width:240px;">
+                    <input id="cd-note-author" type="text" class="form-input note-author-input" placeholder="Автор (необязательно)">
+                    <input id="cd-note-text"   type="text" class="form-input note-text-input" placeholder="Новая заметка...">
                     <button id="cd-note-add"   class="btn btn-small btn-blue" type="button">Добавить</button>
                 </div>
                 </div>

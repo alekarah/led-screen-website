@@ -94,11 +94,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 <div class="form-section">
   <h2>Перезвоны</h2>
   <div class="stats-grid">
-    <a class="stat-card" href="/admin/contacts?reminder=today" style="text-decoration:none;color:inherit;">
+    <a class="stat-card stat-card-link" href="/admin/contacts?reminder=today">
       <div class="stat-label">Сегодня</div>
       <div class="stat-value">{{.reminders.today}}</div>
     </a>
-    <a class="stat-card" href="/admin/contacts?reminder=overdue" style="text-decoration:none;color:inherit;">
+    <a class="stat-card stat-card-link" href="/admin/contacts?reminder=overdue">
       <div class="stat-label">Просрочено</div>
       <div class="stat-value">{{.reminders.overdue}}</div>
     </a>

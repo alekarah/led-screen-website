@@ -58,6 +58,7 @@ backend/vendor/
 .vscode/
 .idea/
 .claude/
+CLAUDE.md
 *.swp
 *.swo
 *.bak

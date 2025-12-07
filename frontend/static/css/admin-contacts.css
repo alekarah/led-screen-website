@@ -199,6 +199,42 @@
   }
 }
 
+/* Утилитарные классы для контактов */
+.bulk-count {
+  margin-left: 8px;
+}
+
+.muted-email {
+  color: #777;
+}
+
+.empty-message {
+  color: #777;
+}
+
+.modal-footer {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.note-form {
+  margin-top: 12px;
+}
+
+.note-author-input {
+  max-width: 220px;
+}
+
+.note-text-input {
+  flex: 1;
+  min-width: 240px;
+}
+
+.remind-input {
+  max-width: 220px;
+}
+
 /* Очень маленькие экраны (< 480px) */
 @media (max-width: 480px){
   .contacts-table {

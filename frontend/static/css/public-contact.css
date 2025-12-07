@@ -63,10 +63,6 @@
   box-shadow: 0 10px 25px rgba(0,0,0,.12);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .contact-card, .info-block { transition: none; }
-}
-
 /* Секция формы обратной связи */
 .contact-form-section {
     background: var(--p-bg-alt);
@@ -250,4 +246,10 @@
 .map-container iframe {
     display: block;
     border: none;
+}
+
+/* Honeypot поле (скрыто от пользователей, но видно ботам) */
+.honeypot {
+    position: absolute;
+    left: -5000px;
 }

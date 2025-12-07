@@ -1,6 +1,4 @@
 /* Стили для страницы услуг */
-
-/* Основная секция услуг */
 .services-main {
     padding: 2rem 0 4rem;
 }
@@ -35,11 +33,7 @@
     border-color: var(--p-brand);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
 }
-
-.service-card.featured:hover { 
-    border-color: color-mix(in oklab, var(--p-brand), white 20%); 
-}
-
+.service-card.featured:hover { border-color: color-mix(in oklab, var(--p-brand), white 20%); }
 .service-card.featured::before {
     content: "Популярно";
     position: absolute;
@@ -52,8 +46,6 @@
     font-size: 0.8rem;
     font-weight: bold;
 }
-
-
 
 /* Иконки услуг */
 .service-icon {
