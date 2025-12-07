@@ -20,6 +20,9 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://s-n-r.ru{{if .ogUrl}}{{.ogUrl}}{{else}}/{{end}}">
+
     <!-- Additional page-specific meta tags -->
     {{block "meta-tags" .}}{{end}}
 

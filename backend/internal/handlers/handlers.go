@@ -187,6 +187,7 @@ func (h *Handlers) PrivacyPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":  "Обработка персональных данных",
 		"PageID": "privacy",
+		"ogUrl":  "/privacy",
 	})
 }
 
@@ -276,6 +277,14 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 			})
 			return
 		}
+	}
+
+	// Honeypot защита от спама: если скрытое поле заполнено - это бот
+	if form.Website != "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Неверные данные формы",
+		})
+		return
 	}
 
 	// Простая валидация

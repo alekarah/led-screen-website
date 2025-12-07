@@ -103,10 +103,16 @@
                 
                 <div class="form-group">
                     <label for="message">Сообщение</label>
-                    <textarea id="message" name="message" rows="4" 
+                    <textarea id="message" name="message" rows="4"
                             placeholder="Опишите ваш проект, размеры экрана, место установки и другие детали..."></textarea>
                 </div>
-                
+
+                <!-- Honeypot защита от спама (не удалять!) -->
+                <div class="form-group" style="position: absolute; left: -5000px;" aria-hidden="true">
+                    <label for="website">Не заполняйте это поле</label>
+                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                </div>
+
                 <!-- Лайв-область для сообщений отправки -->
                 <p id="form-status" class="visually-hidden" aria-live="polite"></p>
 

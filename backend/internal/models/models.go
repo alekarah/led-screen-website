@@ -148,6 +148,7 @@ type ContactForm struct {
 	Company     string     `json:"company"`
 	ProjectType string     `json:"project_type"`
 	Message     string     `json:"message"`
+	Website     string     `json:"website" form:"website" gorm:"-"`                    // Honeypot поле (не сохраняется в БД)
 	Source      string     `json:"source"`                                             // Источник заявки: "contact_form", "calculator", "phone_call" и т.д.
 	Status      string     `json:"status" gorm:"type:varchar(20);default:'new';index"` // Статус: "new", "processed", "archived"
 	CreatedAt   time.Time  `json:"created_at" gorm:"index"`
