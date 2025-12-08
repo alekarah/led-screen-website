@@ -71,10 +71,10 @@ footer {
     color: #ccc;
 }
 
-/* Компактная версия футера (для контактов) */
+/* Компактная версия футера (для контактов и о лед экранах) */
 .simple-footer.compact {
     padding: 0.75rem 0;
-    margin-top: 2rem;
+    margin-top: 0;
 }
 
 .simple-footer.compact .footer-bottom {

@@ -27,6 +27,11 @@
 .project-item:hover{ background:var(--hover); }
 
 .project-info{ flex:1; }
+.project-info-flex{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
 .project-info h3{
   margin:0 0 .4rem;
   color:var(--text-700);

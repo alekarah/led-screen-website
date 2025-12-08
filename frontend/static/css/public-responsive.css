@@ -11,6 +11,9 @@
     margin-left: 0;
     padding: 0 2rem;
   }
+  .screen-types--wide {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Очень большие экраны (< 1500px) */
@@ -329,7 +332,85 @@
     grid-template-columns: 1fr;
     padding: 0 1rem;
   }
+
+  /* LED Guide - скрытие таблицы сравнения */
+  .comparison-table-section {
+    display: none;
+  }
+
+  /* LED Guide - скрытие дополнительных областей применения */
+  .application-item--mobile-hidden {
+    display: none;
+  }
+
+  /* LED Guide - компактные типы экранов (горизонтальная компоновка) */
+  .screen-type .screen-specs {
+    display: none;
+  }
+  .screen-type p:not(.type-description) {
+    display: none;
+  }
+  .screen-type {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    min-width: auto;
+    max-width: none;
+    text-align: left;
+  }
+  .screen-image {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: 40px;
+    margin-bottom: 0;
+  }
+  .screen-type-content {
+    flex: 1;
+  }
+  .screen-type-content h3 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  .screen-type-content .type-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--p-text-500);
+    margin: 0;
+  }
+  .screen-types {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .screen-types--wide {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  /* LED Guide - компактные ключевые характеристики */
+  .key-characteristic-item {
+    padding: 1rem 1.25rem;
+  }
+  .key-characteristic-icon, .factor-icon {
+    font-size: 2rem;
+    width: 40px;
+  }
+  .key-characteristic-content h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .key-characteristic-content p, .factor-item p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .factor-item { padding: 1.5rem; }
+  .factor-item h4 { font-size: 1.1rem; }
 }
+
 
 @media (max-width: 959px) and (min-width: 769px) {
   /* Статистика (футер) */
@@ -367,7 +448,6 @@
   /* Основной контент */
   .main-content { 
     margin-top: 120px;
-    padding: 2rem 0;
   }
 
   /* Заголовки секций */
@@ -532,11 +612,6 @@
   .service-card { padding: 1.5rem; }
   .service-icon { font-size: 2.5rem; }
   .service-card h3 { font-size: 1.2rem; }
-  .screen-types {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-  .screen-type { padding: 1.5rem; }
   .process-steps {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
@@ -577,14 +652,12 @@
   .selection-guide-section, .comparison-table-section, .advantages-section, .faq-section { padding: 2.5rem 0; }
   .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 2rem; margin-bottom: 2rem; }
   .selection-intro { font-size: 1rem; }
-  .factor-item { padding: 1.5rem; }
-  .factor-icon { font-size: 2rem; }
-  .factor-item h4 { font-size: 1.1rem; }
   .advantages-grid { grid-template-columns: 1fr; gap: 1.5rem; max-width: 500px; margin: 0 auto; }
   .advantage-icon { font-size: 2.5rem; }
   .faq-question { font-size: 1rem; padding: 1.2rem 1.5rem; }
   .faq-answer { padding: 0 1.5rem; }
   .faq-item.active .faq-answer { padding: 1.2rem 1.5rem 1.5rem; }
+  .selection-tip p {font-size: 0.9rem}
 
   /* LED Guide - дополнительные стили для мобильных */
   .nav-dropdown-toc {
@@ -653,26 +726,6 @@
 
   .faq-accordion {
     padding: 0;
-  }
-
-  .factor-item {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .factor-icon {
-    margin-bottom: 0.5rem;
-  }
-
-  .key-characteristic-item {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .key-characteristic-icon {
-    margin-bottom: 0.5rem;
   }
 
   /* О компании - вертикальная компоновка */
@@ -810,11 +863,6 @@
 
   /* Контейнеры / отступы */
   .container { padding: 0 .75rem; }
-
-  /* Основной контент */
-  .main-content { 
-    padding: 1.5rem 0; 
-  }
 
   /* Заголовки секций */
   .section-header { margin-bottom: 1.5rem; }

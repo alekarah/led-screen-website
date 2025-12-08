@@ -73,6 +73,7 @@
 ### DevOps & Infrastructure
 - **Docker & Docker Compose** - контейнеризация PostgreSQL
 - **Nginx** - reverse proxy с SSL/TLS (Let's Encrypt)
+- **CloudFlare CDN** - кеширование статики, DDoS защита, автоматическая минификация
 - **systemd** - service management с оптимизированным бинарником
 - **fail2ban** - защита от брутфорс-атак SSH
 - **UFW Firewall** - настройка сетевой безопасности
@@ -261,6 +262,7 @@ cd backend && go test ./... -v -cover
 
 ### Инфраструктура
 - **Хостинг:** Beget VPS (2GB RAM, 20GB SSD)
+- **CDN:** CloudFlare (кеширование, минификация, DDoS защита)
 - **ОС:** Ubuntu 22.04 LTS
 - **База данных:** PostgreSQL 15 (Docker)
 - **Веб-сервер:** Nginx 1.18 с SSL/TLS (Let's Encrypt)

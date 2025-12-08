@@ -163,6 +163,7 @@ body:has(.hero) .main-content {
     gap: 2.5rem;
     justify-items: center;
     justify-content: center;
+    align-items: stretch;
 }
 
 .home-project-card {
@@ -175,6 +176,7 @@ body:has(.hero) .main-content {
     padding: 1rem 1rem 1.3rem 1rem;
     max-width: 320px;
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -225,6 +227,11 @@ body:has(.hero) .main-content {
     font-weight: bold;
     font-size: 1.15rem;
     margin-bottom: 1rem;
+}
+
+/* Контейнер для нижних элементов */
+.home-project-card .project-bottom {
+    margin-top: auto;
 }
 
 /* Категории на главной */

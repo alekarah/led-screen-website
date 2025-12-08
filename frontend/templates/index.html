@@ -80,14 +80,16 @@
                     {{if .Size}}
                     <div class="project-size">{{.Size}}</div>
                     {{end}}
-                    <div class="project-categories">
-                        {{range .Categories}}
-                        <span class="category-tag">{{.Name}}</span>
-                        {{end}}
+                    <div class="project-bottom">
+                        <div class="project-categories">
+                            {{range .Categories}}
+                            <span class="category-tag">{{.Name}}</span>
+                            {{end}}
+                        </div>
+                        <a href="/projects#{{.Slug}}" class="project-detail-btn">
+                            Подробнее
+                        </a>
                     </div>
-                    <a href="/projects#{{.Slug}}" class="project-detail-btn">
-                        Подробнее
-                    </a>
                 </div>
             </div>
             {{end}}

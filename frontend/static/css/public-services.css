@@ -161,14 +161,20 @@
 .screen-type p {
     color: var(--p-text-500);
     margin-bottom: 1rem;
-    margin-top: auto !important;
+}
+
+.screen-type-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
 }
 
 .screen-specs {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-top: 0 !important;
+    margin-top: auto;
 }
 
 .screen-specs span {
