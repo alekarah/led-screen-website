@@ -3,13 +3,12 @@ package handlers
 import (
 	"fmt"
 	"image"
-	"image/jpeg"
-	"image/png"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/chai2010/webp"
 	"github.com/disintegration/imaging"
 )
 
@@ -92,18 +91,10 @@ func generateSingleThumbnail(srcImage image.Image, originalPath string, size Thu
 	// Anchor определяет какую часть изображения сохранить при обрезке
 	thumb := imaging.Fill(srcImage, size.Width, size.Height, anchor, imaging.Lanczos)
 
-	// Генерируем имя файла для thumbnail
+	// Генерируем имя файла для thumbnail (всегда .webp)
 	thumbPath := generateThumbnailPath(originalPath, size.Suffix)
 
-	// Определяем формат по расширению
-	ext := strings.ToLower(filepath.Ext(originalPath))
-
-	// Конвертируем .jfif в .jpg
-	if ext == ".jfif" {
-		thumbPath = strings.TrimSuffix(thumbPath, ".jfif") + ".jpg"
-	}
-
-	// Сохраняем thumbnail
+	// Сохраняем thumbnail как WebP
 	if err := saveThumbnail(thumb, thumbPath); err != nil {
 		return "", err
 	}
@@ -205,6 +196,7 @@ func getAnchorForCrop(crop CropParams) imaging.Anchor {
 }
 
 // saveThumbnail сохраняет изображение с оптимизацией
+// Все thumbnails сохраняются в формате WebP с качеством 90%
 func saveThumbnail(img image.Image, path string) error {
 	// Создаем директорию если нужно
 	dir := filepath.Dir(path)
@@ -219,49 +211,43 @@ func saveThumbnail(img image.Image, path string) error {
 	}
 	defer file.Close()
 
-	// Определяем формат по расширению
-	ext := strings.ToLower(filepath.Ext(path))
-
-	switch ext {
-	case ".jpg", ".jpeg":
-		// JPEG с качеством 85% и progressive encoding
-		err = jpeg.Encode(file, img, &jpeg.Options{Quality: 85})
-	case ".png":
-		// PNG с оптимизацией
-		err = png.Encode(file, img)
-	default:
-		// По умолчанию JPEG
-		err = jpeg.Encode(file, img, &jpeg.Options{Quality: 85})
+	// Сохраняем как WebP с качеством 90% (lossy)
+	// Quality 90 обеспечивает визуально неотличимое качество при экономии 25-35% размера
+	options := &webp.Options{
+		Lossless: false,
+		Quality:  90,
 	}
 
-	if err != nil {
-		return fmt.Errorf("не удалось сохранить изображение: %w", err)
+	if err := webp.Encode(file, img, options); err != nil {
+		return fmt.Errorf("не удалось сохранить WebP: %w", err)
 	}
 
 	return nil
 }
 
 // generateThumbnailPath генерирует путь для thumbnail
+// Всегда использует .webp расширение для thumbnails
 func generateThumbnailPath(originalPath, suffix string) string {
 	ext := filepath.Ext(originalPath)
 	nameWithoutExt := strings.TrimSuffix(originalPath, ext)
-	return nameWithoutExt + suffix + ext
+	return nameWithoutExt + suffix + ".webp"
 }
 
 // DeleteThumbnails удаляет все thumbnails для изображения
 func DeleteThumbnails(originalPath string) {
 	for _, size := range AllThumbnailSizes {
+		// Удаляем WebP thumbnails (новый формат)
 		thumbPath := generateThumbnailPath(originalPath, size.Suffix)
 		if err := os.Remove(thumbPath); err != nil && !os.IsNotExist(err) {
 			log.Printf("[WARN] Не удалось удалить thumbnail %s: %v", thumbPath, err)
 		}
 
-		// Также пытаемся удалить .jpg версию если оригинал был .jfif
-		if filepath.Ext(originalPath) == ".jfif" {
-			jpgPath := strings.TrimSuffix(thumbPath, ".jfif") + ".jpg"
-			if err := os.Remove(jpgPath); err != nil && !os.IsNotExist(err) {
-				log.Printf("[WARN] Не удалось удалить thumbnail %s: %v", jpgPath, err)
-			}
+		// Также удаляем старые PNG/JPG thumbnails если они есть
+		ext := filepath.Ext(originalPath)
+		nameWithoutExt := strings.TrimSuffix(originalPath, ext)
+		oldPngPath := nameWithoutExt + size.Suffix + ext
+		if err := os.Remove(oldPngPath); err != nil && !os.IsNotExist(err) {
+			log.Printf("[WARN] Не удалось удалить старый thumbnail %s: %v", oldPngPath, err)
 		}
 	}
 }
