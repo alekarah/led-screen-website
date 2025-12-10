@@ -105,4 +105,103 @@ function closeCreateProjectModal() {
     resetForm('createProjectForm');
 }
 
+// Подсчет количества выбранных проектов на главной
+function countFeaturedProjects() {
+    // Считаем все проекты с галочкой featured в базе через DOM
+    const featuredItems = document.querySelectorAll('.project-item .featured-yes');
+    return featuredItems.length;
+}
+
+// Обновление предупреждения и счетчика для модального окна создания
+function updateFeaturedWarning(checkboxId, modalType) {
+    const checkbox = document.getElementById(checkboxId);
+    if (!checkbox) return;
+
+    const modal = checkbox.closest('.modal');
+    if (!modal) return;
+
+    let warning = modal.querySelector('.featured-warning');
+    const label = modal.querySelector(`label[for="${checkboxId}"]`);
+
+    // Подсчитываем текущее количество featured проектов
+    let currentCount = countFeaturedProjects();
+
+    // Если в модале редактирования, и чекбокс был уже выбран при открытии,
+    // не учитываем текущий проект в счетчике (он уже учтен)
+    if (modalType === 'edit') {
+        const projectId = document.getElementById('edit_project_id');
+        if (projectId && projectId.value) {
+            // Проверяем начальное состояние чекбокса
+            const initiallyChecked = checkbox.dataset.initiallyChecked === 'true';
+            if (initiallyChecked && !checkbox.checked) {
+                currentCount--; // Проект был featured, но мы сняли галочку
+            } else if (!initiallyChecked && checkbox.checked) {
+                currentCount++; // Проект не был featured, но мы поставили галочку
+            }
+        }
+    } else {
+        // Для создания - просто прибавляем 1 если галочка стоит
+        if (checkbox.checked) {
+            currentCount++;
+        }
+    }
+
+    // Обновляем текст в label
+    if (label) {
+        const baseText = '⭐ Показать на главной странице';
+        label.textContent = `${baseText} (выбрано: ${currentCount} из 6)`;
+    }
+
+    // Показываем/скрываем предупреждение
+    if (currentCount > 6) {
+        if (!warning) {
+            // Создаем предупреждение если его нет
+            warning = document.createElement('div');
+            warning.className = 'featured-warning';
+            warning.innerHTML = '⚠️ Будут показаны первые 6 проектов по порядку сортировки';
+
+            // Вставляем после чекбокса
+            const featuredCheckbox = modal.querySelector('.featured-checkbox');
+            if (featuredCheckbox) {
+                featuredCheckbox.insertAdjacentElement('afterend', warning);
+            }
+        }
+        warning.style.display = 'block';
+    } else {
+        if (warning) {
+            warning.style.display = 'none';
+        }
+    }
+}
+
+// Инициализация обработчиков для чекбокса featured в модальном окне создания
+function initFeaturedCheckboxHandlers() {
+    // Для модального окна создания
+    const createCheckbox = document.getElementById('featured');
+    if (createCheckbox) {
+        createCheckbox.addEventListener('change', function() {
+            updateFeaturedWarning('featured', 'create');
+        });
+
+        // Обновляем при открытии модального окна
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                const modal = document.getElementById('createProjectModal');
+                if (modal && modal.style.display === 'block') {
+                    updateFeaturedWarning('featured', 'create');
+                }
+            });
+        });
+
+        const createModal = document.getElementById('createProjectModal');
+        if (createModal) {
+            observer.observe(createModal, { attributes: true, attributeFilter: ['style'] });
+        }
+    }
+}
+
+// Инициализируем обработчики при загрузке
+document.addEventListener('DOMContentLoaded', initFeaturedCheckboxHandlers);
+
 window.initProjectCreation = initProjectCreation;
+window.updateFeaturedWarning = updateFeaturedWarning;

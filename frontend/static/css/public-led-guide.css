@@ -296,9 +296,10 @@
     padding: 3rem 0;
 }
 .advantages-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
     gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
     width: calc(100% + 25rem);
     margin-left: -12.5rem;
 }
@@ -310,6 +311,8 @@
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-left: 4px solid var(--p-brand);
+    flex: 0 0 360px;
+    width: 360px;
 }
 
 .advantage-item:hover {
@@ -702,7 +705,8 @@ html {
 
 .disadvantage-item {
     border-left: 3px solid #e74c3c;
-    flex: 0 1 360px;
+    flex: 0 0 360px;
+    width: 360px;
 }
 
 .applications-grid-centered {

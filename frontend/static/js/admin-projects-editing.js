@@ -122,6 +122,13 @@ function fillEditForm(data) {
     const featuredCheckbox = document.getElementById('edit_featured');
     if (featuredCheckbox) {
         featuredCheckbox.checked = project.featured || false;
+        // Сохраняем начальное состояние для правильного подсчета
+        featuredCheckbox.dataset.initiallyChecked = featuredCheckbox.checked ? 'true' : 'false';
+
+        // Обновляем предупреждение при открытии
+        if (typeof updateFeaturedWarning === 'function') {
+            updateFeaturedWarning('edit_featured', 'edit');
+        }
     }
     
     // Заполняем категории
@@ -129,9 +136,12 @@ function fillEditForm(data) {
     
     // Заполняем изображения
     fillProjectImages(project.images || []);
-    
+
     // ПЕРЕСОЗДАЕМ ФОРМЫ ЧТОБЫ УБРАТЬ СТАРЫЕ ОБРАБОТЧИКИ
     initEditForms();
+
+    // Инициализируем обработчик для featured checkbox
+    initEditFeaturedCheckbox();
 }
 
 // Заполнение категорий в форме редактирования
@@ -290,6 +300,24 @@ function initEditForms() {
     }
 }
 
+// Инициализация обработчика для чекбокса featured в модальном окне редактирования
+function initEditFeaturedCheckbox() {
+    const editCheckbox = document.getElementById('edit_featured');
+    if (editCheckbox) {
+        // Удаляем старый обработчик если есть
+        const newCheckbox = editCheckbox.cloneNode(true);
+        editCheckbox.parentNode.replaceChild(newCheckbox, editCheckbox);
+
+        // Добавляем новый обработчик
+        newCheckbox.addEventListener('change', function() {
+            if (typeof updateFeaturedWarning === 'function') {
+                updateFeaturedWarning('edit_featured', 'edit');
+            }
+        });
+    }
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
+    // Обработчик будет добавлен при открытии модального окна через fillEditForm
 });

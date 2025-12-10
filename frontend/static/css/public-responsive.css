@@ -14,6 +14,15 @@
   .screen-types--wide {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* Показ кнопки "Показать еще" преимуществ */
+  .advantages-toggle-wrapper {
+    display: block;
+  }
+
+  .advantage-item--hidden {
+    display: none;
+  }
 }
 
 /* Очень большие экраны (< 1500px) */
@@ -145,15 +154,6 @@
   .privacy-section .privacy-block {
     padding: 1.3rem 1.1rem;
   }
-
-  /* LED Guide - сетка преимуществ 3 колонки */
-  .advantages-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    padding: 0 1.5rem;
-    width: 100%;
-    margin-left: 0;
-  }
 }
 
 /* Маленькие десктопы (< 1100px) */
@@ -235,7 +235,6 @@
   }
   /* LED Guide */
   .selection-factors { grid-template-columns: 1fr; gap: 1.5rem; }
-  .advantages-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
   /* О компании */
   .about-company-content { grid-template-columns: 250px 1fr; gap: 2rem; }
   .about-company-text h2 { font-size: 1.75rem; }
@@ -291,19 +290,10 @@
     background: #111;
   }
 
-  /* LED Guide - показ кнопки преимуществ при 2 колонках */
-  .advantages-toggle-wrapper {
-    display: block;
-  }
-
-  .advantage-item--hidden {
-    display: none;
-  }
-
+  /* LED Guide */
   .advantages-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
     padding: 0 1rem;
+    gap: 1.5rem;
   }
 
   .selection-factors {
@@ -652,7 +642,7 @@
   .selection-guide-section, .comparison-table-section, .advantages-section, .faq-section { padding: 2.5rem 0; }
   .selection-guide-section h2, .comparison-table-section h2, .advantages-section h2, .faq-section h2 { font-size: 2rem; margin-bottom: 2rem; }
   .selection-intro { font-size: 1rem; }
-  .advantages-grid { grid-template-columns: 1fr; gap: 1.5rem; max-width: 500px; margin: 0 auto; }
+  .advantages-grid { gap: 1.5rem; }
   .advantage-icon { font-size: 2.5rem; }
   .faq-question { font-size: 1rem; padding: 1.2rem 1.5rem; }
   .faq-answer { padding: 0 1.5rem; }

@@ -63,7 +63,7 @@ input[type="radio"]{
   background: #e8f4fd;
   border:2px solid var(--brand);
   border-radius: var(--radius);
-  padding:1rem; margin-top:1rem;
+  padding:1rem; margin:1rem 0;
   display:flex; align-items:center; gap:.75rem;
   transition: background-color .3s;
 }
@@ -77,7 +77,7 @@ input[type="radio"]{
 .featured-warning{
   color: #ff9800; 
   font-size: 0.9rem; 
-  margin: 0.5rem 0 2rem; 
+  margin-bottom: 1.5rem; 
   padding: 0.5rem; 
   background: #fff3e0; 
   border-left: 3px solid #ff9800; 
