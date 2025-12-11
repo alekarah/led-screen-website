@@ -7,7 +7,10 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 import logging
+import asyncio
+from telegram.ext import Application, CallbackQueryHandler
 from bot import TelegramNotifier
+from callback_handler import CallbackHandler
 from config import settings
 
 # Настройка логирования
@@ -24,11 +27,18 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Инициализация Telegram бота
+# Инициализация Telegram бота для отправки уведомлений
 notifier = TelegramNotifier(
     bot_token=settings.TELEGRAM_BOT_TOKEN,
     chat_id=settings.TELEGRAM_CHAT_ID
 )
+
+# Инициализация обработчика callback queries
+# Backend URL - localhost т.к. Go и Python работают на одном сервере
+callback_handler = CallbackHandler(backend_url="http://127.0.0.1:8080")
+
+# Глобальная переменная для Telegram Application
+telegram_app = None
 
 
 class ContactNotification(BaseModel):
@@ -41,6 +51,42 @@ class ContactNotification(BaseModel):
     message: Optional[str] = None
     contact_id: Optional[int] = None
     timestamp: Optional[str] = None
+
+
+@app.on_event("startup")
+async def startup_event():
+    """Запуск Telegram бота при старте FastAPI"""
+    global telegram_app
+
+    logger.info("Инициализация Telegram Application...")
+
+    # Создаем Application
+    telegram_app = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).build()
+
+    # Добавляем обработчик callback queries
+    telegram_app.add_handler(
+        CallbackQueryHandler(callback_handler.handle_callback_query)
+    )
+
+    # Запускаем бота в фоне
+    await telegram_app.initialize()
+    await telegram_app.start()
+    await telegram_app.updater.start_polling()
+
+    logger.info("✓ Telegram bot запущен и слушает callback queries")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Остановка Telegram бота при остановке FastAPI"""
+    global telegram_app
+
+    if telegram_app:
+        logger.info("Остановка Telegram bot...")
+        await telegram_app.updater.stop()
+        await telegram_app.stop()
+        await telegram_app.shutdown()
+        logger.info("✓ Telegram bot остановлен")
 
 
 @app.get("/")

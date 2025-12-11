@@ -59,6 +59,14 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.POST("/contact", h.SubmitContact)                   // Отправка заявки от клиента
 		api.GET("/admin/contacts-7d", h.AdminContacts7Days)     // Статистика заявок за 7 дней (для dashboard)
 		api.POST("/track/project-view/:id", h.TrackProjectView) // Трекинг просмотров проекта
+
+		// Telegram Bot API - доступ только с localhost (127.0.0.1)
+		telegram := api.Group("/telegram")
+		{
+			telegram.POST("/update-status", h.TelegramUpdateStatus) // Изменить статус заявки
+			telegram.POST("/add-note", h.TelegramAddNote)           // Добавить заметку
+			telegram.POST("/set-reminder", h.TelegramSetReminder)   // Установить напоминание
+		}
 	}
 
 	// Публичные роуты админки (без авторизации)

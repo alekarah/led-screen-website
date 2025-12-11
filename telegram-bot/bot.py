@@ -3,7 +3,7 @@ Telegram Bot логика для отправки уведомлений
 """
 
 import logging
-from telegram import Bot
+from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import TelegramError
 from typing import Optional
 
@@ -39,11 +39,34 @@ class TelegramNotifier:
             # Формируем красивое сообщение
             message = self._format_new_contact_message(notification)
 
+            # Создаем inline клавиатуру с кнопками
+            keyboard = None
+            if notification.contact_id:
+                keyboard = InlineKeyboardMarkup([
+                    [
+                        InlineKeyboardButton(
+                            "✅ Обработано",
+                            callback_data=f"processed:{notification.contact_id}"
+                        ),
+                        InlineKeyboardButton(
+                            "🔔 Завтра",
+                            callback_data=f"tomorrow:{notification.contact_id}"
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            "👀 Открыть в админке",
+                            url="https://s-n-r.ru/admin/contacts"
+                        )
+                    ]
+                ])
+
             # Отправляем сообщение
             await self.bot.send_message(
                 chat_id=self.chat_id,
                 text=message,
-                parse_mode='HTML'
+                parse_mode='HTML',
+                reply_markup=keyboard
             )
 
             logger.info(f"Уведомление отправлено в Telegram для: {notification.name}")
@@ -93,12 +116,6 @@ class TelegramNotifier:
         if notification.timestamp:
             message_parts.append(f"🕐 <b>Получена:</b> {notification.timestamp}")
 
-        # Добавляем ссылку на админку
-        if notification.contact_id:
-            admin_url = f"https://s-n-r.ru/admin/contacts"
-            message_parts.append("")
-            message_parts.append(f"<a href='{admin_url}'>📊 Открыть в админке</a>")
-
         return "\n".join(message_parts)
 
     async def send_reminder_notification(self, contact_name: str, phone: str, note: str) -> bool:
@@ -133,4 +150,42 @@ class TelegramNotifier:
 
         except TelegramError as e:
             logger.error(f"Ошибка при отправке напоминания: {str(e)}")
+            return False
+
+    async def remove_buttons_from_message(self, chat_id: str, message_id: int, success_text: str) -> bool:
+        """
+        Убрать кнопки из сообщения после обработки и добавить текст о результате
+
+        Args:
+            chat_id: ID чата
+            message_id: ID сообщения
+            success_text: Текст успешного выполнения действия
+
+        Returns:
+            bool: True если успешно
+        """
+        try:
+            # Получаем текущее сообщение
+            message = await self.bot.edit_message_reply_markup(
+                chat_id=chat_id,
+                message_id=message_id,
+                reply_markup=None  # Убираем кнопки
+            )
+
+            # Добавляем текст о результате к оригинальному сообщению
+            current_text = message.text if hasattr(message, 'text') else ""
+            new_text = f"{current_text}\n\n{success_text}"
+
+            await self.bot.edit_message_text(
+                chat_id=chat_id,
+                message_id=message_id,
+                text=new_text,
+                parse_mode='HTML'
+            )
+
+            logger.info(f"Кнопки убраны из сообщения {message_id}")
+            return True
+
+        except TelegramError as e:
+            logger.error(f"Ошибка при редактировании сообщения: {str(e)}")
             return False
