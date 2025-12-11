@@ -68,6 +68,21 @@ func main() {
 			}
 			return t.In(loc).Format("02.01.2006 15:04")
 		},
+		"translateProjectType": func(projectType string) string {
+			translations := map[string]string{
+				"indoor":       "Внутренние LED экраны",
+				"outdoor":      "Наружные LED экраны",
+				"rental":       "Аренда оборудования",
+				"service":      "Техническое обслуживание",
+				"repair":       "Ремонт LED экранов",
+				"consultation": "Консультация",
+			}
+			if translated, ok := translations[projectType]; ok {
+				return translated
+			}
+			// Если тип не найден, возвращаем как есть
+			return projectType
+		},
 		"add": func(a, b int) int { return a + b },
 		"primaryImage": func(images []models.Image) models.Image {
 			// Ищем главное изображение (is_primary = true)

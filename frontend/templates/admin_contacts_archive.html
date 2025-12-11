@@ -70,7 +70,7 @@
                         </td>
 
                         <td>{{.Company}}</td>
-                        <td>{{.ProjectType}}</td>
+                        <td>{{translateProjectType .ProjectType}}</td>
 
                         <td class="date-cell">{{fmtTime .CreatedAt}}</td>
 
@@ -83,7 +83,7 @@
                         data-phone="{{.Phone}}"
                         data-email="{{.Email}}"
                         data-company="{{.Company}}"
-                        data-type="{{.ProjectType}}"
+                        data-type="{{translateProjectType .ProjectType}}"
                         data-message="{{.Message}}"
                         data-date="{{fmtTime .CreatedAt}}"
                         {{with .ArchivedAt}}data-archived='{{.Format "02.01.2006 15:04"}}'{{else}}data-archived=''{{end}}

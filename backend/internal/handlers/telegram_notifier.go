@@ -11,6 +11,23 @@ import (
 	"time"
 )
 
+// translateProjectType переводит тип проекта с английского на русский
+func translateProjectType(projectType string) string {
+	translations := map[string]string{
+		"indoor":       "Внутренние LED экраны",
+		"outdoor":      "Наружные LED экраны",
+		"rental":       "Аренда оборудования",
+		"service":      "Техническое обслуживание",
+		"repair":       "Ремонт LED экранов",
+		"consultation": "Консультация",
+	}
+	if translated, ok := translations[projectType]; ok {
+		return translated
+	}
+	// Если тип не найден, возвращаем как есть
+	return projectType
+}
+
 // TelegramNotification представляет структуру данных для отправки в Telegram бот
 type TelegramNotification struct {
 	Name        string `json:"name"`
@@ -38,7 +55,7 @@ func SendTelegramNotification(contact *models.ContactForm) {
 		Phone:       contact.Phone,
 		Email:       contact.Email,
 		Company:     contact.Company,
-		ProjectType: contact.ProjectType,
+		ProjectType: translateProjectType(contact.ProjectType),
 		Message:     contact.Message,
 		ContactID:   contact.ID,
 		Timestamp:   time.Now().Format("02.01.2006 15:04"),
