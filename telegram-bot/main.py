@@ -11,6 +11,7 @@ import asyncio
 from telegram.ext import Application, CallbackQueryHandler
 from bot import TelegramNotifier
 from callback_handler import CallbackHandler
+from reminder_checker import ReminderChecker
 from config import settings
 
 # Настройка логирования
@@ -36,6 +37,15 @@ notifier = TelegramNotifier(
 # Инициализация обработчика callback queries
 # Backend URL - localhost т.к. Go и Python работают на одном сервере
 callback_handler = CallbackHandler(backend_url="http://127.0.0.1:8080")
+
+# Инициализация проверщика напоминаний
+# Проверка каждые 5 минут (300 секунд)
+reminder_checker = ReminderChecker(
+    bot=notifier.bot,
+    chat_id=settings.TELEGRAM_CHAT_ID,
+    backend_url="http://127.0.0.1:8080",
+    check_interval=300  # 5 минут
+)
 
 # Глобальная переменная для Telegram Application
 telegram_app = None
@@ -75,11 +85,18 @@ async def startup_event():
 
     logger.info("✓ Telegram bot запущен и слушает callback queries")
 
+    # Запускаем проверку напоминаний
+    await reminder_checker.start()
+    logger.info("✓ Проверка напоминаний запущена (интервал: 5 минут)")
+
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Остановка Telegram бота при остановке FastAPI"""
     global telegram_app
+
+    # Останавливаем проверку напоминаний
+    await reminder_checker.stop()
 
     if telegram_app:
         logger.info("Остановка Telegram bot...")

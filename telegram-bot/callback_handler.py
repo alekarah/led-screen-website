@@ -89,12 +89,11 @@ class CallbackHandler:
                 status_response.raise_for_status()
 
                 # Добавляем системную заметку
-                now = datetime.now().strftime("%d.%m.%Y %H:%M")
                 note_response = await client.post(
                     f"{self.backend_url}/api/telegram/add-note",
                     json={
                         "contact_id": contact_id,
-                        "text": f"Обработано через Telegram {now}",
+                        "text": "Обработано",
                         "author": "Telegram Bot"
                     },
                     timeout=10.0
@@ -111,7 +110,7 @@ class CallbackHandler:
                     ]
                 ])
 
-                success_text = f"✅ <b>Обработано через Telegram</b> ({now})"
+                success_text = "✅ <b>Обработано</b>"
                 await query.edit_message_text(
                     text=query.message.text + "\n\n" + success_text,
                     parse_mode='HTML',
