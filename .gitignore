@@ -106,3 +106,9 @@ migrations/*.sql
 # Общее
 *.old
 *.orig
+
+# Telegram Bot
+telegram-bot/.env
+telegram-bot/venv/
+telegram-bot/__pycache__/
+telegram-bot/*.pyc

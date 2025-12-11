@@ -303,7 +303,8 @@ func (h *Handlers) SubmitContact(c *gin.Context) {
 		return
 	}
 
-	// TODO: Отправка email уведомления
+	// Отправляем уведомление в Telegram (асинхронно, не блокируем ответ пользователю)
+	SendTelegramNotificationAsync(&form)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.",

@@ -67,6 +67,12 @@
 - **CSS переменные** для темизации
 - **Fetch API** для взаимодействия с backend
 
+### Telegram Bot (Python)
+- **Python 3.x** - язык для Telegram бота
+- **FastAPI** - веб-фреймворк для API
+- **python-telegram-bot** - библиотека для Telegram Bot API
+- **Uvicorn** - ASGI сервер
+
 ### База данных
 - **PostgreSQL 15** - основная БД
 - **pgAdmin** - для администрирования
@@ -166,6 +172,7 @@ led-screen-website/
 ├── frontend/
 │   ├── static/            # CSS, JS, images, uploads
 │   └── templates/         # HTML шаблоны (Go templates)
+├── telegram-bot/          # Python Telegram уведомления
 ├── deployment/            # Production deployment
 │   ├── led-website.service  # systemd service file
 │   ├── deploy.sh          # Automated deployment script

@@ -1,0 +1,143 @@
+# Telegram Notification Bot
+
+Сервис для отправки уведомлений о новых заявках с сайта в Telegram.
+
+## 📂 Структура
+
+```
+telegram-bot/
+├── main.py              # FastAPI приложение (API endpoints)
+├── bot.py               # Telegram bot логика (отправка сообщений)
+├── config.py            # Конфигурация (настройки из .env)
+├── requirements.txt     # Python зависимости
+├── .env.example         # Пример файла с настройками
+└── README.md            # Документация
+```
+
+## Архитектура
+
+- **FastAPI** - веб-сервер с API endpoint
+- **python-telegram-bot** - библиотека для работы с Telegram Bot API
+- Работает на `localhost:5000` (не доступен из интернета)
+- Go backend делает HTTP POST запросы для отправки уведомлений
+
+## Установка
+
+### 1. Создание .env файла
+
+```bash
+cp .env.example .env
+```
+
+Заполните `.env` своими данными:
+- `TELEGRAM_BOT_TOKEN` - токен от BotFather
+- `TELEGRAM_CHAT_ID` - ID вашего чата
+
+### 2. Установка зависимостей
+
+```bash
+cd telegram-bot
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# или
+venv\Scripts\activate  # Windows
+
+pip install -r requirements.txt
+```
+
+### 3. Запуск (локально для тестирования)
+
+```bash
+python main.py
+```
+
+Сервер запустится на `http://127.0.0.1:5000`
+
+## API Endpoints
+
+### POST /api/send-notification
+
+Отправить уведомление о новой заявке.
+
+**Request Body:**
+```json
+{
+  "name": "Иван Иванов",
+  "phone": "+7 921 123-45-67",
+  "email": "ivan@example.com",
+  "company": "ООО Рога и копыта",
+  "project_type": "Интерьерный экран",
+  "message": "Нужен экран 3x2м",
+  "contact_id": 123,
+  "timestamp": "2025-12-11 14:30"
+}
+```
+
+**Response:**
+```json
+{
+  "status": "success",
+  "message": "Notification sent successfully"
+}
+```
+
+### GET /health
+
+Проверка работоспособности сервиса.
+
+## Production Deployment
+
+### systemd Service
+
+Создать файл `/etc/systemd/system/telegram-bot.service`:
+
+```ini
+[Unit]
+Description=LED Screen Telegram Notification Bot
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/led-website/telegram-bot
+Environment="PATH=/opt/led-website/telegram-bot/venv/bin"
+ExecStart=/opt/led-website/telegram-bot/venv/bin/python main.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Запуск:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable telegram-bot
+sudo systemctl start telegram-bot
+sudo systemctl status telegram-bot
+```
+
+## Тестирование
+
+```bash
+# Проверка healthcheck
+curl http://localhost:5000/health
+
+# Тестовая отправка уведомления
+curl -X POST http://localhost:5000/api/send-notification \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Test User",
+    "phone": "+7 123 456-78-90",
+    "message": "Test notification"
+  }'
+```
+
+## Логи
+
+```bash
+# Просмотр логов systemd
+sudo journalctl -u telegram-bot -f
+
+# Или если запущено напрямую - логи выводятся в консоль
+```
