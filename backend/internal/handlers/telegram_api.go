@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"ledsite/internal/models"
@@ -38,33 +37,6 @@ type DueReminderResponse struct {
 	Company     string `json:"company,omitempty"`
 	ProjectType string `json:"project_type,omitempty"`
 	RemindAt    string `json:"remind_at"` // время напоминания
-}
-
-// telegramAuthMiddleware проверяет что запрос пришел от Telegram бота (localhost)
-// В production можно добавить проверку секретного токена
-func telegramAuthMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Проверяем что запрос с localhost
-		clientIP := c.ClientIP()
-		if clientIP != "127.0.0.1" && clientIP != "::1" {
-			jsonErr(c, http.StatusForbidden, "Доступ запрещен")
-			c.Abort()
-			return
-		}
-
-		// Опционально: проверка секретного токена
-		expectedToken := os.Getenv("TELEGRAM_API_SECRET")
-		if expectedToken != "" {
-			token := c.GetHeader("X-Telegram-Token")
-			if token != expectedToken {
-				jsonErr(c, http.StatusUnauthorized, "Неверный токен")
-				c.Abort()
-				return
-			}
-		}
-
-		c.Next()
-	}
 }
 
 // TelegramUpdateStatus обновляет статус контакта по запросу от Telegram бота

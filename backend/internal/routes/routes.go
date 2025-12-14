@@ -63,10 +63,10 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		// Telegram Bot API - доступ только с localhost (127.0.0.1)
 		telegram := api.Group("/telegram")
 		{
-			telegram.POST("/update-status", h.TelegramUpdateStatus)       // Изменить статус заявки
-			telegram.POST("/add-note", h.TelegramAddNote)                 // Добавить заметку
-			telegram.POST("/set-reminder", h.TelegramSetReminder)         // Установить напоминание
-			telegram.GET("/due-reminders", h.TelegramGetDueReminders)     // Получить напоминания к отправке
+			telegram.POST("/update-status", h.TelegramUpdateStatus)          // Изменить статус заявки
+			telegram.POST("/add-note", h.TelegramAddNote)                    // Добавить заметку
+			telegram.POST("/set-reminder", h.TelegramSetReminder)            // Установить напоминание
+			telegram.GET("/due-reminders", h.TelegramGetDueReminders)        // Получить напоминания к отправке
 			telegram.POST("/mark-reminder-sent", h.TelegramMarkReminderSent) // Пометить напоминание как отправленное
 		}
 	}
