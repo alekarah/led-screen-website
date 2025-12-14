@@ -14,15 +14,21 @@ go test ./... -v -cover -coverprofile=coverage.out # С покрытием
 go test ./internal/handlers -run TestGetProjects -v # Конкретный тест
 ```
 
-**Покрытие: 22 unit теста**
+**Покрытие: 75 unit тестов (36% покрытие кода)**
 - ✅ **Middleware (JWT)** - 100% (6 тестов)
 - ✅ **Handlers (API)** - основные endpoints (9 тестов)
+- ✅ **Admin CRM Actions** - управление заявками, заметки, напоминания (30 тестов)
+- ✅ **Admin Projects CRUD** - создание, редактирование, удаление проектов (14 тестов)
+- ✅ **Telegram API** - интеграция с Telegram ботом (12 тестов)
 - ✅ **SEO** - sitemap.xml, robots.txt, HTTPS (7 тестов)
 
 **Что тестируется:**
-- API: GetProjects, SubmitContact, TrackProjectView (пагинация, валидация)
-- SEO: HTTPS для production, X-Forwarded-Proto, корректность форматов
-- Auth: валидные/невалидные/истекшие токены, редиректы
+- **Public API:** GetProjects, SubmitContact, TrackProjectView (пагинация, валидация)
+- **Admin CRM:** UpdateContactStatus, BulkUpdateContacts, ArchiveContact, RestoreContact, DeleteContact, заметки, напоминания (security tests)
+- **Admin Projects:** CreateProject (slug generation), GetProject, UpdateProject (many-to-many categories), DeleteProject (cascade, transactions)
+- **Telegram Integration:** update status, add note, set reminder, due reminders, mark sent
+- **SEO:** HTTPS для production, X-Forwarded-Proto, корректность форматов
+- **Auth:** валидные/невалидные/истекшие токены, редиректы
 
 ---
 
@@ -113,15 +119,15 @@ go build main.go  # Смотрите вывод ошибки
 ## 📈 Статистика и планы
 
 **Текущее состояние:**
-- ✅ 22 unit теста (Middleware 100%, SEO полное, Handlers основные)
+- ✅ 75 unit тестов (Middleware 100%, Admin CRM 73-87%, Admin Projects 50-88%, Telegram API покрыт)
 - ✅ 14 smoke tests
 - ✅ CI/CD pipeline (GitHub Actions + Codecov)
 - ✅ SEO HTTPS оптимизировано для Google/Yandex
-- ⚠️ Общее покрытие: ~7%
+- ✅ Общее покрытие: 36% (было 7%, улучшено в 5 раз)
 
 **Планы улучшений:**
-- 🎯 Handlers покрытие → 80%+
-- 🎯 Integration тесты (database CRUD)
+- 🎯 Handlers покрытие → 50%+ (достигнуто: admin_actions 73-87%, admin_projects 50-88%)
+- 🎯 Integration тесты (database CRUD) - частично покрыто в admin tests
 - 🎯 E2E тесты (Playwright/Cypress для админ-панели)
 - 🎯 Performance тесты (k6, Go benchmarks)
 
