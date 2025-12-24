@@ -29,7 +29,7 @@
 .form-group :is(input, textarea, select):focus{
   outline:none;
   border-color:var(--p-brand);
-  box-shadow:0 0 0 3px rgba(102,126,234,.1);
+  box-shadow:0 0 0 3px rgba(74,144,226,.1);
 }
 
 /* Placeholder */
@@ -98,7 +98,7 @@
 }
 .btn-large:hover{
   transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(102,126,234,.3);
+  box-shadow:0 4px 12px rgba(74,144,226,.3);
 }
 .btn-large:active{ transform:translateY(0); }
 .btn-large:disabled{

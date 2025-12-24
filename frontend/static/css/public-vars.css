@@ -1,8 +1,8 @@
 /* ========== Public design tokens ========== */
 :root {
   /* Бренд */
-  --p-brand: #667eea;
-  --p-brand-2: #764ba2;
+  --p-brand: #4A90E2;
+  --p-brand-2: #20B2AA;
 
   /* Текст */
   --p-text-900: #111827;

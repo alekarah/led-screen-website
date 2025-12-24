@@ -190,18 +190,24 @@ footer { flex-shrink: 0; }
 }
 
 .btn:active{ transform: translateY(1px); }
-.btn:hover { background: #5567d7; }
+.btn:hover { background: var(--p-brand-2); }
 .btn-primary { background: var(--p-brand); }
 .btn-secondary { background: #6c757d; }
 .btn-success { background: var(--p-success); }
 .btn-danger { background: #dc3545; }
 
-.btn-hero { 
-    background: #ff6b6b; 
+.btn-hero {
+    background: white;
+    color: #333;
     font-size: 20px;
     padding: 1rem 2rem;
+    border: 2px solid white;
 }
-.btn-hero:hover { background: #ee5a5a; }
+.btn-hero:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.5);
+}
 
 /* Убираем outline при клике мышкой, но оставляем при навигации клавиатурой (Tab) */
 .btn:focus,

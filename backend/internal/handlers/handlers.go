@@ -87,7 +87,7 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		"ogTitle":       "S'n'R - Продажа и обслуживание LED дисплеев",
 		"ogDescription": "Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Портфолио проектов. Гарантия качества.",
 		"ogUrl":         "/",
-		"ogImage":       "https://s-n-r.ru/static/images/og-preview.jpg",
+		"ogImage":       "https://s-n-r.ru/static/images/og-preview.png",
 		"projects":      featuredProjects,
 		"services":      services,
 		"PageID":        "home",

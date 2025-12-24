@@ -12,7 +12,7 @@
     right: -10%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(74, 144, 226, 0.08) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
 }
@@ -467,13 +467,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
 }
 
 .btn-toggle-faq:hover {
     background: var(--p-brand-2);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
 }
 
 .btn-toggle-faq .toggle-icon {
@@ -499,19 +499,19 @@
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 0.5rem;
+    margin-top: 0.2rem;
     background: white;
-    border: 2px solid var(--p-brand);
     border-radius: 12px;
     padding: 1.5rem;
     min-width: 280px;
     max-width: 320px;
-    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.25);
+    box-shadow: 0 10px 40px rgba(74, 144, 226, 0.25);
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transform: translateX(-50%) translateY(-10px);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transition-delay: 0s;
     pointer-events: none;
 }
 
@@ -520,12 +520,19 @@
     visibility: visible;
     transform: translateX(-50%) translateY(0);
     pointer-events: auto;
+    transition-delay: 0s;
 }
 
 .nav-dropdown-toc:hover {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    transition-delay: 0s;
+}
+
+/* Задержка перед исчезновением при уходе мыши */
+.nav-item-with-dropdown .nav-dropdown-toc {
+    transition-delay: 0.6s;
 }
 
 .toc-dropdown-title {
@@ -556,13 +563,11 @@
     border-radius: 6px;
     font-size: 0.9rem;
     transition: all 0.2s ease;
-    border-left: 3px solid transparent;
 }
 
 .toc-dropdown-link:hover {
     background: var(--p-brand);
     color: white !important;
-    border-left-color: var(--p-brand-2);
     transform: translateX(3px);
 }
 
@@ -582,7 +587,7 @@
     background: linear-gradient(90deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     z-index: 9999;
     transition: width 0.1s ease-out;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.4);
 }
 
 .advantages-toggle-wrapper {
@@ -604,13 +609,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
 }
 
 .btn-toggle-advantages:hover {
     background: var(--p-brand-2);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
 }
 
 .btn-toggle-advantages .toggle-icon {
@@ -640,7 +645,7 @@
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
     z-index: 1000;
 }
 
@@ -652,7 +657,7 @@
 .back-to-top:hover {
     background: var(--p-brand-2);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
 }
 
 .back-to-top svg {

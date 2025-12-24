@@ -50,11 +50,11 @@
     background: linear-gradient(
         120deg,
         rgba(255,255,255, 0)   35%,
-        rgba(255,255,255, .22) 50%,          /* ярче блика */
+        rgba(255,255,255, .5)  50%,          /* более яркий блик */
         rgba(255,255,255, 0)   65%
     );
-    filter: blur(2px);
-    opacity: .8;
+    filter: blur(6px);
+    opacity: 1;
     animation: led-sweep-alt 7.2s ease-in-out infinite alternate;
     will-change: transform, opacity;
     z-index: 0;

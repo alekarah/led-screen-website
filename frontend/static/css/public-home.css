@@ -49,51 +49,13 @@ body:has(.hero) .main-content {
     color: var(--p-text-700);
 }
 
-/* Пирамидальная компоновка 2-3 */
-.home-services .services-pyramid {
-    display: flex;
-    flex-direction: column;
+/* Сетка 2x2 для услуг */
+.home-services .services-grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
-}
-
-.home-services .services-row {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    align-items: stretch; /* Все карточки одной высоты */
-}
-
-/* Верхний ряд: 2 карточки (крупнее) */
-.home-services .services-row-top .service-card {
-    flex: 0 1 450px;
-    max-width: 450px;
-    min-width: 320px;
-}
-
-/* Нижний ряд: 3 карточки (стандарт) */
-.home-services .services-row-bottom .service-card {
-    flex: 0 1 350px;
-    max-width: 350px;
-    min-width: 280px;
-}
-
-/* Карточки внутри рядов растягиваются на всю высоту ряда */
-.home-services .services-row .service-card {
-    height: auto; /* Позволяем stretch работать естественно */
-    min-height: 0; /* Сбрасываем min-height чтобы stretch работал */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Параграф в карточках услуг растягивается, кнопка прижимается к низу */
-.home-services .services-row .service-card p {
-    flex-grow: 1;
-}
-
-.home-services .services-row .service-card .service-btn {
-    margin-top: auto;
 }
 
 .service-card {
@@ -143,10 +105,9 @@ body:has(.hero) .main-content {
 }
 .service-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+    box-shadow: 0 4px 12px rgba(74,144,226,0.3);
     color: white;
 }
-.service-btn-secondary { background: linear-gradient(90deg, #ff6b6b, #ee5a5a); }
 
 /* Проекты на главной странице */
 .projects { padding: 0 0 3rem 0; }
@@ -268,7 +229,7 @@ body:has(.hero) .main-content {
 
 .home-project-card .project-detail-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
     color: white;
     text-decoration: none;
 }
@@ -282,7 +243,7 @@ body:has(.hero) .main-content {
     border: none;
     padding: 0.7em 1.2em;
     border-radius: 26px;
-    box-shadow: 0 2px 18px rgba(102,126,234,0.11);
+    box-shadow: 0 2px 18px rgba(74,144,226,0.11);
     transition: background 0.25s, transform 0.17s;
     margin-top: 2.5rem;
     text-decoration: none;

@@ -148,7 +148,7 @@
 
 .project-detail-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
     color: white;
     text-decoration: none;
 }
@@ -343,7 +343,7 @@ body.modal-open { overflow: hidden; }
 .project-detail-btn:focus-visible {
   outline: none;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
   color: #fff;
   text-decoration: none;
 }
@@ -378,7 +378,7 @@ body.modal-open { overflow: hidden; }
   border: none !important;
   padding: 0.9em 2.1em;
   border-radius: 26px;
-  box-shadow: 0 2px 18px rgba(102,126,234,0.11);
+  box-shadow: 0 2px 18px rgba(74,144,226,0.11);
   transition: background 0.25s, transform 0.17s, box-shadow 0.25s;
   cursor: pointer;
   text-decoration: none;

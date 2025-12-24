@@ -31,7 +31,7 @@
 
 .service-card.featured {
     border-color: var(--p-brand);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 8px 25px rgba(74, 144, 226, 0.15);
 }
 .service-card.featured:hover { border-color: color-mix(in oklab, var(--p-brand), white 20%); }
 .service-card.featured::before {
@@ -224,7 +224,7 @@
     font-size: 1.5rem;
     font-weight: bold;
     margin: 0 auto 1rem;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
 }
 
 /* === Wave подсветка цифр в "Как мы работаем" === */
@@ -253,21 +253,21 @@
 @keyframes glowPulse {
   0% {
     box-shadow:
-      0 0 0 rgba(102,126,234,0),
-      0 4px 15px rgba(102,126,234,.30);
-    filter: drop-shadow(0 0 0 rgba(118,75,162,0));
+      0 0 0 rgba(74,144,226,0),
+      0 4px 15px rgba(74,144,226,.30);
+    filter: drop-shadow(0 0 0 rgba(32,178,170,0));
   }
   50% {
     box-shadow:
-      0 0 18px rgba(102,126,234,.55),
-      0 8px 26px rgba(118,75,162,.45);
+      0 0 18px rgba(74,144,226,.55),
+      0 8px 26px rgba(32,178,170,.45);
     filter: drop-shadow(0 0 8px rgba(255,240,180,.45));
   }
   100% {
     box-shadow:
-      0 0 0 rgba(102,126,234,0),
-      0 4px 15px rgba(102,126,234,.30);
-    filter: drop-shadow(0 0 0 rgba(118,75,162,0));
+      0 0 0 rgba(74,144,226,0),
+      0 4px 15px rgba(74,144,226,.30);
+    filter: drop-shadow(0 0 0 rgba(32,178,170,0));
   }
 }
 

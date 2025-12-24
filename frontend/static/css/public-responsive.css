@@ -471,20 +471,9 @@
   }
 
   /* Услуги на главной - одна колонка (мобильные) */
-  .home-services .services-pyramid {
+  .home-services .services-grid-2x2 {
+    grid-template-columns: 1fr;
     max-width: 600px;
-  }
-
-  .home-services .services-row {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .home-services .services-row-top .service-card,
-  .home-services .services-row-bottom .service-card {
-    flex: 1 1 auto;
-    max-width: 600px;
-    width: 100%;
   }
 
   /* Уменьшаем min-height для мобильных */
@@ -744,12 +733,7 @@
   }
 
   /* Карточки услуг на главной - 100% ширины */
-  .home-services .services-pyramid {
-    max-width: 100%;
-  }
-
-  .home-services .services-row-top .service-card,
-  .home-services .services-row-bottom .service-card {
+  .home-services .services-grid-2x2 {
     max-width: 100%;
   }
 }
@@ -767,7 +751,7 @@
   }
 
   /* Услуги на главной - одна колонка с уменьшенными отступами */
-  .home-services .services-pyramid {
+  .home-services .services-grid-2x2 {
     gap: 1.5rem;
   }
 
