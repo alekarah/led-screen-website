@@ -17,7 +17,7 @@
   margin: 2rem auto;
   background: var(--p-bg);
   border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.12);
   padding: 2.2rem 2.5rem;
   font-size: 1.12rem;
   line-height: 1.7;
@@ -38,4 +38,15 @@
 }
 .privacy-section .privacy-block li + li {
   margin-top: 0.4rem;
+}
+
+/* Стили ссылок в политике */
+.privacy-section .privacy-block a {
+  color: var(--p-brand-dark);
+  text-decoration: none;
+  font-weight: 600;
+  transition: text-decoration 0.2s ease;
+}
+.privacy-section .privacy-block a:hover {
+  text-decoration: underline;
 }

@@ -140,12 +140,6 @@
     max-width: 300px;
   }
 
-  /* Услуги */
-  .services-grid {
-    grid-template-columns: repeat(2, minmax(280px, 1fr));
-    gap: 1.75rem;
-  }
-
   /* Приватность */
   .privacy-section .container {
     max-width: 98vw;
@@ -750,6 +744,10 @@
     grid-template-columns: 1fr !important;
   }
 
+  .main-content {
+    margin-top: 80px;
+  }
+
   /* Услуги на главной - одна колонка с уменьшенными отступами */
   .home-services .services-grid-2x2 {
     gap: 1.5rem;
@@ -806,33 +804,88 @@
   /* Лого и навигация */
   .logo-icon { height: 24px; width: 18px; }
   .logo-text { font-size: 1.45rem; }
-  .nav-container { padding: 0 .75rem; }
+  .nav-container {
+    padding: 0 1.5rem;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 0;
+  }
 
-  /* Меню в две строки: первые 3 пункта, затем последние 2 */
+  /* Логотип остается слева */
+  .logo {
+    order: 1;
+    margin-right: 0;
+  }
+
+  /* Показываем кнопку бургера на мобилке справа */
+  .burger-menu {
+    display: flex;
+    order: 3;
+    margin-left: auto;
+  }
+
+  /* Мобильное меню - выезжает справа */
   .nav-links {
-    gap: 0 0.75rem;
-    justify-content: center;
-    max-width: 100%;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 50%;
+    max-width: 300px;
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
+    flex-direction: column;
+    gap: 0;
+    padding: 80px 0 20px 0;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.24);
+    overflow-y: auto;
+    z-index: 999;
+    order: 2;
   }
 
-  /* Все пункты нормального размера */
+  /* Открытое меню */
+  .nav-links.active {
+    right: 0;
+  }
+
+  /* Пункты меню */
   .nav-links li {
-    flex: 0 0 auto;
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
   }
 
-  /* Используем order для управления порядком */
-  .nav-links li:nth-child(1) { order: 1; }
-  .nav-links li:nth-child(2) { order: 2; }
-  .nav-links li:nth-child(3) { order: 3; }
-  .nav-links li:nth-child(4) { order: 5; }
-  .nav-links li:nth-child(5) { order: 6; }
+  .nav-links a {
+    display: block;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+  }
 
-  /* Добавляем invisible элемент для переноса строки после 3-го пункта */
+  /* Убираем order и псевдоэлемент */
+  .nav-links li:nth-child(1) { order: initial; }
+  .nav-links li:nth-child(2) { order: initial; }
+  .nav-links li:nth-child(3) { order: initial; }
+  .nav-links li:nth-child(4) { order: initial; }
+  .nav-links li:nth-child(5) { order: initial; }
+
   .nav-links::before {
+    display: none;
+  }
+
+  /* Оверлей для закрытия меню */
+  body.menu-open::before {
     content: '';
-    flex-basis: 100%;
-    height: 0;
-    order: 4;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
+  }
+
+  /* Блокируем скролл при открытом меню */
+  body.menu-open {
+    overflow: hidden;
   }
 
   /* Контейнеры / отступы */
@@ -926,7 +979,10 @@
 
   /* Услуги */
  .services-main { padding: 1rem 0 1.5rem; }
-  .service-card { padding: 1rem;}
+  .service-card { 
+    padding: 1rem;
+    min-height: 100px;
+  }
   .service-price {
     font-size: 1.1rem;
     padding: 0.75rem;
@@ -1151,5 +1207,13 @@
     min-height: 50px !important;
     padding: 1rem 1.5rem !important;
     font-size: 0.9rem !important;
+  }
+}
+
+/* Компенсация для высокого DPR (Windows масштабирование 125%, 150%) */
+@media screen and (-webkit-min-device-pixel-ratio: 1.25),
+       screen and (min-resolution: 120dpi) {
+  html {
+    font-size: 80%; /* Уменьшаем базовый размер шрифта для компенсации масштабирования */
   }
 }

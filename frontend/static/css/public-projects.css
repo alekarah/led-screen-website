@@ -12,8 +12,8 @@
 .filter-btn {
     padding: 0.7rem 1.5rem;
     background: white;
-    border: 2px solid var(--p-brand);
-    color: var(--p-brand);
+    border: 2px solid var(--p-brand-dark);
+    color: var(--p-brand-dark);
     border-radius: 25px;
     text-decoration: none;
     display: flex;
@@ -29,7 +29,7 @@
 
 .filter-btn:hover,
 .filter-btn.active {
-    background: var(--p-brand);
+    background: var(--p-brand-dark);
     color: white;
 }
 
@@ -46,7 +46,7 @@
     background: white;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
     transition: transform 0.3s, box-shadow 0.3s;
     width: 350px;
     max-width: 100%;
@@ -60,7 +60,7 @@
 .public-project-card:hover,
 .public-project-card:focus-within {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
 }
 
 /* Изображения проектов */
@@ -104,7 +104,7 @@
 
 .public-project-content .project-size {
     font-size: 1rem;
-    color: var(--p-brand);
+    color: var(--p-brand-dark);
     font-weight: 600;
     margin-bottom: 1rem;
     min-height: 1.5rem;
@@ -135,8 +135,8 @@
 /* Кнопка "Подробнее" */
 .project-detail-btn {
     display: inline-block;
-    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
-    color: white;
+    background: var(--p-brand);
+    color: #333;
     padding: 0.7rem 1.5rem;
     text-decoration: none;
     border-radius: 25px;
@@ -147,9 +147,10 @@
 }
 
 .project-detail-btn:hover {
+    background: var(--p-brand-2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
-    color: white;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.36);
+    color: #333;
     text-decoration: none;
 }
 
@@ -183,7 +184,7 @@
     max-height: 90vh;
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    box-shadow: 0 20px 60px rgba(0,0,0,.30);
     overflow: hidden;
     display: grid;
     grid-template-columns: 58% 42%;
@@ -275,7 +276,7 @@
 }
 
 .project-modal__specs {
-    color: var(--p-brand);
+    color: var(--p-brand-dark);
     font-weight: 700;
     margin-bottom: .6rem;
     font-size: 1rem;
@@ -293,9 +294,16 @@
     margin-bottom: .75rem;
 }
 
-/* Кнопка в модалке - прижата к низу */
+/* Кнопка в модалке - с градиентом */
 .project-modal__body .project-detail-btn {
     margin-top: auto;
+    background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%);
+    color: #333;
+}
+
+.project-modal__body .project-detail-btn:hover {
+    background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%);
+    color: #333;
 }
 
 /* Кнопка закрытия */
@@ -343,7 +351,7 @@ body.modal-open { overflow: hidden; }
 .project-detail-btn:focus-visible {
   outline: none;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.36);
   color: #fff;
   text-decoration: none;
 }
@@ -372,13 +380,13 @@ body.modal-open { overflow: hidden; }
 
 .load-more-btn {
   background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
-  color: #fff !important;
+  color: #333 !important;
   font-size: 1.1rem;
   font-weight: 600;
   border: none !important;
   padding: 0.9em 2.1em;
   border-radius: 26px;
-  box-shadow: 0 2px 18px rgba(74,144,226,0.11);
+  box-shadow: 0 2px 18px rgba(74,144,226,0.13);
   transition: background 0.25s, transform 0.17s, box-shadow 0.25s;
   cursor: pointer;
   text-decoration: none;
@@ -387,9 +395,9 @@ body.modal-open { overflow: hidden; }
 
 .load-more-btn:hover {
   background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   transform: translateY(-2px) scale(1.04);
-  color: #fff !important;
+  color: #333 !important;
   text-decoration: none;
   border: none !important;
 }

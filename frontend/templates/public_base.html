@@ -306,6 +306,11 @@
                     </a>
                 </li>
             </ul>
+            <button class="burger-menu" aria-label="Открыть меню" aria-expanded="false">
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+            </button>
         </div>
     </nav>
 
@@ -353,6 +358,9 @@
     <script src="/static/js/faq-accordion.js"></script>
     <script src="/static/js/led-guide-navigation.js"></script>
     {{end}}
+
+    <!-- Мобильное меню -->
+    <script src="/static/js/mobile-menu.js" defer></script>
 
     {{block "extra-js" .}}{{end}}
 </body>

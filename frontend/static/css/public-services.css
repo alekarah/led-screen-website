@@ -16,7 +16,7 @@
     background: white;
     border-radius: 15px;
     padding: 2rem;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
     transition: all 0.3s ease;
     position: relative;
     border: 2px solid transparent;
@@ -26,12 +26,13 @@
 
 .service-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+    border-color: var(--p-accent);
 }
 
 .service-card.featured {
     border-color: var(--p-brand);
-    box-shadow: 0 8px 25px rgba(74, 144, 226, 0.15);
+    box-shadow: 0 8px 25px rgba(74, 144, 226, 0.18);
 }
 .service-card.featured:hover { border-color: color-mix(in oklab, var(--p-brand), white 20%); }
 .service-card.featured::before {
@@ -39,8 +40,8 @@
     position: absolute;
     top: -10px;
     right: 20px;
-    background: var(--p-brand);
-    color: white;
+    background: var(--p-accent);
+    color: #333;
     padding: 0.3rem 1rem;
     border-radius: 15px;
     font-size: 0.8rem;
@@ -94,7 +95,7 @@
 .service-price {
     font-size: 1.3rem;
     font-weight: bold;
-    color: var(--p-brand);
+    color: var(--p-brand-dark);
     text-align: center;
     margin-bottom: 1.5rem;
     padding: 1rem;
@@ -139,7 +140,7 @@
     padding: 2rem;
     border-radius: 15px;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
     transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -179,7 +180,7 @@
 
 .screen-specs span {
     background: var(--p-brand);
-    color: white;
+    color: #333;
     padding: 0.3rem 0.8rem;
     border-radius: 15px;
     font-size: 0.9rem;
@@ -216,7 +217,7 @@
     width: 60px;
     height: 60px;
     background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
-    color: white;
+    color: #333;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -224,7 +225,7 @@
     font-size: 1.5rem;
     font-weight: bold;
     margin: 0 auto 1rem;
-    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.36);
 }
 
 /* === Wave подсветка цифр в "Как мы работаем" === */
@@ -247,6 +248,7 @@
 /* акцент при ховере на карточке шага */
 .process-step:hover .step-number {
   transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(135deg, var(--p-accent) 0%, var(--p-brand-2) 100%);
 }
 
 /* ключевые кадры мягкого свечения */
@@ -286,7 +288,7 @@
 /* Секция призыва к действию */
 .cta-section {
     background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
-    color: white;
+    color: #333;
     padding: 4rem 0;
     text-align: center;
 }
@@ -322,4 +324,19 @@
     width: 100%;
     white-space: nowrap;
     padding: 1rem 2rem;
+    background: white;
+    color: #333;
+    font-size: 20px;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.6);
+}
+
+.cta-buttons .btn-secondary:hover {
+    background: var(--p-accent);
+    color: #333;
 }
