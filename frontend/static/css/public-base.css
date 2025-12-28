@@ -242,12 +242,12 @@ footer { flex-shrink: 0; }
     color: #333;
     font-size: 20px;
     padding: 1rem 2rem;
-    border: 2px solid white;
+    border: 2px solid var(--p-accent);
 }
 .btn-hero:hover {
     background: rgba(255, 255, 255, 0.9);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.60);
+    box-shadow: 0 6px 20px rgba(255, 163, 141, 0.60);
 }
 
 /* Убираем outline при клике мышкой, но оставляем при навигации клавиатурой (Tab) */

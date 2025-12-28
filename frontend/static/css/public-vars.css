@@ -1,10 +1,10 @@
 /* ========== Public design tokens ========== */
 :root {
   /* Бренд */
-  --p-brand: #87CEEB;
-  --p-brand-2: #F5DEB3;
-  --p-brand-dark: #4A9FCA; /* тёмный синий для лучшего контраста на белом фоне */
-  --p-accent: #FFA38D; /* коралловый акцент для CTA и бейджей */
+  --p-brand: #87ceeb;
+  --p-brand-2: #f5deb3;
+  --p-brand-dark: #4a9fca;
+  --p-accent: #ffa38d;
 
   /* Текст */
   --p-text-900: #111827;

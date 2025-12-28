@@ -112,13 +112,14 @@ footer {
     margin-bottom: 0.5rem;
     font-weight: 700;
     color: #fff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.36);
+    text-shadow: 0 4px 8px rgba(0,0,0,0.36);
 }
 
 .stat-item p {
     font-size: 1.1rem;
-    color: #333;
+    color: #fff;
     font-weight: 500;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Анимация для статистики */

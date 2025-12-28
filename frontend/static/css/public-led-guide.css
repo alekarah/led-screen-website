@@ -55,11 +55,26 @@
     margin-left: -14rem;
 }
 
-.key-characteristic-item {
-    background: white;
+/* Общие стили для карточек */
+.key-characteristic-item,
+.factor-item,
+.advantage-item {
     padding: 2rem;
     border-radius: 15px;
     border-left: 4px solid var(--p-brand-dark);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+.key-characteristic-item:hover,
+.factor-item:hover,
+.advantage-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Специфичные стили */
+.key-characteristic-item {
+    background: white;
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
@@ -156,9 +171,6 @@
 
 .factor-item {
     background: var(--p-bg-alt);
-    padding: 2rem;
-    border-radius: 15px;
-    border-left: 4px solid var(--p-brand-dark);
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
@@ -225,7 +237,7 @@
     overflow-x: auto;
     margin-bottom: 2rem;
     border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
 }
 
 .comparison-table {
@@ -307,18 +319,9 @@
 
 .advantage-item {
     background: var(--p-bg-alt);
-    padding: 2rem;
-    border-radius: 15px;
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-left: 4px solid var(--p-brand-dark);
     flex: 0 0 360px;
     width: 360px;
-}
-
-.advantage-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
 .advantage-icon {
@@ -575,8 +578,7 @@
 .toc-dropdown-link.active {
     background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
     color: #333 !important;
-    font-weight: normal;
-    text-shadow: none;
+    text-shadow: none !important;
 }
 
 /* Индикатор прогресса чтения */

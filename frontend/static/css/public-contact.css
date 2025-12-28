@@ -16,9 +16,14 @@
     background: white;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+    box-shadow: 0 5px 15px rgba(74, 159, 202, 0.3);
     text-align: center;
     transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.contact-card:hover,
+.contact-card:focus-within {
+    box-shadow: 0 10px 25px rgba(74, 159, 202, 0.4);
 }
 
 .contact-icon {
@@ -53,14 +58,6 @@
     font-style: italic;
     display: block;
     margin-top: 0.5rem;
-}
-
-.contact-card:hover,
-.contact-card:focus-within,
-.info-block:hover,
-.info-block:focus-within {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,.12);
 }
 
 /* Секция формы обратной связи */
@@ -120,7 +117,8 @@
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-    transition: transform .25s ease, box-shadow .25s ease;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    border: 2px solid transparent;
 }
 
 .info-block h3 {
@@ -145,6 +143,13 @@
     font-weight: bold;
     position: absolute;
     left: 0;
+}
+
+.info-block:hover,
+.info-block:focus-within {
+  border-color: var(--p-accent);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .2);
 }
 
 /* Секция "О компании" */

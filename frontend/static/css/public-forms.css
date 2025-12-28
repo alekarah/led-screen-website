@@ -101,9 +101,9 @@
   font-weight:600;
 }
 .btn-large:hover{
-  background:color-mix(in oklab, var(--p-accent), white 15%);
-  transform:translateY(-2px);
-  box-shadow:0 6px 18px rgba(255,163,141,.35);
+  background:var(--p-brand-2);
+  transform:scale(1.05);
+  box-shadow:0 6px 20px rgba(0,0,0,.2);
 }
 .btn-large:active{ transform:translateY(0); }
 .btn-large:disabled{
