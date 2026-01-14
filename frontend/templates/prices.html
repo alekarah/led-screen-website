@@ -29,44 +29,22 @@
                         <p class="price-card-description">{{.PriceItem.Description}}</p>
                         {{end}}
 
-                        {{if .PriceItem.HasSpecifications}}
-                            {{if .GroupedSpecs}}
-                            <div class="price-specs">
-                                <button class="specs-toggle" aria-expanded="false" aria-controls="specs-{{.PriceItem.ID}}">
-                                    <span>Характеристики</span>
-                                    <svg class="specs-toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
-
-                                <div class="specs-content" id="specs-{{.PriceItem.ID}}" hidden>
-                                    <table class="specs-table">
-                                        <tbody>
-                                            {{range .GroupedSpecs}}
-                                            <tr class="spec-group-header">
-                                                <td colspan="2">{{.Group}}</td>
-                                            </tr>
-                                            {{range .Specs}}
-                                            <tr>
-                                                <td class="spec-key">{{.SpecKey}}</td>
-                                                <td class="spec-value">{{.SpecValue}}</td>
-                                            </tr>
-                                            {{end}}
-                                            {{end}}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            {{end}}
-                        {{end}}
-
                         <div class="price-card-footer">
                             <div class="price-amount">
                                 <span class="price-label">от</span>
                                 <span class="price-value">{{formatPrice .PriceItem.PriceFrom}}</span>
                                 <span class="price-currency">₽</span>
                             </div>
-                            <a href="/contact" class="btn btn-primary">Отправить заявку</a>
+                            <button class="price-detail-btn"
+                                    data-price-id="{{.PriceItem.ID}}"
+                                    data-title="{{.PriceItem.Title}}"
+                                    data-description="{{.PriceItem.Description}}"
+                                    data-price-from="{{formatPrice .PriceItem.PriceFrom}}"
+                                    data-image-path="{{if .PriceItem.ThumbnailMediumPath}}{{.PriceItem.ThumbnailMediumPath}}{{else if .PriceItem.ImagePath}}{{.PriceItem.ImagePath}}{{end}}"
+                                    data-has-specs="{{.PriceItem.HasSpecifications}}"
+                                    data-specs='{{if .GroupedSpecs}}{{toJSON .GroupedSpecs}}{{else}}[]{{end}}'>
+                                Подробнее
+                            </button>
                         </div>
                     </div>
                 </div>

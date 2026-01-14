@@ -284,6 +284,17 @@
     background: #111;
   }
 
+  /* Price Modal */
+  .price-modal__dialog {
+    grid-template-columns: 1fr;
+    width: min(760px, 96vw);
+    max-height: 92vh;
+  }
+  .price-modal__media {
+    height: 42vh;
+    background: #111;
+  }
+
   /* LED Guide */
   .advantages-grid {
     padding: 0 1rem;
