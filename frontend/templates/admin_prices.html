@@ -1,0 +1,180 @@
+{{define "admin-prices-content"}}
+<div class="form-section">
+    <button class="btn" id="openCreatePriceModal">Создать позицию прайса</button>
+</div>
+
+<!-- Список позиций прайса -->
+<div class="projects-list">
+    <h2>Позиции прайса</h2>
+    <div id="sortable-prices" class="sortable-list">
+        {{range .PriceItems}}
+        <div class="project-item price-item" data-price-id="{{.ID}}">
+            <div class="project-info">
+                <div class="project-info-flex">
+                    <span class="drag-handle" title="Перетащите для изменения порядка" role="button" aria-label="Перетащить">⋮⋮</span>
+
+                    <!-- Миниатюра позиции -->
+                    <div class="project-thumbnail">
+                        {{if .ThumbnailSmallPath}}
+                            <img src="{{.ThumbnailSmallPath}}" alt="{{.Title}}">
+                        {{else if .ImagePath}}
+                            <img src="{{.ImagePath}}" alt="{{.Title}}">
+                        {{else}}
+                            <div class="no-image">💰</div>
+                        {{end}}
+                    </div>
+
+                    <div>
+                        <h3>{{.Title}}</h3>
+                        <p>{{.Description}}</p>
+                        <p><small>
+                            Цена: от {{.PriceFrom}} ₽ |
+                            Характеристики: {{if .HasSpecifications}}<span class="featured-yes">✓ Да</span>{{else}}<span class="featured-no">Нет</span>{{end}} |
+                            Статус: {{if .IsActive}}<span class="featured-yes">✓ Активна</span>{{else}}<span class="featured-no">Скрыта</span>{{end}}
+                        </small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="project-actions">
+                <button class="btn" onclick="openEditPriceModal({{.ID}})">Редактировать</button>
+                <button class="btn btn-danger" onclick="deletePrice({{.ID}}, '{{.Title}}')">Удалить</button>
+            </div>
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}
+
+{{define "price-modals"}}
+<!-- Модальное окно создания -->
+<div id="createPriceModal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h2>Создать позицию прайса</h2>
+            <span class="close" onclick="closeModal('createPriceModal')">&times;</span>
+        </div>
+        <form id="createPriceForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="createTitle">Название <span class="required">*</span>:</label>
+                <input type="text" id="createTitle" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="createDescription">Описание:</label>
+                <textarea id="createDescription" name="description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="createPriceFrom">Цена от (₽) <span class="required">*</span>:</label>
+                <input type="number" id="createPriceFrom" name="price_from" required min="0" placeholder="250000">
+            </div>
+
+            <div class="checkbox-row">
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="createHasSpecifications" name="has_specifications">
+                        <span>Добавить таблицу характеристик</span>
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="createIsActive" name="is_active" checked>
+                        <span>Активна (отображается на сайте)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Секция характеристик (показывается если галочка выбрана) -->
+            <div id="createSpecificationsBlock" class="specifications-block" style="display: none;">
+                <h3>Характеристики</h3>
+                <div id="createSpecifications"></div>
+                <button type="button" class="btn btn-secondary" id="addCreateSpecGroup">+ Добавить группу</button>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Создать</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createPriceModal')">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно редактирования -->
+<div id="editPriceModal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h2>Редактировать позицию прайса</h2>
+            <span class="close" onclick="closeModal('editPriceModal')">&times;</span>
+        </div>
+        <form id="editPriceForm">
+            <input type="hidden" id="editPriceId">
+
+            <div class="form-group">
+                <label for="editTitle">Название <span class="required">*</span>:</label>
+                <input type="text" id="editTitle" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editDescription">Описание:</label>
+                <textarea id="editDescription" name="description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="editPriceFrom">Цена от (₽) <span class="required">*</span>:</label>
+                <input type="number" id="editPriceFrom" name="price_from" required min="0">
+            </div>
+
+            <div class="checkbox-row">
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editHasSpecifications" name="has_specifications">
+                        <span>Добавить таблицу характеристик</span>
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editIsActive" name="is_active">
+                        <span>Активна (отображается на сайте)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Секция характеристик -->
+            <div id="editSpecificationsBlock" class="specifications-block" style="display: none;">
+                <h3>Характеристики</h3>
+                <div id="editSpecifications"></div>
+                <button type="button" class="btn btn-secondary" id="addEditSpecGroup">+ Добавить группу</button>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('editPriceModal')">Отмена</button>
+            </div>
+        </form>
+
+        <!-- Управление изображением -->
+        <div class="upload-section">
+            <h3>Изображение позиции</h3>
+            <div id="price_images" class="images-grid">
+                <!-- Заполняется динамически -->
+            </div>
+
+            <form id="editPriceImageForm" method="post" enctype="multipart/form-data" class="project-upload-form">
+                <div class="form-group">
+                    <label for="editPriceImages">Добавить изображение:</label>
+                    <input type="file" id="editPriceImages" name="image" accept="image/*">
+                </div>
+                <div class="upload-button-container">
+                    <button type="submit" class="btn">Загрузить</button>
+                    <div id="priceUploadSpinner" class="upload-spinner hidden">
+                        <div class="spinner"></div>
+                        <span>Загрузка изображения...</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{end}}

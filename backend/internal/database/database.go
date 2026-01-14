@@ -136,6 +136,8 @@ func Migrate(db *gorm.DB) error {
 		&models.ContactNote{},
 		&models.ProjectViewDaily{},
 		&models.Admin{},
+		&models.PriceItem{},
+		&models.PriceSpecification{},
 	); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
 	}

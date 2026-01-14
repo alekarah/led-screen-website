@@ -1,0 +1,390 @@
+/* Стили управления ценами в админке */
+
+/* Список позиций */
+.prices-list {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+}
+
+.prices-list h2 {
+    margin: 0 0 1.25rem;
+    color: var(--text-700);
+}
+
+/* Карточка позиции прайса */
+.price-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+    user-select: none;
+    cursor: default;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.price-item:last-child {
+    border-bottom: none;
+}
+
+.price-item:hover {
+    background: var(--hover);
+}
+
+.price-info {
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.price-thumbnail {
+    width: 80px;
+    height: 60px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #f0f0f0;
+}
+
+.price-details {
+    flex: 1;
+}
+
+.price-details h3 {
+    margin: 0 0 0.4rem;
+    color: var(--text-700);
+    font-weight: 600;
+}
+
+.price-details p {
+    margin: 0 0 0.4rem;
+    color: var(--text-500);
+    font-size: 0.9rem;
+}
+
+.price-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.price-amount-badge {
+    font-weight: 700;
+    color: var(--success);
+}
+
+.price-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Drag & Drop */
+.sortable-list {
+    min-height: 200px;
+}
+
+.price-item.sortable-ghost {
+    opacity: 0.45;
+    background: #eef6ff;
+}
+
+.price-item.sortable-chosen {
+    background: #f3f8ff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    animation: dragStart 0.2s ease-out;
+}
+
+@keyframes dragStart {
+    from { transform: scale(1); }
+    to { transform: scale(1.02); }
+}
+
+/* Хэндл перетаскивания */
+.drag-handle {
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    color: #888;
+    cursor: grab;
+    transition: color 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: var(--text-600);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle:focus {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* Бейджи статуса */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Ряд с галочками */
+.checkbox-row {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.checkbox-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Характеристики в модалке */
+.specifications-block {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+}
+
+.spec-group {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+}
+
+.spec-group-header {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.spec-group-name {
+    flex: 1;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.btn-remove-group {
+    color: var(--danger);
+}
+
+.btn-remove-group:hover {
+    background: rgba(220,53,69,0.1);
+}
+
+.spec-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.spec-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.spec-key,
+.spec-value {
+    flex: 1;
+    font-size: 1rem;
+}
+
+.btn-remove-row {
+    color: var(--danger);
+    padding: 0.5rem;
+}
+
+.btn-remove-row:hover {
+    background: rgba(220,53,69,0.1);
+}
+
+/* Превью изображения */
+.image-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: var(--radius);
+}
+
+/* Текущее изображение в редакторе */
+.current-image {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+}
+
+/* Кнопка-иконка */
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--text-600);
+    transition: all 0.2s;
+    border-radius: var(--radius);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background: var(--hover);
+    color: var(--text-700);
+}
+
+.btn-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-icon.btn-danger {
+    color: var(--danger);
+}
+
+.btn-icon.btn-danger:hover {
+    background: rgba(220,53,69,0.1);
+}
+
+/* ============== Работа с изображениями ==============  */
+
+/* Контейнер изображения позиции прайса */
+.price-image-block {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+}
+
+.price-current-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.price-image-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.no-image-placeholder {
+    padding: 2rem;
+    background: var(--bg-alt);
+    border: 2px dashed var(--line);
+    border-radius: var(--radius);
+    text-align: center;
+    color: var(--text-500);
+}
+
+.no-image-placeholder p {
+    margin: 0.5rem 0;
+}
+
+.no-image-placeholder small {
+    font-size: 0.85rem;
+}
+
+/* Превью изображений при загрузке */
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.upload-preview {
+    position: relative;
+    width: 150px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-alt);
+}
+
+.upload-preview img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+}
+
+.upload-preview .preview-info {
+    padding: 0.5rem;
+    background: var(--bg);
+    font-size: 0.75rem;
+}
+
+.upload-preview .preview-name {
+    display: block;
+    color: var(--text-700);
+    margin-bottom: 0.25rem;
+    word-break: break-all;
+}
+
+.upload-preview .preview-size {
+    display: block;
+    color: var(--text-500);
+}
+
+.upload-preview .remove-preview {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(220, 38, 38, 0.9);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.upload-preview .remove-preview:hover {
+    background: rgb(220, 38, 38);
+}

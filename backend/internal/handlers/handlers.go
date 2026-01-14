@@ -436,3 +436,67 @@ func isImageFile(filename string) bool {
 	}
 	return false
 }
+
+// PricesPage рендерит публичную страницу с ценами на LED экраны и услуги.
+//
+// Отображает:
+//   - Активные позиции прайса (is_active = true)
+//   - Карточки с изображениями, названиями, ценами
+//   - Раскрывающиеся таблицы характеристик (если has_specifications = true)
+//
+// Позиции отсортированы по sort_order (ASC), затем по created_at (DESC).
+//
+// GET /prices
+func (h *Handlers) PricesPage(c *gin.Context) {
+	var priceItems []models.PriceItem
+
+	// Получаем только активные позиции с характеристиками
+	h.db.Where("is_active = ?", true).
+		Preload("Specifications", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_order ASC, id ASC")
+		}).
+		Order("sort_order ASC, created_at DESC").
+		Find(&priceItems)
+
+	// Группируем характеристики по группам для каждой позиции
+	type GroupedSpec struct {
+		Group string
+		Specs []models.PriceSpecification
+	}
+
+	priceItemsWithGroupedSpecs := make([]struct {
+		PriceItem   models.PriceItem
+		GroupedSpecs []GroupedSpec
+	}, len(priceItems))
+
+	for i, item := range priceItems {
+		priceItemsWithGroupedSpecs[i].PriceItem = item
+
+		if item.HasSpecifications && len(item.Specifications) > 0 {
+			groupsMap := make(map[string][]models.PriceSpecification)
+
+			// Группируем спецификации
+			for _, spec := range item.Specifications {
+				groupsMap[spec.SpecGroup] = append(groupsMap[spec.SpecGroup], spec)
+			}
+
+			// Преобразуем map в slice для шаблона
+			for group, specs := range groupsMap {
+				priceItemsWithGroupedSpecs[i].GroupedSpecs = append(
+					priceItemsWithGroupedSpecs[i].GroupedSpecs,
+					GroupedSpec{Group: group, Specs: specs},
+				)
+			}
+		}
+	}
+
+	c.HTML(http.StatusOK, "public_base.html", gin.H{
+		"title":       "Цены на LED экраны | S'n'R",
+		"description": "Цены на LED экраны и дисплеи в Санкт-Петербурге. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
+		"ogTitle":     "Цены на LED экраны и дисплеи | S'n'R",
+		"ogDescription": "Цены на LED экраны и дисплеи в Санкт-Петербурге. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
+		"ogUrl":       "/prices",
+		"priceItems":  priceItemsWithGroupedSpecs,
+		"PageID":      "prices",
+	})
+}

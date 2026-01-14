@@ -222,3 +222,60 @@ type Admin struct {
 	CreatedAt    time.Time  `json:"created_at"`
 	UpdatedAt    time.Time  `json:"updated_at"`
 }
+
+// PriceItem представляет позицию в прайс-листе (например, "Билборд 6x3").
+//
+// Связи:
+//   - one-to-many с PriceSpecification (одной позиции принадлежат несколько характеристик)
+//
+// Особенности:
+//   - HasSpecifications определяет, нужна ли таблица характеристик для этой позиции
+//   - PriceFrom - цена "от" в рублях
+//   - ImagePath - путь к изображению продукта
+//   - SortOrder определяет порядок отображения на странице
+//   - IsActive позволяет скрывать позиции без удаления
+type PriceItem struct {
+	ID                uint      `json:"id" gorm:"primaryKey"`
+	Title             string    `json:"title" gorm:"not null"`                   // Название (например, "Билборд 6x3")
+	Description       string    `json:"description"`                             // Краткое описание
+	ImagePath         string    `json:"image_path"`                              // Путь к оригинальному изображению
+	PriceFrom         int       `json:"price_from" gorm:"not null"`              // Цена "от" в рублях
+	HasSpecifications bool      `json:"has_specifications" gorm:"default:false"` // Есть ли таблица характеристик
+	SortOrder         int       `json:"sort_order" gorm:"default:0"`             // Порядок отображения
+	IsActive          bool      `json:"is_active" gorm:"default:true"`           // Активность
+
+	// Поля для работы с миниатюрами и кроппингом
+	ThumbnailSmallPath  string  `json:"thumbnail_small_path"`              // Путь к маленькой миниатюре (400x300)
+	ThumbnailMediumPath string  `json:"thumbnail_medium_path"`             // Путь к средней миниатюре (1200x900)
+	CropX               float64 `json:"crop_x" gorm:"default:50"`          // Позиция кроппинга по X (0-100%)
+	CropY               float64 `json:"crop_y" gorm:"default:50"`          // Позиция кроппинга по Y (0-100%)
+	CropScale           float64 `json:"crop_scale" gorm:"default:1.0"`     // Масштаб кроппинга (1.0-3.0)
+
+	CreatedAt         time.Time `json:"created_at"`
+	UpdatedAt         time.Time `json:"updated_at"`
+
+	Specifications []PriceSpecification `json:"specifications,omitempty" gorm:"foreignKey:PriceItemID;constraint:OnDelete:CASCADE"`
+}
+
+// PriceSpecification представляет характеристику (строку в таблице) для позиции прайса.
+//
+// Связи:
+//   - many-to-one с PriceItem (много характеристик принадлежат одной позиции)
+//
+// Особенности:
+//   - SpecGroup используется для группировки характеристик (например, "Параметры экрана", "Модуль/кабинет")
+//   - Группы отображаются как синие заголовки в таблице
+//   - SortOrder определяет порядок отображения внутри группы
+//   - SpecKey - название параметра, SpecValue - значение параметра
+type PriceSpecification struct {
+	ID          uint      `json:"id" gorm:"primaryKey"`
+	PriceItemID uint      `json:"price_item_id" gorm:"not null;index;constraint:OnDelete:CASCADE"`
+	SpecGroup   string    `json:"spec_group" gorm:"not null"` // Группа (например, "Параметры экрана")
+	SpecKey     string    `json:"spec_key" gorm:"not null"`   // Название параметра (например, "Разрешение по горизонтали")
+	SpecValue   string    `json:"spec_value" gorm:"not null"` // Значение (например, "1152")
+	SortOrder   int       `json:"sort_order" gorm:"default:0"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+
+	PriceItem *PriceItem `json:"price_item,omitempty" gorm:"foreignKey:PriceItemID"`
+}

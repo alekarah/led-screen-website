@@ -1,0 +1,97 @@
+{{define "prices-content"}}
+<section class="prices-hero">
+    <div class="container">
+        <h1>Цены на LED экраны</h1>
+        <p class="hero-subtitle">Выберите подходящее решение для вашего бизнеса</p>
+    </div>
+</section>
+
+<section class="prices-section">
+    <div class="container">
+        {{if .priceItems}}
+            <div class="prices-grid">
+                {{range .priceItems}}
+                <div class="price-card">
+                    {{if .PriceItem.ThumbnailMediumPath}}
+                    <div class="price-card-image">
+                        <img src="{{.PriceItem.ThumbnailMediumPath}}" alt="{{.PriceItem.Title}}" loading="lazy">
+                    </div>
+                    {{else if .PriceItem.ImagePath}}
+                    <div class="price-card-image">
+                        <img src="{{.PriceItem.ImagePath}}" alt="{{.PriceItem.Title}}" loading="lazy">
+                    </div>
+                    {{end}}
+
+                    <div class="price-card-content">
+                        <h3 class="price-card-title">{{.PriceItem.Title}}</h3>
+
+                        {{if .PriceItem.Description}}
+                        <p class="price-card-description">{{.PriceItem.Description}}</p>
+                        {{end}}
+
+                        {{if .PriceItem.HasSpecifications}}
+                            {{if .GroupedSpecs}}
+                            <div class="price-specs">
+                                <button class="specs-toggle" aria-expanded="false" aria-controls="specs-{{.PriceItem.ID}}">
+                                    <span>Характеристики</span>
+                                    <svg class="specs-toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+
+                                <div class="specs-content" id="specs-{{.PriceItem.ID}}" hidden>
+                                    <table class="specs-table">
+                                        <tbody>
+                                            {{range .GroupedSpecs}}
+                                            <tr class="spec-group-header">
+                                                <td colspan="2">{{.Group}}</td>
+                                            </tr>
+                                            {{range .Specs}}
+                                            <tr>
+                                                <td class="spec-key">{{.SpecKey}}</td>
+                                                <td class="spec-value">{{.SpecValue}}</td>
+                                            </tr>
+                                            {{end}}
+                                            {{end}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {{end}}
+                        {{end}}
+
+                        <div class="price-card-footer">
+                            <div class="price-amount">
+                                <span class="price-label">от</span>
+                                <span class="price-value">{{formatPrice .PriceItem.PriceFrom}}</span>
+                                <span class="price-currency">₽</span>
+                            </div>
+                            <a href="/contact" class="btn btn-primary">Отправить заявку</a>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        {{else}}
+            <div class="empty-state">
+                <p>На данный момент информация о ценах обновляется. Пожалуйста, свяжитесь с нами для получения актуальных цен.</p>
+                <a href="/contact" class="btn btn-primary">Связаться с нами</a>
+            </div>
+        {{end}}
+    </div>
+</section>
+
+<!-- Призыв к действию -->
+<div class="cta-section led-effect led-effect--subtle">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Не нашли подходящее решение?</h2>
+            <p>Мы разработаем индивидуальное предложение под ваши требования</p>
+            <div class="cta-buttons">
+                <a href="/contact" class="btn btn-hero btn-large">Получить консультацию</a>
+                <a href="tel:+79675608858" class="btn btn-secondary btn-large">Позвонить сейчас</a>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

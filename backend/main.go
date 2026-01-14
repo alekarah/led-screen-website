@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"os"
@@ -60,6 +61,27 @@ func main() {
 	funcMap := template.FuncMap{
 		"mul": func(a, b float64) float64 { return a * b },
 		"sub": func(a, b float64) float64 { return a - b },
+		"formatPrice": func(price int) string {
+			// Форматируем число с разделителями тысяч (пробелами)
+			if price < 1000 {
+				return fmt.Sprintf("%d", price)
+			}
+			// Преобразуем в строку и добавляем пробелы
+			s := fmt.Sprintf("%d", price)
+			n := len(s)
+			if n <= 3 {
+				return s
+			}
+			// Вставляем пробелы каждые 3 цифры справа
+			var result []byte
+			for i, c := range s {
+				if i > 0 && (n-i)%3 == 0 {
+					result = append(result, ' ')
+				}
+				result = append(result, byte(c))
+			}
+			return string(result)
+		},
 		"fmtTime": func(t time.Time) string {
 			// Мск, если нужна локаль с часовым поясом
 			loc, err := time.LoadLocation("Europe/Moscow")

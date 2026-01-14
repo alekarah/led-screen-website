@@ -94,11 +94,15 @@ func generateSingleThumbnail(srcImage image.Image, originalPath string, size Thu
 	// Генерируем имя файла для thumbnail (всегда .webp)
 	thumbPath := generateThumbnailPath(originalPath, size.Suffix)
 
+	log.Printf("[DEBUG] generateSingleThumbnail: originalPath='%s' thumbPath='%s'", originalPath, thumbPath)
+
 	// Сохраняем thumbnail как WebP
 	if err := saveThumbnail(thumb, thumbPath); err != nil {
+		log.Printf("[ERROR] Ошибка saveThumbnail для %s: %v", thumbPath, err)
 		return "", err
 	}
 
+	log.Printf("[DEBUG] Thumbnail успешно сохранен: %s", thumbPath)
 	return thumbPath, nil
 }
 
@@ -198,13 +202,17 @@ func getAnchorForCrop(crop CropParams) imaging.Anchor {
 // saveThumbnail сохраняет изображение с оптимизацией
 // Все thumbnails сохраняются в формате WebP с качеством 90%
 func saveThumbnail(img image.Image, path string) error {
+	log.Printf("[DEBUG] saveThumbnail: начало, path='%s'", path)
+
 	// Создаем директорию если нужно
 	dir := filepath.Dir(path)
+	log.Printf("[DEBUG] saveThumbnail: создаем директорию '%s'", dir)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return fmt.Errorf("не удалось создать директорию: %w", err)
 	}
 
 	// Создаем файл
+	log.Printf("[DEBUG] saveThumbnail: создаем файл '%s'", path)
 	file, err := os.Create(path)
 	if err != nil {
 		return fmt.Errorf("не удалось создать файл: %w", err)
@@ -218,8 +226,16 @@ func saveThumbnail(img image.Image, path string) error {
 		Quality:  90,
 	}
 
+	log.Printf("[DEBUG] saveThumbnail: кодируем в WebP")
 	if err := webp.Encode(file, img, options); err != nil {
 		return fmt.Errorf("не удалось сохранить WebP: %w", err)
+	}
+
+	// Проверяем что файл действительно создан
+	if info, err := os.Stat(path); err == nil {
+		log.Printf("[DEBUG] saveThumbnail: файл создан успешно, размер=%d bytes", info.Size())
+	} else {
+		log.Printf("[WARN] saveThumbnail: файл НЕ найден после создания: %v", err)
 	}
 
 	return nil

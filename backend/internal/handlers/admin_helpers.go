@@ -85,7 +85,13 @@ func buildPageNumbers(current, total int) []int {
 
 // Единые JSON-ответы
 func jsonOK(c *gin.Context, payload any) {
-	c.JSON(http.StatusOK, payload)
+	// Если payload это gin.H, добавляем success: true
+	if m, ok := payload.(gin.H); ok {
+		m["success"] = true
+		c.JSON(http.StatusOK, m)
+	} else {
+		c.JSON(http.StatusOK, payload)
+	}
 }
 
 func jsonErr(c *gin.Context, code int, msg string) {

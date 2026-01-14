@@ -233,6 +233,7 @@
     <link rel="stylesheet" href="/static/css/public-base.css">
     <link rel="stylesheet" href="/static/css/public-home.css">
     <link rel="stylesheet" href="/static/css/public-projects.css">
+    <link rel="stylesheet" href="/static/css/public-prices.css">
     <link rel="stylesheet" href="/static/css/public-contact.css">
     <link rel="stylesheet" href="/static/css/public-services.css">
     <link rel="stylesheet" href="/static/css/public-led-guide.css">
@@ -299,6 +300,13 @@
                     </a>
                 </li>
                 <li>
+                    <a href="/prices"
+                    class="{{if eq .PageID "prices"}}active{{end}}"
+                    {{if eq .PageID "prices"}}aria-current="page"{{end}}>
+                    Цены
+                    </a>
+                </li>
+                <li>
                     <a href="/contact"
                     class="{{if eq .PageID "contact"}}active{{end}}"
                     {{if eq .PageID "contact"}}aria-current="page"{{end}}>
@@ -326,6 +334,8 @@
             {{template "led-guide-content" .}}
         {{else if eq .title "Портфолио - LED Display"}}
             {{template "projects-content" .}}
+        {{else if eq .title "Цены на LED экраны | S'n'R"}}
+            {{template "prices-content" .}}
         {{else if eq .title "Обработка персональных данных"}}
             {{template "privacy-content" .}}
         {{end}}
@@ -357,6 +367,10 @@
     {{if eq .PageID "led-guide"}}
     <script src="/static/js/faq-accordion.js"></script>
     <script src="/static/js/led-guide-navigation.js"></script>
+    {{end}}
+
+    {{if eq .PageID "prices"}}
+    <script src="/static/js/prices-accordion.js" defer></script>
     {{end}}
 
     <!-- Мобильное меню -->

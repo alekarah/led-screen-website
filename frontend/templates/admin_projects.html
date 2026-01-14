@@ -190,53 +190,6 @@
     </form>
   </div>
 </div>
-
-
-<!-- Модальное окно редактора кроппинга -->
-<div id="cropModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Настройка отображения</h2>
-            <span class="close" onclick="closeCropModal()">&times;</span>
-        </div>
-
-        <div class="crop-editor">
-            <div class="crop-preview">
-                <img id="cropPreviewImage" src="" alt="Превью">
-            </div>
-
-            <div class="crop-controls">
-                <div class="crop-control">
-                    <label for="cropX">Горизонтальное смещение:</label>
-                    <input type="range" id="cropX" min="0" max="100" value="50">
-                    <div class="crop-value">Значение: <span id="cropXValue">50</span>%</div>
-                </div>
-
-                <div class="crop-control">
-                    <label for="cropY">Вертикальное смещение:</label>
-                    <input type="range" id="cropY" min="0" max="100" value="50">
-                    <div class="crop-value">Значение: <span id="cropYValue">50</span>%</div>
-                </div>
-
-                <div class="crop-control">
-                    <label for="cropScale">Масштаб:</label>
-                    <input type="range" id="cropScale" min="1" max="3" step="0.1" value="1">
-                    <div class="crop-value">Значение: <span id="cropScaleValue">1</span>x</div>
-                </div>
-
-                <div class="crop-actions">
-                    <button type="button" class="btn" onclick="resetCrop()">Сбросить</button>
-                    <button type="button" class="btn btn-success" onclick="saveCrop()">Сохранить</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Кнопка подсказки в правом нижнем углу -->
-        <button type="button" class="crop-help-button" onclick="showKeyboardHelp()" title="Горячие клавиши">
-            ⌨️
-        </button>
-    </div>
-</div>
 {{end}}
 
 {{define "projects-extra-js"}}

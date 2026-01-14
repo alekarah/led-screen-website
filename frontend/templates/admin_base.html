@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/static/css/admin-contacts.css">
     <link rel="stylesheet" href="/static/css/admin-forms.css">
     <link rel="stylesheet" href="/static/css/admin-projects.css">
+    <link rel="stylesheet" href="/static/css/admin-prices.css">
     <link rel="stylesheet" href="/static/css/admin-modals.css">
     <link rel="stylesheet" href="/static/css/crop-editor.css">
 
@@ -30,6 +31,7 @@
                 <li><a href="/admin" {{if eq .PageID "admin-dashboard"}}aria-current="page"{{end}}>Главная</a></li>
                 <li><a href="/admin/contacts" {{if eq .PageID "admin-contacts"}}aria-current="page"{{end}}>Заявки</a></li>
                 <li><a href="/admin/projects" {{if eq .PageID "admin-projects"}}aria-current="page"{{end}}>Проекты</a></li>
+                <li><a href="/admin/prices" {{if eq .PageID "admin-prices"}}aria-current="page"{{end}}>Цены</a></li>
                 <li><a href="/">На сайт</a></li>
                 <li><a href="/admin/logout" class="logout-link">Выход</a></li>
             </ul>
@@ -46,6 +48,8 @@
             {{template "admin-dashboard-content" .}}
         {{else if eq .PageID "admin-projects"}}
             {{template "admin-projects-content" .}}
+        {{else if eq .PageID "admin-prices"}}
+            {{template "admin-prices-content" .}}
         {{else if eq .PageID "admin-contacts"}}
             {{template "admin-contacts-content" .}}
         {{else if eq .PageID "admin-contacts-archive"}}
@@ -60,8 +64,59 @@
     {{if eq .PageID "admin-projects"}}
         {{template "project-modals" .}}
     {{end}}
+    {{if eq .PageID "admin-prices"}}
+        {{template "price-modals" .}}
+    {{end}}
     {{if eq .PageID "admin-contacts-archive"}}
         {{template "contacts-archive-modals" .}}
+    {{end}}
+
+    <!-- Crop Editor Modal - используется на страницах проектов и цен -->
+    {{if or (eq .PageID "admin-projects") (eq .PageID "admin-prices")}}
+    <div id="cropModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Настройка отображения</h2>
+                <span class="close" onclick="closeCropModal()">&times;</span>
+            </div>
+
+            <div class="crop-editor">
+                <div class="crop-preview">
+                    <img id="cropPreviewImage" src="" alt="Превью">
+                </div>
+
+                <div class="crop-controls">
+                    <div class="crop-control">
+                        <label for="cropX">Горизонтальное смещение:</label>
+                        <input type="range" id="cropX" min="0" max="100" value="50">
+                        <div class="crop-value">Значение: <span id="cropXValue">50</span>%</div>
+                    </div>
+
+                    <div class="crop-control">
+                        <label for="cropY">Вертикальное смещение:</label>
+                        <input type="range" id="cropY" min="0" max="100" value="50">
+                        <div class="crop-value">Значение: <span id="cropYValue">50</span>%</div>
+                    </div>
+
+                    <div class="crop-control">
+                        <label for="cropScale">Масштаб:</label>
+                        <input type="range" id="cropScale" min="1" max="3" step="0.1" value="1">
+                        <div class="crop-value">Значение: <span id="cropScaleValue">1</span>x</div>
+                    </div>
+
+                    <div class="crop-actions">
+                        <button type="button" class="btn" onclick="resetCrop()">Сбросить</button>
+                        <button type="button" class="btn btn-success" onclick="saveCrop()">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка подсказки в правом нижнем углу -->
+            <button type="button" class="crop-help-button" onclick="showKeyboardHelp()" title="Горячие клавиши">
+                ⌨️
+            </button>
+        </div>
+    </div>
     {{end}}
 
     <!-- Базовые скрипты -->
@@ -74,6 +129,15 @@
     {{end}}
     {{if eq .PageID "admin-projects"}}
         {{template "projects-extra-js" .}}
+    {{end}}
+    {{if eq .PageID "admin-prices"}}
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
+        <script src="/static/js/crop-editor-core.js" defer></script>
+        <script src="/static/js/crop-editor-ui.js" defer></script>
+        <script src="/static/js/crop-editor-presets.js" defer></script>
+        <script src="/static/js/crop-editor-api.js" defer></script>
+        <script src="/static/js/admin-prices-images.js" defer></script>
+        <script src="/static/js/admin-prices.js" defer></script>
     {{end}}
     {{if eq .PageID "admin-contacts-archive"}}
         {{template "contacts-archive-extra-js" .}}

@@ -94,6 +94,11 @@ body.modal-open { overflow: hidden; }
   backdrop-filter: blur(2px);
 }
 
+/* Показать модалку когда active */
+.modal.active{
+  display: block !important;
+}
+
 /* Window */
 .modal-content{
   position: relative;
