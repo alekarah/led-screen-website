@@ -18,7 +18,6 @@ import (
 // UploadImages - загрузка изображений для проекта
 func (h *Handlers) UploadImages(c *gin.Context) {
 	projectIDStr := c.PostForm("project_id")
-	log.Printf("[DEBUG] Загрузка изображений для project_id: '%s'", projectIDStr)
 
 	projectID, err := strconv.Atoi(projectIDStr)
 	if err != nil {
@@ -50,7 +49,6 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 	}
 
 	files := form.File["images"]
-	log.Printf("[DEBUG] Получено файлов в поле 'images': %d", len(files))
 
 	var uploadedImages []models.Image
 
@@ -67,7 +65,6 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 	}
 
 	for i, file := range files {
-		log.Printf("[DEBUG] Обработка файла #%d: %s (размер: %d байт)", i, file.Filename, file.Size)
 
 		// Проверяем тип файла
 		if !isImageFile(file.Filename) {
@@ -83,7 +80,6 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 
 		// Генерируем уникальное имя файла
 		filename := generateImageFilename(projectID, i, file.Filename)
-		log.Printf("[DEBUG] Сгенерировано имя файла: %s", filename)
 
 		// Сохраняем файл
 		filePath, err := h.saveUploadedFile(c, file, filename)
@@ -91,7 +87,6 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 			log.Printf("[ERROR] Ошибка сохранения файла %s: %v", filename, err)
 			continue
 		}
-		log.Printf("[DEBUG] Файл сохранен: %s", filePath)
 
 		// Создаем запись в базе
 		image := createImageRecord(projectID, filename, file, filePath, i)
@@ -100,7 +95,6 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 		if !hasPrimaryImage && i == 0 {
 			image.IsPrimary = true
 			hasPrimaryImage = true // Чтобы остальные загружаемые изображения не стали главными
-			log.Printf("[DEBUG] Изображение %s установлено как главное", filename)
 		}
 
 		// Генерируем thumbnails с дефолтным кроппингом (без трансформаций)
@@ -120,18 +114,14 @@ func (h *Handlers) UploadImages(c *gin.Context) {
 			if path, ok := thumbnails[ThumbnailMedium.Suffix]; ok {
 				image.ThumbnailMediumPath = path
 			}
-			log.Printf("[DEBUG] Thumbnails созданы для %s", filename)
 		}
 
 		if err := h.db.Create(&image).Error; err == nil {
 			uploadedImages = append(uploadedImages, image)
-			log.Printf("[DEBUG] Изображение %s успешно добавлено в БД (ID: %d)", filename, image.ID)
 		} else {
 			log.Printf("[ERROR] Ошибка добавления изображения %s в БД: %v", filename, err)
 		}
 	}
-
-	log.Printf("[DEBUG] Итого успешно загружено изображений: %d из %d", len(uploadedImages), len(files))
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": fmt.Sprintf("Загружено %d изображений", len(uploadedImages)),
@@ -191,9 +181,6 @@ func (h *Handlers) UpdateImageCrop(c *gin.Context) {
 	// Регенерируем thumbnails с новыми настройками кроппинга
 	cropParams := CropParams(cropData)
 
-	log.Printf("[DEBUG] UpdateImageCrop: ID=%d, FilePath=%s, Crop=(%.1f, %.1f, %.1fx)",
-		id, image.FilePath, cropParams.X, cropParams.Y, cropParams.Scale)
-
 	thumbnails, err := GenerateThumbnails(image.FilePath, cropParams)
 	if err != nil {
 		log.Printf("[ERROR] Не удалось регенерировать thumbnails для изображения %d: %v", id, err)
@@ -205,8 +192,6 @@ func (h *Handlers) UpdateImageCrop(c *gin.Context) {
 		if path, ok := thumbnails[ThumbnailMedium.Suffix]; ok {
 			image.ThumbnailMediumPath = path
 		}
-		log.Printf("[DEBUG] Thumbnails регенерированы для изображения %d с кроппингом (%.1f, %.1f, %.1fx)",
-			id, cropData.X, cropData.Y, cropData.Scale)
 	}
 
 	if err := h.db.Save(&image).Error; err != nil {

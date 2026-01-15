@@ -128,14 +128,20 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		// Цены - CRUD операции для прайс-листа
 		prices := admin.Group("/prices")
 		{
-			prices.GET("", h.AdminPricesPage)                         // Страница управления ценами
-			prices.POST("", h.CreatePriceItem)                        // Создание новой позиции прайса
-			prices.GET("/:id", h.GetPriceItem)                        // Получение позиции для редактирования (JSON)
-			prices.POST("/:id/update", h.UpdatePriceItem)             // Обновление позиции прайса
-			prices.DELETE("/:id", h.DeletePriceItem)                  // Удаление позиции прайса
-			prices.POST("/sort", h.UpdatePriceItemsSorting)           // Обновление порядка позиций (drag & drop)
-			prices.POST("/:id/crop", h.UpdatePriceImageCrop)          // Обновление настроек кроппинга изображения
-			prices.DELETE("/:id/image", h.DeletePriceImage)           // Удаление изображения из позиции
+			prices.GET("", h.AdminPricesPage)                // Страница управления ценами
+			prices.POST("", h.CreatePriceItem)               // Создание новой позиции прайса
+			prices.GET("/:id", h.GetPriceItem)               // Получение позиции для редактирования (JSON)
+			prices.POST("/:id/update", h.UpdatePriceItem)    // Обновление позиции прайса
+			prices.DELETE("/:id", h.DeletePriceItem)         // Удаление позиции прайса
+			prices.POST("/sort", h.UpdatePriceItemsSorting)  // Обновление порядка позиций (drag & drop)
+			prices.POST("/:id/crop", h.UpdatePriceImageCrop) // Обновление настроек кроппинга изображения (старый формат)
+			prices.DELETE("/:id/image", h.DeletePriceImage)  // Удаление изображения из позиции (старый формат)
+
+			// Новые endpoints для множественных изображений
+			prices.POST("/upload-images", h.UploadPriceImages)             // Загрузка изображений для позиции
+			prices.DELETE("/images/:id", h.DeletePriceImageNew)            // Удаление изображения из price_images
+			prices.POST("/images/:id/crop", h.UpdatePriceImageCropNew)     // Обновление настроек кроппинга изображения
+			prices.POST("/images/:id/set-primary", h.SetPrimaryPriceImage) // Установка главного изображения позиции
 		}
 	}
 }

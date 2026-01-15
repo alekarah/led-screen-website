@@ -15,10 +15,14 @@
 
                     <!-- Миниатюра позиции -->
                     <div class="project-thumbnail">
-                        {{if .ThumbnailSmallPath}}
-                            <img src="{{.ThumbnailSmallPath}}" alt="{{.Title}}">
-                        {{else if .ImagePath}}
-                            <img src="{{.ImagePath}}" alt="{{.Title}}">
+                        {{range .Images}}
+                            {{if .IsPrimary}}
+                                {{if .ThumbnailSmallPath}}
+                                    <img src="{{.ThumbnailSmallPath}}" alt="{{$.Title}}">
+                                {{else}}
+                                    <img src="{{.FilePath}}" alt="{{$.Title}}">
+                                {{end}}
+                            {{end}}
                         {{else}}
                             <div class="no-image">💰</div>
                         {{end}}
@@ -163,14 +167,14 @@
 
             <form id="editPriceImageForm" method="post" enctype="multipart/form-data" class="project-upload-form">
                 <div class="form-group">
-                    <label for="editPriceImages">Добавить изображение:</label>
-                    <input type="file" id="editPriceImages" name="image" accept="image/*">
+                    <label for="editPriceImages">Добавить изображения:</label>
+                    <input type="file" id="editPriceImages" name="images" accept="image/*" multiple>
                 </div>
                 <div class="upload-button-container">
                     <button type="submit" class="btn">Загрузить</button>
                     <div id="priceUploadSpinner" class="upload-spinner hidden">
                         <div class="spinner"></div>
-                        <span>Загрузка изображения...</span>
+                        <span>Загрузка изображений...</span>
                     </div>
                 </div>
             </form>

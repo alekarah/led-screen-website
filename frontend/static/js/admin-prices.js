@@ -45,9 +45,9 @@ function openEditPriceModal(id) {
             document.getElementById('editHasSpecifications').checked = priceItem.has_specifications || false;
             document.getElementById('editIsActive').checked = priceItem.is_active !== false;
 
-            // Отображаем текущее изображение с кнопками управления
-            if (typeof displayPriceImage === 'function') {
-                displayPriceImage(priceItem);
+            // Отображаем изображения с кнопками управления
+            if (typeof displayPriceImages === 'function') {
+                displayPriceImages(priceItem.images || []);
             }
 
             // Загружаем характеристики
@@ -57,11 +57,6 @@ function openEditPriceModal(id) {
             const specsBlock = document.getElementById('editSpecificationsBlock');
             if (specsBlock) {
                 specsBlock.style.display = priceItem.has_specifications ? 'block' : 'none';
-            }
-
-            // Отображаем изображение с кнопками управления
-            if (typeof displayPriceImage === 'function') {
-                displayPriceImage(priceItem);
             }
 
             modal.classList.add('active');

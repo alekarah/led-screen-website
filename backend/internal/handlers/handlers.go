@@ -450,10 +450,13 @@ func isImageFile(filename string) bool {
 func (h *Handlers) PricesPage(c *gin.Context) {
 	var priceItems []models.PriceItem
 
-	// Получаем только активные позиции с характеристиками
+	// Получаем только активные позиции с характеристиками и изображениями
 	h.db.Where("is_active = ?", true).
 		Preload("Specifications", func(db *gorm.DB) *gorm.DB {
 			return db.Order("sort_order ASC, id ASC")
+		}).
+		Preload("Images", func(db *gorm.DB) *gorm.DB {
+			return db.Order("is_primary DESC, sort_order ASC, id ASC")
 		}).
 		Order("sort_order ASC, created_at DESC").
 		Find(&priceItems)
@@ -465,7 +468,7 @@ func (h *Handlers) PricesPage(c *gin.Context) {
 	}
 
 	priceItemsWithGroupedSpecs := make([]struct {
-		PriceItem   models.PriceItem
+		PriceItem    models.PriceItem
 		GroupedSpecs []GroupedSpec
 	}, len(priceItems))
 
@@ -474,14 +477,20 @@ func (h *Handlers) PricesPage(c *gin.Context) {
 
 		if item.HasSpecifications && len(item.Specifications) > 0 {
 			groupsMap := make(map[string][]models.PriceSpecification)
+			groupsOrder := []string{} // Сохраняем порядок групп
 
-			// Группируем спецификации
+			// Группируем спецификации, сохраняя порядок первого появления группы
 			for _, spec := range item.Specifications {
+				// Если группа встречается первый раз, добавляем в порядок
+				if _, exists := groupsMap[spec.SpecGroup]; !exists {
+					groupsOrder = append(groupsOrder, spec.SpecGroup)
+				}
 				groupsMap[spec.SpecGroup] = append(groupsMap[spec.SpecGroup], spec)
 			}
 
-			// Преобразуем map в slice для шаблона
-			for group, specs := range groupsMap {
+			// Преобразуем map в slice в порядке первого появления групп
+			for _, group := range groupsOrder {
+				specs := groupsMap[group]
 				priceItemsWithGroupedSpecs[i].GroupedSpecs = append(
 					priceItemsWithGroupedSpecs[i].GroupedSpecs,
 					GroupedSpec{Group: group, Specs: specs},
@@ -491,12 +500,12 @@ func (h *Handlers) PricesPage(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title":       "Цены на LED экраны | S'n'R",
-		"description": "Цены на LED экраны и дисплеи в Санкт-Петербурге. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
-		"ogTitle":     "Цены на LED экраны и дисплеи | S'n'R",
+		"title":         "Цены на LED экраны | S'n'R",
+		"description":   "Цены на LED экраны и дисплеи в Санкт-Петербурге. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
+		"ogTitle":       "Цены на LED экраны и дисплеи | S'n'R",
 		"ogDescription": "Цены на LED экраны и дисплеи в Санкт-Петербурге. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
-		"ogUrl":       "/prices",
-		"priceItems":  priceItemsWithGroupedSpecs,
-		"PageID":      "prices",
+		"ogUrl":         "/prices",
+		"priceItems":    priceItemsWithGroupedSpecs,
+		"PageID":        "prices",
 	})
 }

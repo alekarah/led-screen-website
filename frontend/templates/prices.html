@@ -12,14 +12,12 @@
             <div class="prices-grid">
                 {{range .priceItems}}
                 <div class="price-card">
-                    {{if .PriceItem.ThumbnailMediumPath}}
-                    <div class="price-card-image">
-                        <img src="{{.PriceItem.ThumbnailMediumPath}}" alt="{{.PriceItem.Title}}" loading="lazy">
-                    </div>
-                    {{else if .PriceItem.ImagePath}}
-                    <div class="price-card-image">
-                        <img src="{{.PriceItem.ImagePath}}" alt="{{.PriceItem.Title}}" loading="lazy">
-                    </div>
+                    {{range .PriceItem.Images}}
+                        {{if .IsPrimary}}
+                        <div class="price-card-image">
+                            <img src="{{if .ThumbnailMediumPath}}{{.ThumbnailMediumPath}}{{else}}{{.FilePath}}{{end}}" alt="{{$.PriceItem.Title}}" loading="lazy">
+                        </div>
+                        {{end}}
                     {{end}}
 
                     <div class="price-card-content">
@@ -40,7 +38,7 @@
                                     data-title="{{.PriceItem.Title}}"
                                     data-description="{{.PriceItem.Description}}"
                                     data-price-from="{{formatPrice .PriceItem.PriceFrom}}"
-                                    data-image-path="{{if .PriceItem.ThumbnailMediumPath}}{{.PriceItem.ThumbnailMediumPath}}{{else if .PriceItem.ImagePath}}{{.PriceItem.ImagePath}}{{end}}"
+                                    data-images='{{toJSON .PriceItem.Images}}'
                                     data-has-specs="{{.PriceItem.HasSpecifications}}"
                                     data-specs='{{if .GroupedSpecs}}{{toJSON .GroupedSpecs}}{{else}}[]{{end}}'>
                                 Подробнее

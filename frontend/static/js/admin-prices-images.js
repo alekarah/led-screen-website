@@ -1,45 +1,58 @@
-// Работа с изображениями позиций прайса (аналогично admin-projects-images.js)
+// Работа с множественными изображениями позиций прайса (аналогично admin-projects-images.js)
 
-// ============== ОТОБРАЖЕНИЕ ИЗОБРАЖЕНИЯ В МОДАЛКЕ РЕДАКТИРОВАНИЯ ==============
+// --- публичный API ---
+window.displayPriceImages = displayPriceImages;
+window.initPriceImageUploadForm = initPriceImageUploadForm;
+window.initPriceImagePreview = initPriceImagePreview;
 
-function displayPriceImage(priceItem) {
+// =============================
+// РЕНДЕР КОЛЛЕКЦИИ ИЗОБРАЖЕНИЙ
+// =============================
+function displayPriceImages(images) {
     const root = document.getElementById('price_images');
     if (!root) {
-        console.warn('Контейнер изображения не найден');
+        console.warn('Контейнер изображений не найден');
         return;
     }
 
-    // Если изображения нет - показываем сообщение
-    if (!priceItem.image_path) {
-        root.innerHTML = `<p class="no-images">У позиции пока нет изображения</p>`;
+    // Сообщения о пустом состоянии
+    if (!Array.isArray(images)) {
+        root.innerHTML = `<p class="no-images">Изображения не загружены</p>`;
+        return;
+    }
+    if (images.length === 0) {
+        root.innerHTML = `<p class="no-images">У позиции пока нет изображений</p>`;
         return;
     }
 
-    // Рендер карточки изображения
+    // Рендер через DocumentFragment (без лишних reflow)
     root.innerHTML = '';
-    const imageItem = buildPriceImageItem(priceItem);
-    root.appendChild(imageItem);
+    const frag = document.createDocumentFragment();
+    images.forEach(img => frag.appendChild(buildPriceImageItem(img)));
+    root.appendChild(frag);
+
+    // Включаем делегирование событий один раз
+    enableImagesDelegation(root);
 }
 
-// Строим карточку изображения как DOM‑узлы (аналогично buildImageItem в проектах)
-function buildPriceImageItem(priceItem) {
+// Строим карточку изображения как DOM‑узлы
+function buildPriceImageItem(image) {
     const item = document.createElement('div');
     item.className = 'image-item';
-    item.dataset.priceId = priceItem.id;
+    item.dataset.imageId = image.id;
 
     const previewWrap = document.createElement('div');
     previewWrap.className = 'image-preview-container';
 
     const img = document.createElement('img');
-    // Используем small thumbnail для превью, fallback к оригиналу
-    const previewSrc = priceItem.thumbnail_small_path || priceItem.image_path;
-    // Извлекаем только имя файла из пути
+    // Используем small thumbnail для превью, fallback к file_path, потом к filename
+    const previewSrc = image.thumbnail_small_path || image.file_path || image.filename;
     const filename = previewSrc.split(/[/\\]/).pop();
     // Агрессивный cache-busting для перезагрузки после кроппинга
-    const cacheBuster = `v=${priceItem.id}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+    const cacheBuster = `v=${image.id}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
     img.src = `/static/uploads/${encodeURIComponent(filename)}?${cacheBuster}`;
-    img.alt = priceItem.title || '';
-    img.dataset.originalFilename = priceItem.image_path; // для fallback
+    img.alt = escapeHtml(image.alt || image.original_name || '');
+    img.dataset.originalFilename = image.filename;
     img.onerror = () => handlePriceImageError(img);
 
     const loading = document.createElement('div');
@@ -54,10 +67,13 @@ function buildPriceImageItem(priceItem) {
     info.className = 'image-info';
     const nameSpan = document.createElement('span');
     nameSpan.className = 'image-name';
-    const imageName = filename || 'Изображение';
-    nameSpan.title = imageName;
-    nameSpan.textContent = truncateText(imageName, 15);
+    nameSpan.title = escapeHtml(image.original_name || image.filename);
+    nameSpan.textContent = truncateText(image.original_name || image.filename, 15);
+    const sizeSpan = document.createElement('span');
+    sizeSpan.className = 'image-size';
+    sizeSpan.textContent = formatFileSize(image.file_size || 0);
     info.appendChild(nameSpan);
+    info.appendChild(sizeSpan);
 
     // controls
     const controls = document.createElement('div');
@@ -69,19 +85,33 @@ function buildPriceImageItem(priceItem) {
     cropBtn.title = 'Настроить отображение';
     cropBtn.setAttribute('aria-label', 'Настроить кроппинг изображения');
     cropBtn.dataset.action = 'crop';
-    cropBtn.dataset.priceId = priceItem.id;
-    cropBtn.dataset.filename = priceItem.image_path;
-    cropBtn.dataset.cropX = priceItem.crop_x || 50;
-    cropBtn.dataset.cropY = priceItem.crop_y || 50;
-    cropBtn.dataset.cropScale = priceItem.crop_scale || 1;
+    cropBtn.dataset.imageId = image.id;
+    cropBtn.dataset.filename = image.filename;
+    cropBtn.dataset.cropX = image.crop_x || 50;
+    cropBtn.dataset.cropY = image.crop_y || 50;
+    cropBtn.dataset.cropScale = image.crop_scale || 1;
     cropBtn.textContent = '✂️';
-    cropBtn.onclick = () => openPriceCropEditor(
-        priceItem.id,
-        priceItem.image_path,
-        priceItem.crop_x || 50,
-        priceItem.crop_y || 50,
-        priceItem.crop_scale || 1.0
-    );
+
+    // Кнопка "Сделать главным" или индикатор главного изображения
+    const primaryBtn = document.createElement('button');
+    primaryBtn.type = 'button';
+    primaryBtn.dataset.imageId = image.id;
+
+    if (image.is_primary) {
+        // Если это главное изображение - показываем индикатор (желтая с черной звездой)
+        primaryBtn.className = 'primary-image-indicator';
+        primaryBtn.title = 'Главное изображение позиции';
+        primaryBtn.setAttribute('aria-label', 'Главное изображение позиции');
+        primaryBtn.textContent = '★';
+        primaryBtn.disabled = true;
+    } else {
+        // Если не главное - показываем кнопку для установки (серая с черной звездой)
+        primaryBtn.className = 'set-primary-image';
+        primaryBtn.title = 'Сделать главным изображением';
+        primaryBtn.setAttribute('aria-label', 'Сделать главным изображением');
+        primaryBtn.dataset.action = 'set-primary';
+        primaryBtn.textContent = '★';
+    }
 
     const delBtn = document.createElement('button');
     delBtn.className = 'delete-image';
@@ -89,11 +119,11 @@ function buildPriceImageItem(priceItem) {
     delBtn.title = 'Удалить изображение';
     delBtn.setAttribute('aria-label', 'Удалить изображение');
     delBtn.dataset.action = 'delete';
-    delBtn.dataset.priceId = priceItem.id;
+    delBtn.dataset.imageId = image.id;
     delBtn.textContent = '×';
-    delBtn.onclick = () => deletePriceImage(priceItem.id);
 
     controls.appendChild(cropBtn);
+    controls.appendChild(primaryBtn);
     controls.appendChild(delBtn);
 
     item.appendChild(previewWrap);
@@ -103,9 +133,37 @@ function buildPriceImageItem(priceItem) {
     return item;
 }
 
-// Обработка ошибки загрузки изображения (аналогично handleImageError)
+// Делегирование событий на контейнере
+let __imagesDelegationBound = false;
+function enableImagesDelegation(root) {
+    if (__imagesDelegationBound) return;
+    __imagesDelegationBound = true;
+
+    root.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const imageId = btn.dataset.imageId;
+
+        if (action === 'crop') {
+            openPriceCropEditor(
+                imageId,
+                btn.dataset.filename,
+                parseFloat(btn.dataset.cropX) || 50,
+                parseFloat(btn.dataset.cropY) || 50,
+                parseFloat(btn.dataset.cropScale) || 1.0
+            );
+        } else if (action === 'set-primary') {
+            await setPrimaryPriceImage(imageId);
+        } else if (action === 'delete') {
+            await deletePriceImage(imageId);
+        }
+    });
+}
+
+// Обработка ошибки загрузки изображения
 function handlePriceImageError(img) {
-    // Предотвращаем бесконечный цикл
     if (img.dataset.triedOriginal === 'true') {
         img.onerror = null;
         img.style.display = 'none';
@@ -113,7 +171,6 @@ function handlePriceImageError(img) {
         return;
     }
 
-    // Пробуем загрузить оригинал как fallback
     const originalFilename = img.dataset.originalFilename;
     if (originalFilename) {
         img.dataset.triedOriginal = 'true';
@@ -125,17 +182,38 @@ function handlePriceImageError(img) {
     }
 }
 
-// Утилита для обрезки текста
-function truncateText(text, max) {
-    if (!text || text.length <= max) return text || '';
-    return text.slice(0, max) + '…';
+// ============== УСТАНОВКА ГЛАВНОГО ИЗОБРАЖЕНИЯ ==============
+
+async function setPrimaryPriceImage(imageId) {
+    try {
+        const response = await fetch(`/admin/prices/images/${imageId}/set-primary`, {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAdminMessage('Главное изображение установлено', 'success');
+
+            // Обновляем отображение изображений
+            const priceId = document.getElementById('editPriceId')?.value;
+            if (priceId) {
+                await updatePriceImages(priceId);
+            }
+        } else {
+            showAdminMessage(data.error || 'Ошибка установки главного изображения', 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка установки главного изображения:', error);
+        showAdminMessage('Ошибка установки главного изображения', 'error');
+    }
 }
 
 // ============== РЕДАКТОР КРОППИНГА ==============
 
 let currentPriceCropEditor = null;
 
-function openPriceCropEditor(priceId, imagePath, cropX, cropY, cropScale) {
+function openPriceCropEditor(imageId, imagePath, cropX, cropY, cropScale) {
     // Используем общий редактор кроппинга из crop-editor-api.js
     if (typeof openCropEditor !== 'function') {
         showAdminMessage('Редактор кроппинга не загружен', 'error');
@@ -146,11 +224,11 @@ function openPriceCropEditor(priceId, imagePath, cropX, cropY, cropScale) {
 
     // Сохраняем контекст
     currentPriceCropEditor = {
-        priceId: priceId
+        imageId: imageId
     };
 
     // Открываем редактор кроппинга
-    openCropEditor(priceId, filename, cropX, cropY, cropScale);
+    openCropEditor(imageId, filename, cropX, cropY, cropScale);
 
     // Переопределяем saveCrop() чтобы сохранять в наш endpoint
     window.originalSaveCrop = window.saveCrop;
@@ -169,7 +247,7 @@ function openPriceCropEditor(priceId, imagePath, cropX, cropY, cropScale) {
         const cropScale = parseFloat(cropScaleSlider.value);
 
         try {
-            const response = await fetch(`/admin/prices/${currentPriceCropEditor.priceId}/crop`, {
+            const response = await fetch(`/admin/prices/images/${currentPriceCropEditor.imageId}/crop`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -190,11 +268,11 @@ function openPriceCropEditor(priceId, imagePath, cropX, cropY, cropScale) {
                 setTimeout(() => {
                     closeCropModal();
 
-                    // Обновляем изображение в форме редактирования
+                    // Обновляем изображения в форме редактирования
                     setTimeout(() => {
                         const priceId = document.getElementById('editPriceId')?.value;
                         if (priceId) {
-                            updatePriceImage(priceId);
+                            updatePriceImages(priceId);
                         }
                     }, 300);
                 }, 500);
@@ -210,29 +288,29 @@ function openPriceCropEditor(priceId, imagePath, cropX, cropY, cropScale) {
     };
 }
 
-// Обновление изображения позиции после кроппинга
-async function updatePriceImage(priceId) {
+// Обновление изображений позиции после кроппинга
+async function updatePriceImages(priceId) {
     try {
         const response = await fetch(`/admin/prices/${priceId}`);
         const data = await response.json();
 
         if (response.ok && data.price_item) {
-            displayPriceImage(data.price_item);
+            displayPriceImages(data.price_item.images || []);
         }
     } catch (error) {
-        console.error('Ошибка обновления изображения:', error);
+        console.error('Ошибка обновления изображений:', error);
     }
 }
 
 // ============== УДАЛЕНИЕ ИЗОБРАЖЕНИЯ ==============
 
-async function deletePriceImage(priceId) {
+async function deletePriceImage(imageId) {
     if (!confirm('Вы уверены, что хотите удалить изображение? Это действие нельзя отменить.')) {
         return;
     }
 
     try {
-        const response = await fetch(`/admin/prices/${priceId}/image`, {
+        const response = await fetch(`/admin/prices/images/${imageId}`, {
             method: 'DELETE'
         });
 
@@ -241,20 +319,10 @@ async function deletePriceImage(priceId) {
         if (data.success) {
             showAdminMessage('Изображение удалено', 'success');
 
-            // Обновляем отображение в контейнере price_images
-            const priceImagesContainer = document.getElementById('price_images');
-            if (priceImagesContainer) {
-                priceImagesContainer.innerHTML = `<p class="no-images">У позиции пока нет изображения</p>`;
-            }
-
-            // Очищаем превью загрузки если есть
-            const fileInput = document.getElementById('editPriceImages');
-            if (fileInput) {
-                fileInput.value = '';
-                const previewContainer = fileInput.parentNode.querySelector('.image-preview-container');
-                if (previewContainer) {
-                    previewContainer.remove();
-                }
+            // Обновляем отображение изображений
+            const priceId = document.getElementById('editPriceId')?.value;
+            if (priceId) {
+                await updatePriceImages(priceId);
             }
         } else {
             showAdminMessage(data.error || 'Ошибка удаления изображения', 'error');
@@ -265,7 +333,7 @@ async function deletePriceImage(priceId) {
     }
 }
 
-// ============== ЗАГРУЗКА ИЗОБРАЖЕНИЯ ==============
+// ============== ЗАГРУЗКА ИЗОБРАЖЕНИЙ ==============
 
 function initPriceImageUploadForm() {
     const form = document.getElementById('editPriceImageForm');
@@ -283,60 +351,32 @@ function initPriceImageUploadForm() {
 
         const fileInput = document.getElementById('editPriceImages');
         if (!fileInput || !fileInput.files || !fileInput.files.length) {
-            showAdminMessage('Выберите файл для загрузки', 'error');
+            showAdminMessage('Выберите файлы для загрузки', 'error');
             return;
         }
 
-        // Создаем FormData с изображением + данными из основной формы
+        // Создаем FormData с изображениями
         const formData = new FormData();
-        formData.append('image', fileInput.files[0]);
+        formData.append('price_item_id', priceId);
 
-        // Добавляем обязательные поля из формы редактирования
-        const mainForm = document.getElementById('editPriceForm');
-        if (mainForm) {
-            formData.append('title', document.getElementById('editTitle')?.value || '');
-            formData.append('description', document.getElementById('editDescription')?.value || '');
-            formData.append('price_from', document.getElementById('editPriceFrom')?.value || '0');
-
-            // Добавляем чекбоксы
-            if (document.getElementById('editHasSpecifications')?.checked) {
-                formData.append('has_specifications', 'on');
-            }
-            if (document.getElementById('editIsActive')?.checked) {
-                formData.append('is_active', 'on');
-            }
-
-            // Добавляем характеристики если есть
-            if (document.getElementById('editHasSpecifications')?.checked) {
-                // Используем функцию из admin-prices.js
-                if (typeof collectSpecifications === 'function') {
-                    const specs = collectSpecifications('edit');
-                    if (specs && specs.length > 0) {
-                        formData.append('specifications', JSON.stringify(specs));
-                    }
-                }
-            }
-        }
+        // Добавляем все выбранные файлы
+        Array.from(fileInput.files).forEach(file => {
+            formData.append('images', file);
+        });
 
         const spinner = document.getElementById('priceUploadSpinner');
         if (spinner) spinner.classList.remove('hidden');
 
-        // Debug: логируем что отправляется
-        console.log('=== Загрузка изображения для позиции прайса ===');
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value instanceof File ? `File(${value.name})` : value);
-        }
-
         try {
-            const response = await fetch(`/admin/prices/${priceId}/update`, {
+            const response = await fetch('/admin/prices/upload-images', {
                 method: 'POST',
                 body: formData
             });
 
             const data = await response.json();
 
-            if (data.success) {
-                showAdminMessage('Изображение загружено успешно', 'success');
+            if (response.ok && data.images) {
+                showAdminMessage(`Загружено ${data.images.length} изображений`, 'success');
 
                 // Очищаем поле выбора файла
                 fileInput.value = '';
@@ -347,14 +387,14 @@ function initPriceImageUploadForm() {
                     previewContainer.remove();
                 }
 
-                // Обновляем отображение изображения
-                await updatePriceImage(priceId);
+                // Обновляем отображение изображений
+                await updatePriceImages(priceId);
             } else {
-                showAdminMessage(data.error || 'Ошибка загрузки изображения', 'error');
+                showAdminMessage(data.error || 'Ошибка загрузки изображений', 'error');
             }
         } catch (error) {
-            console.error('Ошибка загрузки изображения:', error);
-            showAdminMessage('Ошибка загрузки изображения', 'error');
+            console.error('Ошибка загрузки изображений:', error);
+            showAdminMessage('Ошибка загрузки изображений', 'error');
         } finally {
             if (spinner) spinner.classList.add('hidden');
         }
@@ -414,6 +454,13 @@ function getOrCreatePreviewContainer(input) {
     return container;
 }
 
+// ============== УТИЛИТЫ ==============
+
+function truncateText(text, max) {
+    if (!text || text.length <= max) return text || '';
+    return text.slice(0, max) + '…';
+}
+
 function formatFileSize(bytes) {
     if (!bytes) return '0 B';
     const sizes = ['B', 'KB', 'MB', 'GB'];
@@ -421,17 +468,14 @@ function formatFileSize(bytes) {
     return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i];
 }
 
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // ============== ИНИЦИАЛИЗАЦИЯ ==============
 
-// Экспортируем функции для использования в admin-prices.js
-window.displayPriceImage = displayPriceImage;
-window.openPriceCropEditor = openPriceCropEditor;
-window.deletePriceImage = deletePriceImage;
-window.updatePriceImage = updatePriceImage;
-window.initPriceImageUploadForm = initPriceImageUploadForm;
-window.initPriceImagePreview = initPriceImagePreview;
-
-// Инициализируем при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     initPriceImageUploadForm();
     initPriceImagePreview();

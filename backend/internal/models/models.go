@@ -235,26 +235,27 @@ type Admin struct {
 //   - SortOrder определяет порядок отображения на странице
 //   - IsActive позволяет скрывать позиции без удаления
 type PriceItem struct {
-	ID                uint      `json:"id" gorm:"primaryKey"`
-	Title             string    `json:"title" gorm:"not null"`                   // Название (например, "Билборд 6x3")
-	Description       string    `json:"description"`                             // Краткое описание
-	ImagePath         string    `json:"image_path"`                              // Путь к оригинальному изображению
-	PriceFrom         int       `json:"price_from" gorm:"not null"`              // Цена "от" в рублях
-	HasSpecifications bool      `json:"has_specifications" gorm:"default:false"` // Есть ли таблица характеристик
-	SortOrder         int       `json:"sort_order" gorm:"default:0"`             // Порядок отображения
-	IsActive          bool      `json:"is_active" gorm:"default:true"`           // Активность
+	ID                uint   `json:"id" gorm:"primaryKey"`
+	Title             string `json:"title" gorm:"not null"`                   // Название (например, "Билборд 6x3")
+	Description       string `json:"description"`                             // Краткое описание
+	ImagePath         string `json:"image_path"`                              // Путь к оригинальному изображению
+	PriceFrom         int    `json:"price_from" gorm:"not null"`              // Цена "от" в рублях
+	HasSpecifications bool   `json:"has_specifications" gorm:"default:false"` // Есть ли таблица характеристик
+	SortOrder         int    `json:"sort_order" gorm:"default:0"`             // Порядок отображения
+	IsActive          bool   `json:"is_active" gorm:"default:true"`           // Активность
 
 	// Поля для работы с миниатюрами и кроппингом
-	ThumbnailSmallPath  string  `json:"thumbnail_small_path"`              // Путь к маленькой миниатюре (400x300)
-	ThumbnailMediumPath string  `json:"thumbnail_medium_path"`             // Путь к средней миниатюре (1200x900)
-	CropX               float64 `json:"crop_x" gorm:"default:50"`          // Позиция кроппинга по X (0-100%)
-	CropY               float64 `json:"crop_y" gorm:"default:50"`          // Позиция кроппинга по Y (0-100%)
-	CropScale           float64 `json:"crop_scale" gorm:"default:1.0"`     // Масштаб кроппинга (1.0-3.0)
+	ThumbnailSmallPath  string  `json:"thumbnail_small_path"`          // Путь к маленькой миниатюре (400x300)
+	ThumbnailMediumPath string  `json:"thumbnail_medium_path"`         // Путь к средней миниатюре (1200x900)
+	CropX               float64 `json:"crop_x" gorm:"default:50"`      // Позиция кроппинга по X (0-100%)
+	CropY               float64 `json:"crop_y" gorm:"default:50"`      // Позиция кроппинга по Y (0-100%)
+	CropScale           float64 `json:"crop_scale" gorm:"default:1.0"` // Масштаб кроппинга (1.0-3.0)
 
-	CreatedAt         time.Time `json:"created_at"`
-	UpdatedAt         time.Time `json:"updated_at"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 
 	Specifications []PriceSpecification `json:"specifications,omitempty" gorm:"foreignKey:PriceItemID;constraint:OnDelete:CASCADE"`
+	Images         []PriceImage         `json:"images,omitempty" gorm:"foreignKey:PriceItemID;constraint:OnDelete:CASCADE"`
 }
 
 // PriceSpecification представляет характеристику (строку в таблице) для позиции прайса.
@@ -276,6 +277,43 @@ type PriceSpecification struct {
 	SortOrder   int       `json:"sort_order" gorm:"default:0"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
+
+	PriceItem *PriceItem `json:"price_item,omitempty" gorm:"foreignKey:PriceItemID"`
+}
+
+// PriceImage представляет изображение для позиции прайса.
+//
+// Связи:
+//   - many-to-one с PriceItem (много изображений принадлежат одной позиции прайса)
+//
+// Особенности:
+//   - IsPrimary: только одно изображение может быть главным для каждой позиции
+//   - Thumbnails: автоматически генерируются в 2-х размерах (small, medium)
+//   - SortOrder: определяет порядок отображения в галерее
+type PriceImage struct {
+	ID           uint   `json:"id" gorm:"primaryKey"`
+	PriceItemID  uint   `json:"price_item_id" gorm:"not null;index;constraint:OnDelete:CASCADE"`
+	Filename     string `json:"filename" gorm:"not null"`
+	OriginalName string `json:"original_name"`
+	FilePath     string `json:"file_path" gorm:"not null"`
+	FileSize     int64  `json:"file_size"`
+	MimeType     string `json:"mime_type"`
+	Alt          string `json:"alt"`
+	Caption      string `json:"caption"`
+	SortOrder    int    `json:"sort_order" gorm:"default:0"`
+	IsPrimary    bool   `json:"is_primary" gorm:"default:false;index"` // Главное изображение позиции
+
+	// Thumbnails (автоматически генерируются при загрузке и при изменении crop)
+	ThumbnailSmallPath  string `json:"thumbnail_small_path"`  // 400x300 для карточек (~50KB)
+	ThumbnailMediumPath string `json:"thumbnail_medium_path"` // 1200x900 для галереи (~180KB)
+
+	// Настройки кроппинга для превью (используются в crop-editor.js)
+	CropX     float64 `json:"crop_x" gorm:"default:50"`      // Позиция X центра в процентах (0-100)
+	CropY     float64 `json:"crop_y" gorm:"default:50"`      // Позиция Y центра в процентах (0-100)
+	CropScale float64 `json:"crop_scale" gorm:"default:1.0"` // Масштаб изображения (0.5-3.0)
+
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 
 	PriceItem *PriceItem `json:"price_item,omitempty" gorm:"foreignKey:PriceItemID"`
 }

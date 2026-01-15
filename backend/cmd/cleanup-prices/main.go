@@ -62,7 +62,10 @@ func main() {
 	fmt.Print("Продолжить? (yes/no): ")
 
 	var answer string
-	fmt.Scanln(&answer)
+	if _, err := fmt.Scanln(&answer); err != nil {
+		fmt.Println("Ошибка чтения ввода")
+		os.Exit(1)
+	}
 
 	if answer != "yes" {
 		fmt.Println("Операция отменена")

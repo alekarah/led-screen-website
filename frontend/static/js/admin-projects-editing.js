@@ -253,6 +253,15 @@ function initEditForms() {
                     showAdminMessage('Изображения успешно загружены', 'success');
                     this.reset();
 
+                    // Удаляем контейнер превью полностью
+                    const fileInput = this.querySelector('input[type="file"]');
+                    if (fileInput) {
+                        const previewContainer = fileInput.parentNode.querySelector('.image-preview-container');
+                        if (previewContainer) {
+                            previewContainer.remove();
+                        }
+                    }
+
                     // Получаем текущий список изображений
                     const projectId = document.getElementById('edit_project_id').value;
                     if (projectId && result.images && result.images.length > 0) {
@@ -297,6 +306,14 @@ function initEditForms() {
                 if (submitBtn) submitBtn.disabled = false;
             }
         });
+
+        // Инициализируем превью изображений после пересоздания формы
+        // Используем setTimeout чтобы убедиться что DOM обновился
+        setTimeout(() => {
+            if (typeof initImagePreview === 'function') {
+                initImagePreview();
+            }
+        }, 0);
     }
 }
 

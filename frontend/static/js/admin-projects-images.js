@@ -262,7 +262,15 @@ async function setPrimaryImage(imageId) {
 function initImagePreview() {
     // только для инпутов именно в форме редактирования
     const input = document.querySelector('#editUploadForm input[type="file"][accept*="image"]');
-    if (!input || input.dataset.bound === '1') return;
+    if (!input) {
+        return;
+    }
+
+    // Удаляем флаг bound - форма пересоздана, нужно заново привязать обработчики
+    if (input.dataset.bound === '1') {
+        delete input.dataset.bound;
+    }
+
     input.dataset.bound = '1';
 
     input.addEventListener('change', () => {
@@ -301,13 +309,13 @@ function initImagePreview() {
 // Получение или создание контейнера для превью
 function getOrCreatePreviewContainer(input) {
     let container = input.parentNode.querySelector('.image-preview-container');
-    
+
     if (!container) {
         container = document.createElement('div');
         container.className = 'image-preview-container';
         input.parentNode.appendChild(container);
     }
-    
+
     return container;
 }
 
@@ -360,3 +368,6 @@ function escapeHtml(text) {
     div.textContent = text || '';
     return div.innerHTML;
 }
+
+// ============== ИНИЦИАЛИЗАЦИЯ ==============
+// initImagePreview() теперь вызывается из admin-projects-editing.js после открытия модального окна
