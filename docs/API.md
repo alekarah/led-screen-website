@@ -54,9 +54,16 @@
 `POST /api/track/project-view/:id`
 
 **Response** (200): `{ok: true}`
-**Note:** Агрегирует просмотры по дням (UTC) в `project_view_dailies`
+**Note:** Агрегирует просмотры по дням (MSK) в `project_view_dailies`. Client-side TTL 10 минут.
 
-### 4. Статистика заявок за 7 дней
+### 4. Трекинг просмотра позиции прайса
+
+`POST /api/track/price-view/:id`
+
+**Response** (200): `{ok: true}`
+**Note:** Агрегирует просмотры по дням (MSK) в `price_view_dailies`. Client-side TTL 10 минут.
+
+### 5. Статистика заявок за 7 дней
 
 `GET /api/admin/contacts-7d`
 
@@ -100,6 +107,45 @@
 
 ---
 
+## Админ API: Прайс-лист
+
+**Auth:** Все эндпоинты требуют JWT (`admin_token` cookie)
+
+**Страницы:**
+- `GET /admin/prices` - страница управления (HTML с модальными окнами)
+- `GET /admin/prices/:id` - получить позицию (Response: {price_item, images[], specifications[]}, Headers: no-cache)
+
+**CRUD позиций:**
+- `POST /admin/prices` - создать (Request: multipart/form-data: title*, description, price_from, has_specifications, is_active, image, specifications JSON)
+  - **Response:** `{success: true, price_id: 123, message}`
+  - **Note:** После создания открывается модалка редактирования для добавления изображений
+- `POST /admin/prices/:id/update` - обновить (Request: аналогично создать)
+- `DELETE /admin/prices/:id` - удалить (CASCADE: images, specifications, views)
+
+**Сортировка:**
+- `POST /admin/prices/sort` - сохранить порядок drag & drop (Request: {ids: [17, 20, 18]})
+
+**Изображения позиций прайса:**
+- `POST /admin/prices/:id/upload-images` - загрузить (Request: multipart/form-data: images[], Formats: jpg/png/gif/webp, Max: 10MB)
+  - **Автогенерация WebP thumbnails:** Small (400×300px) + Medium (1200×900px) с дефолтным кропом (50%, 50%, 1.0x)
+  - **Response:** `{message, images: [{id, filename, thumbnail_small_path, thumbnail_medium_path}]}`
+- `POST /admin/prices/images/:id/crop` - обновить кроппинг (Request: {crop_x: 0-100, crop_y: 0-100, crop_scale: 0.5-3.0})
+  - **Регенерация:** автоматически пересоздает WebP thumbnails с новыми параметрами кропа
+- `DELETE /admin/prices/images/:id` - удалить (удаляет оригинал + WebP thumbnails из файловой системы и БД)
+
+**Характеристики:**
+- Передаются как JSON в поле `specifications` при создании/обновлении
+- **Формат:** `[{group: "Параметры экрана", key: "Разрешение", value: "1920x1080", order: 0}, ...]`
+- **Группировка:** автоматическая по полю `group` с сортировкой по `order`
+
+**Аналитика:**
+- `POST /admin/prices/:id/reset-views` - сбросить просмотры позиции (Response: {ok: true})
+- `POST /admin/analytics/reset-prices` - сбросить всю статистику просмотров (TRUNCATE price_view_dailies)
+
+**Note:** Имена файлов: `price_{id}_{timestamp}_{index}.ext`, Thumbnails: `*_small.webp`, `*_medium.webp`, Путь: `../frontend/static/uploads/`
+
+---
+
 ## Админ API: Контакты
 
 **Страницы (HTML):**
@@ -129,8 +175,16 @@
 
 ## Админ API: Аналитика
 
-- `GET /admin/` - dashboard (HTML: статистика, заявки 7д, напоминания, топ-5 проектов 30д, график просмотров, system info)
-- `POST /admin/analytics/reset` - сбросить всю статистику просмотров (TRUNCATE project_view_dailies)
+- `GET /admin/` - dashboard (HTML: статистика, заявки 7д, напоминания, **топ-5 проектов 30д**, **топ-5 позиций прайса 30д**, график просмотров, system info)
+- `POST /admin/analytics/reset` - сбросить всю статистику просмотров проектов (TRUNCATE project_view_dailies)
+- `POST /admin/analytics/reset-prices` - сбросить всю статистику просмотров позиций прайса (TRUNCATE price_view_dailies)
+- `POST /admin/projects/:id/reset-views` - сбросить просмотры конкретного проекта (DELETE WHERE project_id)
+- `POST /admin/prices/:id/reset-views` - сбросить просмотры конкретной позиции прайса (DELETE WHERE price_item_id)
+
+**Фичи топ-5:**
+- Клик на название проекта/позиции → переход на страницу управления с автоматическим фокусом и желтой подсветкой (2.5 сек)
+- Кнопки сброса статистики для всей таблицы или отдельной записи
+- Тултипы с описанием при наведении на название
 
 ---
 
@@ -153,13 +207,23 @@ await fetch('/api/projects?page=1&limit=12&category=shopping-centers').then(r =>
 await fetch('/api/contact', {method: 'POST', headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({name: 'Иван', phone: '+79211234567', email: 'ivan@example.com'})})
 
+// Публичный: POST трекинг просмотра проекта
+await fetch('/api/track/project-view/5', {method: 'POST'})
+
+// Публичный: POST трекинг просмотра позиции прайса
+await fetch('/api/track/price-view/17', {method: 'POST'})
+
 // Админ: POST обновить статус (важно: credentials: 'include' для JWT cookie!)
 await fetch('/admin/contacts/10/status', {method: 'POST', credentials: 'include',
   headers: {'Content-Type': 'application/json'}, body: JSON.stringify({status: 'processed'})})
 
-// Админ: POST загрузка изображений
+// Админ: POST загрузка изображений проекта
 const fd = new FormData(); fd.append('project_id', '5'); fd.append('images', file);
 await fetch('/admin/upload-images', {method: 'POST', credentials: 'include', body: fd})
+
+// Админ: POST загрузка изображений позиции прайса
+const fd2 = new FormData(); fd2.append('images', file1); fd2.append('images', file2);
+await fetch('/admin/prices/17/upload-images', {method: 'POST', credentials: 'include', body: fd2})
 ```
 
 **cURL:**

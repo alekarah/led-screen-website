@@ -34,6 +34,15 @@
     background: var(--hover);
 }
 
+/* Подсветка найденной позиции прайса (?focus_id) */
+.price-item.price-focus {
+    background: #fff7cc;
+    box-shadow: inset 0 0 0 2px #facc15, 0 6px 20px rgba(0,0,0,.08);
+    position: relative;
+    z-index: 1;
+    transition: background .2s ease, box-shadow .2s ease;
+}
+
 .price-info {
     flex: 1;
     display: flex;

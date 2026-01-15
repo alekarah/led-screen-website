@@ -84,6 +84,31 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 		views30 = nil
 	}
 
+	// Топ-5 позиций прайса
+	type TopPriceItem struct {
+		PriceItemID uint   `gorm:"column:price_item_id"`
+		Title       string `gorm:"column:title"`
+		Views       int64  `gorm:"column:views"`
+		Description string `gorm:"column:description"`
+	}
+
+	var topPriceItems []TopPriceItem
+	if err := h.db.Table("price_view_dailies AS v").
+		Select(`
+			p.id    AS price_item_id,
+			p.title AS title,
+			SUM(v.views) AS views,
+			p.description AS description
+		`).
+		Joins("JOIN price_items p ON p.id = v.price_item_id").
+		Where("v.day >= CURRENT_DATE - INTERVAL '29 days'").
+		Group("p.id, p.title, p.description").
+		Order("views DESC").
+		Limit(5).
+		Scan(&topPriceItems).Error; err != nil {
+		topPriceItems = nil
+	}
+
 	// --- СИСТЕМА ---
 	var dbOK bool
 	if sqlDB, err := h.db.DB(); err == nil {
@@ -112,8 +137,9 @@ func (h *Handlers) AdminDashboard(c *gin.Context) {
 		},
 
 		"analytics": gin.H{
-			"topProjects": topProjects,
-			"views30":     views30,
+			"topProjects":   topProjects,
+			"topPriceItems": topPriceItems,
+			"views30":       views30,
 		},
 
 		"sys": sys,
@@ -185,6 +211,30 @@ func (h *Handlers) ResetProjectViews(c *gin.Context) {
 	if err := h.db.Where("project_id = ?", id).Delete(&models.ProjectViewDaily{}).Error; err != nil {
 		log.Printf("Ошибка сброса статистики проекта %d: %v", id, err)
 		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики проекта")
+		return
+	}
+	jsonOK(c, gin.H{"ok": true})
+}
+
+// ResetAllPriceViews — глобальный сброс всей статистики просмотров позиций прайса
+func (h *Handlers) ResetAllPriceViews(c *gin.Context) {
+	if err := h.db.Exec(`TRUNCATE TABLE price_view_dailies RESTART IDENTITY`).Error; err != nil {
+		log.Printf("Ошибка сброса статистики просмотров прайса: %v", err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики")
+		return
+	}
+	jsonOK(c, gin.H{"ok": true})
+}
+
+// ResetPriceItemViews — сброс просмотров только для конкретной позиции прайса
+func (h *Handlers) ResetPriceItemViews(c *gin.Context) {
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+	if err := h.db.Where("price_item_id = ?", id).Delete(&models.PriceViewDaily{}).Error; err != nil {
+		log.Printf("Ошибка сброса статистики позиции прайса %d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка сброса статистики позиции прайса")
 		return
 	}
 	jsonOK(c, gin.H{"ok": true})

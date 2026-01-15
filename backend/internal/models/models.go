@@ -317,3 +317,24 @@ type PriceImage struct {
 
 	PriceItem *PriceItem `json:"price_item,omitempty" gorm:"foreignKey:PriceItemID"`
 }
+
+// PriceViewDaily представляет агрегированные просмотры позиции прайса по дням.
+//
+// Связи:
+//   - many-to-one с PriceItem (CASCADE DELETE при удалении позиции)
+//
+// Особенности:
+//   - Day хранится как date (обнуленное время до полуночи МСК)
+//   - Views инкрементируется через UPSERT (INSERT ... ON CONFLICT)
+//   - Уникальный индекс (price_item_id, day) предотвращает дубликаты
+//   - Используется для построения аналитики топ-5 позиций в dashboard
+//
+// Трекинг происходит через /api/track/price-view/:id
+type PriceViewDaily struct {
+	ID          uint      `json:"id" gorm:"primaryKey"`
+	PriceItemID uint      `json:"price_item_id" gorm:"not null;uniqueIndex:uniq_price_day;constraint:OnDelete:CASCADE,OnUpdate:CASCADE"`
+	Day         time.Time `json:"day" gorm:"type:date;not null;uniqueIndex:uniq_price_day"`
+	Views       int64     `json:"views" gorm:"default:1"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}

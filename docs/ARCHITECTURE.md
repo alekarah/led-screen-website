@@ -60,11 +60,12 @@ backend/
 │   │   ├── handlers.go            # Публичные страницы
 │   │   ├── seo.go                 # SEO handlers (sitemap.xml, robots.txt)
 │   │   ├── admin_auth.go          # Аутентификация
-│   │   ├── admin_dashboard.go     # Dashboard с аналитикой
+│   │   ├── admin_dashboard.go     # Dashboard с аналитикой (топ-5 проектов/прайсов)
 │   │   ├── admin_projects_crud.go # CRUD проектов
+│   │   ├── admin_prices_crud.go   # CRUD позиций прайс-листа
 │   │   ├── admin_actions.go       # Действия админа (контакты)
 │   │   ├── admin_images.go        # Загрузка изображений и автогенерация thumbnails
-│   │   ├── image_processor.go     # Обработка изображений (thumbnails, crop)
+│   │   ├── image_processor.go     # Обработка изображений (thumbnails, crop, WebP)
 │   │   ├── admin_sorting.go       # Сортировка проектов
 │   │   ├── admin_pages.go         # Рендеринг админских страниц
 │   │   └── admin_helpers.go       # Вспомогательные функции
@@ -91,8 +92,8 @@ HTTP Request → Gin Router → Middleware (auth) → Handler → GORM → Postg
 ```
 
 **Типы маршрутов:**
-- Публичные: `/`, `/projects`, `/services`, `/contact`
-- API: `/api/projects`, `/api/contact`
+- Публичные: `/`, `/projects`, `/services`, `/prices`, `/contact`
+- API: `/api/projects`, `/api/contact`, `/api/track/project-view/:id`, `/api/track/price-view/:id`
 - Админ: `/admin/login` (открытый), `/admin/*` (JWT защита)
 
 ### 🔐 Система авторизации
@@ -118,18 +119,25 @@ Request → AuthMiddleware → validate JWT → extract claims (admin_id, userna
 | `Project` | Проекты портфолио | Title, Slug, Description, Location, Size, Featured, SortOrder, ViewCount |
 | `Category` | Категории проектов | Name, Slug, Description |
 | `Image` | Изображения проектов | ProjectID, Filename, FilePath, ThumbnailSmallPath, ThumbnailMediumPath, CropX/Y/Scale, IsPrimary |
+| `PriceItem` | Позиции прайс-листа | Title, Description, PriceFrom, HasSpecifications, IsActive, SortOrder |
+| `PriceImage` | Изображения позиций прайса | PriceItemID, Filename, FilePath, ThumbnailSmallPath, ThumbnailMediumPath, CropX/Y/Scale |
+| `PriceSpecification` | Характеристики позиций прайса | PriceItemID, SpecGroup, SpecKey, SpecValue, SpecOrder (группировка) |
 | `ContactForm` | Заявки клиентов | Name, Phone, Email, Status, ArchivedAt, RemindAt |
 | `ContactNote` | Заметки по заявкам | ContactID, Text, Author |
 | `Admin` | Администраторы | Username, PasswordHash, IsActive, LastLoginAt |
-| `ProjectViewDaily` | Просмотры по дням | ProjectID, Day, Views |
+| `ProjectViewDaily` | Просмотры проектов по дням | ProjectID, Day, Views (аналитика) |
+| `PriceViewDaily` | Просмотры позиций прайса по дням | PriceItemID, Day, Views (аналитика) |
 | `Service` | Услуги компании | Name, Slug, Description, Icon, Featured |
 | `Settings` | Настройки сайта | Key, Value, Type |
 
 **Связи между таблицами:**
 - `Project` ↔ `Category` (many-to-many через `project_categories`)
 - `Project` → `Image` (one-to-many)
-- `ContactForm` → `ContactNote` (one-to-many)
 - `Project` → `ProjectViewDaily` (one-to-many с CASCADE DELETE)
+- `PriceItem` → `PriceImage` (one-to-many с CASCADE DELETE)
+- `PriceItem` → `PriceSpecification` (one-to-many с CASCADE DELETE)
+- `PriceItem` → `PriceViewDaily` (one-to-many с CASCADE DELETE)
+- `ContactForm` → `ContactNote` (one-to-many)
 
 ---
 
@@ -147,16 +155,23 @@ frontend/
 │   │   ├── admin-vars.css       # CSS переменные (админка)
 │   │   ├── admin-forms.css      # Формы админки
 │   │   ├── admin-projects.css   # Проекты админки
+│   │   ├── admin-prices.css     # Прайс-лист админки
 │   │   ├── admin-contacts.css   # Контакты админки
 │   │   ├── admin-login.css      # Страница входа
+│   │   ├── admin-modals.css     # Модальные окна админки
 │   │   ├── crop-editor.css      # Редактор обрезки изображений
-│   │   └── modal.css            # Модальные окна
+│   │   ├── public-prices.css    # Прайс-лист (публичная)
+│   │   └── public-responsive.css # Медиа-запросы публичной части
 │   ├── js/                      # JavaScript модули
 │   │   ├── admin-base.js        # Базовая функциональность админки
 │   │   ├── admin-projects-*.js  # Модули управления проектами
+│   │   ├── admin-prices.js      # CRUD прайс-листа
+│   │   ├── admin-prices-images.js # Управление изображениями прайса
 │   │   ├── admin-contacts-*.js  # Модули управления контактами
 │   │   ├── crop-editor.js       # Редактор обрезки
-│   │   └── vendor/              # Сторонние библиотеки (Sortable.js)
+│   │   ├── price-modal.js       # Модальные окна прайс-листа (публичная)
+│   │   ├── prices-accordion.js  # Аккордеон характеристик (публичная)
+│   │   └── vendor/              # Сторонние библиотеки (Sortable.js, Chart.js)
 │   ├── images/                  # Статические изображения
 │   └── uploads/                 # Загруженные файлы (gitignore)
 └── templates/                   # HTML шаблоны (Go templates)
@@ -164,10 +179,12 @@ frontend/
     ├── admin_base.html          # Базовый layout (админка)
     ├── index.html               # Главная страница
     ├── projects.html            # Портфолио
+    ├── prices.html              # Прайс-лист с модальными окнами
     ├── services.html            # Услуги
     ├── contact.html             # Контакты
-    ├── admin_dashboard.html     # Dashboard админки
+    ├── admin_dashboard.html     # Dashboard админки (топ-5 проектов/прайсов)
     ├── admin_projects.html      # Управление проектами
+    ├── admin_prices.html        # Управление прайс-листом
     ├── admin_contacts.html      # Управление заявками
     └── admin_login.html         # Страница входа
 ```

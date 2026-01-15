@@ -375,9 +375,31 @@ function savePriceOrder() {
 
 // ============== ИНИЦИАЛИЗАЦИЯ ==============
 
+// Фокус на позицию прайса по параметру URL (?focus_id=123)
+function focusPriceFromQuery() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('focus_id');
+    if (!id) return;
+
+    const el = document.querySelector(`.price-item[data-price-id="${id}"]`);
+    if (!el) return;
+
+    try {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (_) {
+        el.scrollIntoView();
+    }
+
+    el.classList.add('price-focus');
+    setTimeout(() => el.classList.remove('price-focus'), 2500);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Инициализация drag & drop сортировки
     initPriceSorting();
+
+    // Фокус на позицию из URL параметра
+    focusPriceFromQuery();
 
     // Обработчики для открытия модалок
     const createBtn = document.getElementById('openCreatePriceModal');

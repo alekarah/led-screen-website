@@ -60,6 +60,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.POST("/contact", h.SubmitContact)                   // Отправка заявки от клиента
 		api.GET("/admin/contacts-7d", h.AdminContacts7Days)     // Статистика заявок за 7 дней (для dashboard)
 		api.POST("/track/project-view/:id", h.TrackProjectView) // Трекинг просмотров проекта
+		api.POST("/track/price-view/:id", h.TrackPriceView)     // Трекинг просмотров позиции прайса
 
 		// Telegram Bot API - доступ только с localhost (127.0.0.1)
 		telegram := api.Group("/telegram")
@@ -99,11 +100,12 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		// Изображения - загрузка, удаление, кроппинг
 		img := admin.Group("/")
 		{
-			img.POST("upload-images", h.UploadImages)             // Загрузка изображений для проекта
-			img.DELETE("images/:id", h.DeleteImage)               // Удаление изображения
-			img.POST("images/:id/crop", h.UpdateImageCrop)        // Обновление настроек кроппинга
-			img.POST("images/:id/set-primary", h.SetPrimaryImage) // Установка главного изображения проекта
-			img.POST("analytics/reset", h.ResetAllViews)          // Глобальный сброс статистики просмотров
+			img.POST("upload-images", h.UploadImages)                // Загрузка изображений для проекта
+			img.DELETE("images/:id", h.DeleteImage)                  // Удаление изображения
+			img.POST("images/:id/crop", h.UpdateImageCrop)           // Обновление настроек кроппинга
+			img.POST("images/:id/set-primary", h.SetPrimaryImage)    // Установка главного изображения проекта
+			img.POST("analytics/reset", h.ResetAllViews)             // Глобальный сброс статистики просмотров проектов
+			img.POST("analytics/reset-prices", h.ResetAllPriceViews) // Глобальный сброс статистики просмотров прайса
 		}
 
 		// Заявки (контакты) - CRM система
@@ -142,6 +144,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			prices.DELETE("/images/:id", h.DeletePriceImageNew)            // Удаление изображения из price_images
 			prices.POST("/images/:id/crop", h.UpdatePriceImageCropNew)     // Обновление настроек кроппинга изображения
 			prices.POST("/images/:id/set-primary", h.SetPrimaryPriceImage) // Установка главного изображения позиции
+			prices.POST("/:id/reset-views", h.ResetPriceItemViews)         // Сброс просмотров конкретной позиции прайса
 		}
 	}
 }

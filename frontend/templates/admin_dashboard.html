@@ -172,6 +172,72 @@ document.addEventListener('DOMContentLoaded', async () => {
 </div>
 
 <div class="form-section">
+  {{if .analytics.topPriceItems}}
+    <div class="dashboard-analytics">
+      <h2>Топ-5 позиций прайса (30 дней)</h2>
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th aria-label="Позиция в рейтинге"></th>
+            <th>Позиция прайса</th>
+            <th>Просмотры</th>
+            <th class="reset-col">
+              <button type="button" class="btn-link reset-all" id="reset-price-views-all"
+                aria-label="Сбросить статистику просмотров по всем позициям прайса">Сбросить всё</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range $i, $p := .analytics.topPriceItems}}
+          <tr>
+            <td>{{add $i 1}}</td>
+            <td class="project-cell">
+              <span class="project-tt">
+                <a href="/admin/prices?focus_id={{$p.PriceItemID}}" class="project-link">
+                  {{$p.Title}}
+                </a>
+
+                {{if $p.Description}}
+                  <div class="project-tooltip" role="tooltip">
+                    <div class="desc">{{$p.Description}}</div>
+                  </div>
+                {{end}}
+              </span>
+            </td>
+            <td class="views">{{$p.Views}}</td>
+            <td class="reset-col">
+              <button type="button" class="btn-link reset-price-item"
+                data-price-item-id="{{$p.PriceItemID}}"
+                aria-label="Сбросить просмотры позиции «{{$p.Title}}»">сбросить</button>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+
+      <script>
+      document.addEventListener('click', async (e) => {
+        if (e.target.closest('#reset-price-views-all')) {
+          if (!confirm('Сбросить ВСЮ статистику просмотров позиций прайса?')) return;
+          const res = await fetch('/admin/analytics/reset-prices', { method: 'POST' });
+          if (res.ok) location.reload();
+          return;
+        }
+        const priceBtn = e.target.closest('.reset-price-item');
+        if (priceBtn) {
+          const id = priceBtn.dataset.priceItemId;
+          if (!id) return;
+          if (!confirm('Сбросить просмотры для позиции прайса #' + id + '?')) return;
+          const res = await fetch(`/admin/prices/${id}/reset-views`, { method: 'POST' });
+          if (res.ok) location.reload();
+        }
+      });
+      </script>
+    </div>
+  {{end}}
+</div>
+
+<div class="form-section">
     <h2>Система</h2>
     <div class="sys-grid">
         <div class="sys-item">

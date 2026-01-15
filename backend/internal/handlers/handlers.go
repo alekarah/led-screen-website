@@ -368,6 +368,63 @@ func (h *Handlers) TrackProjectView(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"ok": true})
 }
 
+// TrackPriceView увеличивает счетчик просмотров позиции прайса за текущий день (по МСК).
+//
+// Использует UPSERT (INSERT ... ON CONFLICT) для атомарного инкремента счетчика.
+// Если запись за сегодняшний день уже существует - увеличивает views на 1,
+// иначе создает новую запись с views=1.
+//
+// Параметры:
+//   - id (path): ID позиции прайса
+//
+// Просмотры агрегируются по дням в таблице price_view_dailies.
+//
+// POST /api/track/price-view/:id
+func (h *Handlers) TrackPriceView(c *gin.Context) {
+	pid, err := strconv.Atoi(c.Param("id"))
+	if err != nil || pid <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid price item id"})
+		return
+	}
+
+	var exists int64
+	if err := h.db.Model(&models.PriceItem{}).Where("id = ?", pid).Count(&exists).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "db error"})
+		return
+	}
+	if exists == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "price item not found"})
+		return
+	}
+
+	// Получаем текущую дату по Московскому времени, обнуляем время до полуночи
+	now := NowMSK()
+	day := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, moscowLoc)
+
+	rec := models.PriceViewDaily{
+		PriceItemID: uint(pid),
+		Day:         day,
+		Views:       1,
+	}
+
+	// UPSERT: если запись (price_item_id, day) существует - инкрементируем views,
+	// иначе создаем новую запись с views=1
+	if err := h.db.Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "price_item_id"},
+			{Name: "day"},
+		},
+		DoUpdates: clause.Assignments(map[string]any{
+			"views": gorm.Expr(`"price_view_dailies"."views" + EXCLUDED."views"`),
+		}),
+	}).Create(&rec).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "db upsert error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"ok": true})
+}
+
 // ==================== Утилитные функции ====================
 
 // generateSlug создает URL-friendly slug из русского или английского названия.

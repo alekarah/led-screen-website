@@ -4,6 +4,25 @@
         btn: '.price-detail-btn'
     };
 
+    const VIEW_ENDPOINT_BY_ID = (id) => `/api/track/price-view/${id}`;
+    const VIEW_TTL_MIN = 10;
+
+    function nowSec(){ return Math.floor(Date.now()/1000); }
+
+    function viewedRecently(key, ttlMin){
+        try{
+            const raw = sessionStorage.getItem(key);
+            if(!raw) return false;
+            const ts = parseInt(raw, 10);
+            if(Number.isNaN(ts)) return false;
+            return (nowSec() - ts) < (ttlMin*60);
+        }catch(_){ return false; }
+    }
+
+    function markViewedTTL(key){
+        try{ sessionStorage.setItem(key, String(nowSec())); }catch(_){}
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -189,6 +208,16 @@
             }
 
             galleryState.currentIndex = startIndex;
+
+            // Трекинг просмотров (с TTL через sessionStorage)
+            const priceItemId = btn.getAttribute('data-price-id');
+            if (priceItemId) {
+                const key = `price_view:${priceItemId}`;
+                if (!viewedRecently(key, VIEW_TTL_MIN)) {
+                    try { fetch(VIEW_ENDPOINT_BY_ID(priceItemId), { method: 'POST' }); } catch(_) {}
+                    markViewedTTL(key);
+                }
+            }
 
             // Заполняем текстовую информацию
             ui.title.textContent = title;
