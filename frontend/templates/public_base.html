@@ -264,6 +264,20 @@
                     </a>
                 </li>
                 <li>
+                    <a href="/prices"
+                    class="{{if eq .PageID "prices"}}active{{end}}"
+                    {{if eq .PageID "prices"}}aria-current="page"{{end}}>
+                    Цены
+                    </a>
+                </li>
+                <li>
+                    <a href="/projects"
+                    class="{{if eq .PageID "projects"}}active{{end}}"
+                    {{if eq .PageID "projects"}}aria-current="page"{{end}}>
+                    Портфолио
+                    </a>
+                </li>
+                <li>
                     <a href="/services"
                     class="{{if eq .PageID "services"}}active{{end}}"
                     {{if eq .PageID "services"}}aria-current="page"{{end}}>
@@ -292,20 +306,6 @@
                         </ul>
                     </div>
                     {{end}}
-                </li>
-                <li>
-                    <a href="/projects"
-                    class="{{if eq .PageID "projects"}}active{{end}}"
-                    {{if eq .PageID "projects"}}aria-current="page"{{end}}>
-                    Портфолио
-                    </a>
-                </li>
-                <li>
-                    <a href="/prices"
-                    class="{{if eq .PageID "prices"}}active{{end}}"
-                    {{if eq .PageID "prices"}}aria-current="page"{{end}}>
-                    Цены
-                    </a>
                 </li>
                 <li>
                     <a href="/contact"
