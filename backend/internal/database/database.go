@@ -140,6 +140,7 @@ func Migrate(db *gorm.DB) error {
 		&models.PriceSpecification{},
 		&models.PriceImage{},
 		&models.PriceViewDaily{},
+		&models.PromoPopup{},
 	); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
 	}
@@ -258,6 +259,23 @@ func seedInitialData(db *gorm.DB) error {
 			if err := db.Create(&service).Error; err != nil {
 				return fmt.Errorf("failed to create service %s: %w", service.Name, err)
 			}
+		}
+	}
+
+	// Создаем запись PromoPopup если её ещё нет (singleton)
+	var promoCount int64
+	db.Model(&models.PromoPopup{}).Count(&promoCount)
+	if promoCount == 0 {
+		promo := models.PromoPopup{
+			Title:            "",
+			Content:          "",
+			IsActive:         false,
+			Pages:            `["home"]`,
+			TTLHours:         24,
+			ShowDelaySeconds: 0,
+		}
+		if err := db.Create(&promo).Error; err != nil {
+			return fmt.Errorf("failed to create promo popup: %w", err)
 		}
 	}
 

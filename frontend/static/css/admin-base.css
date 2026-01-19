@@ -36,10 +36,21 @@ html, body {
   align-items: center;
 }
 .nav-links a {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
 }
-.nav-links a:hover { text-decoration: underline; }
+.nav-links a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+.nav-links a[aria-current="page"] {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: 500;
+}
 
 /* Кнопка Выход прибита к правому краю */
 .nav-links li:last-child {
@@ -356,3 +367,48 @@ button[aria-disabled="true"]{
 .col-width-12 {
   width: 12%;
 }
+
+/* ============================================
+   СТРАНИЦА АКЦИИ (PROMO)
+   ============================================ */
+.promo-admin { max-width: 800px; }
+.promo-admin .alert-success {
+  background: #d1fae5; border: 1px solid #10b981; color: #065f46;
+  padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem;
+}
+
+/* Чекбокс активации popup */
+.promo-activate-group { margin-top: 1rem; }
+.promo-activate-group label.promo-activate-label {
+  display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+.promo-activate-group label.promo-activate-label:focus-within { outline: none; }
+.promo-activate-group input.promo-activate-checkbox {
+  width: 18px !important; height: 18px !important; cursor: pointer; margin: 0; 
+  flex-shrink: 0; padding: 0 !important; border: none !important;
+}
+.promo-activate-group input.promo-activate-checkbox:focus { outline: none !important; box-shadow: none !important; }
+.promo-activate-text { font-size: 1.2rem; font-weight: 500; color: #334155; white-space: nowrap; }
+
+/* Превью popup */
+.promo-preview-container { background: #f3f4f6; border-radius: 8px; padding: 2rem; }
+.promo-preview {
+  background: rgba(0,0,0,0.5); border-radius: 8px; padding: 3rem;
+  display: flex; align-items: center; justify-content: center; min-height: 200px;
+  backdrop-filter: blur(4px);
+}
+.promo-preview-popup {
+  background: #fff; border-radius: 16px; padding: 3rem; max-width: 560px; width: 100%;
+  position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  border: 3px solid #ffa38d;
+}
+.promo-preview-close {
+  position: absolute; top: 1rem; right: 1rem; background: #f3f4f6; border: none;
+  font-size: 1.5rem; color: #666; cursor: pointer; line-height: 1;
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.promo-preview-close:hover { background: #e5e7eb; color: #333; }
+.promo-preview-title { margin: 0 0 1.25rem; font-size: 2rem; color: #ffa38d; font-weight: 700; text-align: center; }
+.promo-preview-content { margin: 0; color: #444; line-height: 1.7; white-space: pre-wrap; font-size: 1.2rem; text-align: center; }

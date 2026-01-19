@@ -1,0 +1,108 @@
+/* Promo Popup - всплывающее окно для акций */
+.promo-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.promo-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.promo-popup-content {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 3rem;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    animation: promoPopupIn 0.3s ease-out, promoPulse 2s ease-in-out 0.5s infinite;
+    border: 3px solid var(--p-accent, #ffa38d);
+}
+
+@keyframes promoPopupIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes promoPulse {
+    0%, 100% {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 0 0 rgba(255, 163, 141, 0);
+    }
+    50% {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 20px 6px rgba(255, 163, 141, 0.25);
+    }
+}
+
+.promo-popup-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #f3f4f6;
+    border: none;
+    color: #666;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    line-height: 1;
+}
+
+.promo-popup-close:hover {
+    background: #e5e7eb;
+    color: #333;
+}
+
+.promo-popup-title {
+    margin: 0 0 1.25rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--p-accent, #ffa38d);
+    line-height: 1.2;
+    text-align: center;
+}
+
+.promo-popup-text {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #444;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .promo-popup-content {
+        padding: 2rem 1.5rem;
+        margin: 0.5rem;
+        border-radius: 12px;
+    }
+    .promo-popup-title { font-size: 1.4rem; }
+    .promo-popup-text { font-size: 1rem; }
+}

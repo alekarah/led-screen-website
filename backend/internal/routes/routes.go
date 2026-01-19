@@ -61,6 +61,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.GET("/admin/contacts-7d", h.AdminContacts7Days)     // Статистика заявок за 7 дней (для dashboard)
 		api.POST("/track/project-view/:id", h.TrackProjectView) // Трекинг просмотров проекта
 		api.POST("/track/price-view/:id", h.TrackPriceView)     // Трекинг просмотров позиции прайса
+		api.GET("/promo", h.GetActivePromo)                     // Получение активного popup для страницы
 
 		// Telegram Bot API - доступ только с localhost (127.0.0.1)
 		telegram := api.Group("/telegram")
@@ -146,5 +147,9 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			prices.POST("/images/:id/set-primary", h.SetPrimaryPriceImage) // Установка главного изображения позиции
 			prices.POST("/:id/reset-views", h.ResetPriceItemViews)         // Сброс просмотров конкретной позиции прайса
 		}
+
+		// Промо popup - управление всплывающим окном для акций
+		admin.GET("/promo", h.AdminPromoPage)    // Страница настроек popup
+		admin.POST("/promo", h.AdminPromoUpdate) // Сохранение настроек popup
 	}
 }

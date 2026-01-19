@@ -338,3 +338,25 @@ type PriceViewDaily struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
+
+// PromoPopup представляет настройки всплывающего окна для акций и промо.
+//
+// Особенности:
+//   - Только одна запись в таблице (singleton pattern)
+//   - IsActive определяет показывать ли popup на сайте
+//   - Pages - JSON массив страниц для показа: ["home", "prices", "projects", "services", "contact", "led-guide"]
+//   - TTLHours - через сколько часов показать снова (0 = показывать всегда)
+//   - ShowDelaySeconds - задержка показа после загрузки страницы
+//
+// Управляется через /admin/promo
+type PromoPopup struct {
+	ID               uint      `json:"id" gorm:"primaryKey"`
+	Title            string    `json:"title" gorm:"not null;default:''"`
+	Content          string    `json:"content" gorm:"type:text;not null;default:''"`
+	IsActive         bool      `json:"is_active" gorm:"default:false"`
+	Pages            string    `json:"pages" gorm:"type:text;not null;default:'[\"home\"]'"` // JSON массив страниц
+	TTLHours         int       `json:"ttl_hours" gorm:"default:24"`                          // 0 = показывать всегда
+	ShowDelaySeconds int       `json:"show_delay_seconds" gorm:"default:0"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
+}

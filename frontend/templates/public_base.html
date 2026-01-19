@@ -242,6 +242,7 @@
     <link rel="stylesheet" href="/static/css/public-footer.css">
     <link rel="stylesheet" href="/static/css/public-privacy.css">
     <link rel="stylesheet" href="/static/css/public-responsive.css">
+    <link rel="stylesheet" href="/static/css/promo-popup.css">
     <link rel="stylesheet" href="/static/css/led-effect.css">
     
     <!-- Дополнительные стили для конкретной страницы -->
@@ -376,6 +377,59 @@
 
     <!-- Мобильное меню -->
     <script src="/static/js/mobile-menu.js" defer></script>
+
+    <!-- Promo Popup -->
+    <div id="promoPopup" class="promo-popup" style="display:none;">
+        <div class="promo-popup-overlay"></div>
+        <div class="promo-popup-content">
+            <button type="button" class="promo-popup-close" aria-label="Закрыть">&times;</button>
+            <h3 class="promo-popup-title"></h3>
+            <p class="promo-popup-text"></p>
+        </div>
+    </div>
+    <script>
+    (function() {
+        var pageId = '{{.PageID}}';
+        var popup = document.getElementById('promoPopup');
+        if (!popup) return;
+
+        fetch('/api/promo?page=' + encodeURIComponent(pageId))
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (!data.active) return;
+
+                // Проверяем TTL в localStorage
+                var storageKey = 'promo_popup_closed';
+                var lastClosed = localStorage.getItem(storageKey);
+                if (lastClosed && data.ttl_hours > 0) {
+                    var ttlMs = data.ttl_hours * 60 * 60 * 1000;
+                    if (Date.now() - parseInt(lastClosed, 10) < ttlMs) return;
+                }
+
+                // Показываем popup с задержкой
+                var delay = (data.show_delay_seconds || 0) * 1000;
+                setTimeout(function() {
+                    popup.querySelector('.promo-popup-title').textContent = data.title || '';
+                    popup.querySelector('.promo-popup-text').textContent = data.content || '';
+                    popup.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }, delay);
+            })
+            .catch(function() {});
+
+        // Закрытие popup
+        function closePopup() {
+            popup.style.display = 'none';
+            document.body.style.overflow = '';
+            localStorage.setItem('promo_popup_closed', Date.now().toString());
+        }
+        popup.querySelector('.promo-popup-close').addEventListener('click', closePopup);
+        popup.querySelector('.promo-popup-overlay').addEventListener('click', closePopup);
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && popup.style.display === 'flex') closePopup();
+        });
+    })();
+    </script>
 
     {{block "extra-js" .}}{{end}}
 </body>

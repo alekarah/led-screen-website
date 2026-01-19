@@ -1,0 +1,119 @@
+{{define "admin-promo-content"}}
+<div class="promo-admin">
+    <script>
+    // Показ сообщения об успехе
+    if (window.location.search.includes('success=1')) {
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success';
+            alert.textContent = 'Настройки акции успешно сохранены!';
+            document.querySelector('.promo-admin').prepend(alert);
+            setTimeout(() => alert.remove(), 5000);
+        });
+    }
+    </script>
+
+    <div class="form-section">
+        <h2>Настройки всплывающего окна</h2>
+        <p class="form-help">Настройте popup-окно для отображения акций и специальных предложений на сайте.</p>
+
+        <form action="/admin/promo" method="POST" class="promo-form">
+            <!-- Статус активации -->
+            <div class="form-group promo-activate-group">
+                <label class="promo-activate-label">
+                    <input type="checkbox" name="is_active" class="promo-activate-checkbox" {{if .promo.IsActive}}checked{{end}}>
+                    <span class="promo-activate-text">Активировать popup</span>
+                </label>
+                <p class="form-hint">Если включено, popup будет показываться посетителям на выбранных страницах.</p>
+            </div>
+
+            <!-- Заголовок -->
+            <div class="form-group">
+                <label for="title">Заголовок</label>
+                <input type="text" id="title" name="title" value="{{.promo.Title}}" placeholder="Например: Акция!" maxlength="100">
+            </div>
+
+            <!-- Содержимое -->
+            <div class="form-group">
+                <label for="content">Текст акции</label>
+                <textarea id="content" name="content" rows="4" placeholder="Например: Скидка 15% на все LED экраны до конца месяца!">{{.promo.Content}}</textarea>
+                <p class="form-hint">Можно использовать несколько строк текста.</p>
+            </div>
+
+            <!-- Выбор страниц -->
+            <div class="form-group">
+                <label>Показывать на страницах</label>
+                <div class="checkbox-group" id="pagesCheckboxes">
+                    {{range .allPages}}
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="pages[]" value="{{.ID}}" data-page-id="{{.ID}}">
+                        <span class="checkbox-text">{{.Name}}</span>
+                    </label>
+                    {{end}}
+                </div>
+                <input type="hidden" id="selectedPagesData" value="{{.promo.Pages}}">
+            </div>
+
+            <!-- TTL (через сколько показать снова) -->
+            <div class="form-group">
+                <label for="ttl_hours">Повторный показ через (часов)</label>
+                <input type="number" id="ttl_hours" name="ttl_hours" value="{{.promo.TTLHours}}" min="0" max="720">
+                <p class="form-hint">0 = показывать каждый раз при посещении. Рекомендуется 24 часа.</p>
+            </div>
+
+            <!-- Задержка показа -->
+            <div class="form-group">
+                <label for="show_delay_seconds">Задержка показа (секунд)</label>
+                <input type="number" id="show_delay_seconds" name="show_delay_seconds" value="{{.promo.ShowDelaySeconds}}" min="0" max="60">
+                <p class="form-hint">0 = показать сразу. Можно установить задержку до 60 секунд.</p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Превью -->
+    <div class="form-section">
+        <h2>Предпросмотр</h2>
+        <p class="form-help">Так popup будет выглядеть для посетителей сайта:</p>
+
+        <div class="promo-preview-container">
+            <div class="promo-preview" id="promoPreview">
+                <div class="promo-preview-popup">
+                    <button type="button" class="promo-preview-close">&times;</button>
+                    <h3 class="promo-preview-title" id="previewTitle">{{if .promo.Title}}{{.promo.Title}}{{else}}Заголовок акции{{end}}</h3>
+                    <p class="promo-preview-content" id="previewContent">{{if .promo.Content}}{{.promo.Content}}{{else}}Текст вашей акции будет здесь...{{end}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Инициализация чекбоксов страниц
+(function() {
+    const pagesDataEl = document.getElementById('selectedPagesData');
+    if (pagesDataEl && pagesDataEl.value) {
+        try {
+            const selectedPages = JSON.parse(pagesDataEl.value);
+            if (Array.isArray(selectedPages)) {
+                selectedPages.forEach(pageId => {
+                    const checkbox = document.querySelector(`input[data-page-id="${pageId}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+        } catch(e) { console.error('Error parsing pages:', e); }
+    }
+})();
+
+// Живое обновление превью
+document.getElementById('title').addEventListener('input', function() {
+    document.getElementById('previewTitle').textContent = this.value || 'Заголовок акции';
+});
+document.getElementById('content').addEventListener('input', function() {
+    document.getElementById('previewContent').textContent = this.value || 'Текст вашей акции будет здесь...';
+});
+</script>
+{{end}}
