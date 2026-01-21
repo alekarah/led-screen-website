@@ -122,7 +122,8 @@
 
 /* Кнопка "Подробнее" */
 .price-detail-btn {
-    display: inline-block;
+    display: block;
+    width: 100%;
     background: var(--p-brand);
     color: #333;
     padding: 0.7rem 1.5rem;
@@ -130,11 +131,11 @@
     border-radius: 25px;
     font-size: 0.9rem;
     font-weight: 600;
+    line-height: 1.6;
     transition: all 0.3s ease;
     text-align: center;
     border: none;
     cursor: pointer;
-    width: 100%;
 }
 
 .price-detail-btn:hover {

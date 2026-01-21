@@ -14,7 +14,7 @@
 .price-modal.is-open { display: flex; }
 
 .price-modal__dialog {
-    width: min(980px, 96vw);
+    width: min(1100px, 96vw);
     max-height: 90vh;
     background: #fff;
     border-radius: 16px;
@@ -34,7 +34,7 @@
 .price-modal__media {
     background: #0f0f0f;
     position: relative;
-    width: 58%;
+    width: 51.7%;
     height: 426px;
     flex-shrink: 0;
 }
@@ -99,7 +99,7 @@
 .price-modal__body {
     display: flex;
     flex-direction: column;
-    width: 42%;
+    width: 48.3%;
     height: 426px;
     flex-shrink: 0;
 }
@@ -221,7 +221,7 @@
 
 .price-modal__specs-table .spec-key {
     color: var(--p-text-600);
-    width: 45%;
+    width: 60%;
 }
 
 .price-modal__specs-table .spec-value {

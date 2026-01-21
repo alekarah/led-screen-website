@@ -1,62 +1,11 @@
 // LED Guide Navigation Features
-// - Reading Progress Bar
-// - Back to Top Button
 // - Collapsible Advantages
 // - Active ToC Link on Scroll
+// - Smooth Scroll for ToC Links
+// (Progress Bar и Back to Top теперь в scroll-features.js)
 
 (function() {
     'use strict';
-
-    // ===== Reading Progress Bar =====
-    function initProgressBar() {
-        const progressBar = document.querySelector('.reading-progress-bar');
-        if (!progressBar) return;
-
-        function updateProgressBar() {
-            // Calculate scroll percentage
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-            const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
-            progressBar.style.width = Math.min(scrollPercent, 100) + '%';
-        }
-
-        // Update on scroll
-        window.addEventListener('scroll', updateProgressBar, { passive: true });
-
-        // Initial update
-        updateProgressBar();
-    }
-
-    // ===== Back to Top Button =====
-    function initBackToTop() {
-        const backToTopBtn = document.getElementById('backToTop');
-        if (!backToTopBtn) return;
-
-        function toggleBackToTop() {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        }
-
-        // Show/hide on scroll
-        window.addEventListener('scroll', toggleBackToTop, { passive: true });
-
-        // Click handler
-        backToTopBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Initial check
-        toggleBackToTop();
-    }
 
     // ===== Collapsible Advantages =====
     function initCollapsibleAdvantages() {
@@ -186,8 +135,6 @@
 
     // ===== Initialize All Features =====
     function init() {
-        initProgressBar();
-        initBackToTop();
         initCollapsibleAdvantages();
         initActiveToCLinks();
         initSmoothScrollToC();

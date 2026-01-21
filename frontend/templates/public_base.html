@@ -249,6 +249,9 @@
     {{block "extra-css" .}}{{end}}
 </head>
 <body>
+    <!-- Progress Bar -->
+    <div class="reading-progress-bar" style="width: 0%;"></div>
+
     <!-- Навигация -->
     <nav>
         <div class="nav-container">
@@ -356,6 +359,7 @@
     {{if eq .PageID "projects"}}
     <script src="/static/js/project-modal.js" defer></script>
     <script src="/static/js/projects-load-more.js" defer></script>
+    <script src="/static/js/projects-filter.js" defer></script>
     {{end}}
 
     {{if eq .PageID "services"}}
@@ -377,6 +381,16 @@
 
     <!-- Мобильное меню -->
     <script src="/static/js/mobile-menu.js" defer></script>
+
+    <!-- Скрипт прогресс-бара и кнопки наверх -->
+    <script src="/static/js/scroll-features.js" defer></script>
+
+    <!-- Кнопка наверх -->
+    <button class="back-to-top" id="backToTop" aria-label="Вернуться наверх">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
     <!-- Promo Popup -->
     <div id="promoPopup" class="promo-popup" style="display:none;">

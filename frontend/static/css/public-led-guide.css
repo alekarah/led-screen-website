@@ -536,7 +536,7 @@
 
 /* Задержка перед исчезновением при уходе мыши */
 .nav-item-with-dropdown .nav-dropdown-toc {
-    transition-delay: 0.6s;
+    transition-delay: 1.2s;
 }
 
 .toc-dropdown-title {
