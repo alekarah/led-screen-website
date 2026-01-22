@@ -132,6 +132,9 @@
   .prices-hero h1 { font-size: 2rem; }
   .hero-subtitle { font-size: 1rem; }
   .prices-section { padding: 3rem 0; }
+  .privacy-section { padding: 2rem 0 3rem; }
+  .privacy-section h2 { font-size: 1.75rem; margin-bottom: 1rem; }
+  .privacy-section .privacy-block { padding: 1.5rem 1.75rem; margin: 1.5rem auto; font-size: 1.05rem; }
   .prices-grid { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; }
   .price-card { width: 100%; max-width: 400px; }
   .price-card-title { font-size: 1.3rem; }
@@ -185,7 +188,7 @@
   .btn-large { padding: .875rem 1.5rem; font-size: 1rem; }
   .services-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   .service-card { padding: 1.5rem; }
-  .service-icon { font-size: 2.5rem; }
+  .service-icon { font-size: 2.5rem; margin-bottom: 0; }
   .service-card h3 { font-size: 1.2rem; }
   .process-steps { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 600px; }
   .step-number { width: 50px; height: 50px; font-size: 1.3rem; }
@@ -193,11 +196,11 @@
   .cta-content p { font-size: 1rem; max-width: 500px; }
   .cta-buttons { flex-direction: column; align-items: center; max-width: 350px; }
   .cta-buttons .btn { width: 100%; min-width: 250px; max-width: 300px; font-size: 0.95rem; }
-  .btn-secondary { background: var(--p-accent); color: #333; }
+  .cta-buttons .btn-secondary { background: var(--p-accent); color: #333; }
   .led-intro-section { padding: 2rem 0 3rem; }
   .led-intro-section::before { width: 300px; height: 300px; top: -30%; right: -20%; }
   .intro-with-icon { gap: 1.5rem; }
-  .intro-icon { width: 150px; }
+  .intro-icon { width: 220px; }
   .intro-text { font-size: 1rem; padding: 1.2rem 1.5rem; }
   .components-list { padding: 1.5rem !important; }
   .components-list h3 { font-size: 1.3rem !important; }
@@ -257,6 +260,10 @@
   .prices-hero h1 { font-size: 1.8rem; }
   .hero-subtitle { font-size: 0.95rem; }
   .prices-section { padding: 2rem 0; }
+  .privacy-section { padding: 1.5rem 0 2rem; }
+  .privacy-section h2 { font-size: 1.5rem; }
+  .privacy-section .privacy-block { padding: 1.25rem 1.25rem; margin: 1rem auto; font-size: 1rem; line-height: 1.6; }
+  .privacy-section .privacy-block h3 { font-size: 1.1rem; }
   .price-card { max-width: 100%; }
   .price-card-content { padding: 1.25rem; }
   .price-card-title { font-size: 1.2rem; }
@@ -330,7 +337,8 @@
   .btn-large { padding: .75rem 1rem; font-size: .95rem; }
   .services-main { padding: 1rem 0 1.5rem; }
   .service-card { padding: 1rem; min-height: 100px; }
-  .service-price { font-size: 1.1rem; padding: 0.75rem; }
+  .service-features {margin-bottom: 0.5rem;}
+  .service-price { font-size: 1.1rem; padding: 0.75rem; margin-bottom: 0;}
   .screen-types { grid-template-columns: 1fr; }
   .screen-image { font-size: 2.5rem; }
   .process-steps { grid-template-columns: 1fr; max-width: 300px; }
@@ -342,7 +350,6 @@
   .led-intro-section { padding: 1.5rem 0 2rem; }
   .led-intro-section::before { width: 250px; height: 250px; top: -25%; right: -30%; }
   .intro-with-icon { flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
-  .intro-icon { width: 120px; }
   .intro-text { font-size: 0.95rem; padding: 1rem 1.2rem; }
   .components-list { padding: 1.2rem !important; }
   .components-list h3 { font-size: 1.2rem !important; }
@@ -403,6 +410,11 @@
   .prices-hero h1 { font-size: 1.75rem; }
   .hero-subtitle { font-size: 0.9rem; }
   .prices-section { padding: 1.5rem 0; }
+  .privacy-section { padding: 1rem 0 1.5rem; }
+  .privacy-section h2 { font-size: 1.3rem; }
+  .privacy-section .privacy-block { padding: 1rem; margin: 0.75rem auto; font-size: 0.95rem; line-height: 1.55; }
+  .privacy-section .privacy-block h3 { font-size: 1rem; margin-top: 1.25rem; }
+  .privacy-section .privacy-block ul { padding-left: 1rem; }
   .price-card-content { padding: 1rem; }
   .price-card-title { font-size: 1.1rem; }
   .price-card-description { font-size: 0.9rem; line-height: 1.5; }
@@ -412,7 +424,7 @@
   .price-detail-btn { padding: 0.55rem 1rem; font-size: 0.8rem; }
   .led-intro-section { padding: 1.25rem 0 1.75rem; }
   .led-intro-section::before { width: 200px; height: 200px; }
-  .intro-icon { width: 100px; }
+  .intro-icon { width: 190px; }
   .intro-text { font-size: 0.9rem; padding: 0.9rem 1rem; }
   .components-list { padding: 1rem !important; border-radius: 10px !important; margin-top: 1.5rem !important; }
   .components-list h3 { font-size: 1.1rem !important; margin-bottom: 1rem !important; }

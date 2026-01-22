@@ -34,7 +34,7 @@
 .price-modal__media {
     background: #0f0f0f;
     position: relative;
-    width: 51.7%;
+    width: 51.65%;
     height: 426px;
     flex-shrink: 0;
 }
@@ -99,7 +99,7 @@
 .price-modal__body {
     display: flex;
     flex-direction: column;
-    width: 48.3%;
+    width: 48.35%;
     height: 426px;
     flex-shrink: 0;
 }

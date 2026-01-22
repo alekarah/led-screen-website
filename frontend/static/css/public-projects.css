@@ -377,7 +377,7 @@ body.modal-open { overflow: hidden; }
 }
 
 .load-more-btn {
-  background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
+  background: var(--p-brand) !important;
   color: #333 !important;
   font-size: 1.1rem;
   font-weight: 600;
@@ -392,7 +392,7 @@ body.modal-open { overflow: hidden; }
 }
 
 .load-more-btn:hover {
-  background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%) !important;
+  background: var(--p-brand-2) !important;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   transform: translateY(-2px) scale(1.04);
   color: #333 !important;
