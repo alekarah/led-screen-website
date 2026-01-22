@@ -77,6 +77,7 @@ func (h *Handlers) Sitemap(c *gin.Context) {
 	}{
 		{baseURL + "/", "weekly", "1.0"},                   // Главная - максимальный приоритет
 		{baseURL + "/projects", "weekly", "0.9"},           // Портфолио
+		{baseURL + "/prices", "weekly", "0.9"},             // Цены
 		{baseURL + "/led-screens-guide", "monthly", "0.8"}, // О LED-экранах (информационная страница)
 		{baseURL + "/services", "monthly", "0.8"},          // Услуги
 		{baseURL + "/contact", "monthly", "0.7"},           // Контакты
