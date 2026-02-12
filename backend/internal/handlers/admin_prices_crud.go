@@ -334,6 +334,61 @@ func (h *Handlers) DeletePriceItem(c *gin.Context) {
 	jsonOK(c, gin.H{"message": "Позиция прайса успешно удалена"})
 }
 
+// DuplicatePriceItem - дублирование позиции прайса
+func (h *Handlers) DuplicatePriceItem(c *gin.Context) {
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+
+	var original models.PriceItem
+	if err := h.db.Preload("Specifications", func(db *gorm.DB) *gorm.DB {
+		return db.Order("sort_order ASC, id ASC")
+	}).First(&original, id).Error; err != nil {
+		jsonErr(c, http.StatusNotFound, "Позиция прайса не найдена")
+		return
+	}
+
+	// Определяем sort_order для новой позиции
+	var maxSort int
+	h.db.Model(&models.PriceItem{}).Select("COALESCE(MAX(sort_order), 0)").Scan(&maxSort)
+
+	// Создаём копию
+	newItem := models.PriceItem{
+		Title:             original.Title + " (копия)",
+		Description:       original.Description,
+		PriceFrom:         original.PriceFrom,
+		HasSpecifications: original.HasSpecifications,
+		IsActive:          original.IsActive,
+		SortOrder:         maxSort + 1,
+	}
+
+	if err := h.db.Create(&newItem).Error; err != nil {
+		log.Printf("Ошибка дублирования позиции прайса ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка дублирования позиции")
+		return
+	}
+
+	// Копируем спецификации
+	for _, spec := range original.Specifications {
+		newSpec := models.PriceSpecification{
+			PriceItemID: newItem.ID,
+			SpecGroup:   spec.SpecGroup,
+			SpecKey:     spec.SpecKey,
+			SpecValue:   spec.SpecValue,
+			SortOrder:   spec.SortOrder,
+		}
+		if err := h.db.Create(&newSpec).Error; err != nil {
+			log.Printf("Ошибка копирования характеристики: %v", err)
+		}
+	}
+
+	jsonOK(c, gin.H{
+		"message":  "Позиция прайса продублирована",
+		"price_id": newItem.ID,
+	})
+}
+
 // UpdatePriceItemsSorting - обновление порядка отображения позиций прайса
 func (h *Handlers) UpdatePriceItemsSorting(c *gin.Context) {
 	var req struct {

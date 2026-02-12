@@ -83,6 +83,9 @@ html, body {
 }
 .btn:hover{ background: var(--brand-600); }
 
+.btn-icon-copy{ padding: 0.55rem 0.7rem; font-size: 1.1rem; line-height: 1; background: var(--gray-100); color: var(--gray-700); border: 1px solid var(--gray-300); }
+.btn-icon-copy:hover{ background: var(--brand); color: #fff; border-color: var(--brand); }
+
 .btn-danger{ background: var(--danger); color:#fff; }
 .btn-danger:hover{ background: var(--danger-700); }
 

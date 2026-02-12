@@ -329,6 +329,29 @@ function deletePrice(id, title) {
     });
 }
 
+// ============== ДУБЛИРОВАНИЕ ПОЗИЦИИ ==============
+
+function duplicatePrice(id) {
+    if (!confirm('Дублировать эту позицию прайса?')) return;
+
+    fetch(`/admin/prices/${id}/duplicate`, { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAdminMessage(data.message || 'Позиция продублирована', 'success');
+            setTimeout(() => {
+                window.location.href = `/admin/prices?focus_id=${data.price_id}`;
+            }, 500);
+        } else {
+            showAdminMessage(data.error || 'Ошибка дублирования', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        showAdminMessage('Ошибка дублирования позиции', 'error');
+    });
+}
+
 // ============== DRAG & DROP СОРТИРОВКА ==============
 
 function initPriceSorting() {

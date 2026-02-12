@@ -95,6 +95,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			pr.DELETE("/:id", h.DeleteProject)               // Удаление проекта с изображениями
 			pr.POST("/:id/reorder", h.ReorderProject)        // Изменение порядка одного проекта
 			pr.POST("/:id/reset-views", h.ResetProjectViews) // Сброс просмотров конкретного проекта
+			pr.POST("/:id/duplicate", h.DuplicateProject)    // Дублирование проекта
 			pr.POST("/bulk-reorder", h.BulkReorderProjects)  // Массовая сортировка (drag & drop)
 		}
 
@@ -146,6 +147,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			prices.POST("/images/:id/crop", h.UpdatePriceImageCropNew)     // Обновление настроек кроппинга изображения
 			prices.POST("/images/:id/set-primary", h.SetPrimaryPriceImage) // Установка главного изображения позиции
 			prices.POST("/:id/reset-views", h.ResetPriceItemViews)         // Сброс просмотров конкретной позиции прайса
+			prices.POST("/:id/duplicate", h.DuplicatePriceItem)            // Дублирование позиции прайса
 		}
 
 		// Промо popup - управление всплывающим окном для акций

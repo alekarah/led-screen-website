@@ -31,6 +31,28 @@ window.editProject = async function(id) {
     }
 };
 
+// Глобальная функция дублирования
+window.duplicateProject = async function(id) {
+    if (!confirm('Дублировать этот проект?')) return;
+
+    try {
+        const response = await fetch(`/admin/projects/${id}/duplicate`, { method: 'POST' });
+        const result = await response.json();
+
+        if (result.success) {
+            showAdminMessage(result.message || 'Проект продублирован', 'success');
+            setTimeout(() => {
+                window.location.href = `/admin/projects?focus_id=${result.project_id}`;
+            }, 500);
+        } else {
+            showAdminMessage(result.error || 'Ошибка дублирования', 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка дублирования проекта:', error);
+        showAdminMessage('Ошибка при дублировании проекта: ' + error.message, 'error');
+    }
+};
+
 // Глобальная функция удаления
 window.deleteProject = async function(id) {
     if (!id) {

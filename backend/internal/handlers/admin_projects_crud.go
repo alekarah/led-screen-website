@@ -142,6 +142,68 @@ func (h *Handlers) UpdateProject(c *gin.Context) {
 	jsonOK(c, gin.H{"message": "Проект успешно обновлен"})
 }
 
+// DuplicateProject - дублирование проекта
+func (h *Handlers) DuplicateProject(c *gin.Context) {
+	id, ok := mustID(c)
+	if !ok {
+		return
+	}
+
+	var original models.Project
+	if err := h.db.Preload("Categories").First(&original, id).Error; err != nil {
+		jsonErr(c, http.StatusNotFound, "Проект не найден")
+		return
+	}
+
+	// Определяем sort_order для нового проекта
+	var maxSort int
+	h.db.Model(&models.Project{}).Select("COALESCE(MAX(sort_order), 0)").Scan(&maxSort)
+
+	// Создаём копию
+	newProject := models.Project{
+		Title:       original.Title + " (копия)",
+		Description: original.Description,
+		Location:    original.Location,
+		Size:        original.Size,
+		PixelPitch:  original.PixelPitch,
+		Completed:   original.Completed,
+		Featured:    original.Featured,
+		SortOrder:   maxSort + 1,
+	}
+
+	// Генерируем уникальный slug
+	newProject.Slug = generateSlug(newProject.Title)
+	baseSlug := newProject.Slug
+	suffix := 1
+	for {
+		var count int64
+		h.db.Model(&models.Project{}).Where("slug = ?", newProject.Slug).Count(&count)
+		if count == 0 {
+			break
+		}
+		suffix++
+		newProject.Slug = baseSlug + "-" + strconv.Itoa(suffix)
+	}
+
+	if err := h.db.Create(&newProject).Error; err != nil {
+		log.Printf("Ошибка дублирования проекта ID=%d: %v", id, err)
+		jsonErr(c, http.StatusInternalServerError, "Ошибка дублирования проекта")
+		return
+	}
+
+	// Копируем категории
+	for _, category := range original.Categories {
+		if err := h.db.Model(&newProject).Association("Categories").Append(&category); err != nil {
+			log.Printf("Ошибка копирования категории ID=%d: %v", category.ID, err)
+		}
+	}
+
+	jsonOK(c, gin.H{
+		"message":    "Проект продублирован",
+		"project_id": newProject.ID,
+	})
+}
+
 // DeleteProject - удаление проекта + всего связанного (изображения, категории, просмотры)
 func (h *Handlers) DeleteProject(c *gin.Context) {
 	id, ok := mustID(c)

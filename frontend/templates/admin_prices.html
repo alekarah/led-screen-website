@@ -40,6 +40,7 @@
                 </div>
             </div>
             <div class="project-actions">
+                <button class="btn btn-icon-copy" onclick="duplicatePrice({{.ID}})" title="Дублировать">📋</button>
                 <button class="btn" onclick="openEditPriceModal({{.ID}})">Редактировать</button>
                 <button class="btn btn-danger" onclick="deletePrice({{.ID}}, '{{.Title}}')">Удалить</button>
             </div>
