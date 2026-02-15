@@ -50,6 +50,7 @@
   .home-services .services-row-bottom .service-card { flex: 0 1 280px; max-width: 280px; }
   .service-card h3 { min-height: 4rem; }
   .public-project-card { max-width: 420px; }
+  .price-card { max-width: 420px; }
 }
 
 /* Планшеты большие (< 1024px) */
@@ -80,7 +81,7 @@
   .projects-grid { grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
   .public-project-card { width: 100%; max-width: 320px; }
   .prices-grid { grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
-  .price-card { max-width: 350px; }
+  .price-card { width: 100%; max-width: 320px; }
   .project-modal__dialog { grid-template-columns: 1fr; width: min(760px, 96vw); max-height: 92vh; }
   .project-modal__media { height: 42vh; background: #111; }
   .advantages-grid { padding: 0 1rem; gap: 1.5rem; }
@@ -135,8 +136,8 @@
   .privacy-section { padding: 2rem 0 3rem; }
   .privacy-section h2 { font-size: 1.75rem; margin-bottom: 1rem; }
   .privacy-section .privacy-block { padding: 1.5rem 1.75rem; margin: 1.5rem auto; font-size: 1.05rem; }
-  .prices-grid { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; }
-  .price-card { width: 100%; max-width: 400px; }
+  .prices-grid { grid-template-columns: 1fr; }
+  .price-card { width: 100%; max-width: 100%; }
   .price-card-title { font-size: 1.3rem; }
   .price-value { font-size: 1.8rem; }
   .project-modal__dialog { flex-direction: column; max-height: 95vh; }
@@ -397,6 +398,7 @@
 /* Очень маленькие экраны (≤375px) */
 @media (max-width: 375px) {
   .public-project-card { width: 100% !important; max-width: 100% !important; }
+  .price-card { width: 100% !important; max-width: 100% !important; }
   .filter-btn { padding: .45rem .75rem; font-size: .8rem; }
   .service-card h3 { font-size: 1.15rem; min-height: 3rem; }
   .service-card p { font-size: .95rem; }
@@ -460,7 +462,12 @@
   .filter-btn { flex: 1 1 calc(50% - 0.5rem) !important; min-height: 50px !important; padding: 1rem 1.5rem !important; font-size: 0.9rem !important; }
 }
 
-/* Компенсация для высокого DPR (Windows масштабирование 125%, 150%) */
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 120dpi) {
-  html { font-size: 80%; }
+/* Компенсация для высокого DPR на десктопах (Windows масштабирование 125%, 150%) */
+/* zoom масштабирует всё: px, rem, картинки, карточки */
+/* hover: hover отсекает мобильные/планшеты с Retina, min-width — маленькие экраны */
+@media screen and (hover: hover) and (min-width: 1024px) and (min-resolution: 120dpi) {
+  html { zoom: 0.875; }
+}
+@media screen and (hover: hover) and (min-width: 1024px) and (min-resolution: 144dpi) {
+  html { zoom: 0.8; }
 }

@@ -19,9 +19,10 @@
     justify-content: center;
     transition: all 0.3s;
     font-size: 0.9rem;
-    line-height: 1.4;
+    line-height: 1.3;
     text-align: center;
-    white-space: nowrap;
+    width: 200px;
+    min-height: 52px;
 }
 
 .filter-btn:hover,
@@ -292,15 +293,17 @@
     margin-bottom: .75rem;
 }
 
-/* Кнопка в модалке - с градиентом */
+/* Кнопка в модалке */
 .project-modal__body .project-detail-btn {
     margin-top: auto;
-    background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%);
+    background: var(--p-brand);
     color: #333;
 }
 
 .project-modal__body .project-detail-btn:hover {
-    background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%);
+    background: var(--p-brand-2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.36);
     color: #333;
 }
 

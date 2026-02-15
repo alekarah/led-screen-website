@@ -232,7 +232,7 @@
 /* Кнопка в модалке */
 .price-modal__footer .btn {
     width: 100%;
-    background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%);
+    background: var(--p-brand);
     color: #333;
     padding: 0.7rem 1.5rem;
     text-decoration: none;
@@ -245,7 +245,7 @@
 }
 
 .price-modal__footer .btn:hover {
-    background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2) 90%);
+    background: var(--p-brand-2);
     color: #333;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(74, 144, 226, 0.36);

@@ -1,101 +1,72 @@
 // Логика "Смотреть еще" для проектов
 document.addEventListener('DOMContentLoaded', function() {
-  const grid = document.getElementById('projectsGrid');
-  const loadMoreBtn = document.getElementById('loadMoreBtn');
-  const loadMoreContainer = document.getElementById('loadMoreContainer');
+  var grid = document.getElementById('projectsGrid');
+  var loadMoreBtn = document.getElementById('loadMoreBtn');
+  var loadMoreContainer = document.getElementById('loadMoreContainer');
 
-  if (!grid || !loadMoreBtn || !loadMoreContainer) {
-    return;
-  }
+  if (!grid || !loadMoreBtn || !loadMoreContainer) return;
 
-  const cards = Array.from(grid.querySelectorAll('.public-project-card'));
-  let currentlyShowing = getInitialItemsToShow();
+  var cards = Array.from(grid.querySelectorAll('.public-project-card'));
+  var INITIAL_ROWS = 4;
+  var LOAD_MORE_ROWS = 2;
+  var currentlyShowing = getInitialItemsToShow();
 
-  // Функция определения начального количества проектов
   function getInitialItemsToShow() {
-    const width = window.innerWidth;
-    if (width > 1200) return 12; // 4 ряда по 3
-    if (width > 768) return 8;   // 4 ряда по 2
-    return 4;                     // 4 ряда по 1
+    return window.getGridColumns() * INITIAL_ROWS;
   }
 
-  // Получить количество колонок в текущем брейкпоинте
-  function getColumnsCount() {
-    const width = window.innerWidth;
-    if (width > 1200) return 3;
-    if (width > 768) return 2;
-    return 1;
+  // Получаем карточки, подходящие под текущий фильтр
+  function getFilteredCards() {
+    var activeFilter = document.querySelector('.filters .filter-btn.active');
+    if (!activeFilter) return cards;
+
+    var category = activeFilter.getAttribute('data-category');
+    return cards.filter(function(card) {
+      var tagsContainer = card.querySelector('.project-categories');
+      if (!tagsContainer) return false;
+      var tags = tagsContainer.querySelectorAll('.category-tag');
+      for (var i = 0; i < tags.length; i++) {
+        if (tags[i].getAttribute('data-slug') === category) return true;
+      }
+      return false;
+    });
   }
 
-  // Показать проекты
   function showProjects() {
-    // Сначала убираем все классы центрирования
-    cards.forEach(card => {
-      card.style.display = '';
-      card.classList.remove('js-center-single-3col', 'js-center-double-3col-first', 'js-center-double-3col-second', 'js-center-single-2col');
+    var filtered = getFilteredCards();
+
+    // Сначала скрываем все
+    cards.forEach(function(card) { card.style.display = 'none'; });
+
+    // Показываем отфильтрованные до лимита
+    filtered.forEach(function(card, index) {
+      card.style.display = index < currentlyShowing ? '' : 'none';
     });
 
-    // Показываем/скрываем карточки
-    const visibleCards = [];
-    cards.forEach((card, index) => {
-      if (index < currentlyShowing) {
-        card.style.display = '';
-        visibleCards.push(card);
-      } else {
-        card.style.display = 'none';
-      }
-    });
+    loadMoreContainer.style.display = filtered.length <= currentlyShowing ? 'none' : 'flex';
 
-    // Центрируем неполный последний ряд
-    const columns = getColumnsCount();
-    const visibleCount = visibleCards.length;
-    const lastRowCount = visibleCount % columns;
-
-    if (lastRowCount > 0 && columns > 1) {
-      const firstInLastRow = visibleCount - lastRowCount;
-
-      if (columns === 3) {
-        // 3 колонки
-        if (lastRowCount === 1) {
-          // Одна карточка - во вторую колонку
-          visibleCards[firstInLastRow].classList.add('js-center-single-3col');
-        } else if (lastRowCount === 2) {
-          // Две карточки - центрируем
-          visibleCards[firstInLastRow].classList.add('js-center-double-3col-first');
-          visibleCards[firstInLastRow + 1].classList.add('js-center-double-3col-second');
-        }
-      } else if (columns === 2 && lastRowCount === 1) {
-        // 2 колонки, одна карточка - span на обе колонки и центр
-        visibleCards[firstInLastRow].classList.add('js-center-single-2col');
-      }
-    }
-
-    // Показать/скрыть кнопку
-    if (cards.length <= currentlyShowing) {
-      loadMoreContainer.style.display = 'none';
-    } else {
-      loadMoreContainer.style.display = 'flex';
-    }
+    if (window.centerGrid) window.centerGrid(grid, '.public-project-card');
   }
 
-  // Обработчик кнопки - показываем еще 4 проекта
   loadMoreBtn.addEventListener('click', function() {
-    currentlyShowing += 4;
+    currentlyShowing += window.getGridColumns() * LOAD_MORE_ROWS;
     showProjects();
   });
 
-  // Обработчик ресайза
-  let resizeTimer;
+  // Пересчёт при фильтрации
+  window.addEventListener('projectsFiltered', function() {
+    currentlyShowing = getInitialItemsToShow();
+    showProjects();
+  });
+
+  var resizeTimer;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function() {
-      const newInitialCount = getInitialItemsToShow();
-      // Сбрасываем к начальному значению при изменении размера окна
-      currentlyShowing = newInitialCount;
+      currentlyShowing = getInitialItemsToShow();
       showProjects();
     }, 250);
   });
 
-  // Инициализация
   showProjects();
 });

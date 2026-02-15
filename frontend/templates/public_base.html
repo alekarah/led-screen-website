@@ -355,6 +355,9 @@
         {{template "simple-footer" .}}
     {{end}}
 
+    <!-- Универсальное центрирование гридов -->
+    <script src="/static/js/grid-center.js"></script>
+
     <!-- Скрипты для конкретной страницы -->
     {{if eq .PageID "projects"}}
     <script src="/static/js/project-modal.js" defer></script>
@@ -377,6 +380,7 @@
 
     {{if eq .PageID "prices"}}
     <script src="/static/js/price-modal.js" defer></script>
+    <script src="/static/js/prices-load-more.js" defer></script>
     {{end}}
 
     <!-- Мобильное меню -->

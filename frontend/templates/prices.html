@@ -9,7 +9,7 @@
 <section class="prices-section">
     <div class="container">
         {{if .priceItems}}
-            <div class="prices-grid">
+            <div class="prices-grid" id="pricesGrid">
                 {{range .priceItems}}
                 <div class="price-card">
                     {{range .PriceItem.Images}}
@@ -47,6 +47,11 @@
                     </div>
                 </div>
                 {{end}}
+            </div>
+
+            <!-- Кнопка "Смотреть еще" -->
+            <div class="load-more-container" id="pricesLoadMoreContainer">
+                <button class="load-more-btn" id="pricesLoadMoreBtn">Смотреть еще</button>
             </div>
         {{else}}
             <div class="empty-state">
