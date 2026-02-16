@@ -33,6 +33,7 @@
                 <li><a href="/admin/projects" {{if eq .PageID "admin-projects"}}aria-current="page"{{end}}>Проекты</a></li>
                 <li><a href="/admin/prices" {{if eq .PageID "admin-prices"}}aria-current="page"{{end}}>Цены</a></li>
                 <li><a href="/admin/promo" {{if eq .PageID "admin-promo"}}aria-current="page"{{end}}>Акция</a></li>
+                <li><a href="/admin/map-points" {{if eq .PageID "admin-map-points"}}aria-current="page"{{end}}>Карта</a></li>
                 <li><a href="/">На сайт</a></li>
                 <li><a href="/admin/logout" class="logout-link">Выход</a></li>
             </ul>
@@ -57,6 +58,8 @@
             {{template "admin-contacts-content" .}}
         {{else if eq .PageID "admin-contacts-archive"}}
             {{template "admin-contacts-archive-content" .}}
+        {{else if eq .PageID "admin-map-points"}}
+            {{template "admin-map-points-content" .}}
         {{end}}
     </main>
 
@@ -72,6 +75,9 @@
     {{end}}
     {{if eq .PageID "admin-contacts-archive"}}
         {{template "contacts-archive-modals" .}}
+    {{end}}
+    {{if eq .PageID "admin-map-points"}}
+        {{template "map-points-modals" .}}
     {{end}}
 
     <!-- Crop Editor Modal - используется на страницах проектов и цен -->
@@ -144,6 +150,11 @@
     {{end}}
     {{if eq .PageID "admin-contacts-archive"}}
         {{template "contacts-archive-extra-js" .}}
+    {{end}}
+    {{if eq .PageID "admin-map-points"}}
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=7dfc2fa2-8cbd-465a-8101-0a9ce00d82c5&lang=ru_RU"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" defer></script>
+        <script src="/static/js/admin-map-points.js" defer></script>
     {{end}}
 
     {{define "contacts-table-head-inbox"}}

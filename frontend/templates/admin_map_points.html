@@ -1,0 +1,180 @@
+{{define "admin-map-points-content"}}
+<div class="form-section" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+    <button class="btn" id="openCreateMapPointModal">Добавить точку</button>
+    <button class="btn" id="openImportLinkModal">Импорт из ссылки</button>
+    <button class="btn" id="openBulkImportModal">Массовый импорт</button>
+</div>
+
+<!-- Список точек -->
+<div class="projects-list">
+    <h2>Точки на карте ({{len .MapPoints}})</h2>
+    <div id="sortable-map-points" class="sortable-list">
+        {{range .MapPoints}}
+        <div class="project-item" data-point-id="{{.ID}}">
+            <div class="project-info">
+                <div class="project-info-flex">
+                    <span class="drag-handle" title="Перетащите для изменения порядка" role="button" aria-label="Перетащить">⋮⋮</span>
+                    <div class="project-thumbnail">
+                        <div class="no-image">📍</div>
+                    </div>
+                    <div>
+                        <h3>{{.Title}}</h3>
+                        {{if .Description}}<p>{{.Description}}</p>{{end}}
+                        <p><small>
+                            Координаты: {{.Latitude}}, {{.Longitude}} |
+                            {{if .PanoramaURL}}<a href="{{.PanoramaURL}}" target="_blank">Панорама</a> | {{end}}
+                            Статус: {{if .IsActive}}<span class="featured-yes">✓ Активна</span>{{else}}<span class="featured-no">Скрыта</span>{{end}}
+                        </small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="project-actions">
+                <button class="btn" onclick="editMapPoint({{.ID}})">Редактировать</button>
+                <button class="btn btn-danger" onclick="deleteMapPoint({{.ID}}, '{{.Title}}')">Удалить</button>
+            </div>
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}
+
+{{define "map-points-modals"}}
+<!-- Модальное окно создания -->
+<div id="createMapPointModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Добавить точку на карту</h2>
+            <span class="close" onclick="closeModal('createMapPointModal')">&times;</span>
+        </div>
+        <form id="createMapPointForm">
+            <div class="form-group">
+                <label for="createPointTitle">Название <span class="required">*</span>:</label>
+                <input type="text" id="createPointTitle" name="title" required placeholder="Билборд на Невском">
+            </div>
+            <div class="form-group">
+                <label for="createPointDescription">Описание:</label>
+                <textarea id="createPointDescription" name="description" placeholder="LED экран 6x3, P6"></textarea>
+            </div>
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="form-group">
+                    <label for="createPointLat">Широта <span class="required">*</span>:</label>
+                    <input type="text" id="createPointLat" name="latitude" required placeholder="59.938784">
+                </div>
+                <div class="form-group">
+                    <label for="createPointLng">Долгота <span class="required">*</span>:</label>
+                    <input type="text" id="createPointLng" name="longitude" required placeholder="30.315868">
+                </div>
+            </div>
+            <!-- Мини-карта -->
+            <div class="form-group">
+                <label>Выберите точку на карте:</label>
+                <div id="createPointMap" style="width:100%;height:300px;border-radius:8px;margin-top:0.5rem;"></div>
+            </div>
+            <div class="form-group">
+                <label for="createPointPanorama">Ссылка на панораму:</label>
+                <input type="url" id="createPointPanorama" name="panorama_url" placeholder="https://yandex.ru/maps/...">
+            </div>
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="createPointActive" name="is_active" checked>
+                    Активна (отображается на сайте)
+                </label>
+            </div>
+            <button type="submit" class="btn">Добавить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно редактирования -->
+<div id="editMapPointModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Редактировать точку</h2>
+            <span class="close" onclick="closeModal('editMapPointModal')">&times;</span>
+        </div>
+        <form id="editMapPointForm">
+            <input type="hidden" id="editPointId">
+            <div class="form-group">
+                <label for="editPointTitle">Название <span class="required">*</span>:</label>
+                <input type="text" id="editPointTitle" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="editPointDescription">Описание:</label>
+                <textarea id="editPointDescription" name="description"></textarea>
+            </div>
+            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="form-group">
+                    <label for="editPointLat">Широта <span class="required">*</span>:</label>
+                    <input type="text" id="editPointLat" name="latitude" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPointLng">Долгота <span class="required">*</span>:</label>
+                    <input type="text" id="editPointLng" name="longitude" required>
+                </div>
+            </div>
+            <!-- Мини-карта -->
+            <div class="form-group">
+                <label>Выберите точку на карте:</label>
+                <div id="editPointMap" style="width:100%;height:300px;border-radius:8px;margin-top:0.5rem;"></div>
+            </div>
+            <div class="form-group">
+                <label for="editPointPanorama">Ссылка на панораму:</label>
+                <input type="url" id="editPointPanorama" name="panorama_url" placeholder="https://yandex.ru/maps/...">
+            </div>
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="editPointActive" name="is_active">
+                    Активна (отображается на сайте)
+                </label>
+            </div>
+            <button type="submit" class="btn">Сохранить</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно импорта из ссылки -->
+<div id="importLinkModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Импорт из ссылки Яндекс.Карт</h2>
+            <span class="close" onclick="closeModal('importLinkModal')">&times;</span>
+        </div>
+        <form id="importLinkForm">
+            <div class="form-group">
+                <label for="importLinkUrl">Ссылка Яндекс.Карт <span class="required">*</span>:</label>
+                <input type="url" id="importLinkUrl" required placeholder="https://yandex.ru/maps/2/saint-petersburg/house/...?ll=30.312957%2C59.873822&z=17">
+                <small style="color:#888;">Координаты и панорама будут извлечены автоматически</small>
+            </div>
+            <div class="form-group">
+                <label for="importLinkTitle">Название <span class="required">*</span>:</label>
+                <input type="text" id="importLinkTitle" required placeholder="Заполнится автоматически из ссылки">
+            </div>
+            <div class="form-group">
+                <label for="importLinkDescription">Описание:</label>
+                <textarea id="importLinkDescription" placeholder="LED экран 6x3, P6"></textarea>
+            </div>
+            <button type="submit" class="btn">Импортировать</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно массового импорта -->
+<div id="bulkImportModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Массовый импорт</h2>
+            <span class="close" onclick="closeModal('bulkImportModal')">&times;</span>
+        </div>
+        <form id="bulkImportForm">
+            <div class="form-group">
+                <label for="bulkImportLinks">Ссылки Яндекс.Карт (по одной на строку):</label>
+                <textarea id="bulkImportLinks" rows="12" required placeholder="https://yandex.ru/maps/...?ll=30.312957%2C59.873822...
+https://yandex.ru/maps/...?ll=30.315868%2C59.938784...
+https://yandex.ru/maps/..."></textarea>
+                <small style="color:#888;">Названия будут извлечены из URL автоматически. Координаты берутся из параметра ll=.</small>
+            </div>
+            <button type="submit" class="btn">Импортировать все</button>
+        </form>
+    </div>
+</div>
+{{end}}

@@ -166,10 +166,14 @@ func (h *Handlers) LEDGuidePage(c *gin.Context) {
 	})
 }
 
-// ContactPage рендерит страницу контактов с формой обратной связи.
+// ContactPage рендерит страницу контактов с формой обратной связи и картой.
 //
 // GET /contact
 func (h *Handlers) ContactPage(c *gin.Context) {
+	// Загружаем активные точки для карты
+	var mapPoints []models.MapPoint
+	h.db.Where("is_active = ?", true).Order("sort_order ASC, id ASC").Find(&mapPoints)
+
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":         "Контакты | LED экраны",
 		"description":   "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
@@ -177,6 +181,7 @@ func (h *Handlers) ContactPage(c *gin.Context) {
 		"ogDescription": "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
 		"ogUrl":         "/contact",
 		"PageID":        "contact",
+		"mapPoints":     mapPoints,
 	})
 }
 

@@ -339,6 +339,23 @@ type PriceViewDaily struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+// MapPoint представляет точку на карте — адрес выполненной работы.
+//
+// Точки отображаются на Яндекс.Карте на странице контактов.
+// Управляются через админку: /admin/map-points
+type MapPoint struct {
+	ID          uint      `json:"id" gorm:"primaryKey"`
+	Title       string    `json:"title" gorm:"not null"`
+	Description string    `json:"description"`
+	Latitude    float64   `json:"latitude" gorm:"not null"`
+	Longitude   float64   `json:"longitude" gorm:"not null"`
+	PanoramaURL string    `json:"panorama_url"` // Ссылка на панораму Яндекс.Карт
+	SortOrder   int       `json:"sort_order" gorm:"default:0"`
+	IsActive    bool      `json:"is_active" gorm:"default:true"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
 // PromoPopup представляет настройки всплывающего окна для акций и промо.
 //
 // Особенности:

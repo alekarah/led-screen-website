@@ -204,14 +204,10 @@
             Выезд специалиста — бесплатно.
         </p>
         <div class="map-container">
-            <iframe src="https://yandex.ru/map-widget/v1/?ll=30.315868,59.938784&z=9&l=map"
-                    width="100%"
-                    height="450"
-                    frameborder="0"
-                    allowfullscreen="true"
-                    title="Карта зоны обслуживания - Санкт-Петербург и Ленинградская область"
-                    loading="lazy">
-            </iframe>
+            <div id="contact-map"
+                 style="width:100%;height:450px;"
+                 data-points='{{if .mapPoints}}{{toJSON .mapPoints}}{{else}}[]{{end}}'>
+            </div>
         </div>
     </div>
 </div>
