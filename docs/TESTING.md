@@ -14,11 +14,12 @@ go test ./... -v -cover -coverprofile=coverage.out # С покрытием
 go test ./internal/handlers -run TestGetProjects -v # Конкретный тест
 ```
 
-**Покрытие: 150 unit тестов (handlers 34.4%, middleware 100%)**
+**Покрытие: 176 unit тестов (handlers 40.4%, middleware 100%)**
 - ✅ **Middleware (JWT)** - 100% (6 тестов)
 - ✅ **Handlers (API)** - основные endpoints (9 тестов)
 - ✅ **Admin CRM Actions** - управление заявками, заметки, напоминания (30 тестов)
 - ✅ **Admin Projects CRUD** - создание, редактирование, удаление проектов (14 тестов)
+- ✅ **Admin Prices CRUD** - позиции прайса, спецификации, дублирование, сортировка (26 тестов)
 - ✅ **Admin Map Points** - CRUD точек, bulk import, парсинг URL Яндекс.Карт (22 теста)
 - ✅ **Admin Helpers** - mustID, parseStatus, пагинация, JSON-ответы (22 теста)
 - ✅ **Admin Auth** - Login/Logout, JWT, bcrypt, cookies (23 теста)
@@ -29,6 +30,7 @@ go test ./internal/handlers -run TestGetProjects -v # Конкретный те�
 - **Public API:** GetProjects, SubmitContact, TrackProjectView (пагинация, валидация)
 - **Admin CRM:** UpdateContactStatus, BulkUpdateContacts, ArchiveContact, RestoreContact, DeleteContact, заметки, напоминания (security tests)
 - **Admin Projects:** CreateProject (slug generation), GetProject, UpdateProject (many-to-many categories), DeleteProject (cascade, transactions)
+- **Admin Prices:** CreatePriceItem (с/без спецификаций, валидация), GetPriceItem (с спецификациями), UpdatePriceItem (обновление спецификаций), DeletePriceItem, DuplicatePriceItem (копирование спецификаций, sort_order), UpdatePriceItemsSorting, convertToWebPath
 - **Admin Auth:** Login (success, валидация, неверные credentials, неактивный админ), Logout (clear cookie), JWT (генерация, валидация, истечение, подписи), bcrypt (хеширование), cookies (Secure/HttpOnly flags)
 - **Telegram Integration:** update status, add note, set reminder, due reminders, mark sent
 - **SEO:** HTTPS для production, X-Forwarded-Proto, корректность форматов
@@ -124,7 +126,7 @@ go build main.go  # Смотрите вывод ошибки
 ## 📈 Статистика и планы
 
 **Текущее состояние:**
-- ✅ 150 unit тестов (Middleware 100%, Handlers 34.4%, Auth + Map Points + Helpers полностью покрыты)
+- ✅ 176 unit тестов (Middleware 100%, Handlers 40.4%, Auth + Prices CRUD + Map Points + Helpers покрыты)
 - ✅ 14 smoke tests
 - ✅ CI/CD pipeline (GitHub Actions + Codecov)
 - ✅ SEO HTTPS оптимизировано для Google/Yandex
