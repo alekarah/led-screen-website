@@ -13,6 +13,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// coordsDelta — допуск при сравнении координат (~11 метров)
+const coordsDelta = 0.0001
+
+// isDuplicatePoint проверяет, существует ли точка с такими же координатами
+func (h *Handlers) isDuplicatePoint(lat, lng float64) bool {
+	var count int64
+	h.db.Model(&models.MapPoint{}).
+		Where("latitude BETWEEN ? AND ? AND longitude BETWEEN ? AND ?",
+			lat-coordsDelta, lat+coordsDelta,
+			lng-coordsDelta, lng+coordsDelta).
+		Count(&count)
+	return count > 0
+}
+
 // AdminMapPointsPage — страница управления точками на карте
 func (h *Handlers) AdminMapPointsPage(c *gin.Context) {
 	var points []models.MapPoint
@@ -58,6 +72,12 @@ func (h *Handlers) CreateMapPoint(c *gin.Context) {
 	}
 
 	isActive := c.PostForm("is_active") != "false"
+
+	// Проверка дубликата по координатам
+	if h.isDuplicatePoint(lat, lng) {
+		jsonErr(c, http.StatusConflict, "Точка с такими координатами уже существует")
+		return
+	}
 
 	point := models.MapPoint{
 		Title:       title,
@@ -202,6 +222,12 @@ func (h *Handlers) BulkImportMapPoints(c *gin.Context) {
 		lat, lng, err := parseCoordsFromYandexURL(link)
 		if err != nil {
 			errors = append(errors, fmt.Sprintf("Строка %d: %v", i+1, err))
+			continue
+		}
+
+		// Проверка дубликата по координатам
+		if h.isDuplicatePoint(lat, lng) {
+			errors = append(errors, fmt.Sprintf("Строка %d: точка с такими координатами уже существует", i+1))
 			continue
 		}
 

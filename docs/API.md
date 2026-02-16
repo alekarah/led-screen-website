@@ -198,6 +198,7 @@
 
 **CRUD:**
 - `POST /admin/map-points` - создать (Request: {title*, latitude*, longitude*, description, panorama_url, is_active})
+  - **Дубликаты:** проверка по координатам (±0.0001° ≈ 11м). При совпадении → `409 Conflict`
 - `POST /admin/map-points/:id/update` - обновить (Request: аналогично создать)
 - `DELETE /admin/map-points/:id` - удалить
 
@@ -208,7 +209,8 @@
 - `POST /admin/map-points/bulk-import` - массовый импорт из ссылок Яндекс.Карт (Request: {links: ["https://yandex.ru/maps/..."]})
   - Автоматически извлекает координаты из параметра `ll=longitude,latitude`
   - Извлекает название из slug `/house/address_slug/` в URL
-  - **Response:** `{success: true, imported: 3, message}`
+  - **Дубликаты:** точки с существующими координатами (±11м) пропускаются с ошибкой в отчёте
+  - **Response:** `{success: true, created: 3, errors: [...], message}`
 
 **Яндекс.Карты на публичной странице:**
 - Страница `/contact` отображает Яндекс.Карту с метками всех активных точек
@@ -222,7 +224,7 @@
 
 ## Коды ошибок
 
-**HTTP Status:** `200` (OK), `302` (redirect), `400` (bad request/validation), `401` (unauthorized), `404` (not found), `500` (server error)
+**HTTP Status:** `200` (OK), `302` (redirect), `400` (bad request/validation), `401` (unauthorized), `404` (not found), `409` (conflict/duplicate), `500` (server error)
 
 **Format:** `{error: "Описание ошибки"}`
 

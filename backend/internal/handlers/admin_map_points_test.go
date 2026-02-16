@@ -137,6 +137,94 @@ func TestCreateMapPoint_DefaultIsActive(t *testing.T) {
 	assert.True(t, point.IsActive)
 }
 
+// ---------- Дубликаты ----------
+
+func TestCreateMapPoint_Duplicate(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/map-points", h.CreateMapPoint)
+
+	// Создаём первую точку
+	h.db.Create(&models.MapPoint{Title: "Существующая", Latitude: 59.8683, Longitude: 30.3138, IsActive: true})
+
+	// Пытаемся создать точку с теми же координатами
+	form := url.Values{
+		"title":     {"Дубликат"},
+		"latitude":  {"59.8683"},
+		"longitude": {"30.3138"},
+	}
+
+	req, _ := http.NewRequest("POST", "/admin/map-points", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusConflict, w.Code)
+
+	var resp map[string]interface{}
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	assert.Contains(t, resp["error"], "уже существует")
+
+	// В БД должна быть только 1 точка
+	var count int64
+	h.db.Model(&models.MapPoint{}).Count(&count)
+	assert.Equal(t, int64(1), count)
+}
+
+func TestCreateMapPoint_NearbyNotDuplicate(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/map-points", h.CreateMapPoint)
+
+	// Создаём первую точку
+	h.db.Create(&models.MapPoint{Title: "Точка A", Latitude: 59.8683, Longitude: 30.3138, IsActive: true})
+
+	// Точка на расстоянии >11м (delta > 0.0001)
+	form := url.Values{
+		"title":     {"Точка B"},
+		"latitude":  {"59.870"},
+		"longitude": {"30.315"},
+	}
+
+	req, _ := http.NewRequest("POST", "/admin/map-points", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var count int64
+	h.db.Model(&models.MapPoint{}).Count(&count)
+	assert.Equal(t, int64(2), count)
+}
+
+func TestBulkImport_SkipsDuplicates(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/map-points/bulk-import", h.BulkImportMapPoints)
+
+	// Создаём существующую точку
+	h.db.Create(&models.MapPoint{Title: "Существующая", Latitude: 59.8683, Longitude: 30.3138, IsActive: true})
+
+	body, _ := json.Marshal(gin.H{
+		"links": []string{
+			"https://yandex.ru/maps/?ll=30.3138,59.8683", // дубликат
+			"https://yandex.ru/maps/?ll=30.5000,60.0000", // новая
+		},
+	})
+
+	req, _ := http.NewRequest("POST", "/admin/map-points/bulk-import", bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp map[string]interface{}
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	assert.Equal(t, float64(1), resp["created"])
+	errors := resp["errors"].([]interface{})
+	assert.Equal(t, 1, len(errors))
+	assert.Contains(t, errors[0], "уже существует")
+}
+
 // ---------- GetMapPoint ----------
 
 func TestGetMapPoint_Success(t *testing.T) {
