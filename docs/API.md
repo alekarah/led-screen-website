@@ -188,6 +188,38 @@
 
 ---
 
+## Админ API: Точки на карте
+
+**Auth:** Все эндпоинты требуют JWT (`admin_token` cookie)
+
+**Страницы:**
+- `GET /admin/map-points` - страница управления точками (HTML)
+- `GET /admin/map-points/:id` - получить точку (Response: {map_point}, Headers: no-cache)
+
+**CRUD:**
+- `POST /admin/map-points` - создать (Request: {title*, latitude*, longitude*, description, panorama_url, is_active})
+- `POST /admin/map-points/:id/update` - обновить (Request: аналогично создать)
+- `DELETE /admin/map-points/:id` - удалить
+
+**Сортировка:**
+- `POST /admin/map-points/sort` - сохранить порядок drag & drop (Request: {ids: [1, 3, 2]})
+
+**Импорт:**
+- `POST /admin/map-points/bulk-import` - массовый импорт из ссылок Яндекс.Карт (Request: {links: ["https://yandex.ru/maps/..."]})
+  - Автоматически извлекает координаты из параметра `ll=longitude,latitude`
+  - Извлекает название из slug `/house/address_slug/` в URL
+  - **Response:** `{success: true, imported: 3, message}`
+
+**Яндекс.Карты на публичной странице:**
+- Страница `/contact` отображает Яндекс.Карту с метками всех активных точек
+- Кластеризация меток (Clusterer) при большом количестве точек
+- Автоматическое масштабирование карты под все точки
+- Балуны с названием, описанием и кнопкой «Панорама» (если указан panorama_url)
+
+**Note:** API ключ Яндекс.Карт подключается в `public_base.html` и `admin_base.html` (страница карты)
+
+---
+
 ## Коды ошибок
 
 **HTTP Status:** `200` (OK), `302` (redirect), `400` (bad request/validation), `401` (unauthorized), `404` (not found), `500` (server error)
@@ -249,5 +281,5 @@ curl -X POST http://localhost:8080/admin/contacts/10/status \
 
 ---
 
-**v1.0** (Ноябрь 2024)
+**v1.1** (Февраль 2026)
 

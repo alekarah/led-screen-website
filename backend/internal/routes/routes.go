@@ -157,12 +157,12 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		// Точки на карте - CRUD операции
 		mapPoints := admin.Group("/map-points")
 		{
-			mapPoints.GET("", h.AdminMapPointsPage)          // Страница управления точками
-			mapPoints.POST("", h.CreateMapPoint)             // Создание точки
-			mapPoints.GET("/:id", h.GetMapPoint)             // Получение точки (JSON)
-			mapPoints.POST("/:id/update", h.UpdateMapPoint)  // Обновление точки
-			mapPoints.DELETE("/:id", h.DeleteMapPoint)       // Удаление точки
-			mapPoints.POST("/sort", h.UpdateMapPointsSorting)          // Сортировка (drag & drop)
+			mapPoints.GET("", h.AdminMapPointsPage)               // Страница управления точками
+			mapPoints.POST("", h.CreateMapPoint)                  // Создание точки
+			mapPoints.GET("/:id", h.GetMapPoint)                  // Получение точки (JSON)
+			mapPoints.POST("/:id/update", h.UpdateMapPoint)       // Обновление точки
+			mapPoints.DELETE("/:id", h.DeleteMapPoint)            // Удаление точки
+			mapPoints.POST("/sort", h.UpdateMapPointsSorting)     // Сортировка (drag & drop)
 			mapPoints.POST("/bulk-import", h.BulkImportMapPoints) // Массовый импорт из ссылок
 		}
 	}

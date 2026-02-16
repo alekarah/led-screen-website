@@ -281,7 +281,9 @@ func extractTitleFromURL(rawURL string, index int) string {
 			// Следующий сегмент — адрес (slug: varshavskaya_ulitsa_26)
 			addr := segments[i+1]
 			// Декодируем URL-encoded символы
-			addr, _ = url.PathUnescape(addr)
+			if decoded, err := url.PathUnescape(addr); err == nil {
+				addr = decoded
+			}
 			// Заменяем _ на пробелы
 			addr = strings.ReplaceAll(addr, "_", " ")
 			return addr

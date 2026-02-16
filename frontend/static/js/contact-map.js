@@ -26,16 +26,35 @@ ymaps.ready(function() {
     clusterBalloonContentLayout: 'cluster#balloonCarousel'
   });
 
+  // SVG-иконка 360° для кнопки панорамы
+  var panoramaIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;">' +
+    '<circle cx="12" cy="12" r="10"/>' +
+    '<ellipse cx="12" cy="12" rx="10" ry="4"/>' +
+    '<line x1="12" y1="2" x2="12" y2="22"/>' +
+    '</svg>';
+
   var placemarks = [];
   points.forEach(function(p) {
+    // Собираем тело балуна
+    var body = '';
+    if (p.description) {
+      body += '<div style="margin-bottom:8px;color:#555;font-size:13px;">' + p.description + '</div>';
+    }
+    if (p.panorama_url) {
+      body += '<a href="' + p.panorama_url + '" target="_blank" rel="noopener" ' +
+        'style="display:inline-flex;align-items:center;padding:6px 14px;' +
+        'background:#1a73e8;color:#fff;border-radius:6px;font-size:13px;' +
+        'text-decoration:none;transition:background .2s;" ' +
+        'onmouseover="this.style.background=\'#1557b0\'" ' +
+        'onmouseout="this.style.background=\'#1a73e8\'">' +
+        panoramaIcon + 'Панорама</a>';
+    }
+
     var placemark = new ymaps.Placemark(
       [p.latitude, p.longitude],
       {
-        balloonContentHeader: p.panorama_url
-          ? '<a href="' + p.panorama_url + '" target="_blank" rel="noopener" style="color:#1a73e8;">' + p.title + '</a>'
-          : p.title,
-        balloonContentBody: (p.description || '') +
-          (p.panorama_url ? '<br><a href="' + p.panorama_url + '" target="_blank" rel="noopener" style="color:#1a73e8;">Открыть панораму</a>' : ''),
+        balloonContentHeader: '<span style="font-weight:600;font-size:14px;">' + p.title + '</span>',
+        balloonContentBody: body,
         hintContent: p.title
       },
       {
