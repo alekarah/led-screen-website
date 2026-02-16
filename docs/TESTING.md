@@ -14,13 +14,14 @@ go test ./... -v -cover -coverprofile=coverage.out # С покрытием
 go test ./internal/handlers -run TestGetProjects -v # Конкретный тест
 ```
 
-**Покрытие: 119 unit тестов (handlers 31.5%, middleware 100%)**
+**Покрытие: 150 unit тестов (handlers 34.4%, middleware 100%)**
 - ✅ **Middleware (JWT)** - 100% (6 тестов)
 - ✅ **Handlers (API)** - основные endpoints (9 тестов)
 - ✅ **Admin CRM Actions** - управление заявками, заметки, напоминания (30 тестов)
 - ✅ **Admin Projects CRUD** - создание, редактирование, удаление проектов (14 тестов)
 - ✅ **Admin Map Points** - CRUD точек, bulk import, парсинг URL Яндекс.Карт (22 теста)
 - ✅ **Admin Helpers** - mustID, parseStatus, пагинация, JSON-ответы (22 теста)
+- ✅ **Admin Auth** - Login/Logout, JWT, bcrypt, cookies (23 теста)
 - ✅ **Telegram API** - интеграция с Telegram ботом (12 тестов)
 - ✅ **SEO** - sitemap.xml, robots.txt, HTTPS (7 тестов)
 
@@ -28,11 +29,11 @@ go test ./internal/handlers -run TestGetProjects -v # Конкретный те�
 - **Public API:** GetProjects, SubmitContact, TrackProjectView (пагинация, валидация)
 - **Admin CRM:** UpdateContactStatus, BulkUpdateContacts, ArchiveContact, RestoreContact, DeleteContact, заметки, напоминания (security tests)
 - **Admin Projects:** CreateProject (slug generation), GetProject, UpdateProject (many-to-many categories), DeleteProject (cascade, transactions)
+- **Admin Auth:** Login (success, валидация, неверные credentials, неактивный админ), Logout (clear cookie), JWT (генерация, валидация, истечение, подписи), bcrypt (хеширование), cookies (Secure/HttpOnly flags)
 - **Telegram Integration:** update status, add note, set reminder, due reminders, mark sent
 - **SEO:** HTTPS для production, X-Forwarded-Proto, корректность форматов
 - **Admin Map Points:** CRUD (create, get, update, delete), сортировка, bulk import из Яндекс.Карт, парсинг координат, извлечение адреса из URL
 - **Admin Helpers:** mustID (валидация/невалидные ID), parseStatus, buildPageNumbers (пагинация), jsonOK/jsonErr, pageMeta, getPageQuery, NowMSK
-- **Auth:** валидные/невалидные/истекшие токены, редиректы
 
 ---
 
@@ -123,7 +124,7 @@ go build main.go  # Смотрите вывод ошибки
 ## 📈 Статистика и планы
 
 **Текущее состояние:**
-- ✅ 119 unit тестов (Middleware 100%, Handlers 31.5%, Map Points + Helpers полностью покрыты)
+- ✅ 150 unit тестов (Middleware 100%, Handlers 34.4%, Auth + Map Points + Helpers полностью покрыты)
 - ✅ 14 smoke tests
 - ✅ CI/CD pipeline (GitHub Actions + Codecov)
 - ✅ SEO HTTPS оптимизировано для Google/Yandex
