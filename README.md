@@ -270,8 +270,8 @@ led-screen-website/
 ./check-code.sh   # Linux/macOS
 ```
 
-**Unit тесты:** 176 автоматических тестов (handlers 40.4%, middleware 100%)
-- Middleware 100%, Admin Auth, Admin CRM, Admin Projects, Admin Prices CRUD, Map Points, Helpers, Telegram API, SEO
+**Unit тесты:** 192 автоматических теста (handlers 43.3%, middleware 100%)
+- Middleware 100%, Admin Auth, Admin CRM, Admin Projects, Admin Prices CRUD, Admin Images, Map Points, Helpers, Telegram API, SEO
 ```bash
 cd backend && go test ./... -v -cover
 ```
