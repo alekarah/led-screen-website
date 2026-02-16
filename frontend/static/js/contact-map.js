@@ -42,11 +42,10 @@ ymaps.ready(function() {
     }
     if (p.panorama_url) {
       body += '<a href="' + p.panorama_url + '" target="_blank" rel="noopener" ' +
+        'class="map-panorama-btn" ' +
         'style="display:inline-flex;align-items:center;padding:6px 14px;' +
         'background:#1a73e8;color:#fff;border-radius:6px;font-size:13px;' +
-        'text-decoration:none;transition:background .2s;" ' +
-        'onmouseover="this.style.background=\'#1557b0\'" ' +
-        'onmouseout="this.style.background=\'#1a73e8\'">' +
+        'text-decoration:none;cursor:pointer;position:relative;z-index:1000;">' +
         panoramaIcon + 'Панорама</a>';
     }
 
@@ -61,6 +60,22 @@ ymaps.ready(function() {
         preset: 'islands#blueCircleDotIcon'
       }
     );
+
+    // Добавляем обработчики hover через события балуна
+    placemark.events.add('balloonopen', function() {
+      setTimeout(function() {
+        var btn = document.querySelector('.map-panorama-btn');
+        if (btn) {
+          btn.addEventListener('mouseenter', function() {
+            this.style.background = '#1557b0';
+          });
+          btn.addEventListener('mouseleave', function() {
+            this.style.background = '#1a73e8';
+          });
+        }
+      }, 100);
+    });
+
     placemarks.push(placemark);
   });
 
