@@ -14,32 +14,36 @@ go test ./... -v -cover -coverprofile=coverage.out # С покрытием
 go test ./internal/handlers -run TestGetProjects -v # Конкретный тест
 ```
 
-**Покрытие: 203 unit теста (handlers 45.1%, middleware 100%)**
+**Покрытие: 239 unit тестов (handlers 49.7%, middleware 100%)**
 - ✅ **Middleware (JWT)** - 100% (6 тестов)
-- ✅ **Handlers (API)** - основные endpoints (9 тестов)
+- ✅ **Handlers (API)** - основные endpoints (13 тестов)
 - ✅ **Admin CRM Actions** - управление заявками, заметки, напоминания (30 тестов)
-- ✅ **Admin Projects CRUD** - создание, редактирование, удаление проектов (14 тестов)
+- ✅ **Admin Projects CRUD** - создание, редактирование, удаление, дублирование проектов (19 тестов)
 - ✅ **Admin Prices CRUD** - позиции прайса, спецификации, дублирование, сортировка (26 тестов)
 - ✅ **Admin Images** - удаление, SetPrimary (транзакции), crop валидация, вспомогательные функции (16 тестов)
 - ✅ **Admin Sorting** - ReorderProject, BulkReorderProjects (транзакции, множественные проекты) (11 тестов)
 - ✅ **Admin Map Points** - CRUD точек, bulk import, парсинг URL Яндекс.Карт (22 теста)
-- ✅ **Admin Helpers** - mustID, parseStatus, пагинация, JSON-ответы (22 теста)
+- ✅ **Admin Helpers** - mustID, parseStatus, пагинация, JSON-ответы, applyDateFilter (27 тестов)
 - ✅ **Admin Auth** - Login/Logout, JWT, bcrypt, cookies (23 теста)
+- ✅ **Admin Promo** - GetActivePromo, проверка страниц, активность (6 тестов)
 - ✅ **Telegram API** - интеграция с Telegram ботом (12 тестов)
 - ✅ **SEO** - sitemap.xml, robots.txt, HTTPS (7 тестов)
+- ✅ **Helper Functions** - isImageFile, generateSlug (4 теста)
 
 **Что тестируется:**
-- **Public API:** GetProjects, SubmitContact, TrackProjectView (пагинация, валидация)
+- **Public API:** GetProjects (пагинация, валидация, фильтры), SubmitContact (honeypot, spam check), TrackProjectView, TrackPriceView
 - **Admin CRM:** UpdateContactStatus, BulkUpdateContacts, ArchiveContact, RestoreContact, DeleteContact, заметки, напоминания (security tests)
-- **Admin Projects:** CreateProject (slug generation), GetProject, UpdateProject (many-to-many categories), DeleteProject (cascade, transactions)
-- **Admin Prices:** CreatePriceItem (с/без спецификаций, валидация), GetPriceItem (с спецификациями), UpdatePriceItem (обновление спецификаций), DeletePriceItem, DuplicatePriceItem (копирование спецификаций, sort_order), UpdatePriceItemsSorting, convertToWebPath
+- **Admin Projects:** CreateProject (slug generation), GetProject, UpdateProject (many-to-many categories), DeleteProject (cascade, transactions), **DuplicateProject** (slug uniqueness, categories copy)
+- **Admin Prices:** CreatePriceItem (с/без спецификаций, валидация), GetPriceItem (с спецификациями), UpdatePriceItem (обновление спецификаций), DeletePriceItem, DuplicatePriceItem (копирование спецификаций, sort_order), UpdatePriceItemsSorting, convertToWebPath (Windows paths fix)
 - **Admin Images:** DeleteImage (not found, invalid ID), SetPrimaryImage (транзакции, единственное главное, no project_id), UpdateImageCrop (валидация JSON), validateCropData (граничные значения), createImageRecord, generateImageFilename
 - **Admin Sorting:** ReorderProject (валидация позиции, negative values), BulkReorderProjects (транзакции, единственный/множественные проекты, пустой список, GORM Update behavior)
 - **Admin Auth:** Login (success, валидация, неверные credentials, неактивный админ), Logout (clear cookie), JWT (генерация, валидация, истечение, подписи), bcrypt (хеширование), cookies (Secure/HttpOnly flags)
+- **Admin Promo:** GetActivePromo (активность, страницы, invalid JSON)
 - **Telegram Integration:** update status, add note, set reminder, due reminders, mark sent
 - **SEO:** HTTPS для production, X-Forwarded-Proto, корректность форматов
 - **Admin Map Points:** CRUD (create, get, update, delete), сортировка, bulk import из Яндекс.Карт, парсинг координат, извлечение адреса из URL
-- **Admin Helpers:** mustID (валидация/невалидные ID), parseStatus, buildPageNumbers (пагинация), jsonOK/jsonErr, pageMeta, getPageQuery, NowMSK
+- **Admin Helpers:** mustID (валидация/невалидные ID), parseStatus, buildPageNumbers (пагинация), jsonOK/jsonErr, pageMeta, getPageQuery, NowMSK, **applyDateFilter** (today, 7d, month)
+- **Helper Functions:** isImageFile (valid/invalid extensions), generateSlug (транслитерация)
 
 ---
 
@@ -130,16 +134,17 @@ go build main.go  # Смотрите вывод ошибки
 ## 📈 Статистика и планы
 
 **Текущее состояние:**
-- ✅ 203 unit теста (Middleware 100%, Handlers 45.1%, Auth + Prices + Images + Sorting + Map Points + Helpers покрыты)
+- ✅ **239 unit тестов** (Middleware 100%, Handlers 49.7% ≈50%)
 - ✅ 14 smoke tests
 - ✅ CI/CD pipeline (GitHub Actions + Codecov)
 - ✅ SEO HTTPS оптимизировано для Google/Yandex
+- ✅ **Handlers покрытие 49.7%** (admin_actions 73-87%, admin_projects 50-88%, admin_auth 91-100%, admin_helpers 100%, admin_promo 50%+)
 
 **Планы улучшений:**
-- 🎯 Handlers покрытие → 50%+ (достигнуто: admin_actions 73-87%, admin_projects 50-88%)
 - 🎯 Integration тесты (database CRUD) - частично покрыто в admin tests
 - 🎯 E2E тесты (Playwright/Cypress для админ-панели)
 - 🎯 Performance тесты (k6, Go benchmarks)
+- 🎯 Handlers покрытие → 60%+ (admin dashboard, HTML pages)
 
 **Дополнительная документация:**
 - [LOCAL_CHECKS.md](LOCAL_CHECKS.md) - Локальная проверка кода

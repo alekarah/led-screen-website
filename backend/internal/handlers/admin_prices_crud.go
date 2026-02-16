@@ -539,8 +539,8 @@ func (h *Handlers) DeletePriceImage(c *gin.Context) {
 // frontend/static/uploads/file.png -> /static/uploads/file.png
 // frontend\static\uploads\file.png -> /static/uploads/file.png
 func convertToWebPath(fsPath string) string {
-	// Нормализуем разделители
-	normalized := filepath.ToSlash(fsPath)
+	// Нормализуем разделители (заменяем все Windows \ на /)
+	normalized := strings.ReplaceAll(fsPath, "\\", "/")
 
 	// Ищем "/static/uploads/" в пути
 	if idx := strings.Index(normalized, "/static/uploads/"); idx != -1 {

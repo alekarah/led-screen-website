@@ -466,3 +466,159 @@ func TestDeleteProject_InvalidID(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
+
+// ============================================================================
+// DuplicateProject Tests
+// ============================================================================
+
+func TestDuplicateProject_Success(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/projects/:id/duplicate", h.DuplicateProject)
+
+	// Создаем оригинальный проект
+	original := models.Project{
+		Title:       "Оригинальный проект",
+		Description: "Описание оригинала",
+		Location:    "Москва",
+		Size:        "3x2 м",
+		PixelPitch:  "P10",
+		Featured:    true,
+		SortOrder:   5,
+		Slug:        "originalnyj-proekt",
+	}
+	h.db.Create(&original)
+
+	req, _ := http.NewRequest("POST", fmt.Sprintf("/admin/projects/%d/duplicate", original.ID), nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var response map[string]interface{}
+	json.Unmarshal(w.Body.Bytes(), &response)
+	assert.Contains(t, response, "project_id")
+
+	// Проверяем что копия создана
+	duplicateID := uint(response["project_id"].(float64))
+	var duplicate models.Project
+	h.db.First(&duplicate, duplicateID)
+
+	assert.Equal(t, "Оригинальный проект (копия)", duplicate.Title)
+	assert.Equal(t, original.Description, duplicate.Description)
+	assert.Equal(t, original.Location, duplicate.Location)
+	assert.Equal(t, original.Size, duplicate.Size)
+	assert.Equal(t, original.PixelPitch, duplicate.PixelPitch)
+	assert.Equal(t, original.Featured, duplicate.Featured)
+	assert.Equal(t, 6, duplicate.SortOrder, "sort_order должен быть maxSort+1")
+	// Проверяем что slug содержит "kopiya" и уникален
+	assert.Contains(t, duplicate.Slug, "kopiya")
+	assert.NotEqual(t, original.Slug, duplicate.Slug)
+}
+
+func TestDuplicateProject_WithCategories(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/projects/:id/duplicate", h.DuplicateProject)
+
+	// Создаем категории
+	category1 := models.Category{Name: "Категория 1", Slug: "category-1"}
+	category2 := models.Category{Name: "Категория 2", Slug: "category-2"}
+	h.db.Create(&category1)
+	h.db.Create(&category2)
+
+	// Создаем проект с категориями
+	original := models.Project{
+		Title: "Проект с категориями",
+		Slug:  "proekt-s-kategoriyami",
+	}
+	h.db.Create(&original)
+	h.db.Model(&original).Association("Categories").Append(&category1, &category2)
+
+	req, _ := http.NewRequest("POST", fmt.Sprintf("/admin/projects/%d/duplicate", original.ID), nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var response map[string]interface{}
+	json.Unmarshal(w.Body.Bytes(), &response)
+	duplicateID := uint(response["project_id"].(float64))
+
+	// Проверяем что категории скопированы
+	var duplicate models.Project
+	h.db.Preload("Categories").First(&duplicate, duplicateID)
+
+	assert.Equal(t, 2, len(duplicate.Categories))
+	assert.Equal(t, category1.ID, duplicate.Categories[0].ID)
+	assert.Equal(t, category2.ID, duplicate.Categories[1].ID)
+}
+
+func TestDuplicateProject_UniqueSlug(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/projects/:id/duplicate", h.DuplicateProject)
+
+	// Создаем оригинальный проект
+	original := models.Project{
+		Title: "Проект",
+		Slug:  "proekt",
+	}
+	h.db.Create(&original)
+
+	// Создаем первую копию
+	req1, _ := http.NewRequest("POST", fmt.Sprintf("/admin/projects/%d/duplicate", original.ID), nil)
+	w1 := httptest.NewRecorder()
+	router.ServeHTTP(w1, req1)
+
+	var response1 map[string]interface{}
+	json.Unmarshal(w1.Body.Bytes(), &response1)
+	duplicate1ID := uint(response1["project_id"].(float64))
+
+	var duplicate1 models.Project
+	h.db.First(&duplicate1, duplicate1ID)
+
+	// Проверяем что slug содержит "kopiya" и уникален
+	assert.Contains(t, duplicate1.Slug, "kopiya")
+	assert.NotEqual(t, original.Slug, duplicate1.Slug)
+
+	// Создаем вторую копию
+	req2, _ := http.NewRequest("POST", fmt.Sprintf("/admin/projects/%d/duplicate", original.ID), nil)
+	w2 := httptest.NewRecorder()
+	router.ServeHTTP(w2, req2)
+
+	var response2 map[string]interface{}
+	json.Unmarshal(w2.Body.Bytes(), &response2)
+	duplicate2ID := uint(response2["project_id"].(float64))
+
+	var duplicate2 models.Project
+	h.db.First(&duplicate2, duplicate2ID)
+
+	// Проверяем что второй slug уникален и отличается от первого
+	assert.Contains(t, duplicate2.Slug, "kopiya")
+	assert.NotEqual(t, duplicate1.Slug, duplicate2.Slug)
+	assert.NotEqual(t, original.Slug, duplicate2.Slug)
+}
+
+func TestDuplicateProject_NotFound(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/projects/:id/duplicate", h.DuplicateProject)
+
+	req, _ := http.NewRequest("POST", "/admin/projects/99999/duplicate", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+
+	var response map[string]interface{}
+	json.Unmarshal(w.Body.Bytes(), &response)
+	assert.Contains(t, response["error"], "не найден")
+}
+
+func TestDuplicateProject_InvalidID(t *testing.T) {
+	router, h := setupTestRouter(t)
+	router.POST("/admin/projects/:id/duplicate", h.DuplicateProject)
+
+	req, _ := http.NewRequest("POST", "/admin/projects/invalid/duplicate", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}

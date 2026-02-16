@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"ledsite/internal/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -349,4 +351,61 @@ func TestNowMSK_Timezone(t *testing.T) {
 func TestNowMSKUTC_Timezone(t *testing.T) {
 	now := NowMSKUTC()
 	assert.Equal(t, "UTC", now.Location().String())
+}
+
+// ---------- applyDateFilter ----------
+
+func TestApplyDateFilter_EmptyRange(t *testing.T) {
+	_, h := setupTestRouter(t)
+
+	// Пустой dateRange не должен добавлять WHERE условия
+	qb := h.db.Model(&models.ContactForm{})
+	result := applyDateFilter(qb, "")
+
+	assert.NotNil(t, result)
+	// Проверяем что это тот же query builder
+	assert.Equal(t, qb, result)
+}
+
+func TestApplyDateFilter_Today(t *testing.T) {
+	_, h := setupTestRouter(t)
+
+	qb := h.db.Model(&models.ContactForm{})
+	result := applyDateFilter(qb, "today")
+
+	// Проверяем что функция вернула query builder
+	assert.NotNil(t, result)
+	// GORM возвращает тот же указатель, поэтому просто проверяем что Error не установлен
+	assert.Nil(t, result.Error)
+}
+
+func TestApplyDateFilter_7Days(t *testing.T) {
+	_, h := setupTestRouter(t)
+
+	qb := h.db.Model(&models.ContactForm{})
+	result := applyDateFilter(qb, "7d")
+
+	assert.NotNil(t, result)
+	assert.Nil(t, result.Error)
+}
+
+func TestApplyDateFilter_Month(t *testing.T) {
+	_, h := setupTestRouter(t)
+
+	qb := h.db.Model(&models.ContactForm{})
+	result := applyDateFilter(qb, "month")
+
+	assert.NotNil(t, result)
+	assert.Nil(t, result.Error)
+}
+
+func TestApplyDateFilter_InvalidRange(t *testing.T) {
+	_, h := setupTestRouter(t)
+
+	// Невалидный dateRange должен вернуть qb без изменений
+	qb := h.db.Model(&models.ContactForm{})
+	result := applyDateFilter(qb, "invalid")
+
+	assert.NotNil(t, result)
+	assert.Equal(t, qb, result)
 }
