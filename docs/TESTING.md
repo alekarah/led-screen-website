@@ -14,13 +14,14 @@ go test ./... -v -cover -coverprofile=coverage.out # С покрытием
 go test ./internal/handlers -run TestGetProjects -v # Конкретный тест
 ```
 
-**Покрытие: 192 unit теста (handlers 43.3%, middleware 100%)**
+**Покрытие: 203 unit теста (handlers 45.1%, middleware 100%)**
 - ✅ **Middleware (JWT)** - 100% (6 тестов)
 - ✅ **Handlers (API)** - основные endpoints (9 тестов)
 - ✅ **Admin CRM Actions** - управление заявками, заметки, напоминания (30 тестов)
 - ✅ **Admin Projects CRUD** - создание, редактирование, удаление проектов (14 тестов)
 - ✅ **Admin Prices CRUD** - позиции прайса, спецификации, дублирование, сортировка (26 тестов)
 - ✅ **Admin Images** - удаление, SetPrimary (транзакции), crop валидация, вспомогательные функции (16 тестов)
+- ✅ **Admin Sorting** - ReorderProject, BulkReorderProjects (транзакции, множественные проекты) (11 тестов)
 - ✅ **Admin Map Points** - CRUD точек, bulk import, парсинг URL Яндекс.Карт (22 теста)
 - ✅ **Admin Helpers** - mustID, parseStatus, пагинация, JSON-ответы (22 теста)
 - ✅ **Admin Auth** - Login/Logout, JWT, bcrypt, cookies (23 теста)
@@ -33,6 +34,7 @@ go test ./internal/handlers -run TestGetProjects -v # Конкретный те�
 - **Admin Projects:** CreateProject (slug generation), GetProject, UpdateProject (many-to-many categories), DeleteProject (cascade, transactions)
 - **Admin Prices:** CreatePriceItem (с/без спецификаций, валидация), GetPriceItem (с спецификациями), UpdatePriceItem (обновление спецификаций), DeletePriceItem, DuplicatePriceItem (копирование спецификаций, sort_order), UpdatePriceItemsSorting, convertToWebPath
 - **Admin Images:** DeleteImage (not found, invalid ID), SetPrimaryImage (транзакции, единственное главное, no project_id), UpdateImageCrop (валидация JSON), validateCropData (граничные значения), createImageRecord, generateImageFilename
+- **Admin Sorting:** ReorderProject (валидация позиции, negative values), BulkReorderProjects (транзакции, единственный/множественные проекты, пустой список, GORM Update behavior)
 - **Admin Auth:** Login (success, валидация, неверные credentials, неактивный админ), Logout (clear cookie), JWT (генерация, валидация, истечение, подписи), bcrypt (хеширование), cookies (Secure/HttpOnly flags)
 - **Telegram Integration:** update status, add note, set reminder, due reminders, mark sent
 - **SEO:** HTTPS для production, X-Forwarded-Proto, корректность форматов
@@ -128,7 +130,7 @@ go build main.go  # Смотрите вывод ошибки
 ## 📈 Статистика и планы
 
 **Текущее состояние:**
-- ✅ 192 unit теста (Middleware 100%, Handlers 43.3%, Auth + Prices + Images + Map Points + Helpers покрыты)
+- ✅ 203 unit теста (Middleware 100%, Handlers 45.1%, Auth + Prices + Images + Sorting + Map Points + Helpers покрыты)
 - ✅ 14 smoke tests
 - ✅ CI/CD pipeline (GitHub Actions + Codecov)
 - ✅ SEO HTTPS оптимизировано для Google/Yandex

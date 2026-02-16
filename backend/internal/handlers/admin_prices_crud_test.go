@@ -51,7 +51,7 @@ func TestCreatePriceItem_Success(t *testing.T) {
 	router.POST("/admin/prices", h.CreatePriceItem)
 
 	data := map[string]string{
-		"title":      "Билборд 6x3",
+		"title":       "Билборд 6x3",
 		"description": "Большой билборд",
 		"price_from":  "150000",
 		"is_active":   "on",
@@ -158,7 +158,7 @@ func TestCreatePriceItem_WithIsActiveChecked(t *testing.T) {
 	router.POST("/admin/prices", h.CreatePriceItem)
 
 	data := map[string]string{
-		"title":     "Активная позиция",
+		"title":      "Активная позиция",
 		"price_from": "100000",
 		"is_active":  "on", // чекбокс отмечен
 	}
@@ -254,7 +254,7 @@ func TestUpdatePriceItem_Success(t *testing.T) {
 	item := createTestPriceItem(t, h, "Старое название", 100000, true)
 
 	data := map[string]string{
-		"title":      "Новое название",
+		"title":       "Новое название",
 		"description": "Новое описание",
 		"price_from":  "200000",
 		"is_active":   "on",
