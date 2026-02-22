@@ -3,16 +3,18 @@ ymaps.ready(function() {
   var mapEl = document.getElementById('contact-map');
   if (!mapEl) return;
 
-  // Задаём размер в CSS-пикселях (не физических) для корректной работы при масштабе Windows
-  var rect = mapEl.getBoundingClientRect();
-  mapEl.style.width = rect.width + 'px';
-
   var map = new ymaps.Map('contact-map', {
     center: [59.938784, 30.315868],
     zoom: 9,
     controls: ['zoomControl', 'fullscreenControl']
   }, {
-    balloonAutoPan: true
+    balloonAutoPan: true,
+    suppressMapOpenBlock: true
+  });
+
+  // Принудительно пересчитываем размеры после полной загрузки страницы
+  window.addEventListener('load', function() {
+    map.container.fitToViewport();
   });
 
   // Загружаем точки из data-атрибута
