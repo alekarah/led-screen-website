@@ -3,6 +3,11 @@ ymaps.ready(function() {
   var mapEl = document.getElementById('contact-map');
   if (!mapEl) return;
 
+  // Фиксируем размер в px до инициализации — иначе при масштабе Windows != 100%
+  // Яндекс.Карты инициализируют внутренние слои с неверными размерами
+  var mapWidth = mapEl.offsetWidth;
+  mapEl.style.width = mapWidth + 'px';
+
   var map = new ymaps.Map('contact-map', {
     center: [59.938784, 30.315868],
     zoom: 9,
@@ -60,10 +65,11 @@ ymaps.ready(function() {
   clusterer.add(placemarks);
   map.geoObjects.add(clusterer);
 
-  // Пересчитываем размеры карты после отрисовки страницы
-  setTimeout(function() {
+  // При изменении размера окна — обновляем ширину карты
+  window.addEventListener('resize', function() {
+    mapEl.style.width = mapEl.parentElement.offsetWidth + 'px';
     map.container.fitToViewport();
-  }, 100);
+  });
 
   // Автоматически подбираем масштаб чтобы все точки были видны
   if (placemarks.length > 1) {
