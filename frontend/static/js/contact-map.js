@@ -3,9 +3,6 @@ function initContactMap() {
   var mapEl = document.getElementById('contact-map');
   if (!mapEl) return;
 
-  // Задаём ширину в CSS-пикселях до инициализации карты
-  mapEl.style.width = mapEl.getBoundingClientRect().width + 'px';
-
   ymaps.ready(function() {
     var map = new ymaps.Map('contact-map', {
       center: [59.938784, 30.315868],
@@ -73,7 +70,7 @@ function initContactMap() {
   });
 }
 
-// Запускаем после полной загрузки страницы — тогда getBoundingClientRect даёт CSS-пиксели
+// Запускаем после полной загрузки страницы
 if (document.readyState === 'complete') {
   initContactMap();
 } else {
