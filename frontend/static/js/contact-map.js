@@ -65,11 +65,15 @@ ymaps.ready(function() {
   clusterer.add(placemarks);
   map.geoObjects.add(clusterer);
 
-  // При изменении размера окна — обновляем ширину карты
-  window.addEventListener('resize', function() {
-    mapEl.style.width = mapEl.parentElement.offsetWidth + 'px';
-    map.container.fitToViewport();
-  });
+  // Яндекс.Карты при нестандартном масштабе Windows инициализируют events-pane
+  // с уменьшенными размерами — принудительно растягиваем все внутренние слои
+  function fixMapLayers() {
+    mapEl.querySelectorAll('[class*="ymaps-"]').forEach(function(el) {
+      el.style.width = '100%';
+      el.style.height = '100%';
+    });
+  }
+  setTimeout(fixMapLayers, 500);
 
   // Автоматически подбираем масштаб чтобы все точки были видны
   if (placemarks.length > 1) {
