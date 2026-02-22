@@ -7,6 +7,8 @@ ymaps.ready(function() {
     center: [59.938784, 30.315868],
     zoom: 9,
     controls: ['zoomControl', 'fullscreenControl']
+  }, {
+    balloonAutoPan: true
   });
 
   // Загружаем точки из data-атрибута
@@ -57,6 +59,11 @@ ymaps.ready(function() {
 
   clusterer.add(placemarks);
   map.geoObjects.add(clusterer);
+
+  // Пересчитываем размеры карты после отрисовки страницы
+  setTimeout(function() {
+    map.container.fitToViewport();
+  }, 100);
 
   // Автоматически подбираем масштаб чтобы все точки были видны
   if (placemarks.length > 1) {
