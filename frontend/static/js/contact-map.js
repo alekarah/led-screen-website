@@ -3,10 +3,9 @@ ymaps.ready(function() {
   var mapEl = document.getElementById('contact-map');
   if (!mapEl) return;
 
-  // Фиксируем размер в px до инициализации — иначе при масштабе Windows != 100%
-  // Яндекс.Карты инициализируют внутренние слои с неверными размерами
-  var mapWidth = mapEl.offsetWidth;
-  mapEl.style.width = mapWidth + 'px';
+  // Задаём размер в CSS-пикселях (не физических) для корректной работы при масштабе Windows
+  var rect = mapEl.getBoundingClientRect();
+  mapEl.style.width = rect.width + 'px';
 
   var map = new ymaps.Map('contact-map', {
     center: [59.938784, 30.315868],
