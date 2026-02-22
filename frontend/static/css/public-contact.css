@@ -246,6 +246,13 @@
     background: white;
 }
 
+/* Исправление events-pane при нестандартном масштабе Windows */
+#contact-map [class*="events-pane"],
+#contact-map [class*="inner-panes"] {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .map-container iframe {
     display: block;
     border: none;
