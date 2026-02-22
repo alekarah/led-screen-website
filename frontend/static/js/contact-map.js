@@ -66,14 +66,14 @@ ymaps.ready(function() {
   map.geoObjects.add(clusterer);
 
   // Яндекс.Карты при нестандартном масштабе Windows инициализируют events-pane
-  // с уменьшенными размерами — принудительно растягиваем все внутренние слои
-  function fixMapLayers() {
-    mapEl.querySelectorAll('[class*="ymaps-"]').forEach(function(el) {
+  // с уменьшенными размерами — растягиваем только слой событий
+  setTimeout(function() {
+    var panes = mapEl.querySelectorAll('[class*="events-pane"], [class*="inner-panes"]');
+    panes.forEach(function(el) {
       el.style.width = '100%';
       el.style.height = '100%';
     });
-  }
-  setTimeout(fixMapLayers, 500);
+  }, 500);
 
   // Автоматически подбираем масштаб чтобы все точки были видны
   if (placemarks.length > 1) {
