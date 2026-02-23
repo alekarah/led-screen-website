@@ -462,12 +462,18 @@
   .filter-btn { flex: 1 1 calc(50% - 0.5rem) !important; min-height: 50px !important; padding: 1rem 1.5rem !important; font-size: 0.9rem !important; }
 }
 
-/* Компенсация для высокого DPR на десктопах (Windows масштабирование 125%, 150%) */
+/* Компенсация для высокого DPR на десктопах (Windows масштабирование 125%-200%) */
 /* zoom масштабирует всё: px, rem, картинки, карточки */
 /* hover: hover отсекает мобильные/планшеты с Retina, min-width — маленькие экраны */
 @media screen and (hover: hover) and (min-width: 1024px) and (min-resolution: 120dpi) {
-  html { zoom: 0.875; }
+  html { zoom: 0.8; }
 }
 @media screen and (hover: hover) and (min-width: 1024px) and (min-resolution: 144dpi) {
-  html { zoom: 0.8; }
+  html { zoom: 0.667; }
+}
+@media screen and (hover: hover) and (min-width: 1024px) and (min-resolution: 168dpi) {
+  html { zoom: 0.571; }
+}
+@media screen and (hover: hover) and (min-width: 1024px) and (min-resolution: 192dpi) {
+  html { zoom: 0.5; }
 }
