@@ -204,10 +204,11 @@
             Выезд специалиста — бесплатно.
         </p>
         <div class="map-container">
-            <div id="contact-map"
-                 style="width:100%;height:450px;"
-                 data-points='{{if .mapPoints}}{{toJSON .mapPoints}}{{else}}[]{{end}}'>
-            </div>
+            <iframe id="contact-map-frame"
+                    src="/static/map-frame.html"
+                    style="width:100%;height:450px;border:none;display:block;"
+                    data-points='{{if .mapPoints}}{{toJSON .mapPoints}}{{else}}[]{{end}}'>
+            </iframe>
         </div>
     </div>
 </div>
