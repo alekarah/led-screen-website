@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('editPointLat').value = p.latitude;
         document.getElementById('editPointLng').value = p.longitude;
         document.getElementById('editPointPanorama').value = p.panorama_url || '';
+        document.getElementById('editPointIconType').value = p.icon_type || 'billboard';
         document.getElementById('editPointActive').checked = p.is_active;
 
         openModal('editMapPointModal');

@@ -53,6 +53,10 @@ func (h *Handlers) CreateMapPoint(c *gin.Context) {
 	latStr := c.PostForm("latitude")
 	lngStr := c.PostForm("longitude")
 	panoramaURL := strings.TrimSpace(c.PostForm("panorama_url"))
+	iconType := strings.TrimSpace(c.PostForm("icon_type"))
+	if iconType == "" {
+		iconType = "billboard"
+	}
 
 	if title == "" {
 		jsonErr(c, http.StatusBadRequest, "Название не может быть пустым")
@@ -85,6 +89,7 @@ func (h *Handlers) CreateMapPoint(c *gin.Context) {
 		Latitude:    lat,
 		Longitude:   lng,
 		PanoramaURL: panoramaURL,
+		IconType:    iconType,
 		IsActive:    isActive,
 	}
 
@@ -147,11 +152,17 @@ func (h *Handlers) UpdateMapPoint(c *gin.Context) {
 		return
 	}
 
+	iconType := strings.TrimSpace(c.PostForm("icon_type"))
+	if iconType == "" {
+		iconType = "billboard"
+	}
+
 	point.Title = title
 	point.Description = strings.TrimSpace(c.PostForm("description"))
 	point.Latitude = lat
 	point.Longitude = lng
 	point.PanoramaURL = strings.TrimSpace(c.PostForm("panorama_url"))
+	point.IconType = iconType
 	point.IsActive = c.PostForm("is_active") != "false"
 
 	if err := h.db.Save(&point).Error; err != nil {
@@ -239,6 +250,7 @@ func (h *Handlers) BulkImportMapPoints(c *gin.Context) {
 			Latitude:    lat,
 			Longitude:   lng,
 			PanoramaURL: link,
+			IconType:    "billboard",
 			IsActive:    true,
 		}
 

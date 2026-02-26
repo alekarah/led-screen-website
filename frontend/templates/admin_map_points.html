@@ -71,6 +71,17 @@
                 <div id="createPointMap" style="width:100%;height:300px;border-radius:8px;margin-top:0.5rem;"></div>
             </div>
             <div class="form-group">
+                <label for="createPointIconType">Тип рекламоносителя:</label>
+                <select id="createPointIconType" name="icon_type">
+                    <option value="billboard">Билборд</option>
+                    <option value="supersign">Суперсайт</option>
+                    <option value="lightposter">Лайтпостер</option>
+                    <option value="cityboard">Ситиборд</option>
+                    <option value="media_facade">Медиафасад</option>
+                    <option value="gas_station">АЗС</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="createPointPanorama">Ссылка на панораму:</label>
                 <input type="url" id="createPointPanorama" name="panorama_url" placeholder="https://yandex.ru/maps/...">
             </div>
@@ -116,6 +127,17 @@
             <div class="form-group">
                 <label>Выберите точку на карте:</label>
                 <div id="editPointMap" style="width:100%;height:300px;border-radius:8px;margin-top:0.5rem;"></div>
+            </div>
+            <div class="form-group">
+                <label for="editPointIconType">Тип рекламоносителя:</label>
+                <select id="editPointIconType" name="icon_type">
+                    <option value="billboard">Билборд</option>
+                    <option value="supersign">Суперсайт</option>
+                    <option value="lightposter">Лайтпостер</option>
+                    <option value="cityboard">Ситиборд</option>
+                    <option value="media_facade">Медиафасад</option>
+                    <option value="gas_station">АЗС</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="editPointPanorama">Ссылка на панораму:</label>

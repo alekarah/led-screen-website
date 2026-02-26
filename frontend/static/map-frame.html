@@ -34,9 +34,30 @@ function initMap(points) {
       clusterBalloonContentLayout: 'cluster#balloonCarousel'
     });
 
+    // Соответствие типа точки → файл иконки
+    var iconMap = {
+      supersign:    '/static/images/map-icons/supersign.svg',
+      billboard:    '/static/images/map-icons/billboard.svg',
+      lightposter:  '/static/images/map-icons/lightposter.svg',
+      cityboard:    '/static/images/map-icons/cityboard.svg',
+      media_facade: '/static/images/map-icons/media_facade.svg',
+      gas_station:  '/static/images/map-icons/gas_station.svg'
+    };
+
+    // Русские названия типов для балуна
+    var iconLabels = {
+      supersign:    'Суперсайт',
+      billboard:    'Билборд',
+      lightposter:  'Лайтпостер',
+      cityboard:    'Ситиборд',
+      media_facade: 'Медиафасад',
+      gas_station:  'АЗС'
+    };
+
     var placemarks = [];
     points.forEach(function(p) {
-      var body = '';
+      var typeLabel = iconLabels[p.icon_type] || 'Билборд';
+      var body = '<div style="margin-bottom:6px;color:#888;font-size:12px;font-style:italic;">Тип: ' + typeLabel + '</div>';
       if (p.description) {
         body += '<div style="margin-bottom:8px;color:#555;font-size:13px;">' + p.description + '</div>';
       }
@@ -47,6 +68,8 @@ function initMap(points) {
           '&#9654; Панорама</a>';
       }
 
+      var iconHref = iconMap[p.icon_type] || iconMap['billboard'];
+
       placemarks.push(new ymaps.Placemark(
         [p.latitude, p.longitude],
         {
@@ -54,7 +77,12 @@ function initMap(points) {
           balloonContentBody: body,
           hintContent: p.title
         },
-        { preset: 'islands#blueCircleDotIcon' }
+        {
+          iconLayout: 'default#image',
+          iconImageHref: iconHref,
+          iconImageSize: [40, 40],
+          iconImageOffset: [-20, -20]
+        }
       ));
     });
 
