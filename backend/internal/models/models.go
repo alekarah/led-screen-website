@@ -349,7 +349,7 @@ type MapPoint struct {
 	Description string    `json:"description"`
 	Latitude    float64   `json:"latitude" gorm:"not null"`
 	Longitude   float64   `json:"longitude" gorm:"not null"`
-	PanoramaURL string    `json:"panorama_url"`  // Ссылка на панораму Яндекс.Карт
+	PanoramaURL string    `json:"panorama_url"`                         // Ссылка на панораму Яндекс.Карт
 	IconType    string    `json:"icon_type" gorm:"default:'billboard'"` // Тип иконки: supersign, billboard, lightposter, cityboard, media_facade, gas_station
 	SortOrder   int       `json:"sort_order" gorm:"default:0"`
 	IsActive    bool      `json:"is_active" gorm:"default:true"`
