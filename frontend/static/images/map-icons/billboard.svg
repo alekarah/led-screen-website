@@ -7,6 +7,6 @@
   <line x1="7" y1="15" x2="33" y2="15" stroke="white" stroke-width="1" opacity="0.6"/>
   <!-- Центральная нога -->
   <line x1="20" y1="24" x2="20" y2="33" stroke="white" stroke-width="2"/>
-  <!-- Основание -->
-  <line x1="15" y1="33" x2="25" y2="33" stroke="white" stroke-width="2"/>
+  <!-- Основание (закруглённое) -->
+  <rect x="15" y="32" width="10" height="2" rx="1" fill="white"/>
 </svg>

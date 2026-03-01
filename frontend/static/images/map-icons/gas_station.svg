@@ -12,6 +12,6 @@
   <rect x="29.5" y="19.5" width="4" height="4" rx="0.5" fill="white" opacity="0.6"/>
   <!-- Шланг -->
   <path d="M28 26 Q24 28 24 31" fill="none" stroke="white" stroke-width="1.5"/>
-  <!-- Основание -->
-  <line x1="6" y1="32" x2="35" y2="32" stroke="white" stroke-width="2"/>
+  <!-- Основание (закруглённое) -->
+  <rect x="6" y="31" width="29" height="2" rx="1" fill="white"/>
 </svg>

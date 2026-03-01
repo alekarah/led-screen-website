@@ -1,15 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
   <circle cx="20" cy="20" r="20" fill="#1a73e8"/>
-  <!-- Суперсайт: широкий экран на двух высоких ногах -->
-  <!-- Экран -->
-  <rect x="6" y="8" width="28" height="14" rx="1" fill="none" stroke="white" stroke-width="2"/>
-  <!-- Горизонтальная линия экрана -->
-  <line x1="6" y1="14" x2="34" y2="14" stroke="white" stroke-width="1" opacity="0.6"/>
-  <!-- Левая нога -->
-  <line x1="12" y1="22" x2="12" y2="33" stroke="white" stroke-width="2"/>
-  <!-- Правая нога -->
-  <line x1="28" y1="22" x2="28" y2="33" stroke="white" stroke-width="2"/>
-  <!-- Основания ног -->
-  <line x1="9" y1="33" x2="15" y2="33" stroke="white" stroke-width="2"/>
-  <line x1="25" y1="33" x2="31" y2="33" stroke="white" stroke-width="2"/>
+  <!-- Суперсайт: широкое табло с рамкой и центральная стойка -->
+  <!-- Рамка табло -->
+  <rect x="7" y="8" width="26" height="9" rx="1" fill="none" stroke="white" stroke-width="2.2"/>
+  <!-- Горизонтальная перекладина внутри рамки -->
+  <line x1="7" y1="12.5" x2="33" y2="12.5" stroke="white" stroke-width="1" opacity="0.4"/>
+  <!-- Центральная стойка -->
+  <line x1="20" y1="17" x2="20" y2="33" stroke="white" stroke-width="2.2"/>
+  <!-- Основание стойки (закруглённое) -->
+  <rect x="15" y="32" width="10" height="2" rx="1" fill="white"/>
 </svg>
