@@ -17,7 +17,7 @@
             <div class="service-card">
                 <h3>Продажа уличных и интерьерных экранов</h3>
                 <p>Широкий выбор LED дисплеев для любых задач</p>
-                <a href="tel:+79675608858" class="service-btn">Получить консультацию</a>
+                <a href="tel:{{.sitePhone}}" class="service-btn">Получить консультацию</a>
             </div>
             <div class="service-card">
                 <h3>Аренда уличных и интерьерных экранов</h3>
@@ -33,7 +33,7 @@
             <div class="service-card">
                 <h3>Обслуживание LED экранов</h3>
                 <p>Техническое обслуживание и ремонт LED дисплеев</p>
-                <a href="tel:+79675608858" class="service-btn">Вызвать специалиста</a>
+                <a href="tel:{{.sitePhone}}" class="service-btn">Вызвать специалиста</a>
             </div>
         </div>
     </div>
@@ -101,8 +101,8 @@
                 <p>Профессиональные LED решения в Санкт-Петербурге</p>
             </div>
             <div class="footer-contact">
-                <p><strong>Телефон:</strong> <a href="tel:+79675608858">+7 967 560 88 58</a></p>
-                <p><strong>Email:</strong> <a href="mailto:rudkin_ds@mail.ru">rudkin_ds@mail.ru</a></p>
+                <p><strong>Телефон:</strong> <a href="tel:{{.sitePhone}}">{{.sitePhoneDisplay}}</a></p>
+                <p><strong>Email:</strong> <a href="mailto:{{.siteEmail}}">{{.siteEmail}}</a></p>
             </div>
         </div>
         <div class="footer-bottom">

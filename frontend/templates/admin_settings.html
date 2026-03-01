@@ -1,0 +1,37 @@
+{{define "admin-settings-content"}}
+<div class="promo-admin">
+    <script>
+    if (window.location.search.includes('success=1')) {
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success';
+            alert.textContent = 'Настройки успешно сохранены!';
+            document.querySelector('.promo-admin').prepend(alert);
+            setTimeout(() => alert.remove(), 5000);
+        });
+    }
+    </script>
+
+    <div class="form-section">
+        <h2>Настройки сайта</h2>
+        <p class="form-help">Телефон и email отображаются на всех страницах сайта.</p>
+
+        <form action="/admin/settings" method="POST" class="promo-form">
+            <div class="form-group">
+                <label for="phone">Телефон</label>
+                <input type="text" id="phone" name="phone" value="{{.settings.Phone}}" placeholder="+79675608858">
+                <p class="form-hint">Формат: +79991234567 (начиная с +7, только цифры, без пробелов и дефисов). Отображение на сайте форматируется автоматически.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{.settings.Email}}" placeholder="example@mail.ru">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

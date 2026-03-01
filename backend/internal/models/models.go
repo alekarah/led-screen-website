@@ -357,6 +357,17 @@ type MapPoint struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+// SiteSettings хранит глобальные настройки сайта (singleton, всегда одна запись).
+//
+// Управляется через /admin/settings
+type SiteSettings struct {
+	ID           uint      `json:"id" gorm:"primaryKey"`
+	Phone        string    `json:"phone" gorm:"not null;default:''"`         // для href="tel:+79675608858"
+	PhoneDisplay string    `json:"phone_display" gorm:"not null;default:''"` // для отображения "+7 967 560 88 58"
+	Email        string    `json:"email" gorm:"not null;default:''"`
+	UpdatedAt    time.Time `json:"updated_at"`
+}
+
 // PromoPopup представляет настройки всплывающего окна для акций и промо.
 //
 // Особенности:

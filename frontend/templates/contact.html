@@ -15,7 +15,7 @@
             <div class="contact-card">
                 <div class="contact-icon">📞</div>
                 <h3>Телефон</h3>
-                <p><a href="tel:+79675608858">+7 967 560 88 58</a></p>
+                <p><a href="tel:{{.sitePhone}}">{{.sitePhoneDisplay}}</a></p>
                 <span class="contact-note">Звонки принимаем с 9:00 до 21:00</span>
             </div>
             
@@ -23,7 +23,7 @@
             <div class="contact-card">
                 <div class="contact-icon">✉️</div>
                 <h3>Электронная почта</h3>
-                <p><a href="mailto:rudkin_ds@mail.ru">rudkin_ds@mail.ru</a></p>
+                <p><a href="mailto:{{.siteEmail}}">{{.siteEmail}}</a></p>
                 <span class="contact-note">Ответим в течение 2 часов</span>
             </div>
             
@@ -226,7 +226,7 @@
         <p class="modal-text">
         Мы свяжемся с вами в течение 30 минут.<br>
         Если срочно — позвоните нам:
-        <a href="tel:+79675608858">+7 967 560 88 58</a>
+        <a href="tel:{{.sitePhone}}">{{.sitePhoneDisplay}}</a>
         </p>
 
         <div class="modal-actions">

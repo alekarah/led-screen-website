@@ -154,6 +154,10 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		admin.GET("/promo", h.AdminPromoPage)    // Страница настроек popup
 		admin.POST("/promo", h.AdminPromoUpdate) // Сохранение настроек popup
 
+		// Настройки сайта - телефон и email
+		admin.GET("/settings", h.AdminSettingsPage)    // Страница настроек
+		admin.POST("/settings", h.AdminSettingsUpdate) // Сохранение настроек
+
 		// Точки на карте - CRUD операции
 		mapPoints := admin.Group("/map-points")
 		{

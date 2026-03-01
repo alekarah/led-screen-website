@@ -11,6 +11,20 @@ import (
 	"gorm.io/gorm"
 )
 
+// getSettings загружает настройки сайта из БД, создавая запись с дефолтами если её нет.
+func getSettings(db *gorm.DB) models.SiteSettings {
+	var s models.SiteSettings
+	if err := db.First(&s).Error; err != nil {
+		s = models.SiteSettings{
+			Phone:        "+79675608858",
+			PhoneDisplay: "+7 967 560 88 58",
+			Email:        "rudkin_ds@mail.ru",
+		}
+		db.Create(&s)
+	}
+	return s
+}
+
 // moscowLoc is the Moscow timezone location
 // time.LoadLocation for "Europe/Moscow" cannot fail in practice
 var moscowLoc = func() *time.Location {
