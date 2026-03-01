@@ -361,19 +361,19 @@ type MapPoint struct {
 //
 // Управляется через /admin/settings
 type SiteSettings struct {
-	ID             uint      `json:"id" gorm:"primaryKey"`
-	Phone          string    `json:"phone" gorm:"not null;default:''"`           // для href="tel:+79675608858"
-	PhoneDisplay   string    `json:"phone_display" gorm:"not null;default:''"`   // для отображения "+7 967 560 88 58"
-	PhoneNote      string    `json:"phone_note" gorm:"not null;default:''"`      // подпись под телефоном
-	Email          string    `json:"email" gorm:"not null;default:''"`
-	EmailNote      string    `json:"email_note" gorm:"not null;default:''"`      // подпись под email
-	Address        string    `json:"address" gorm:"not null;default:''"`         // многострочный адрес
-	AddressNote    string    `json:"address_note" gorm:"not null;default:''"`    // подпись под адресом
-	WorkHours      string    `json:"work_hours" gorm:"not null;default:''"`      // многострочный режим работы
-	WorkHoursNote  string    `json:"work_hours_note" gorm:"not null;default:''"` // подпись под режимом работы
-	StatsProjects  int       `json:"stats_projects" gorm:"not null;default:0"`   // кол-во проектов в статистике
-	StatsYears     int       `json:"stats_years" gorm:"not null;default:0"`      // лет опыта в статистике
-	UpdatedAt      time.Time `json:"updated_at"`
+	ID            uint      `json:"id" gorm:"primaryKey"`
+	Phone         string    `json:"phone" gorm:"not null;default:''"`         // для href="tel:+79675608858"
+	PhoneDisplay  string    `json:"phone_display" gorm:"not null;default:''"` // для отображения "+7 967 560 88 58"
+	PhoneNote     string    `json:"phone_note" gorm:"not null;default:''"`    // подпись под телефоном
+	Email         string    `json:"email" gorm:"not null;default:''"`
+	EmailNote     string    `json:"email_note" gorm:"not null;default:''"`      // подпись под email
+	Address       string    `json:"address" gorm:"not null;default:''"`         // многострочный адрес
+	AddressNote   string    `json:"address_note" gorm:"not null;default:''"`    // подпись под адресом
+	WorkHours     string    `json:"work_hours" gorm:"not null;default:''"`      // многострочный режим работы
+	WorkHoursNote string    `json:"work_hours_note" gorm:"not null;default:''"` // подпись под режимом работы
+	StatsProjects int       `json:"stats_projects" gorm:"not null;default:0"`   // кол-во проектов в статистике
+	StatsYears    int       `json:"stats_years" gorm:"not null;default:0"`      // лет опыта в статистике
+	UpdatedAt     time.Time `json:"updated_at"`
 }
 
 // PromoPopup представляет настройки всплывающего окна для акций и промо.

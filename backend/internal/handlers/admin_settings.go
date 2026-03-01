@@ -42,10 +42,12 @@ func (h *Handlers) AdminSettingsUpdate(c *gin.Context) {
 	settings.AddressNote = c.PostForm("address_note")
 	settings.WorkHours = c.PostForm("work_hours")
 	settings.WorkHoursNote = c.PostForm("work_hours_note")
-	statsProjects, _ := strconv.Atoi(c.PostForm("stats_projects"))
-	settings.StatsProjects = statsProjects
-	statsYears, _ := strconv.Atoi(c.PostForm("stats_years"))
-	settings.StatsYears = statsYears
+	if v, err := strconv.Atoi(c.PostForm("stats_projects")); err == nil {
+		settings.StatsProjects = v
+	}
+	if v, err := strconv.Atoi(c.PostForm("stats_years")); err == nil {
+		settings.StatsYears = v
+	}
 
 	if err := h.db.Save(&settings).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка сохранения настроек"})
