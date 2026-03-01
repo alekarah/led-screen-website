@@ -14,8 +14,8 @@
             <div class="project-info">
                 <div class="project-info-flex">
                     <span class="drag-handle" title="Перетащите для изменения порядка" role="button" aria-label="Перетащить">⋮⋮</span>
-                    <div class="project-thumbnail">
-                        <div class="no-image">📍</div>
+                    <div class="project-thumbnail map-point-icon-thumb">
+                        <img src="/static/images/map-icons/{{.IconType}}.svg" alt="{{.IconType}}" onerror="this.parentElement.innerHTML='📍'">
                     </div>
                     <div>
                         <h3>{{.Title}}</h3>

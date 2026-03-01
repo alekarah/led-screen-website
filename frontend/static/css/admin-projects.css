@@ -94,6 +94,8 @@
   transition:transform .25s ease;
 }
 .project-thumbnail:hover img{ transform:scale(1.05); }
+.project-thumbnail.map-point-icon-thumb{ background:var(--brand); width:52px; height:52px; }
+.project-thumbnail.map-point-icon-thumb img{ object-fit:contain; }
 
 /* Плейсхолдер (если нет изображения) */
 .no-image{
