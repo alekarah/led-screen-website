@@ -285,6 +285,33 @@ body:has(.hero) .main-content {
     line-height: 1.6;
 }
 
+/* --- Анимация сменяющихся слов в hero --- */
+.hero-rotating-wrapper {
+    white-space: nowrap;
+}
+.hero-rotating-word {
+    display: inline-block;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+.hero-rotating-word--out {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+/* --- Стаггер-анимация карточек услуг --- */
+.anim-card {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.anim-card--visible { opacity: 1; transform: translateY(0); }
+.anim-card:nth-child(1) { transition-delay: 0s; }
+.anim-card:nth-child(2) { transition-delay: 0.12s; }
+.anim-card:nth-child(3) { transition-delay: 0.24s; }
+.anim-card:nth-child(4) { transition-delay: 0.36s; }
+
 /* Утилитарный класс для flex контейнеров */
 .project-info-flex {
     display: flex;
