@@ -395,23 +395,24 @@ button[aria-disabled="true"]{
 .promo-activate-text { font-size: 1.2rem; font-weight: 500; color: #334155; white-space: nowrap; }
 
 /* Превью popup */
-.promo-preview-container { background: #f3f4f6; border-radius: 8px; padding: 2rem; }
+.promo-preview-container { background: #e8edf2; border-radius: 8px; padding: 2rem; }
 .promo-preview {
-  background: rgba(0,0,0,0.5); border-radius: 8px; padding: 3rem;
-  display: flex; align-items: center; justify-content: center; min-height: 200px;
+  background: rgba(0,0,0,0.45); border-radius: 8px; padding: 3rem;
+  display: flex; align-items: center; justify-content: center; min-height: 220px;
   backdrop-filter: blur(4px);
 }
 .promo-preview-popup {
-  background: #fff; border-radius: 16px; padding: 3rem; max-width: 560px; width: 100%;
-  position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  border: 3px solid #ffa38d;
+  background: linear-gradient(135deg, #87ceeb 0%, #f5deb3 100%); border-radius: 16px; padding: 0; max-width: 480px; width: 100%;
+  position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.22), 0 0 0 1px rgba(135,206,235,0.3);
+  overflow: hidden;
 }
 .promo-preview-close {
-  position: absolute; top: 1rem; right: 1rem; background: #f3f4f6; border: none;
-  font-size: 1.5rem; color: #666; cursor: pointer; line-height: 1;
-  width: 36px; height: 36px; border-radius: 50%;
+  position: absolute; top: 1.1rem; right: 1.1rem;
+  background: rgba(0,0,0,0.12); border: none;
+  font-size: 1.4rem; color: #1a2332; cursor: pointer; line-height: 1;
+  width: 34px; height: 34px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
 }
-.promo-preview-close:hover { background: #e5e7eb; color: #333; }
-.promo-preview-title { margin: 0 0 1.25rem; font-size: 2rem; color: #ffa38d; font-weight: 700; text-align: center; }
-.promo-preview-content { margin: 0; color: #444; line-height: 1.7; white-space: pre-wrap; font-size: 1.2rem; text-align: center; }
+.promo-preview-close:hover { background: rgba(0,0,0,0.22); color: #000; }
+.promo-preview-title { margin: 0; padding: 1.75rem 2.5rem 0.75rem; font-size: 1.75rem; color: #1a2332; font-weight: 700; text-align: center; line-height: 1.2; text-shadow: 0 1px 3px rgba(255,255,255,0.4); }
+.promo-preview-content { margin: 0; padding: 0 2.5rem 2rem; color: #2c3e50; line-height: 1.7; white-space: pre-wrap; font-size: 1.1rem; text-align: center; }
