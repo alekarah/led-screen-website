@@ -4,7 +4,7 @@
 </div>
 <!-- Список проектов -->
 <div class="projects-list">
-    <h2>Существующие проекты</h2>
+    <h2>Существующие проекты ({{len .projects}})</h2>
     <div id="sortable-projects" class="sortable-list">
         {{range .projects}}
         <div class="project-item" data-project-id="{{.ID}}">

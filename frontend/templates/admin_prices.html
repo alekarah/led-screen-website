@@ -5,7 +5,7 @@
 
 <!-- Список позиций прайса -->
 <div class="projects-list">
-    <h2>Позиции прайса</h2>
+    <h2>Позиции прайса ({{len .PriceItems}})</h2>
     <div id="sortable-prices" class="sortable-list">
         {{range .PriceItems}}
         <div class="project-item price-item" data-price-id="{{.ID}}">

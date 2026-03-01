@@ -242,9 +242,9 @@ body:has(.hero) .main-content {
     display: inline-block;
     background: var(--p-brand);
     color: #333;
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: 600;
-    padding: 0.7em 1.2em;
+    padding: 0.6em 1.4em;
     border-radius: 26px;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -264,6 +264,25 @@ body:has(.hero) .main-content {
     display: flex;
     justify-content: center;
     margin-top: 2rem;
+}
+
+/* Секция карты на главной */
+.home-map-section {
+    padding: 4rem 0;
+    background: var(--p-bg-alt);
+}
+.home-map-section h2 {
+    text-align: center;
+    color: var(--p-text-700);
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+.home-map-description {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--p-text-600);
+    margin-bottom: 2rem;
+    line-height: 1.6;
 }
 
 /* Утилитарный класс для flex контейнеров */

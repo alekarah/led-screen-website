@@ -72,25 +72,25 @@
 </div>
 {{end}}
 
-{{define "projects-footer"}}
+{{define "stats-section"}}
 <!-- Статистика -->
 <section class="stats-section">
     <div class="container">
         <div class="stats-grid">
             <div class="stat-item">
-                <h3>200+</h3>
+                <h3><span class="stat-count" data-count="{{.siteStatsProjects}}">{{.siteStatsProjects}}</span>+</h3>
                 <p>ЗАВЕРШЕННЫХ ПРОЕКТОВ</p>
             </div>
             <div class="stat-item">
-                <h3>5</h3>
+                <h3><span class="stat-count" data-count="{{.siteStatsYears}}">{{.siteStatsYears}}</span></h3>
                 <p>ЛЕТ ОПЫТА</p>
             </div>
             <div class="stat-item">
-                <h3>24/7</h3>
+                <h3><span class="stat-count" data-count="24">24</span>/7</h3>
                 <p>ТЕХНИЧЕСКАЯ ПОДДЕРЖКА</p>
             </div>
             <div class="stat-item">
-                <h3>100%</h3>
+                <h3><span class="stat-count" data-count="100">100</span>%</h3>
                 <p>ГАРАНТИЯ КАЧЕСТВА</p>
             </div>
         </div>

@@ -156,7 +156,7 @@
 .about-company-section {
     background: white;
     padding: 4rem 0;
-    margin: 3rem 0;
+    margin-top: 3rem;
 }
 
 .about-company-content {
@@ -221,7 +221,6 @@
 .service-area-section {
     background: var(--p-bg-alt);
     padding: 4rem 0;
-    margin-top: 3rem;
 }
 
 .service-area-section h2 {

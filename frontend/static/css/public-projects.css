@@ -361,7 +361,7 @@ body.modal-open { overflow: hidden; }
 .load-more-container {
   display: none;
   justify-content: center;
-  margin-top: 2rem;
+  margin: 2rem;
 }
 
 /* Классы для центрирования неполных рядов (управляются JS) */

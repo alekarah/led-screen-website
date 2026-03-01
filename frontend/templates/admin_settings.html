@@ -14,7 +14,7 @@
 
     <div class="form-section">
         <h2>Настройки сайта</h2>
-        <p class="form-help">Телефон и email отображаются на всех страницах сайта.</p>
+        <p class="form-help">Контактная информация отображается на страницах сайта.</p>
 
         <form action="/admin/settings" method="POST" class="promo-form">
             <div class="form-group">
@@ -24,8 +24,51 @@
             </div>
 
             <div class="form-group">
+                <label for="phone_note">Подпись под телефоном</label>
+                <input type="text" id="phone_note" name="phone_note" value="{{.settings.PhoneNote}}" placeholder="Звонки принимаем с 9:00 до 21:00">
+            </div>
+
+            <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" value="{{.settings.Email}}" placeholder="example@mail.ru">
+            </div>
+
+            <div class="form-group">
+                <label for="email_note">Подпись под email</label>
+                <input type="text" id="email_note" name="email_note" value="{{.settings.EmailNote}}" placeholder="Ответим в течение 2 часов">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Адрес</label>
+                <textarea id="address" name="address" rows="2" placeholder="Санкт-Петербург&#10;Ленинградская область">{{.settings.Address}}</textarea>
+                <p class="form-hint">Каждая строка — отдельная строка в карточке.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="address_note">Подпись под адресом</label>
+                <input type="text" id="address_note" name="address_note" value="{{.settings.AddressNote}}" placeholder="Выезд на объект бесплатно">
+            </div>
+
+            <div class="form-group">
+                <label for="work_hours">Режим работы</label>
+                <textarea id="work_hours" name="work_hours" rows="2" placeholder="Пн-Пт: 9:00 - 18:00&#10;Сб-Вс: 10:00 - 16:00">{{.settings.WorkHours}}</textarea>
+                <p class="form-hint">Каждая строка — отдельная строка в карточке.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="work_hours_note">Подпись под режимом работы</label>
+                <input type="text" id="work_hours_note" name="work_hours_note" value="{{.settings.WorkHoursNote}}" placeholder="Аварийные вызовы 24/7">
+            </div>
+
+            <div class="form-group">
+                <label for="stats_projects">Количество проектов (в статистике)</label>
+                <input type="number" id="stats_projects" name="stats_projects" value="{{.settings.StatsProjects}}" min="0" placeholder="200">
+                <p class="form-hint">Отображается как «N+ завершённых проектов» на страницах портфолио и контактов.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="stats_years">Лет опыта (в статистике)</label>
+                <input type="number" id="stats_years" name="stats_years" value="{{.settings.StatsYears}}" min="0" placeholder="5">
             </div>
 
             <div class="form-actions">

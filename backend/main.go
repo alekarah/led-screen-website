@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -154,6 +155,9 @@ func main() {
 			return template.JS(b)
 		},
 		// imgVersion возвращает unix timestamp обновления изображения для cache-busting
+		"nl2br": func(s string) template.HTML {
+			return template.HTML(strings.ReplaceAll(template.HTMLEscapeString(s), "\n", "<br>"))
+		},
 		"imgVersion": func(img models.Image) int64 {
 			if !img.UpdatedAt.IsZero() {
 				return img.UpdatedAt.Unix()

@@ -81,6 +81,9 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		Order("sort_order").
 		Find(&services)
 
+	var mapPoints []models.MapPoint
+	h.db.Where("is_active = ?", true).Order("sort_order ASC, id ASC").Find(&mapPoints)
+
 	settings := getSettings(h.db)
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":            "LED экраны в СПб | Service 'n' Repair",
@@ -91,6 +94,7 @@ func (h *Handlers) HomePage(c *gin.Context) {
 		"ogImage":          "https://s-n-r.ru/static/images/og-preview.png",
 		"projects":         featuredProjects,
 		"services":         services,
+		"mapPoints":        mapPoints,
 		"PageID":           "home",
 		"sitePhone":        settings.Phone,
 		"sitePhoneDisplay": settings.PhoneDisplay,
@@ -124,16 +128,19 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 	var categories []models.Category
 	h.db.Find(&categories)
 
+	settings := getSettings(h.db)
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title":          "Портфолио - LED Display",
-		"description":    "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
-		"ogTitle":        "Портфолио проектов LED дисплеев | S'n'R",
-		"ogDescription":  "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
-		"ogUrl":          "/projects",
-		"projects":       projects,
-		"categories":     categories,
-		"activeCategory": categorySlug,
-		"PageID":         "projects",
+		"title":             "Портфолио - LED Display",
+		"description":       "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
+		"ogTitle":           "Портфолио проектов LED дисплеев | S'n'R",
+		"ogDescription":     "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
+		"ogUrl":             "/projects",
+		"projects":          projects,
+		"categories":        categories,
+		"activeCategory":    categorySlug,
+		"PageID":            "projects",
+		"siteStatsProjects": settings.StatsProjects,
+		"siteStatsYears":    settings.StatsYears,
 	})
 }
 
@@ -188,16 +195,24 @@ func (h *Handlers) ContactPage(c *gin.Context) {
 
 	settings := getSettings(h.db)
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title":            "Контакты | LED экраны",
-		"description":      "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
-		"ogTitle":          "Контакты | S'n'R",
-		"ogDescription":    "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
-		"ogUrl":            "/contact",
-		"PageID":           "contact",
-		"mapPoints":        mapPoints,
-		"sitePhone":        settings.Phone,
-		"sitePhoneDisplay": settings.PhoneDisplay,
-		"siteEmail":        settings.Email,
+		"title":              "Контакты | LED экраны",
+		"description":        "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
+		"ogTitle":            "Контакты | S'n'R",
+		"ogDescription":      "Свяжитесь с нами для консультации по LED дисплеям. Телефон, email, форма обратной связи.",
+		"ogUrl":              "/contact",
+		"PageID":             "contact",
+		"mapPoints":          mapPoints,
+		"sitePhone":          settings.Phone,
+		"sitePhoneDisplay":   settings.PhoneDisplay,
+		"sitePhoneNote":      settings.PhoneNote,
+		"siteEmail":          settings.Email,
+		"siteEmailNote":      settings.EmailNote,
+		"siteAddress":        settings.Address,
+		"siteAddressNote":    settings.AddressNote,
+		"siteWorkHours":      settings.WorkHours,
+		"siteWorkHoursNote":  settings.WorkHoursNote,
+		"siteStatsProjects":  settings.StatsProjects,
+		"siteStatsYears":     settings.StatsYears,
 	})
 }
 

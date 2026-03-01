@@ -16,9 +16,17 @@ func getSettings(db *gorm.DB) models.SiteSettings {
 	var s models.SiteSettings
 	if err := db.First(&s).Error; err != nil {
 		s = models.SiteSettings{
-			Phone:        "+79675608858",
-			PhoneDisplay: "+7 967 560 88 58",
-			Email:        "rudkin_ds@mail.ru",
+			Phone:         "+79675608858",
+			PhoneDisplay:  "+7 967 560 88 58",
+			PhoneNote:     "Звонки принимаем с 9:00 до 21:00",
+			Email:         "rudkin_ds@mail.ru",
+			EmailNote:     "Ответим в течение 2 часов",
+			Address:       "Санкт-Петербург\nЛенинградская область",
+			AddressNote:   "Выезд на объект бесплатно",
+			WorkHours:     "Пн-Пт: 9:00 - 18:00\nСб-Вс: 10:00 - 16:00",
+			WorkHoursNote: "Аварийные вызовы 24/7",
+			StatsProjects: 200,
+			StatsYears:    5,
 		}
 		db.Create(&s)
 	}

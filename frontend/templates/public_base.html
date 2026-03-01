@@ -350,7 +350,8 @@
     {{if eq .title "LED экраны в СПб | Service 'n' Repair"}}
         {{template "home-footer" .}}
     {{else if eq .title "Портфолио - LED Display"}}
-        {{template "projects-footer" .}}
+        {{template "stats-section" .}}
+        {{template "simple-footer" .}}
     {{else}}
         {{template "simple-footer" .}}
     {{end}}
@@ -363,6 +364,7 @@
     <script src="/static/js/project-modal.js" defer></script>
     <script src="/static/js/projects-load-more.js" defer></script>
     <script src="/static/js/projects-filter.js" defer></script>
+    <script src="/static/js/stats-counter.js" defer></script>
     {{end}}
 
     {{if eq .PageID "services"}}
@@ -371,6 +373,11 @@
 
     {{if eq .PageID "contact"}}
     <script src="/static/js/contact-form.js" defer></script>
+    <script src="/static/js/contact-map.js" defer></script>
+    <script src="/static/js/stats-counter.js" defer></script>
+    {{end}}
+
+    {{if eq .PageID "home"}}
     <script src="/static/js/contact-map.js" defer></script>
     {{end}}
 

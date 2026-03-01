@@ -281,5 +281,38 @@ func seedInitialData(db *gorm.DB) error {
 		}
 	}
 
+	// Заполняем пустые поля SiteSettings дефолтными значениями (для существующих записей)
+	var settings models.SiteSettings
+	if db.First(&settings).Error == nil {
+		updates := map[string]interface{}{}
+		if settings.PhoneNote == "" {
+			updates["phone_note"] = "Звонки принимаем с 9:00 до 21:00"
+		}
+		if settings.EmailNote == "" {
+			updates["email_note"] = "Ответим в течение 2 часов"
+		}
+		if settings.Address == "" {
+			updates["address"] = "Санкт-Петербург\nЛенинградская область"
+		}
+		if settings.AddressNote == "" {
+			updates["address_note"] = "Выезд на объект бесплатно"
+		}
+		if settings.WorkHours == "" {
+			updates["work_hours"] = "Пн-Пт: 9:00 - 18:00\nСб-Вс: 10:00 - 16:00"
+		}
+		if settings.WorkHoursNote == "" {
+			updates["work_hours_note"] = "Аварийные вызовы 24/7"
+		}
+		if settings.StatsProjects == 0 {
+			updates["stats_projects"] = 200
+		}
+		if settings.StatsYears == 0 {
+			updates["stats_years"] = 5
+		}
+		if len(updates) > 0 {
+			db.Model(&settings).Updates(updates)
+		}
+	}
+
 	return nil
 }
