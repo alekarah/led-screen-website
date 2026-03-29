@@ -12,7 +12,7 @@ html, body {
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
     color: var(--p-text-700);
     background-color: var(--p-bg-alt);

@@ -62,7 +62,7 @@
         <h2>Примеры работ</h2>
         <div class="home-projects-grid">
             {{range .projects}}
-            <div class="home-project-card">
+            <div class="home-project-card anim-card">
                 {{if .Images}}
                     {{$primaryImg := primaryImage .Images}}
                     {{$thumbPath := getThumbnail $primaryImg "small"}}

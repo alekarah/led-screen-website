@@ -2,6 +2,7 @@
 <div class="promo-admin">
     <script>
     if (window.location.search.includes('success=1')) {
+        history.replaceState(null, '', window.location.pathname);
         document.addEventListener('DOMContentLoaded', function() {
             const alert = document.createElement('div');
             alert.className = 'alert alert-success';

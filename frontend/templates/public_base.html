@@ -223,10 +223,10 @@
     <link rel="icon" type="image/png" href="/static/images/favicon.png">
     <link rel="apple-touch-icon" href="/static/images/favicon.png">
 
-    <!-- Google Fonts - Tektur -->
+    <!-- Google Fonts - Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800&display=swap&subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Основные стили сайта -->
     <link rel="stylesheet" href="/static/css/public-vars.css">
@@ -381,10 +381,12 @@
     <script src="/static/js/projects-load-more.js" defer></script>
     <script src="/static/js/projects-filter.js" defer></script>
     <script src="/static/js/stats-counter.js" defer></script>
+    <script src="/static/js/hero-animations.js" defer></script>
     {{end}}
 
     {{if eq .PageID "services"}}
     <script src="/static/js/services-steps.js" defer></script>
+    <script src="/static/js/hero-animations.js" defer></script>
     {{end}}
 
     {{if eq .PageID "contact"}}
@@ -406,6 +408,7 @@
     {{if eq .PageID "prices"}}
     <script src="/static/js/price-modal.js" defer></script>
     <script src="/static/js/prices-load-more.js" defer></script>
+    <script src="/static/js/hero-animations.js" defer></script>
     {{end}}
 
     <!-- Мобильное меню -->
