@@ -3,37 +3,54 @@
 <section class="hero led-effect">
     <div class="container">
         <h1>Уличные и интерьерные LED экраны <span class="hero-rotating-wrapper">для вашего <span id="heroRotatingWord" class="hero-rotating-word">бизнеса</span></span></h1>
-        <p>Продажа, монтаж и обслуживание LED дисплеев</p>
+        <p>Нужно купить светодиодный экран?<br>Мы — ваш надежный проводник в мире светодиодных технологий, который предложит лучшее решение «под ключ».</p>
         <a href="/contact" class="btn btn-hero">Получить консультацию</a>
     </div>
 </section>
 
-<!-- Services Section -->
-<section class="services home-services">
+<!-- О компании + LED решения -->
+<section class="home-about">
     <div class="container">
-        <h2>LED решения</h2>
-        <div class="services-grid-2x2">
-            <!-- Ряд 1 -->
-            <div class="service-card anim-card">
-                <h3>Продажа уличных и интерьерных экранов</h3>
-                <p>Широкий выбор LED дисплеев для любых задач</p>
-                <a href="tel:{{.sitePhone}}" class="service-btn">Получить консультацию</a>
+        <h2 class="home-about-title">LED решения</h2>
+        <div class="home-about-layout">
+            <!-- Текст о компании -->
+            <div class="home-about-text">
+                <p class="anim-text">Хотите купить LED экран, который станет мощным инструментом для привлечения клиентов? Мы — ваш надежный партнер в мире светодиодных технологий, готовый сопровождать Вас на всех этапах: от выбора комплектующих до пусконаладки.</p>
+                <p class="anim-text">Мы предлагаем полный спектр решений. Если вам нужен простой LED экран для витрины — обратите внимание на наши «Light»-версии. Если же вы планируете масштабную рекламную кампанию и хотите приобрести LED дисплей с возможностью управления сложным контентом — у нас есть профессиональные серии, созданные для профессиональной рекламной деятельности.</p>
+                <img src="/static/images/two-displays.png" alt="LED экраны" class="intro-icon home-about-icon anim-text" loading="lazy">
+                <p class="home-about-spec-title anim-text">Наша специализация:</p>
+                <ul class="home-about-list anim-text">
+                    <li>Продажа светодиодных экранов.</li>
+                    <li>Профессиональный монтаж любой сложности.</li>
+                    <li>Настройка систем управления и обучение персонала.</li>
+                    <li>Постгарантийное сервисное обслуживание.</li>
+                </ul>
+                <p class="anim-text">Мы располагаемся в Санкт-Петербурге, но работаем на всей территории Российской Федерации. Где бы вы ни находились — от западных границ до дальневосточных рубежей, — наша команда готова выехать на объект, чтобы вы могли купить светодиодный экран и забыть о технических хлопотах, получая только качественную картинку и прибыль. Во всех основных регионах России у нас есть партнеры, которые смогут осуществить гарантийный ремонт и постгарантийный сервис вашего оборудования, качественно и в кратчайшие сроки.</p>
             </div>
-            <div class="service-card anim-card">
-                <h3>Аренда уличных и интерьерных экранов</h3>
-                <p>Аренда LED экранов для мероприятий и событий</p>
-                <a href="/contact?service=rent" class="service-btn">Заказать экран на мероприятие</a>
-            </div>
-            <!-- Ряд 2 -->
-            <div class="service-card anim-card">
-                <h3>Размещение рекламы на экранах</h3>
-                <p>Разместите свою рекламу на наших LED экранах</p>
-                <a href="/contact?service=ad" class="service-btn">Отправить запрос на размещение</a>
-            </div>
-            <div class="service-card anim-card">
-                <h3>Обслуживание LED экранов</h3>
-                <p>Техническое обслуживание и ремонт LED дисплеев</p>
-                <a href="tel:{{.sitePhone}}" class="service-btn">Вызвать специалиста</a>
+            <!-- Карточки услуг -->
+            <div class="home-about-services">
+                <div class="services-grid-2x2">
+                    <div class="service-card anim-card">
+                        <h3>Продажа уличных и интерьерных экранов</h3>
+                        <p>Широкий выбор LED дисплеев для любых задач</p>
+                        <a href="tel:{{.sitePhone}}" class="service-btn">Получить консультацию</a>
+                    </div>
+                    <div class="service-card anim-card">
+                        <h3>Аренда уличных и интерьерных экранов</h3>
+                        <p>Аренда LED экранов для мероприятий и событий</p>
+                        <a href="/contact?service=rent" class="service-btn">Заказать экран на мероприятие</a>
+                    </div>
+                    <div class="service-card anim-card">
+                        <h3>Размещение рекламы на экранах</h3>
+                        <p>Разместите свою рекламу на наших LED экранах</p>
+                        <a href="/contact?service=ad" class="service-btn">Отправить запрос на размещение</a>
+                    </div>
+                    <div class="service-card anim-card">
+                        <h3>Обслуживание LED экранов</h3>
+                        <p>Техническое обслуживание и ремонт LED дисплеев</p>
+                        <a href="tel:{{.sitePhone}}" class="service-btn">Вызвать специалиста</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -42,7 +59,7 @@
 <!-- Projects Section -->
 <section class="projects">
     <div class="container">
-        <h2>Реализованные проекты</h2>
+        <h2>Примеры работ</h2>
         <div class="home-projects-grid">
             {{range .projects}}
             <div class="home-project-card">
@@ -91,11 +108,11 @@
     </div>
 </section>
 
-<!-- География работы -->
+<!-- Наши LED дисплеи на карте России -->
 <section class="home-map-section">
     <div class="container">
-        <h2>География работы</h2>
-        <p class="home-map-description">Работаем по Санкт-Петербургу и Ленинградской области.<br>Объекты по всему региону — убедитесь сами.</p>
+        <h2>Наши LED дисплеи на карте России</h2>
+        <p class="home-map-description">География наших работ постоянно расширяется.<br>Объекты по всей России — убедитесь сами.</p>
         <div class="map-container">
             <iframe id="contact-map-frame"
                     src="/static/map-frame.html"

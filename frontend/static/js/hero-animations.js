@@ -33,4 +33,21 @@
     cards.forEach(function (card) {
         observer.observe(card);
     });
+
+    // --- Плавное появление текстовых блоков ---
+    var textBlocks = document.querySelectorAll('.anim-text');
+    if (!textBlocks.length) return;
+
+    var textObserver = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('anim-text--visible');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    textBlocks.forEach(function (el) {
+        textObserver.observe(el);
+    });
 })();

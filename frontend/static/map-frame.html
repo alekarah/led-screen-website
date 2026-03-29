@@ -34,6 +34,17 @@ function initMap(points) {
       clusterBalloonContentLayout: 'cluster#balloonCarousel'
     });
 
+    // Приоритет z-index по типу (больше = поверх)
+    var iconZIndex = {
+      supersign:     700,
+      media_facade:  600,
+      cityboard:     500,
+      gas_station:   400,
+      lightposter:   300,
+      billboard:     200,
+      indoor_screen: 100
+    };
+
     // Соответствие типа точки → файл иконки
     var iconMap = {
       supersign:     '/static/images/map-icons/supersign.svg',
@@ -83,7 +94,8 @@ function initMap(points) {
           iconLayout: 'default#image',
           iconImageHref: iconHref,
           iconImageSize: [40, 40],
-          iconImageOffset: [-20, -20]
+          iconImageOffset: [-20, -20],
+          zIndex: iconZIndex[p.icon_type] || 200
         }
       ));
     });

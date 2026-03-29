@@ -107,6 +107,9 @@ migrations/*.sql
 *.old
 *.orig
 
+# Материалы от заказчика (не в репозиторий)
+client-feedback/
+
 # Telegram Bot
 telegram-bot/.env
 telegram-bot/venv/
