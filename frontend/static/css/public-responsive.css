@@ -123,7 +123,7 @@
   .section-header h1 { font-size: 2rem; }
   .section-header p { font-size: 1rem; }
   .hero { padding: 8rem 0 3rem 0; }
-  .hero h1 { font-size: 2.2rem; }
+  .hero h1 { font-size: 1.9rem; }
   .hero p { font-size: 1.05rem; }
   .projects .project-card { max-width: none; width: 100%; }
   .filters { gap: .75rem; width: 100%; margin-left: 0; flex-wrap: wrap; }
@@ -159,6 +159,10 @@
   .service-card h3 { min-height: 3.5rem; }
   .service-btn { min-height: 60px; }
   .home-about-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .home-about-services .service-card { flex-direction: column; text-align: center; padding: 1.4rem; }
+  .home-about-services .service-card h3 { justify-content: center; font-size: 1.1rem; }
+  .home-about-services .services-grid-2x2 { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .home-about-title { font-size: 2rem; margin-bottom: 1.5rem; }
   .see-all-projects-btn { font-size: 1.8em; padding: 0.65em 1.1em; }
   .services { padding: 3rem 0; }
   .services h2 { font-size: 2rem; margin-bottom: 2rem; }
@@ -309,13 +313,22 @@
   .section-header { margin-bottom: 1.5rem; }
   .section-header h1 { font-size: 1.8rem; }
   .section-header p { font-size: .95rem; }
-  .hero { padding: 9rem 0 3rem 0; }
-  .hero h1 { font-size: 1.9rem; }
+  .hero { padding: 5rem 0 2rem 0; }
+  .hero h1 { font-size: 1.55rem; }
   .hero p { font-size: 1rem; }
   .btn { padding: 10px 20px; font-size: .9rem; }
   .project-content { padding: 1rem; }
   .project-title { font-size: 1.2rem; }
   .project-size { font-size: 1rem; }
+  .home-about { padding: 2rem 0; }
+  .home-about-title { font-size: 1.7rem; margin-bottom: 1.2rem; }
+  .home-map-section { padding: 2rem 0; }
+  .home-map-section h2 { font-size: 1.3rem; }
+  .home-map-description { font-size: 0.9rem; margin-bottom: 1.2rem; }
+  .home-about-text { font-size: 0.95rem; gap: 1rem; }
+  .home-about-services .services-grid-2x2 { grid-template-columns: 1fr; }
+  .home-about-services .service-card { min-height: auto; }
+  .anim-text, .anim-card { opacity: 1; transform: none; transition: none; }
   .services { padding: 2.2rem 0; }
   .services h2 { font-size: 1.7rem; }
   .stats-section { padding: 2rem 0; }
