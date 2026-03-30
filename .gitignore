@@ -109,6 +109,7 @@ migrations/*.sql
 
 # Материалы от заказчика (не в репозиторий)
 client-feedback/
+temp/
 
 # Telegram Bot
 telegram-bot/.env

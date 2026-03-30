@@ -182,6 +182,9 @@
     font-size: 2rem;
 }
 
+.about-company-more-btn { display: none; }
+.about-company-extra { display: none; }
+
 .about-intro {
     font-size: 1.1rem;
     line-height: 1.7;

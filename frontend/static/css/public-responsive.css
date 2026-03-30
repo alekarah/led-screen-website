@@ -262,7 +262,7 @@
   .projects { padding: 1.5rem 0 1.5rem; }
   .projects h2 { font-size: 1.7rem; margin-bottom: 1.6rem; }
   .projects > .container > div:last-child { margin-top: 1rem !important; }
-  .see-all-projects-btn { margin-top: 0 !important; font-size: 1.5em; padding: 0.6em 1em; }
+  .see-all-projects-btn { margin-top: 0 !important; font-size: 1rem; padding: 0.7em 2em; }
   .home-project-card { width: 100% !important; max-width: 100% !important; }
   .public-project-card { width: 100%; max-width: 100%; }
   .prices-hero h1 { font-size: 1.8rem; }
@@ -325,6 +325,8 @@
   .home-map-section { padding: 2rem 0; }
   .home-map-section h2 { font-size: 1.3rem; }
   .home-map-description { font-size: 0.9rem; margin-bottom: 1.2rem; }
+  .map-title-russia { display: none; }
+  .hide-mobile { display: none !important; }
   .home-about-text { font-size: 0.95rem; gap: 1rem; }
   .home-about-services .services-grid-2x2 { grid-template-columns: 1fr; }
   .home-about-services .service-card { min-height: auto; }
@@ -340,6 +342,10 @@
   .hide-sm { display: none !important; }
   .contact-icon { font-size: 2rem; }
   .contact-info-section { margin-bottom: 2rem; }
+  .about-company-extra { display: none; }
+  .about-company-extra.expanded { display: block; }
+  .about-company-more-btn { display: block; margin: 0 auto 1rem; background: var(--p-brand); border: none; color: #333; border-radius: 20px; padding: 0.5em 1.4em; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; width: fit-content; }
+  .about-company-more-btn:active { background: var(--p-accent); }
   .contact-card { padding: 1rem; max-width: 100%; }
   .contact-form-section { padding: 1.5rem 1rem; margin-bottom: 2rem; }
   .contact-form .btn-large { width: 100%; }
