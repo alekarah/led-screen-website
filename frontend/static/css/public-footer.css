@@ -12,7 +12,7 @@ footer {
     background: var(--p-text-700);
     color: white;
     padding: 1rem 0;
-    margin-top: 3rem;
+    margin-top: 0;
 }
 
 /* Контент футера с двумя колонками */

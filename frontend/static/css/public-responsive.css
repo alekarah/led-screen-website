@@ -327,6 +327,7 @@
   .home-map-description { font-size: 0.9rem; margin-bottom: 1.2rem; }
   .map-title-russia { display: none; }
   .hide-mobile { display: none !important; }
+  .hide-desktop { display: block !important; }
   .home-about-text { font-size: 0.95rem; gap: 1rem; }
   .home-about-services .services-grid-2x2 { grid-template-columns: 1fr; }
   .home-about-services .service-card { min-height: auto; }
@@ -367,9 +368,10 @@
   .process-steps { grid-template-columns: 1fr; max-width: 300px; }
   .process-section, .screen-types-section, .cta-section { padding: 1.5rem 0; }
   .screen-types-section h2, .process-section h2 { font-size: 1.7rem; margin-bottom: 1.5rem; }
-  .cta-content h2 { font-size: 1.8rem; }
+  .cta-content h2 { font-size: 1.55rem; }
   .cta-buttons { max-width: 100%; width: 100%; }
-  .cta-buttons .btn { min-width: 0; width: 100%; max-width: 100%; font-size: 0.9rem; padding: 0.875rem 1.5rem; }
+  .cta-buttons .btn { min-width: 0; width: auto; max-width: 100%; font-size: 0.95rem; padding: 0.875rem 2rem; }
+  .load-more-btn { font-size: 0.95rem !important; padding: 0.6em 1.8em !important; }
   .led-intro-section { padding: 1.5rem 0 2rem; }
   .led-intro-section::before { width: 250px; height: 250px; top: -25%; right: -30%; }
   .intro-with-icon { flex-direction: column; align-items: center; gap: 1rem; text-align: center; }

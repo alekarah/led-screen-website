@@ -269,7 +269,7 @@ body:has(.hero) .main-content {
 /* Секция карты на главной */
 .home-map-section {
     padding: 4rem 0;
-    background: var(--p-bg-alt);
+    background: var(--p-bg);
 }
 .home-map-section h2 {
     text-align: center;
@@ -334,12 +334,12 @@ body:has(.hero) .main-content {
 
 /* Секция "О компании + LED решения" */
 .home-about {
-    padding: 4rem 0;
+    padding: 2rem 0 4rem;
     background: var(--p-bg);
 }
 .home-about-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.9fr 1.1fr;
     gap: 3rem;
     align-items: start;
 }
@@ -353,7 +353,7 @@ body:has(.hero) .main-content {
 }
 .home-about-text .home-about-icon {
     width: 100%;
-    max-width: 375px;
+    max-width: 380px;
     height: auto;
     display: block;
     margin: 0 auto;
@@ -372,9 +372,15 @@ body:has(.hero) .main-content {
 }
 .home-about-title {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0.6rem;
     font-size: 2.5rem;
     color: var(--p-text-700);
+}
+.home-about-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--p-text-500);
+    margin-bottom: 2rem;
 }
 .home-about-services .services-grid-2x2 {
     display: grid;
