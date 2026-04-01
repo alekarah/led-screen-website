@@ -29,7 +29,8 @@ body:has(.hero) .main-content {
 }
 
 .hero p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    color: var(--p-text-700);
     margin-bottom: 2rem;
     max-width: 680px;
     margin-left: auto;
@@ -352,6 +353,7 @@ body:has(.hero) .main-content {
     line-height: 1.75;
 }
 .home-about-text .home-about-icon {
+    animation: none;
     width: 100%;
     max-width: 380px;
     height: auto;
