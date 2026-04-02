@@ -127,7 +127,7 @@ func (h *Handlers) RobotsTxt(c *gin.Context) {
 	baseURL := getBaseURL(c)
 
 	robots := fmt.Sprintf(`# robots.txt для s-n-r.ru
-# LED экраны в Санкт-Петербурге
+# LED экраны по всей России
 
 # Разрешаем всем поисковым ботам индексировать сайт
 User-agent: *

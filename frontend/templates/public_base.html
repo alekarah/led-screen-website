@@ -6,8 +6,8 @@
     <title>{{.title}}</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{{if .description}}{{.description}}{{else}}Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Гарантия качества.{{end}}">
-    <meta name="keywords" content="LED экраны СПб, купить светодиодный экран Санкт-Петербург, LED дисплеи Санкт-Петербург, уличные LED экраны, интерьерные LED дисплеи, аренда LED экранов СПб, ремонт LED экранов, монтаж светодиодных экранов, обслуживание LED дисплеев, продажа LED экранов Санкт-Петербург, установка LED экранов, светодиодные экраны для бизнеса">
+    <meta name="description" content="{{if .description}}{{.description}}{{else}}Поставка, монтаж и обслуживание LED дисплеев для бизнеса по всей России. Гарантия качества.{{end}}">
+    <meta name="keywords" content="LED экраны Россия, купить светодиодный экран, LED дисплеи, уличные LED экраны, интерьерные LED дисплеи, аренда LED экранов, ремонт LED экранов, монтаж светодиодных экранов, обслуживание LED дисплеев, продажа LED экранов, установка LED экранов, светодиодные экраны для бизнеса">
 
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
@@ -28,7 +28,7 @@
     <meta property="og:locale" content="ru_RU">
     <meta property="og:type" content="{{if .ogType}}{{.ogType}}{{else}}website{{end}}">
     <meta property="og:title" content="{{if .ogTitle}}{{.ogTitle}}{{else}}{{.title}}{{end}}">
-    <meta property="og:description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}{{if .description}}{{.description}}{{else}}Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Гарантия качества.{{end}}{{end}}">
+    <meta property="og:description" content="{{if .ogDescription}}{{.ogDescription}}{{else}}{{if .description}}{{.description}}{{else}}Поставка, монтаж и обслуживание LED дисплеев для бизнеса по всей России. Гарантия качества.{{end}}{{end}}">
     <meta property="og:url" content="https://s-n-r.ru{{if .ogUrl}}{{.ogUrl}}{{else}}/{{end}}">
     <meta property="og:image" content="{{if .ogImage}}{{.ogImage}}{{else}}https://s-n-r.ru/static/images/og-preview.png{{end}}">
     <meta property="og:image:width" content="1200">
@@ -50,7 +50,7 @@
       "alternateName": "S'n'R",
       "url": "https://s-n-r.ru",
       "logo": "https://s-n-r.ru/static/images/diod.png",
-      "description": "Профессиональные LED решения в Санкт-Петербурге. Продажа, монтаж и обслуживание LED дисплеев.",
+      "description": "Профессиональные LED решения по всей России. Продажа, монтаж и обслуживание LED дисплеев.",
       "email": "{{.siteEmail}}",
       "telephone": "{{.sitePhone}}",
       "address": {
@@ -70,7 +70,7 @@
       "alternateName": "S'n'R",
       "url": "https://s-n-r.ru",
       "logo": "https://s-n-r.ru/static/images/diod.png",
-      "description": "Продажа, монтаж и обслуживание LED дисплеев в Санкт-Петербурге и Ленинградской области",
+      "description": "Продажа, монтаж и обслуживание LED дисплеев по всей России",
       "email": "{{.siteEmail}}",
       "telephone": "{{.sitePhone}}",
       "address": {
@@ -95,8 +95,8 @@
       ],
       "priceRange": "$$",
       "areaServed": {
-        "@type": "City",
-        "name": "Санкт-Петербург"
+        "@type": "Country",
+        "name": "Россия"
       }
     }
     </script>
@@ -249,15 +249,12 @@
     {{block "extra-css" .}}{{end}}
 </head>
 <body>
-    <!-- Progress Bar -->
-    <div class="reading-progress-bar" style="width: 0%;"></div>
-
     <!-- Топ-бар -->
     <div class="topbar">
         <div class="topbar-inner">
             <span class="topbar-location">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Санкт-Петербург
+                Работаем по всей России
             </span>
             {{if .sitePhone}}
             <a href="tel:{{.sitePhone}}" class="topbar-phone">
@@ -345,7 +342,7 @@
 
     <!-- Основной контент -->
     <main class="main-content">
-        {{if eq .title "LED экраны в СПб | Service 'n' Repair"}}
+        {{if eq .title "LED экраны по всей России | Service 'n' Repair"}}
             {{template "home-content" .}}
         {{else if eq .title "Контакты | LED экраны"}}
             {{template "contact-content" .}}
@@ -363,7 +360,7 @@
     </main>
 
     <!-- Footer -->
-    {{if eq .title "LED экраны в СПб | Service 'n' Repair"}}
+    {{if eq .title "LED экраны по всей России | Service 'n' Repair"}}
         {{template "home-footer" .}}
     {{else if eq .title "Портфолио - LED Display"}}
         {{template "stats-section" .}}

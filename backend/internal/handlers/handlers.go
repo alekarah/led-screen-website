@@ -86,10 +86,10 @@ func (h *Handlers) HomePage(c *gin.Context) {
 
 	settings := getSettings(h.db)
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
-		"title":            "LED экраны в СПб | Service 'n' Repair",
-		"description":      "Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Портфолио проектов. Гарантия качества.",
+		"title":            "LED экраны по всей России | Service 'n' Repair",
+		"description":      "Поставка, монтаж и обслуживание LED дисплеев для бизнеса по всей России. Портфолио проектов. Гарантия качества.",
 		"ogTitle":          "S'n'R - Продажа и обслуживание LED дисплеев",
-		"ogDescription":    "Поставка, монтаж и обслуживание LED дисплеев для бизнеса в Санкт-Петербурге. Портфолио проектов. Гарантия качества.",
+		"ogDescription":    "Поставка, монтаж и обслуживание LED дисплеев для бизнеса по всей России. Портфолио проектов. Гарантия качества.",
 		"ogUrl":            "/",
 		"ogImage":          "https://s-n-r.ru/static/images/og-preview.png",
 		"projects":         featuredProjects,
@@ -131,9 +131,9 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 	settings := getSettings(h.db)
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":             "Портфолио - LED Display",
-		"description":       "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
+		"description":       "Портфолио реализованных проектов LED дисплеев и экранов по всей России. Торговые центры, АЗС, рекламные щиты.",
 		"ogTitle":           "Портфолио проектов LED дисплеев | S'n'R",
-		"ogDescription":     "Портфолио реализованных проектов LED дисплеев и экранов в Санкт-Петербурге. Торговые центры, АЗС, рекламные щиты.",
+		"ogDescription":     "Портфолио реализованных проектов LED дисплеев и экранов по всей России. Торговые центры, АЗС, рекламные щиты.",
 		"ogUrl":             "/projects",
 		"projects":          projects,
 		"categories":        categories,
@@ -141,6 +141,9 @@ func (h *Handlers) ProjectsPage(c *gin.Context) {
 		"PageID":            "projects",
 		"siteStatsProjects": settings.StatsProjects,
 		"siteStatsYears":    settings.StatsYears,
+		"sitePhone":         settings.Phone,
+		"sitePhoneDisplay":  settings.PhoneDisplay,
+		"siteEmail":         settings.Email,
 	})
 }
 
@@ -155,9 +158,9 @@ func (h *Handlers) ServicesPage(c *gin.Context) {
 	settings := getSettings(h.db)
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":            "Услуги | LED экраны",
-		"description":      "Услуги по продаже, монтажу и обслуживанию LED дисплеев в СПб. Интерьерные и уличные экраны, металлоконструкции.",
+		"description":      "Услуги по продаже, монтажу и обслуживанию LED дисплеев по всей России. Интерьерные и уличные экраны, металлоконструкции.",
 		"ogTitle":          "Услуги LED дисплеев | S'n'R",
-		"ogDescription":    "Услуги по продаже, монтажу и обслуживанию LED дисплеев в СПб. Интерьерные и уличные экраны, металлоконструкции.",
+		"ogDescription":    "Услуги по продаже, монтажу и обслуживанию LED дисплеев по всей России. Интерьерные и уличные экраны, металлоконструкции.",
 		"ogUrl":            "/services",
 		"services":         services,
 		"PageID":           "services",
@@ -175,7 +178,7 @@ func (h *Handlers) LEDGuidePage(c *gin.Context) {
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":            "Всё о LED-экранах: виды, выбор и частые вопросы | S'n'R",
 		"description":      "Узнайте всё о LED-экранах: различия уличных и интерьерных моделей, шаг пикселя, срок службы, советы по установке и ответы на частые вопросы.",
-		"ogTitle":          "LED-экраны — виды, выбор, частые вопросы | S'n'R Санкт-Петербург",
+		"ogTitle":          "LED-экраны — виды, выбор, частые вопросы | S'n'R",
 		"ogDescription":    "Полное руководство по выбору LED-экранов: типы, характеристики, сравнение, преимущества и ответы на частые вопросы.",
 		"ogUrl":            "/led-screens-guide",
 		"PageID":           "led-guide",
@@ -597,9 +600,9 @@ func (h *Handlers) PricesPage(c *gin.Context) {
 	settings := getSettings(h.db)
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":            "Цены на LED экраны | S'n'R",
-		"description":      "Цены на LED экраны и дисплеи в Санкт-Петербурге. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
+		"description":      "Цены на LED экраны и дисплеи по всей России. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
 		"ogTitle":          "Цены на LED экраны и дисплеи | S'n'R",
-		"ogDescription":    "Цены на LED экраны и дисплеи в Санкт-Петербурге. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
+		"ogDescription":    "Цены на LED экраны и дисплеи по всей России. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
 		"ogUrl":            "/prices",
 		"priceItems":       priceItemsWithGroupedSpecs,
 		"PageID":           "prices",

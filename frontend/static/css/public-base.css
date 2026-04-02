@@ -23,8 +23,8 @@ body {
 
 /* Топ-бар */
 .topbar {
-    background: var(--p-text-700);
-    color: var(--p-brand);
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
+    color: #333;
     font-size: 0.78rem;
     position: fixed;
     top: 0;
@@ -53,7 +53,7 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
-    color: var(--p-brand);
+    color: #333;
     text-decoration: none;
     font-weight: 600;
     letter-spacing: 0.02em;
