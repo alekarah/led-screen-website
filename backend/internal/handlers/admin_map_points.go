@@ -13,8 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
 // AdminMapPointsPage — страница управления точками на карте
 func (h *Handlers) AdminMapPointsPage(c *gin.Context) {
 	var points []models.MapPoint

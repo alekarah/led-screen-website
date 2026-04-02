@@ -146,7 +146,7 @@ func TestCreateMapPoint_Duplicate(t *testing.T) {
 	// Создаём первую точку
 	h.db.Create(&models.MapPoint{Title: "Существующая", Latitude: 59.8683, Longitude: 30.3138, IsActive: true})
 
-	// Пытаемся создать точку с теми же координатами
+	// Создаём точку с теми же координатами — теперь дубли разрешены
 	form := url.Values{
 		"title":     {"Дубликат"},
 		"latitude":  {"59.8683"},
@@ -158,16 +158,12 @@ func TestCreateMapPoint_Duplicate(t *testing.T) {
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusConflict, w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
 
-	var resp map[string]interface{}
-	json.Unmarshal(w.Body.Bytes(), &resp)
-	assert.Contains(t, resp["error"], "уже существует")
-
-	// В БД должна быть только 1 точка
+	// В БД должно быть 2 точки
 	var count int64
 	h.db.Model(&models.MapPoint{}).Count(&count)
-	assert.Equal(t, int64(1), count)
+	assert.Equal(t, int64(2), count)
 }
 
 func TestCreateMapPoint_NearbyNotDuplicate(t *testing.T) {
@@ -196,7 +192,7 @@ func TestCreateMapPoint_NearbyNotDuplicate(t *testing.T) {
 	assert.Equal(t, int64(2), count)
 }
 
-func TestBulkImport_SkipsDuplicates(t *testing.T) {
+func TestBulkImport_AllowsDuplicates(t *testing.T) {
 	router, h := setupTestRouter(t)
 	router.POST("/admin/map-points/bulk-import", h.BulkImportMapPoints)
 
@@ -205,7 +201,7 @@ func TestBulkImport_SkipsDuplicates(t *testing.T) {
 
 	body, _ := json.Marshal(gin.H{
 		"links": []string{
-			"https://yandex.ru/maps/?ll=30.3138,59.8683", // дубликат
+			"https://yandex.ru/maps/?ll=30.3138,59.8683", // те же координаты — теперь разрешено
 			"https://yandex.ru/maps/?ll=30.5000,60.0000", // новая
 		},
 	})
@@ -219,10 +215,12 @@ func TestBulkImport_SkipsDuplicates(t *testing.T) {
 
 	var resp map[string]interface{}
 	json.Unmarshal(w.Body.Bytes(), &resp)
-	assert.Equal(t, float64(1), resp["created"])
-	errors := resp["errors"].([]interface{})
-	assert.Equal(t, 1, len(errors))
-	assert.Contains(t, errors[0], "уже существует")
+	assert.Equal(t, float64(2), resp["created"])
+
+	// В БД должно быть 3 точки (1 существующая + 2 новые)
+	var count int64
+	h.db.Model(&models.MapPoint{}).Count(&count)
+	assert.Equal(t, int64(3), count)
 }
 
 // ---------- GetMapPoint ----------
