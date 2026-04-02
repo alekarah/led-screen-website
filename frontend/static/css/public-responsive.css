@@ -58,7 +58,7 @@
   .container { max-width: 960px; padding: 0 1.25rem; }
   .home-services .services-row-top .service-card { flex: 0 1 350px; max-width: 350px; }
   .home-services .services-row-bottom .service-card { flex: 0 1 260px; max-width: 260px; }
-  .services-grid { grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 1.5rem; }
+  .services-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
   .services-main { padding: 1.5rem 0 2.5rem; }
   .screen-types-section { padding: 2.5rem 0; }
   .screen-types-section h2 { margin-bottom: 2rem; }
