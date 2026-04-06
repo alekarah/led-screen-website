@@ -253,6 +253,7 @@
 }
 
 @media (max-width: 480px) {
+  body, .screen-types-section, .process-section, .contact-form-section, .additional-info-section, .service-area-section, .faq-section, .comparison-table-section, .home-about, .home-map-section, .projects, .prices-section { background: #fff !important; }
   .services-grid, .contact-cards, .info-blocks, .screen-types, .stats-grid, .home-projects-grid, .projects-grid, .prices-grid { grid-template-columns: 1fr !important; }
   .topbar { display: none; }
   .main-content { margin-top: 80px; }
@@ -327,6 +328,7 @@
   .home-map-description { font-size: 0.9rem; margin-bottom: 1.2rem; }
   .map-title-russia { display: none; }
   .hide-mobile { display: none !important; }
+  .led-effect::before, .led-effect::after { display: none; }
   .hide-desktop { display: block !important; }
   .home-about-text { font-size: 0.95rem; gap: 1rem; }
   .home-about-services .services-grid-2x2 { grid-template-columns: 1fr; }
@@ -338,8 +340,8 @@
   .stats-grid { grid-template-columns: 1fr; gap: 1rem; }
   .stat-item h3 { font-size: 1.8rem; }
   .stat-item p { font-size: .95rem; }
-  .filters { gap: 0.5rem; }
-  .filter-btn { padding: .5rem .85rem; font-size: .85rem; width: auto; flex: 0 1 auto; text-align: center; }
+  .filters { gap: 0.5rem; flex-direction: column; }
+  .filter-btn { padding: .5rem .85rem; font-size: .85rem; width: 100%; flex: none; text-align: center; }
   .hide-sm { display: none !important; }
   .contact-icon { font-size: 2rem; }
   .contact-info-section { margin-bottom: 2rem; }
@@ -428,9 +430,11 @@
   .service-card p { font-size: .95rem; }
   .service-btn { min-height: 55px; font-size: 0.9rem; }
   .services-main { padding: 0.75rem 0 1rem; }
+  .services-grid { margin-bottom: 0; }
   .screen-types-section, .process-section, .cta-section { padding: 1.25rem 0; }
   .screen-types-section h2, .process-section h2 { font-size: 1.5rem; margin-bottom: 1.25rem; }
   .cta-content h2 { font-size: 1.6rem; }
+  .cta-content p { white-space: normal; font-size: 0.95rem; }
   .section-header h1 { font-size: 1.75rem; }
   .see-all-projects-btn { font-size: 1.3em; padding: 0.55em 0.9em; }
   .prices-hero h1 { font-size: 1.75rem; }
@@ -483,7 +487,7 @@
   .process-steps .step-number { animation: none !important; }
   .public-project-card, .public-project-image img, .project-detail-btn, .contact-card, .info-block { transition: none !important; }
   .filters { flex-wrap: wrap !important; }
-  .filter-btn { flex: 1 1 calc(50% - 0.5rem) !important; min-height: 50px !important; padding: 1rem 1.5rem !important; font-size: 0.9rem !important; }
+  .filter-btn { min-height: 44px !important; padding: 0.75rem 1rem !important; font-size: 0.9rem !important; }
 }
 
 /* Компенсация для высокого DPR на десктопах (Windows масштабирование 125%-200%) */
