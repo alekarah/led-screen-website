@@ -69,6 +69,29 @@
 
 **Response** (200): `[{day: "2024-11-01", count: 3}, ...]`
 
+### 6. Данные калькулятора стоимости
+
+`GET /api/calculator`
+
+**Response** (200):
+```json
+{
+  "settings": {
+    "cab_width": 640, "cab_height": 640,
+    "commutation": 25.0, "card": 30.0, "power": 15.0,
+    "usd_rate": 92.5, "usd_rate_at": "2025-04-09T10:00:00Z"
+  },
+  "indoor_pitches": [
+    {"id": 1, "name": "P1.25", "module_price": 180.0, "screen_type": "indoor", "is_active": true}
+  ],
+  "outdoor_pitches": [
+    {"id": 5, "name": "P4", "module_price": 45.0, "screen_type": "outdoor", "is_active": true}
+  ],
+  "usd_rate": 92.5
+}
+```
+**Note:** Курс USD кэшируется в БД и обновляется с сайта ЦБ РФ раз в сутки. Все цены в долларах, итоговый расчёт на клиенте умножается на курс.
+
 ---
 
 ## Админ API: Проекты

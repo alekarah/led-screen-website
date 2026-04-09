@@ -184,12 +184,16 @@
         const slug = window.location.hash.substring(1); // убираем #
         const targetBtn = document.querySelector(`[data-project-slug="${slug}"]`);
         if (targetBtn) {
-            // Небольшая задержка для полной загрузки страницы
+            // Ждём пока projects-load-more скроет карточки, затем принудительно показываем нужную
             setTimeout(() => {
+                const card = targetBtn.closest('.public-project-card');
+                if (card && card.style.display === 'none') {
+                    card.style.display = '';
+                }
                 targetBtn.click();
                 // Убираем hash из URL после открытия модалки
                 history.replaceState(null, null, ' ');
-            }, 300);
+            }, 400);
         }
     }
 

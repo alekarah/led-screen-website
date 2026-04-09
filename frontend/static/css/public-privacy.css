@@ -31,6 +31,9 @@
   color: var(--p-text-900, #1b1b1b);
 }
 
+.privacy-section .privacy-block p { text-align: justify; }
+.privacy-section .privacy-block h3 { text-indent: 2em; }
+
 /* Читаемость списков */
 .privacy-section .privacy-block ul {
   margin: 0.75rem 0 1rem;

@@ -197,18 +197,24 @@
     margin-bottom: 1rem;
     color: var(--p-text-600);
 }
+.about-company-text p:not(.about-intro) {
+    text-align: justify;
+    text-indent: 2em;
+}
 
 .about-founder {
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 1.5rem;
     background: var(--p-bg-alt);
     border-radius: 10px;
     border-left: 4px solid var(--p-brand-dark);
 }
 
-.about-founder p {
+.about-company-text .about-founder p {
     margin-bottom: 0.5rem;
     color: var(--p-text-700);
+    text-indent: 0 !important;
+    text-align: left !important;
 }
 
 .about-founder p:last-child {

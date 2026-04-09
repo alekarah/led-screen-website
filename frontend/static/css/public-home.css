@@ -352,6 +352,10 @@ body:has(.hero) .main-content {
     font-size: 1rem;
     line-height: 1.75;
 }
+.home-about-text p {
+    text-align: justify;
+    text-indent: 2em;
+}
 .home-about-text .home-about-icon {
     animation: none;
     width: 100%;

@@ -99,7 +99,7 @@ func getOrRefreshUSDRate(db *gorm.DB) (float64, error) {
 	}
 
 	// Если курс свежее 1 часа — возвращаем кэш
-	if settings.UsdRate > 0 && time.Since(settings.UsdRateAt) < time.Hour {
+	if settings.UsdRate > 0 && time.Since(settings.UsdRateAt) < 24*time.Hour {
 		return settings.UsdRate * (1 + settings.UsdMarkupPct/100), nil
 	}
 

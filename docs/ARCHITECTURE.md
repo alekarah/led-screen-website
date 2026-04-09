@@ -68,6 +68,7 @@ backend/
 │   │   ├── image_processor.go     # Обработка изображений (thumbnails, crop, WebP)
 │   │   ├── admin_sorting.go       # Сортировка проектов
 │   │   ├── admin_map_points.go    # CRUD точек на карте + импорт из Яндекс.Карт
+│   │   ├── calculator.go          # Калькулятор: курс ЦБ, кэш, данные для шаблона
 │   │   ├── admin_pages.go         # Рендеринг админских страниц
 │   │   └── admin_helpers.go       # Вспомогательные функции
 │   ├── middleware/                # HTTP middleware
@@ -94,7 +95,7 @@ HTTP Request → Gin Router → Middleware (auth) → Handler → GORM → Postg
 
 **Типы маршрутов:**
 - Публичные: `/`, `/projects`, `/services`, `/prices`, `/contact`
-- API: `/api/projects`, `/api/contact`, `/api/track/project-view/:id`, `/api/track/price-view/:id`
+- API: `/api/projects`, `/api/contact`, `/api/track/project-view/:id`, `/api/track/price-view/:id`, `/api/calculator`
 - Админ: `/admin/login` (открытый), `/admin/*` (JWT защита)
 - Карта: `/admin/map-points/*` (CRUD точек + импорт из Яндекс.Карт)
 
@@ -132,6 +133,8 @@ Request → AuthMiddleware → validate JWT → extract claims (admin_id, userna
 | `Service` | Услуги компании | Name, Slug, Description, Icon, Featured |
 | `Settings` | Настройки сайта | Key, Value, Type |
 | `MapPoint` | Точки на карте (география работы) | Title, Description, Latitude, Longitude, PanoramaURL, SortOrder, IsActive |
+| `CalculatorSettings` | Настройки калькулятора | CabWidth, CabHeight, Commutation, Card, Power, UsdRate, UsdRateAt (кэш курса ЦБ) |
+| `CalculatorPixelPitch` | Шаги пикселя для калькулятора | ScreenType (indoor/outdoor), Name, ModulePrice, SortOrder, IsActive |
 
 **Связи между таблицами:**
 - `Project` ↔ `Category` (many-to-many через `project_categories`)
