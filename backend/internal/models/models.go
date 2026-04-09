@@ -385,18 +385,18 @@ type CalculatorSettings struct {
 	UpdatedAt time.Time `json:"updated_at"`
 
 	// Курс доллара (кэш ЦБ РФ)
-	UsdRate       float64   `json:"usd_rate" gorm:"default:0"`          // Курс ЦБ (без надбавки)
-	UsdRateAt     time.Time `json:"usd_rate_at"`                         // Время последнего обновления курса
-	UsdMarkupPct  float64   `json:"usd_markup_pct" gorm:"default:2"`     // Надбавка к курсу ЦБ в процентах (по умолчанию 2%)
+	UsdRate      float64   `json:"usd_rate" gorm:"default:0"`       // Курс ЦБ (без надбавки)
+	UsdRateAt    time.Time `json:"usd_rate_at"`                     // Время последнего обновления курса
+	UsdMarkupPct float64   `json:"usd_markup_pct" gorm:"default:2"` // Надбавка к курсу ЦБ в процентах (по умолчанию 2%)
 
 	// Константы интерьерного кабинета (640×640 мм, 8 модулей)
-	IndoorCabinetSize    int     `json:"indoor_cabinet_size" gorm:"default:640"`    // Размер кабинета в мм
-	IndoorModulesPerCab  int     `json:"indoor_modules_per_cab" gorm:"default:8"`   // Модулей в кабинете
-	IndoorCommutation    float64 `json:"indoor_commutation" gorm:"default:5"`       // Коммутация, $
-	IndoorCabinetStd     float64 `json:"indoor_cabinet_std" gorm:"default:76"`      // Цена кабинета Standard, $
-	IndoorCabinetLight   float64 `json:"indoor_cabinet_light" gorm:"default:60"`    // Цена кабинета Light, $
-	IndoorReceivingCard  float64 `json:"indoor_receiving_card" gorm:"default:20"`   // Принимающая карта, $
-	IndoorPowerSupply    float64 `json:"indoor_power_supply" gorm:"default:17.6"`   // Блок питания (итого), $
+	IndoorCabinetSize   int     `json:"indoor_cabinet_size" gorm:"default:640"`  // Размер кабинета в мм
+	IndoorModulesPerCab int     `json:"indoor_modules_per_cab" gorm:"default:8"` // Модулей в кабинете
+	IndoorCommutation   float64 `json:"indoor_commutation" gorm:"default:5"`     // Коммутация, $
+	IndoorCabinetStd    float64 `json:"indoor_cabinet_std" gorm:"default:76"`    // Цена кабинета Standard, $
+	IndoorCabinetLight  float64 `json:"indoor_cabinet_light" gorm:"default:60"`  // Цена кабинета Light, $
+	IndoorReceivingCard float64 `json:"indoor_receiving_card" gorm:"default:20"` // Принимающая карта, $
+	IndoorPowerSupply   float64 `json:"indoor_power_supply" gorm:"default:17.6"` // Блок питания (итого), $
 
 	// Константы уличного кабинета (960×960 мм, 18 модулей)
 	OutdoorCabinetSize   int     `json:"outdoor_cabinet_size" gorm:"default:960"`   // Размер кабинета в мм

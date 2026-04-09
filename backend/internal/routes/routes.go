@@ -154,10 +154,10 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		// Калькулятор - настройки и шаги пикселя
 		calc := admin.Group("/calculator")
 		{
-			calc.GET("", h.AdminCalculatorPage)                      // Страница настроек калькулятора
-			calc.POST("/settings", h.AdminCalculatorUpdateSettings)  // Сохранение констант
-			calc.POST("/pitches", h.AdminCalculatorCreatePitch)      // Создание шага пикселя
-			calc.POST("/pitches/:id", h.AdminCalculatorUpdatePitch)  // Обновление шага пикселя
+			calc.GET("", h.AdminCalculatorPage)                       // Страница настроек калькулятора
+			calc.POST("/settings", h.AdminCalculatorUpdateSettings)   // Сохранение констант
+			calc.POST("/pitches", h.AdminCalculatorCreatePitch)       // Создание шага пикселя
+			calc.POST("/pitches/:id", h.AdminCalculatorUpdatePitch)   // Обновление шага пикселя
 			calc.DELETE("/pitches/:id", h.AdminCalculatorDeletePitch) // Удаление шага пикселя
 		}
 

@@ -64,7 +64,6 @@ func fetchUSDRateFromCB() (float64, error) {
 		return 0, fmt.Errorf("cbr xml parse: %w", err)
 	}
 
-
 	for _, v := range curs.Valutes {
 		if v.CharCode == "USD" {
 			// ЦБ использует запятую как десятичный разделитель
@@ -159,7 +158,10 @@ func getCalculatorTemplateData(db *gorm.DB) map[string]interface{} {
 	var outdoorPitches []models.CalculatorPixelPitch
 	db.Where("screen_type = ? AND is_active = ?", "outdoor", true).Order("sort_order").Find(&outdoorPitches)
 
-	rate, _ := getOrRefreshUSDRate(db)
+	rate, err := getOrRefreshUSDRate(db)
+	if err != nil {
+		rate = 0
+	}
 
 	return map[string]interface{}{
 		"calcSettings":   settings,
