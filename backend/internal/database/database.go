@@ -143,6 +143,8 @@ func Migrate(db *gorm.DB) error {
 		&models.PromoPopup{},
 		&models.MapPoint{},
 		&models.SiteSettings{},
+		&models.CalculatorSettings{},
+		&models.CalculatorPixelPitch{},
 	); err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)
 	}
@@ -311,6 +313,59 @@ func seedInitialData(db *gorm.DB) error {
 		}
 		if len(updates) > 0 {
 			db.Model(&settings).Updates(updates)
+		}
+	}
+
+	// Создаём настройки калькулятора если их ещё нет (singleton)
+	var calcCount int64
+	db.Model(&models.CalculatorSettings{}).Count(&calcCount)
+	if calcCount == 0 {
+		calc := models.CalculatorSettings{
+			UsdMarkupPct:         2,
+			IndoorCabinetSize:    640,
+			IndoorModulesPerCab:  8,
+			IndoorCommutation:    5,
+			IndoorCabinetStd:     76,
+			IndoorCabinetLight:   60,
+			IndoorReceivingCard:  20,
+			IndoorPowerSupply:    17.6,
+			OutdoorCabinetSize:   960,
+			OutdoorModulesPerCab: 18,
+			OutdoorCommutation:   5,
+			OutdoorCabinetStd:    200,
+			OutdoorCabinetLight:  160,
+			OutdoorReceivingCard: 20,
+			OutdoorPowerSupply:   52.8,
+		}
+		if err := db.Create(&calc).Error; err != nil {
+			return fmt.Errorf("failed to create calculator settings: %w", err)
+		}
+	}
+
+	// Создаём шаги пикселя если их ещё нет
+	var pitchCount int64
+	db.Model(&models.CalculatorPixelPitch{}).Count(&pitchCount)
+	if pitchCount == 0 {
+		pitches := []models.CalculatorPixelPitch{
+			{ScreenType: "indoor", Name: "P1,25", ModulePrice: 58.5, SortOrder: 1},
+			{ScreenType: "indoor", Name: "P1,53", ModulePrice: 28.5, SortOrder: 2},
+			{ScreenType: "indoor", Name: "P1,86", ModulePrice: 25, SortOrder: 3},
+			{ScreenType: "indoor", Name: "P2", ModulePrice: 22, SortOrder: 4},
+			{ScreenType: "indoor", Name: "P2,5", ModulePrice: 16.5, SortOrder: 5},
+			{ScreenType: "indoor", Name: "P3", ModulePrice: 14, SortOrder: 6},
+			{ScreenType: "indoor", Name: "P4", ModulePrice: 11, SortOrder: 7},
+			{ScreenType: "outdoor", Name: "P2", ModulePrice: 82, SortOrder: 1},
+			{ScreenType: "outdoor", Name: "P2,5", ModulePrice: 32, SortOrder: 2},
+			{ScreenType: "outdoor", Name: "P3,07", ModulePrice: 21, SortOrder: 3},
+			{ScreenType: "outdoor", Name: "P4", ModulePrice: 15, SortOrder: 4},
+			{ScreenType: "outdoor", Name: "P5", ModulePrice: 13, SortOrder: 5},
+			{ScreenType: "outdoor", Name: "P6,66", ModulePrice: 12.5, SortOrder: 6},
+			{ScreenType: "outdoor", Name: "P8", ModulePrice: 10.5, SortOrder: 7},
+		}
+		for _, p := range pitches {
+			if err := db.Create(&p).Error; err != nil {
+				return fmt.Errorf("failed to create pixel pitch %s: %w", p.Name, err)
+			}
 		}
 	}
 

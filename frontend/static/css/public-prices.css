@@ -175,3 +175,81 @@
     margin-right: auto;
 }
 
+/* Калькулятор */
+.calculator-section {
+    padding: 2rem 0 3rem;
+    background: var(--p-bg-alt);
+}
+.calc-intro { color: var(--p-text-600); font-size: 0.95rem; text-align: center; margin: 0; }
+.calculator-body {
+    max-width: 640px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.calc-row { display: flex; flex-direction: column; gap: 0.5rem; }
+.calc-label { font-weight: 600; font-size: 0.95rem; color: var(--p-text-700); }
+.calc-type-btns { display: flex; gap: 0.75rem; }
+.calc-type-btn {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border: 2px solid var(--p-brand);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--p-text-700);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.18s, color 0.18s;
+}
+.calc-type-btn.active { background: var(--p-brand); color: #333; }
+.calc-select {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--p-text-700);
+    background: #fff;
+    cursor: pointer;
+}
+.calc-sizes-row { flex-direction: row; gap: 1.5rem; }
+.calc-size-block { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+.calc-slider-wrap { display: flex; flex-direction: column; gap: 0.4rem; }
+.calc-slider {
+    width: 100%;
+    accent-color: var(--p-brand-dark);
+    height: 6px;
+    cursor: pointer;
+}
+.calc-slider-value { font-size: 0.9rem; color: var(--p-text-600); }
+.calc-slider-value span:first-child { font-weight: 700; font-size: 1rem; color: var(--p-text-900); }
+.calc-mm { margin-left: 0.3rem; }
+.calc-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.calc-checkbox-label input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--p-brand-dark); }
+.calc-light-hint { font-weight: 400; color: var(--p-text-500); font-size: 0.85rem; }
+.calc-result {
+    background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-2) 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+.calc-result-label { font-size: 0.9rem; color: #444; margin-bottom: 0.4rem; }
+.calc-result-price { font-size: 2.2rem; font-weight: 800; color: var(--p-text-900); margin-bottom: 0.5rem; }
+.calc-result-note { font-size: 0.8rem; color: #555; }
+
+

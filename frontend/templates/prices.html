@@ -2,9 +2,74 @@
 <section class="prices-hero">
     <div class="container">
         <h1>Цены на LED экраны</h1>
-        <p class="hero-subtitle">Выберите подходящее решение для вашего бизнеса</p>
+        <p class="hero-subtitle">Рассчитайте стоимость или выберите готовое решение</p>
     </div>
 </section>
+
+<!-- Калькулятор стоимости -->
+{{if .calcSettings}}
+<section class="calculator-section">
+    <div class="container">
+        <div class="calculator-body">
+            <!-- Подзаголовок -->
+            <p class="calc-intro">Укажите параметры — получите ориентировочную цену</p>
+
+            <!-- Тип экрана -->
+            <div class="calc-row">
+                <label class="calc-label">Тип экрана</label>
+                <div class="calc-type-btns">
+                    <button class="calc-type-btn active" data-type="indoor">Интерьерный</button>
+                    <button class="calc-type-btn" data-type="outdoor">Уличный</button>
+                </div>
+            </div>
+
+            <!-- Шаг пикселя -->
+            <div class="calc-row">
+                <label class="calc-label">Шаг пикселя</label>
+                <select class="calc-select" id="calcPitch"></select>
+            </div>
+
+            <!-- Данные шагов пикселя (скрытые) -->
+            <div id="pitchData" style="display:none"
+                data-indoor='{{toJSON .indoorPitches}}'
+                data-outdoor='{{toJSON .outdoorPitches}}'></div>
+
+            <!-- Размеры -->
+            <div class="calc-row calc-sizes-row">
+                <div class="calc-size-block">
+                    <label class="calc-label">Ширина</label>
+                    <div class="calc-slider-wrap">
+                        <input type="range" class="calc-slider" id="calcWidth" min="1" max="10" step="1" value="1">
+                        <div class="calc-slider-value"><span id="calcWidthCabs">1</span> каб. <span class="calc-mm" id="calcWidthMm">640 мм</span></div>
+                    </div>
+                </div>
+                <div class="calc-size-block">
+                    <label class="calc-label">Высота</label>
+                    <div class="calc-slider-wrap">
+                        <input type="range" class="calc-slider" id="calcHeight" min="1" max="10" step="1" value="1">
+                        <div class="calc-slider-value"><span id="calcHeightCabs">1</span> каб. <span class="calc-mm" id="calcHeightMm">640 мм</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Light -->
+            <div class="calc-row">
+                <label class="calc-checkbox-label">
+                    <input type="checkbox" id="calcLight">
+                    <span>Light исполнение</span>
+                    <span class="calc-light-hint">упрощённый корпус кабинета</span>
+                </label>
+            </div>
+
+            <!-- Результат -->
+            <div class="calc-result">
+                <div class="calc-result-price" id="calcResultPrice">—</div>
+                <div class="calc-result-note">Расчёт приблизительный.<br>Точную стоимость уточните у менеджера.<br>Монтаж рассчитывается после осмотра места установки.</div>
+            </div>
+        </div>
+    </div>
+</section>
+{{end}}
 
 <section class="prices-section">
     <div class="container">
@@ -75,4 +140,142 @@
         </div>
     </div>
 </div>
+
+{{if .calcSettings}}
+<script>
+(function() {
+    // Данные из бэкенда
+    var USD_RATE = {{.usdRate}};
+    var SETTINGS = {
+        indoor: {
+            cabSize:     {{.calcSettings.IndoorCabinetSize}},
+            modules:     {{.calcSettings.IndoorModulesPerCab}},
+            commutation: {{.calcSettings.IndoorCommutation}},
+            cabStd:      {{.calcSettings.IndoorCabinetStd}},
+            cabLight:    {{.calcSettings.IndoorCabinetLight}},
+            card:        {{.calcSettings.IndoorReceivingCard}},
+            power:       {{.calcSettings.IndoorPowerSupply}}
+        },
+        outdoor: {
+            cabSize:     {{.calcSettings.OutdoorCabinetSize}},
+            modules:     {{.calcSettings.OutdoorModulesPerCab}},
+            commutation: {{.calcSettings.OutdoorCommutation}},
+            cabStd:      {{.calcSettings.OutdoorCabinetStd}},
+            cabLight:    {{.calcSettings.OutdoorCabinetLight}},
+            card:        {{.calcSettings.OutdoorReceivingCard}},
+            power:       {{.calcSettings.OutdoorPowerSupply}}
+        }
+    };
+
+    var currentType = 'indoor';
+
+    // Загружаем данные шагов из data-атрибутов
+    var pitchDataEl = document.getElementById('pitchData');
+    var PITCHES = {
+        indoor:  JSON.parse(pitchDataEl.getAttribute('data-indoor') || '[]'),
+        outdoor: JSON.parse(pitchDataEl.getAttribute('data-outdoor') || '[]')
+    };
+
+    function getSelectedPitch() {
+        var sel = document.getElementById('calcPitch');
+        var opt = sel.options[sel.selectedIndex];
+        return { price: parseFloat(opt.getAttribute('data-price') || '0') };
+    }
+
+    function fillPitchSelect(type) {
+        var sel = document.getElementById('calcPitch');
+        sel.innerHTML = '';
+        var pitches = PITCHES[type] || [];
+        pitches.forEach(function(p) {
+            var opt = document.createElement('option');
+            opt.value = p.id;
+            opt.setAttribute('data-price', p.module_price);
+            opt.textContent = p.name;
+            sel.appendChild(opt);
+        });
+    }
+
+    function formatPrice(n) {
+        return Math.round(n).toLocaleString('ru-RU') + ' ₽';
+    }
+
+    function updateSliderLabels() {
+        var s = SETTINGS[currentType];
+        var w = parseInt(document.getElementById('calcWidth').value);
+        var h = parseInt(document.getElementById('calcHeight').value);
+        document.getElementById('calcWidthCabs').textContent = w;
+        document.getElementById('calcWidthMm').textContent = (w * s.cabSize) + ' мм';
+        document.getElementById('calcHeightCabs').textContent = h;
+        document.getElementById('calcHeightMm').textContent = (h * s.cabSize) + ' мм';
+    }
+
+    function calculate() {
+        if (!USD_RATE || USD_RATE === 0) {
+            document.getElementById('calcResultPrice').textContent = 'Курс недоступен';
+            return;
+        }
+        var s = SETTINGS[currentType];
+        var pitch = getSelectedPitch();
+        var isLight = document.getElementById('calcLight').checked;
+        var w = parseInt(document.getElementById('calcWidth').value);
+        var h = parseInt(document.getElementById('calcHeight').value);
+
+        var cabPrice = isLight ? s.cabLight : s.cabStd;
+        var modulesTotal = pitch.price * s.modules;
+        var costPerCab = s.commutation + cabPrice + s.card + s.power + modulesTotal;
+        var totalCabs = w * h;
+        var totalUsd = costPerCab * totalCabs;
+        var totalRub = totalUsd * USD_RATE;
+
+        document.getElementById('calcResultPrice').textContent = formatPrice(totalRub);
+    }
+
+    function switchType(type) {
+        currentType = type;
+        // Переключаем кнопки
+        document.querySelectorAll('.calc-type-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-type') === type);
+        });
+        // Обновляем максимум ширины: уличные до 15, интерьерные до 10
+        var widthSlider = document.getElementById('calcWidth');
+        widthSlider.max = type === 'outdoor' ? 15 : 10;
+        // Перезаполняем select нужными шагами
+        fillPitchSelect(type);
+        // Выбираем последний (самый большой шаг = самая низкая цена)
+        var sel = document.getElementById('calcPitch');
+        sel.selectedIndex = sel.options.length - 1;
+        // Сбрасываем слайдеры на 1
+        widthSlider.value = 1;
+        document.getElementById('calcHeight').value = 1;
+        updateSliderLabels();
+        calculate();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Кнопки типа
+        document.querySelectorAll('.calc-type-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                switchType(btn.getAttribute('data-type'));
+            });
+        });
+        // Слайдеры
+        document.getElementById('calcWidth').addEventListener('input', function() {
+            updateSliderLabels();
+            calculate();
+        });
+        document.getElementById('calcHeight').addEventListener('input', function() {
+            updateSliderLabels();
+            calculate();
+        });
+        // Шаг пикселя
+        document.getElementById('calcPitch').addEventListener('change', calculate);
+        // Light
+        document.getElementById('calcLight').addEventListener('change', calculate);
+
+        // Инициализация
+        switchType('indoor');
+    });
+})();
+</script>
+{{end}}
 {{end}}

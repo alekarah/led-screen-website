@@ -598,6 +598,8 @@ func (h *Handlers) PricesPage(c *gin.Context) {
 	}
 
 	settings := getSettings(h.db)
+	calcData := getCalculatorTemplateData(h.db)
+
 	c.HTML(http.StatusOK, "public_base.html", gin.H{
 		"title":            "Цены на LED экраны | S'n'R",
 		"description":      "Цены на LED экраны и дисплеи по всей России. Прайс-лист на уличные, интерьерные экраны, медиафасады.",
@@ -609,5 +611,9 @@ func (h *Handlers) PricesPage(c *gin.Context) {
 		"sitePhone":        settings.Phone,
 		"sitePhoneDisplay": settings.PhoneDisplay,
 		"siteEmail":        settings.Email,
+		"calcSettings":     calcData["calcSettings"],
+		"indoorPitches":    calcData["indoorPitches"],
+		"outdoorPitches":   calcData["outdoorPitches"],
+		"usdRate":          calcData["usdRate"],
 	})
 }

@@ -62,6 +62,7 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 		api.POST("/track/project-view/:id", h.TrackProjectView) // Трекинг просмотров проекта
 		api.POST("/track/price-view/:id", h.TrackPriceView)     // Трекинг просмотров позиции прайса
 		api.GET("/promo", h.GetActivePromo)                     // Получение активного popup для страницы
+		api.GET("/calculator", h.GetCalculatorData)             // Данные калькулятора (курс, настройки, шаги)
 
 		// Telegram Bot API - доступ только с localhost (127.0.0.1)
 		telegram := api.Group("/telegram")
@@ -148,6 +149,16 @@ func Setup(router *gin.Engine, h *handlers.Handlers) {
 			prices.POST("/images/:id/set-primary", h.SetPrimaryPriceImage) // Установка главного изображения позиции
 			prices.POST("/:id/reset-views", h.ResetPriceItemViews)         // Сброс просмотров конкретной позиции прайса
 			prices.POST("/:id/duplicate", h.DuplicatePriceItem)            // Дублирование позиции прайса
+		}
+
+		// Калькулятор - настройки и шаги пикселя
+		calc := admin.Group("/calculator")
+		{
+			calc.GET("", h.AdminCalculatorPage)                      // Страница настроек калькулятора
+			calc.POST("/settings", h.AdminCalculatorUpdateSettings)  // Сохранение констант
+			calc.POST("/pitches", h.AdminCalculatorCreatePitch)      // Создание шага пикселя
+			calc.POST("/pitches/:id", h.AdminCalculatorUpdatePitch)  // Обновление шага пикселя
+			calc.DELETE("/pitches/:id", h.AdminCalculatorDeletePitch) // Удаление шага пикселя
 		}
 
 		// Промо popup - управление всплывающим окном для акций

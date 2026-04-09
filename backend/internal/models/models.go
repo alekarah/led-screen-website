@@ -376,6 +376,50 @@ type SiteSettings struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
+// CalculatorSettings хранит настройки калькулятора стоимости LED экрана (singleton).
+//
+// Управляется через /admin/calculator
+// Курс доллара кэшируется из API ЦБ РФ, обновляется раз в час.
+type CalculatorSettings struct {
+	ID        uint      `json:"id" gorm:"primaryKey"`
+	UpdatedAt time.Time `json:"updated_at"`
+
+	// Курс доллара (кэш ЦБ РФ)
+	UsdRate       float64   `json:"usd_rate" gorm:"default:0"`          // Курс ЦБ (без надбавки)
+	UsdRateAt     time.Time `json:"usd_rate_at"`                         // Время последнего обновления курса
+	UsdMarkupPct  float64   `json:"usd_markup_pct" gorm:"default:2"`     // Надбавка к курсу ЦБ в процентах (по умолчанию 2%)
+
+	// Константы интерьерного кабинета (640×640 мм, 8 модулей)
+	IndoorCabinetSize    int     `json:"indoor_cabinet_size" gorm:"default:640"`    // Размер кабинета в мм
+	IndoorModulesPerCab  int     `json:"indoor_modules_per_cab" gorm:"default:8"`   // Модулей в кабинете
+	IndoorCommutation    float64 `json:"indoor_commutation" gorm:"default:5"`       // Коммутация, $
+	IndoorCabinetStd     float64 `json:"indoor_cabinet_std" gorm:"default:76"`      // Цена кабинета Standard, $
+	IndoorCabinetLight   float64 `json:"indoor_cabinet_light" gorm:"default:60"`    // Цена кабинета Light, $
+	IndoorReceivingCard  float64 `json:"indoor_receiving_card" gorm:"default:20"`   // Принимающая карта, $
+	IndoorPowerSupply    float64 `json:"indoor_power_supply" gorm:"default:17.6"`   // Блок питания (итого), $
+
+	// Константы уличного кабинета (960×960 мм, 18 модулей)
+	OutdoorCabinetSize   int     `json:"outdoor_cabinet_size" gorm:"default:960"`   // Размер кабинета в мм
+	OutdoorModulesPerCab int     `json:"outdoor_modules_per_cab" gorm:"default:18"` // Модулей в кабинете
+	OutdoorCommutation   float64 `json:"outdoor_commutation" gorm:"default:5"`      // Коммутация, $
+	OutdoorCabinetStd    float64 `json:"outdoor_cabinet_std" gorm:"default:200"`    // Цена кабинета Standard, $
+	OutdoorCabinetLight  float64 `json:"outdoor_cabinet_light" gorm:"default:160"`  // Цена кабинета Light, $
+	OutdoorReceivingCard float64 `json:"outdoor_receiving_card" gorm:"default:20"`  // Принимающая карта, $
+	OutdoorPowerSupply   float64 `json:"outdoor_power_supply" gorm:"default:52.8"`  // Блоки питания (итого), $
+}
+
+// CalculatorPixelPitch представляет один шаг пикселя для калькулятора.
+type CalculatorPixelPitch struct {
+	ID          uint      `json:"id" gorm:"primaryKey"`
+	ScreenType  string    `json:"screen_type" gorm:"not null;index"` // "indoor" или "outdoor"
+	Name        string    `json:"name" gorm:"not null"`              // Например "P2,5"
+	ModulePrice float64   `json:"module_price" gorm:"not null"`      // Цена одного модуля, $
+	SortOrder   int       `json:"sort_order" gorm:"default:0"`
+	IsActive    bool      `json:"is_active" gorm:"default:true"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
 // PromoPopup представляет настройки всплывающего окна для акций и промо.
 //
 // Особенности:
