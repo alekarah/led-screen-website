@@ -27,7 +27,12 @@ type cbValCurs struct {
 
 // fetchUSDRateFromCB запрашивает курс доллара с сайта ЦБ РФ.
 func fetchUSDRateFromCB() (float64, error) {
-	req, err := http.NewRequest("GET", "https://www.cbr.ru/scripts/XML_daily.asp", nil)
+	return fetchUSDRateFromURL("https://www.cbr.ru/scripts/XML_daily.asp")
+}
+
+// fetchUSDRateFromURL запрашивает курс доллара с указанного URL (используется в тестах).
+func fetchUSDRateFromURL(url string) (float64, error) {
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return 0, fmt.Errorf("cbr new request: %w", err)
 	}
