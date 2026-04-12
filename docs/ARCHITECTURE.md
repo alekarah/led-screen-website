@@ -198,6 +198,7 @@ frontend/
     ├── admin_projects.html      # Управление проектами
     ├── admin_prices.html        # Управление прайс-листом
     ├── admin_contacts.html      # Управление заявками
+    ├── admin_calculator.html    # Управление калькулятором (курс, константы, шаги пикселя)
     ├── admin_map_points.html    # Управление точками на карте
     └── admin_login.html         # Страница входа
 ```

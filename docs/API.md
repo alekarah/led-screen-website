@@ -77,20 +77,38 @@
 ```json
 {
   "settings": {
-    "cab_width": 640, "cab_height": 640,
-    "commutation": 25.0, "card": 30.0, "power": 15.0,
-    "usd_rate": 92.5, "usd_rate_at": "2025-04-09T10:00:00Z"
+    "indoor_cabinet_size": 640, "indoor_modules_per_cab": 8,
+    "indoor_commutation": 5.0, "indoor_receiving_card": 30.0, "indoor_power_supply": 17.6,
+    "outdoor_cabinet_size": 960, "outdoor_modules_per_cab": 18,
+    "outdoor_commutation": 5.0, "outdoor_receiving_card": 30.0, "outdoor_power_supply": 52.8,
+    "usd_rate": 76.97, "usd_markup_pct": 2.0, "usd_rate_at": "2026-04-12T13:54:00Z"
   },
-  "indoor_pitches": [
-    {"id": 1, "name": "P1.25", "module_price": 180.0, "screen_type": "indoor", "is_active": true}
+  "pitches": [
+    {"id": 1, "name": "P1,25", "module_price": 134.55, "screen_type": "indoor", "is_active": true, "sort_order": 1}
   ],
-  "outdoor_pitches": [
-    {"id": 5, "name": "P4", "module_price": 45.0, "screen_type": "outdoor", "is_active": true}
-  ],
-  "usd_rate": 92.5
+  "usd_rate": 78.51
 }
 ```
-**Note:** Курс USD кэшируется в БД и обновляется с сайта ЦБ РФ раз в сутки. Все цены в долларах, итоговый расчёт на клиенте умножается на курс.
+**Note:** Курс USD кэшируется в БД и обновляется с сайта ЦБ РФ раз в сутки. `usd_rate` в корне — итоговый курс с надбавкой. Все цены в долларах, итоговый расчёт на клиенте умножается на курс.
+
+---
+
+## Админ API: Калькулятор
+
+**Auth:** Все эндпоинты требуют JWT (`admin_token` cookie)
+
+**Страница:**
+- `GET /admin/calculator` - страница управления (HTML)
+
+**Константы:**
+- `POST /admin/calculator/settings` - сохранить константы (Request: JSON с полями модели CalculatorSettings)
+
+**Шаги пикселя:**
+- `POST /admin/calculator/pitches` - создать (Request: `{name, module_price, screen_type, is_active, sort_order}`)
+- `POST /admin/calculator/pitches/:id` - обновить (Request: аналогично)
+- `DELETE /admin/calculator/pitches/:id` - удалить
+
+**Note:** Надбавка к курсу (`usd_markup_pct`) сохраняется через `POST /admin/calculator/settings` с одним полем. Курс ЦБ обновляется автоматически раз в сутки.
 
 ---
 
