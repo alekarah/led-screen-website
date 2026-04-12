@@ -181,19 +181,21 @@
 
     // Автооткрытие модалки по hash в URL (при переходе с главной)
     if (window.location.hash) {
-        const slug = window.location.hash.substring(1); // убираем #
+        const slug = decodeURIComponent(window.location.hash.substring(1));
         const targetBtn = document.querySelector(`[data-project-slug="${slug}"]`);
         if (targetBtn) {
-            // Ждём пока projects-load-more скроет карточки, затем принудительно показываем нужную
+            // Ждём после DOMContentLoaded чтобы load-more успел отработать,
+            // затем принудительно показываем карточку и кликаем
             setTimeout(() => {
                 const card = targetBtn.closest('.public-project-card');
-                if (card && card.style.display === 'none') {
+                if (card) {
+                    // Показываем карточку если скрыта (load-more или фильтр)
                     card.style.display = '';
+                    card.style.visibility = 'visible';
                 }
                 targetBtn.click();
-                // Убираем hash из URL после открытия модалки
                 history.replaceState(null, null, ' ');
-            }, 400);
+            }, 500);
         }
     }
 

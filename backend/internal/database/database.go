@@ -342,30 +342,35 @@ func seedInitialData(db *gorm.DB) error {
 		}
 	}
 
-	// Создаём шаги пикселя если их ещё нет
-	var pitchCount int64
-	db.Model(&models.CalculatorPixelPitch{}).Count(&pitchCount)
-	if pitchCount == 0 {
-		pitches := []models.CalculatorPixelPitch{
-			{ScreenType: "indoor", Name: "P1,25", ModulePrice: 58.5, SortOrder: 1},
-			{ScreenType: "indoor", Name: "P1,53", ModulePrice: 28.5, SortOrder: 2},
-			{ScreenType: "indoor", Name: "P1,86", ModulePrice: 25, SortOrder: 3},
-			{ScreenType: "indoor", Name: "P2", ModulePrice: 22, SortOrder: 4},
-			{ScreenType: "indoor", Name: "P2,5", ModulePrice: 16.5, SortOrder: 5},
-			{ScreenType: "indoor", Name: "P3", ModulePrice: 14, SortOrder: 6},
-			{ScreenType: "indoor", Name: "P4", ModulePrice: 11, SortOrder: 7},
-			{ScreenType: "outdoor", Name: "P2", ModulePrice: 82, SortOrder: 1},
-			{ScreenType: "outdoor", Name: "P2,5", ModulePrice: 32, SortOrder: 2},
-			{ScreenType: "outdoor", Name: "P3,07", ModulePrice: 21, SortOrder: 3},
-			{ScreenType: "outdoor", Name: "P4", ModulePrice: 15, SortOrder: 4},
-			{ScreenType: "outdoor", Name: "P5", ModulePrice: 13, SortOrder: 5},
-			{ScreenType: "outdoor", Name: "P6,66", ModulePrice: 12.5, SortOrder: 6},
-			{ScreenType: "outdoor", Name: "P8", ModulePrice: 10.5, SortOrder: 7},
-		}
-		for _, p := range pitches {
+	// Создаём или обновляем шаги пикселя
+	pitches := []models.CalculatorPixelPitch{
+		{ScreenType: "indoor", Name: "P1,25", ModulePrice: 134.55, SortOrder: 1},
+		{ScreenType: "indoor", Name: "P1,53", ModulePrice: 65.55, SortOrder: 2},
+		{ScreenType: "indoor", Name: "P1,86", ModulePrice: 57.5, SortOrder: 3},
+		{ScreenType: "indoor", Name: "P2", ModulePrice: 50.6, SortOrder: 4},
+		{ScreenType: "indoor", Name: "P2,5", ModulePrice: 37.95, SortOrder: 5},
+		{ScreenType: "indoor", Name: "P3", ModulePrice: 32.2, SortOrder: 6},
+		{ScreenType: "indoor", Name: "P4", ModulePrice: 25.3, SortOrder: 7},
+		{ScreenType: "outdoor", Name: "P2", ModulePrice: 188.6, SortOrder: 1},
+		{ScreenType: "outdoor", Name: "P2,5", ModulePrice: 73.6, SortOrder: 2},
+		{ScreenType: "outdoor", Name: "P3,07", ModulePrice: 48.3, SortOrder: 3},
+		{ScreenType: "outdoor", Name: "P4", ModulePrice: 24.37, SortOrder: 4},
+		{ScreenType: "outdoor", Name: "P5", ModulePrice: 34.5, SortOrder: 5},
+		{ScreenType: "outdoor", Name: "P6,66", ModulePrice: 29.9, SortOrder: 6},
+		{ScreenType: "outdoor", Name: "P8", ModulePrice: 24.15, SortOrder: 7},
+	}
+	for _, p := range pitches {
+		var existing models.CalculatorPixelPitch
+		err := db.Where("screen_type = ? AND name = ?", p.ScreenType, p.Name).First(&existing).Error
+		if err != nil {
 			if err := db.Create(&p).Error; err != nil {
 				return fmt.Errorf("failed to create pixel pitch %s: %w", p.Name, err)
 			}
+		} else {
+			db.Model(&existing).Updates(map[string]interface{}{
+				"module_price": p.ModulePrice,
+				"sort_order":   p.SortOrder,
+			})
 		}
 	}
 

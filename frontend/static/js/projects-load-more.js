@@ -35,6 +35,16 @@ document.addEventListener('DOMContentLoaded', function() {
   function showProjects() {
     var filtered = getFilteredCards();
 
+    // Если в URL есть hash — находим нужную карточку среди всех карточек
+    var hashSlug = window.location.hash ? decodeURIComponent(window.location.hash.substring(1)) : null;
+    var hashCardEl = null;
+    if (hashSlug) {
+      for (var i = 0; i < cards.length; i++) {
+        var btn = cards[i].querySelector('[data-project-slug="' + hashSlug + '"]');
+        if (btn) { hashCardEl = cards[i]; break; }
+      }
+    }
+
     // Сначала скрываем все
     cards.forEach(function(card) { card.style.display = 'none'; });
 
@@ -42,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
     filtered.forEach(function(card, index) {
       card.style.display = index < currentlyShowing ? '' : 'none';
     });
+
+    // Принудительно показываем карточку из hash
+    if (hashCardEl) { hashCardEl.style.display = ''; }
 
     loadMoreContainer.style.display = filtered.length <= currentlyShowing ? 'none' : 'flex';
 
