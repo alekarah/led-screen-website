@@ -1,0 +1,331 @@
+{{define "admin-calculator-content"}}
+<div class="promo-admin">
+    <p class="form-help" style="margin-bottom: 1.5rem;">После сохранения любых изменений обновите страницу, чтобы увидеть актуальные значения.</p>
+
+    <!-- Курс доллара -->
+    <div class="form-section">
+        <h2>Курс доллара</h2>
+        <p class="form-help">Курс подтягивается с сайта ЦБ РФ автоматически раз в сутки.</p>
+        <div class="calc-admin-rate-info">
+            <div class="calc-admin-rate-row">
+                <span class="calc-admin-rate-label">Курс ЦБ:</span>
+                <span class="calc-admin-rate-val">{{printf "%.4f" .settings.UsdRate}} ₽</span>
+            </div>
+            <div class="calc-admin-rate-row">
+                <span class="calc-admin-rate-label">Надбавка, %:</span>
+                <input type="number" id="markupInput" value="{{.settings.UsdMarkupPct}}" step="0.1" min="0" style="width:90px; padding:0.25rem 0.5rem; border:1px solid var(--line-soft); border-radius:4px; font-size:0.95rem;" oninput="updateRateDisplay()">
+            </div>
+            <div class="calc-admin-rate-row">
+                <span class="calc-admin-rate-label">Итоговый курс:</span>
+                <span class="calc-admin-rate-val calc-admin-rate-final" id="rateDisplay">—</span>
+            </div>
+            <div class="calc-admin-rate-row">
+                <span class="calc-admin-rate-label">Обновлён:</span>
+                <span class="calc-admin-rate-val">{{.settings.UsdRateAt.Format "02.01.2006 15:04"}}</span>
+            </div>
+            <div class="calc-admin-rate-row" style="margin-top:0.5rem;">
+                <button type="button" class="btn btn-small" onclick="saveMarkup()">Сохранить надбавку</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Константы -->
+    <div class="form-section">
+        <h2>Константы расчёта</h2>
+
+        <form id="calcSettingsForm" class="promo-form">
+            <div class="calc-admin-cols">
+                <!-- Интерьерный -->
+                <div class="calc-admin-col">
+                    <h3 class="calc-admin-col-title">Интерьерный</h3>
+                    <div class="form-group">
+                        <label>Размер кабинета, мм</label>
+                        <input type="number" name="indoor_cabinet_size" value="{{.settings.IndoorCabinetSize}}" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Модулей в кабинете</label>
+                        <input type="number" name="indoor_modules_per_cab" value="{{.settings.IndoorModulesPerCab}}" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Коммутация, $</label>
+                        <input type="number" name="indoor_commutation" value="{{.settings.IndoorCommutation}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Кабинет Standard, $</label>
+                        <input type="number" name="indoor_cabinet_std" value="{{.settings.IndoorCabinetStd}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Кабинет Light, $</label>
+                        <input type="number" name="indoor_cabinet_light" value="{{.settings.IndoorCabinetLight}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Принимающая карта, $</label>
+                        <input type="number" name="indoor_receiving_card" value="{{.settings.IndoorReceivingCard}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Блок питания, $</label>
+                        <input type="number" name="indoor_power_supply" value="{{.settings.IndoorPowerSupply}}" step="0.01" min="0">
+                    </div>
+                </div>
+
+                <!-- Уличный -->
+                <div class="calc-admin-col">
+                    <h3 class="calc-admin-col-title">Уличный</h3>
+                    <div class="form-group">
+                        <label>Размер кабинета, мм</label>
+                        <input type="number" name="outdoor_cabinet_size" value="{{.settings.OutdoorCabinetSize}}" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Модулей в кабинете</label>
+                        <input type="number" name="outdoor_modules_per_cab" value="{{.settings.OutdoorModulesPerCab}}" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Коммутация, $</label>
+                        <input type="number" name="outdoor_commutation" value="{{.settings.OutdoorCommutation}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Кабинет Standard, $</label>
+                        <input type="number" name="outdoor_cabinet_std" value="{{.settings.OutdoorCabinetStd}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Кабинет Light, $</label>
+                        <input type="number" name="outdoor_cabinet_light" value="{{.settings.OutdoorCabinetLight}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Принимающая карта, $</label>
+                        <input type="number" name="outdoor_receiving_card" value="{{.settings.OutdoorReceivingCard}}" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Блоки питания (3 шт), $</label>
+                        <input type="number" name="outdoor_power_supply" value="{{.settings.OutdoorPowerSupply}}" step="0.01" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить константы</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Шаги пикселя -->
+    <div class="form-section">
+        <h2>Шаги пикселя</h2>
+        <p class="form-help">Цена указывается за один модуль в долларах ($).</p>
+
+        <!-- Вкладки -->
+        <div class="calc-admin-tabs">
+            <button class="calc-admin-tab active" onclick="switchPitchTab('indoor', this)">Интерьерные</button>
+            <button class="calc-admin-tab" onclick="switchPitchTab('outdoor', this)">Уличные</button>
+        </div>
+
+        <!-- Таблица интерьерных -->
+        <div id="pitchTab-indoor" class="calc-admin-pitch-tab" data-modules-per-cab="{{.settings.IndoorModulesPerCab}}">
+            <table class="admin-table">
+                <thead><tr><th>Порядок</th><th>Название</th><th>Цена модуля, $</th><th>Стоимость кабинета, $</th><th>Активен</th><th></th></tr></thead>
+                <tbody>
+                {{range .pitches}}{{if eq .ScreenType "indoor"}}
+                <tr data-id="{{.ID}}">
+                    <td><input type="number" class="pitch-order" value="{{.SortOrder}}" min="0" style="width:60px"></td>
+                    <td><input type="text" class="pitch-name" value="{{.Name}}"></td>
+                    <td><input type="number" class="pitch-price" value="{{.ModulePrice}}" step="0.01" min="0" oninput="updateCabPrice(this)"></td>
+                    <td class="pitch-cab-price"></td>
+                    <td><input type="checkbox" class="pitch-active" {{if .IsActive}}checked{{end}}></td>
+                    <td class="pitch-actions">
+                        <button class="btn btn-small btn-success" onclick="savePitch(this)">Сохранить</button>
+                        <button class="btn btn-small btn-danger" onclick="deletePitch({{.ID}}, this)">Удалить</button>
+                    </td>
+                </tr>
+                {{end}}{{end}}
+                </tbody>
+            </table>
+            <button class="btn btn-small" onclick="addPitchRow('indoor')">+ Добавить</button>
+        </div>
+
+        <!-- Таблица уличных -->
+        <div id="pitchTab-outdoor" class="calc-admin-pitch-tab" style="display:none" data-modules-per-cab="{{.settings.OutdoorModulesPerCab}}">
+            <table class="admin-table">
+                <thead><tr><th>Порядок</th><th>Название</th><th>Цена модуля, $</th><th>Стоимость кабинета, $</th><th>Активен</th><th></th></tr></thead>
+                <tbody>
+                {{range .pitches}}{{if eq .ScreenType "outdoor"}}
+                <tr data-id="{{.ID}}">
+                    <td><input type="number" class="pitch-order" value="{{.SortOrder}}" min="0" style="width:60px"></td>
+                    <td><input type="text" class="pitch-name" value="{{.Name}}"></td>
+                    <td><input type="number" class="pitch-price" value="{{.ModulePrice}}" step="0.01" min="0" oninput="updateCabPrice(this)"></td>
+                    <td class="pitch-cab-price"></td>
+                    <td><input type="checkbox" class="pitch-active" {{if .IsActive}}checked{{end}}></td>
+                    <td class="pitch-actions">
+                        <button class="btn btn-small btn-success" onclick="savePitch(this)">Сохранить</button>
+                        <button class="btn btn-small btn-danger" onclick="deletePitch({{.ID}}, this)">Удалить</button>
+                    </td>
+                </tr>
+                {{end}}{{end}}
+                </tbody>
+            </table>
+            <button class="btn btn-small" onclick="addPitchRow('outdoor')">+ Добавить</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.calc-admin-rate-info { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0 0.5rem; max-width: 400px; }
+.calc-admin-rate-row { display: flex; gap: 1rem; align-items: center; }
+.calc-admin-rate-label { color: var(--text-muted); min-width: 140px; }
+.calc-admin-rate-val { font-weight: 600; }
+.calc-admin-rate-final { font-size: 1.2rem; color: var(--primary); }
+.calc-admin-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem; }
+.calc-admin-col-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--brand); border-bottom: 2px solid var(--brand); padding-bottom: 0.4rem; }
+.calc-admin-tabs { display: flex; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1.25rem; }
+button.calc-admin-tab { padding: 0.45rem 1.2rem; border: 2px solid #ccc; border-radius: var(--radius-sm); background: #f0f0f0; color: #555; cursor: pointer; font-size: 1rem; transition: background 0.15s, color 0.15s, border-color 0.15s; text-decoration: none; }
+button.calc-admin-tab.active { background: var(--brand); color: #fff; border-color: var(--brand); box-shadow: none; }
+button.calc-admin-tab:hover:not(.active) { background: #e0e0e0; border-color: #aaa; }
+.admin-table { width: 100%; border-collapse: collapse; margin-bottom: 0.75rem; border: 1px solid var(--border); }
+.admin-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--bg-alt); font-size: 0.85rem; font-weight: 600; border: 1px solid var(--border); }
+.admin-table td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); vertical-align: middle; }
+.admin-table tbody tr { border-top: 1px solid #ccc; }
+.admin-table tbody tr:hover td { background-color: #f4f7fc; }
+.admin-table input[type="text"], .admin-table input[type="number"] { width: 100%; padding: 0.35rem 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.9rem; }
+.pitch-actions { display: flex; gap: 0.4rem; white-space: nowrap; }
+.pitch-cab-price { font-size: 0.9rem; }
+</style>
+
+<script>
+// Курс с надбавкой
+var _cbrRate = {{.settings.UsdRate}};
+function updateRateDisplay() {
+    var markup = parseFloat(document.getElementById('markupInput').value) || 0;
+    var final = _cbrRate * (1 + markup / 100);
+    document.getElementById('rateDisplay').textContent = final.toFixed(4) + ' ₽';
+}
+updateRateDisplay();
+
+// Сохранение надбавки
+function saveMarkup() {
+    var markup = parseFloat(document.getElementById('markupInput').value) || 0;
+    fetch('/admin/calculator/settings', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({usd_markup_pct: markup})
+    }).then(function(r) {
+        if (r.ok) { showMessage('Надбавка сохранена', 'success'); }
+        else { showMessage('Ошибка сохранения', 'error'); }
+    });
+}
+
+// Сохранение констант
+document.getElementById('calcSettingsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var data = {};
+    new FormData(this).forEach(function(v, k) { data[k] = parseFloat(v) || parseInt(v) || 0; });
+    fetch('/admin/calculator/settings', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    }).then(function(r) {
+        if (r.ok) { showMessage('Константы сохранены', 'success'); }
+        else { showMessage('Ошибка сохранения', 'error'); }
+    });
+});
+
+// Обновление стоимости кабинета при изменении цены модуля
+function updateCabPrice(input) {
+    var row = input.closest('tr');
+    var tab = input.closest('.calc-admin-pitch-tab');
+    var mpc = parseInt(tab.dataset.modulesPerCab) || 1;
+    var price = parseFloat(input.value) || 0;
+    row.querySelector('.pitch-cab-price').textContent = (price * mpc).toFixed(2);
+}
+
+// Пересчёт всех кабинетных цен для вкладки
+function recalcCabPrices(tab) {
+    var mpc = parseInt(tab.dataset.modulesPerCab) || 1;
+    tab.querySelectorAll('tbody tr').forEach(function(tr) {
+        var price = parseFloat(tr.querySelector('.pitch-price').value) || 0;
+        tr.querySelector('.pitch-cab-price').textContent = (price * mpc).toFixed(2);
+    });
+}
+
+// Заполняем стоимость кабинетов при загрузке и вешаем обработчики на кол-во модулей
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.calc-admin-pitch-tab').forEach(recalcCabPrices);
+
+    document.querySelector('[name="indoor_modules_per_cab"]').addEventListener('input', function() {
+        var tab = document.getElementById('pitchTab-indoor');
+        tab.dataset.modulesPerCab = this.value;
+        recalcCabPrices(tab);
+    });
+    document.querySelector('[name="outdoor_modules_per_cab"]').addEventListener('input', function() {
+        var tab = document.getElementById('pitchTab-outdoor');
+        tab.dataset.modulesPerCab = this.value;
+        recalcCabPrices(tab);
+    });
+});
+
+// Переключение вкладок
+function switchPitchTab(type, btn) {
+    document.querySelectorAll('.calc-admin-pitch-tab').forEach(function(t) { t.style.display = 'none'; });
+    document.querySelectorAll('.calc-admin-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('pitchTab-' + type).style.display = '';
+    btn.classList.add('active');
+}
+
+// Сохранить шаг пикселя
+function savePitch(btn) {
+    var row = btn.closest('tr');
+    var id = row.dataset.id;
+    var data = {
+        name: row.querySelector('.pitch-name').value,
+        module_price: parseFloat(row.querySelector('.pitch-price').value) || 0,
+        is_active: row.querySelector('.pitch-active').checked,
+        sort_order: parseInt(row.querySelector('.pitch-order').value) || 0
+    };
+    if (id === 'new') {
+        // Определяем тип по вкладке
+        var tab = row.closest('.calc-admin-pitch-tab');
+        data.screen_type = tab.id.replace('pitchTab-', '');
+        fetch('/admin/calculator/pitches', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(function(r) { return r.json(); }).then(function(res) {
+            if (res.id) { row.dataset.id = res.id; showMessage('Добавлено', 'success'); }
+        });
+    } else {
+        fetch('/admin/calculator/pitches/' + id, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(function(r) {
+            if (r.ok) { showMessage('Сохранено', 'success'); }
+            else { showMessage('Ошибка', 'error'); }
+        });
+    }
+}
+
+// Удалить шаг пикселя
+function deletePitch(id, btn) {
+    if (!confirm('Удалить шаг пикселя?')) return;
+    fetch('/admin/calculator/pitches/' + id, { method: 'DELETE' })
+        .then(function(r) {
+            if (r.ok) { btn.closest('tr').remove(); showMessage('Удалено', 'success'); }
+            else { showMessage('Ошибка', 'error'); }
+        });
+}
+
+// Добавить новую строку
+function addPitchRow(type) {
+    var tbody = document.querySelector('#pitchTab-' + type + ' tbody');
+    var tr = document.createElement('tr');
+    tr.dataset.id = 'new';
+    tr.innerHTML = '<td><input type="number" class="pitch-order" value="0" min="0" style="width:60px"></td>' +
+        '<td><input type="text" class="pitch-name" placeholder="P2,5"></td>' +
+        '<td><input type="number" class="pitch-price" value="0" step="0.01" min="0" oninput="updateCabPrice(this)"></td>' +
+        '<td class="pitch-cab-price">0.00</td>' +
+        '<td><input type="checkbox" class="pitch-active" checked></td>' +
+        '<td class="pitch-actions"><button class="btn btn-small btn-success" onclick="savePitch(this)">Сохранить</button>' +
+        '<button class="btn btn-small btn-danger" onclick="this.closest(\'tr\').remove()">Отмена</button></td>';
+    tbody.appendChild(tr);
+    tr.querySelector('.pitch-name').focus();
+}
+</script>
+{{end}}

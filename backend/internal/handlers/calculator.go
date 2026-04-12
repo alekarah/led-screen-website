@@ -183,7 +183,7 @@ func (h *Handlers) AdminCalculatorPage(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "admin_base.html", gin.H{
 		"title":    "Калькулятор",
-		"PageID":   "calculator",
+		"PageID":   "admin-calculator",
 		"settings": settings,
 		"pitches":  pitches,
 	})
