@@ -44,10 +44,13 @@ var moscowLoc = func() *time.Location {
 	return loc
 }()
 
+// NowMSK возвращает текущее время в московском часовом поясе (UTC+3).
 func NowMSK() time.Time {
 	return time.Now().In(moscowLoc)
 }
 
+// NowMSKUTC возвращает текущее московское время конвертированное в UTC.
+// Используется для сохранения временных меток в БД.
 func NowMSKUTC() time.Time {
 	return NowMSK().UTC()
 }
@@ -105,7 +108,7 @@ func buildPageNumbers(current, total int) []int {
 	return res
 }
 
-// Единые JSON-ответы
+// jsonOK отправляет JSON ответ 200 OK. Если payload — gin.H, автоматически добавляет success: true.
 func jsonOK(c *gin.Context, payload any) {
 	// Если payload это gin.H, добавляем success: true
 	if m, ok := payload.(gin.H); ok {
@@ -116,6 +119,7 @@ func jsonOK(c *gin.Context, payload any) {
 	}
 }
 
+// jsonErr отправляет JSON ответ с ошибкой в формате {error: msg}.
 func jsonErr(c *gin.Context, code int, msg string) {
 	c.JSON(code, gin.H{"error": msg})
 }
