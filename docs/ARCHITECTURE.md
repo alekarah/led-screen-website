@@ -122,7 +122,7 @@ Request → AuthMiddleware → validate JWT → extract claims (admin_id, userna
 | `Project` | Проекты портфолио | Title, Slug, Description, Location, Size, Featured, SortOrder, ViewCount |
 | `Category` | Категории проектов | Name, Slug, Description |
 | `Image` | Изображения проектов | ProjectID, Filename, FilePath, ThumbnailSmallPath, ThumbnailMediumPath, CropX/Y/Scale, IsPrimary |
-| `PriceItem` | Позиции прайс-листа | Title, Description, PriceFrom, HasSpecifications, IsActive, SortOrder |
+| `PriceItem` | Позиции прайс-листа | Title, Description, PriceFrom, HasSpecifications, IsActive, SortOrder, Category (indoor/outdoor/innovative/other), IsLight |
 | `PriceImage` | Изображения позиций прайса | PriceItemID, Filename, FilePath, ThumbnailSmallPath, ThumbnailMediumPath, CropX/Y/Scale |
 | `PriceSpecification` | Характеристики позиций прайса | PriceItemID, SpecGroup, SpecKey, SpecValue, SpecOrder (группировка) |
 | `ContactForm` | Заявки клиентов | Name, Phone, Email, Status, ArchivedAt, RemindAt |
@@ -179,6 +179,7 @@ frontend/
 │   │   ├── prices-accordion.js  # Аккордеон характеристик (публичная)
 │   │   ├── grid-center.js       # Универсальное центрирование неполных рядов в гридах
 │   │   ├── projects-load-more.js # «Показать ещё» для проектов
+│   │   ├── prices-filter.js     # Фильтрация позиций прайса по категории и Light-исполнению (JS, без перезагрузки)
 │   │   ├── prices-load-more.js  # «Показать ещё» для прайс-листа
 │   │   ├── projects-filter.js   # Фильтрация проектов по категориям
 │   │   ├── admin-map-points.js  # CRUD точек на карте (админка)

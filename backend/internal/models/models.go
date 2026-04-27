@@ -243,6 +243,8 @@ type PriceItem struct {
 	HasSpecifications bool   `json:"has_specifications" gorm:"default:false"` // Есть ли таблица характеристик
 	SortOrder         int    `json:"sort_order" gorm:"default:0"`             // Порядок отображения
 	IsActive          bool   `json:"is_active" gorm:"default:true"`           // Активность
+	Category          string `json:"category" gorm:"default:''"`              // Категория: indoor, outdoor, innovative, other
+	IsLight           bool   `json:"is_light" gorm:"default:false"`           // Light исполнение (упрощённый корпус)
 
 	// Поля для работы с миниатюрами и кроппингом
 	ThumbnailSmallPath  string  `json:"thumbnail_small_path"`          // Путь к маленькой миниатюре (400x300)

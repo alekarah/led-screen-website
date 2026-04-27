@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (!grid || !loadMoreBtn || !loadMoreContainer) return;
 
-  var cards = Array.from(grid.querySelectorAll('.price-card'));
+  var allCards = Array.from(grid.querySelectorAll('.price-card'));
   var INITIAL_ROWS = 4;
   var LOAD_MORE_ROWS = 2;
   var currentlyShowing = getInitialItemsToShow();
@@ -15,18 +15,32 @@ document.addEventListener('DOMContentLoaded', function() {
     return window.getGridColumns() * INITIAL_ROWS;
   }
 
+  // Возвращает только карточки не скрытые фильтром
+  function getVisibleCards() {
+    return allCards.filter(function(card) {
+      return !card.hasAttribute('data-filtered-out');
+    });
+  }
+
   function showPrices() {
-    cards.forEach(function(card, index) {
+    var visible = getVisibleCards();
+    visible.forEach(function(card, index) {
       card.style.display = index < currentlyShowing ? '' : 'none';
     });
 
-    loadMoreContainer.style.display = cards.length <= currentlyShowing ? 'none' : 'flex';
+    loadMoreContainer.style.display = visible.length <= currentlyShowing ? 'none' : 'flex';
 
     if (window.centerGrid) window.centerGrid(grid, '.price-card');
   }
 
   loadMoreBtn.addEventListener('click', function() {
     currentlyShowing += window.getGridColumns() * LOAD_MORE_ROWS;
+    showPrices();
+  });
+
+  // При смене фильтра — сбрасываем счётчик и пересчитываем
+  window.addEventListener('pricesFiltered', function() {
+    currentlyShowing = getInitialItemsToShow();
     showPrices();
   });
 

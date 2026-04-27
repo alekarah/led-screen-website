@@ -74,11 +74,29 @@
                 <input type="number" id="createPriceFrom" name="price_from" required min="0" placeholder="250000">
             </div>
 
+            <div class="form-group">
+                <label>Категория</label>
+                <select id="createCategory" name="category">
+                    <option value="">— не указана —</option>
+                    <option value="indoor">Интерьерные</option>
+                    <option value="outdoor">Уличные</option>
+                    <option value="innovative">Инновационные</option>
+                    <option value="other">Прочее</option>
+                </select>
+            </div>
+
             <div class="checkbox-row">
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="createHasSpecifications" name="has_specifications">
                         <span>Добавить таблицу характеристик</span>
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="createIsLight" name="is_light">
+                        <span>Light исполнение</span>
                     </label>
                 </div>
 
@@ -130,11 +148,29 @@
                 <input type="number" id="editPriceFrom" name="price_from" required min="0">
             </div>
 
+            <div class="form-group">
+                <label>Категория</label>
+                <select id="editCategory" name="category">
+                    <option value="">— не указана —</option>
+                    <option value="indoor">Интерьерные</option>
+                    <option value="outdoor">Уличные</option>
+                    <option value="innovative">Инновационные</option>
+                    <option value="other">Прочее</option>
+                </select>
+            </div>
+
             <div class="checkbox-row">
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="editHasSpecifications" name="has_specifications">
                         <span>Добавить таблицу характеристик</span>
+                    </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editIsLight" name="is_light">
+                        <span>Light исполнение</span>
                     </label>
                 </div>
 

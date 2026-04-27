@@ -75,10 +75,19 @@
 
 <section class="prices-section">
     <div class="container">
+        <!-- Фильтры -->
+        <div class="prices-filters">
+            <button class="prices-filter-btn" data-category="indoor">Интерьерные</button>
+            <button class="prices-filter-btn" data-category="outdoor">Уличные</button>
+            <button class="prices-filter-btn" data-category="innovative">Инновационные</button>
+            <button class="prices-filter-btn" data-category="other">Прочее</button>
+            <button class="prices-filter-btn prices-filter-light" data-filter="light">Light исполнение</button>
+        </div>
+
         {{if .priceItems}}
             <div class="prices-grid" id="pricesGrid">
                 {{range .priceItems}}
-                <div class="price-card anim-card">
+                <div class="price-card anim-card" data-category="{{.PriceItem.Category}}" data-light="{{.PriceItem.IsLight}}">
                     {{range .PriceItem.Images}}
                         {{if .IsPrimary}}
                         <div class="price-card-image">

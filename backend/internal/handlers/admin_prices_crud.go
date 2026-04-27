@@ -48,6 +48,8 @@ func (h *Handlers) CreatePriceItem(c *gin.Context) {
 	priceFromStr := c.PostForm("price_from")
 	priceItem.HasSpecifications = c.PostForm("has_specifications") == "on"
 	priceItem.IsActive = c.PostForm("is_active") == "on"
+	priceItem.IsLight = c.PostForm("is_light") == "on"
+	priceItem.Category = c.PostForm("category")
 
 	// Валидация
 	if priceItem.Title == "" {
@@ -195,6 +197,8 @@ func (h *Handlers) UpdatePriceItem(c *gin.Context) {
 	priceFromStr := c.PostForm("price_from")
 	priceItem.HasSpecifications = c.PostForm("has_specifications") == "on"
 	priceItem.IsActive = c.PostForm("is_active") == "on"
+	priceItem.IsLight = c.PostForm("is_light") == "on"
+	priceItem.Category = c.PostForm("category")
 
 	// Валидация
 	if priceItem.Title == "" {

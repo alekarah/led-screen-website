@@ -43,7 +43,9 @@ function openEditPriceModal(id) {
             document.getElementById('editDescription').value = priceItem.description || '';
             document.getElementById('editPriceFrom').value = priceItem.price_from || 0;
             document.getElementById('editHasSpecifications').checked = priceItem.has_specifications || false;
+            document.getElementById('editIsLight').checked = priceItem.is_light || false;
             document.getElementById('editIsActive').checked = priceItem.is_active !== false;
+            document.getElementById('editCategory').value = priceItem.category || '';
 
             // Отображаем изображения с кнопками управления
             if (typeof displayPriceImages === 'function') {

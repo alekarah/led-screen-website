@@ -132,7 +132,8 @@
   .public-project-card { width: 100%; max-width: 100%; }
   .prices-hero h1 { font-size: 2rem; }
   .hero-subtitle { font-size: 1rem; }
-  .prices-section { padding: 3rem 0; }
+  .prices-filters { gap: 0.5rem; flex-direction: column; }
+  .prices-filter-btn { flex: none; width: 100%; padding: .5rem .85rem; font-size: .85rem; max-width: none; }
   .privacy-section { padding: 2rem 0 3rem; }
   .privacy-section h2 { font-size: 1.75rem; margin-bottom: 1rem; }
   .privacy-section .privacy-block { padding: 1.5rem 1.75rem; margin: 1.5rem auto; font-size: 1.05rem; }
@@ -274,7 +275,6 @@
   .public-project-card { width: 100%; max-width: 100%; }
   .prices-hero h1 { font-size: 1.8rem; }
   .hero-subtitle { font-size: 0.95rem; }
-  .prices-section { padding: 2rem 0; }
   .privacy-section { padding: 1.5rem 0 2rem; }
   .privacy-section h2 { font-size: 1.5rem; }
   .privacy-section .privacy-block { padding: 1.25rem 1.25rem; margin: 1rem auto; font-size: 1rem; line-height: 1.6; }
